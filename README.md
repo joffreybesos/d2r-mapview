@@ -1,13 +1,35 @@
 # Diablo 2: Resurrected map viewer
 
-Working map reveal for Diablo 2 resurrected to be used for educational purposes only.
+Noob friendly map reveal for Diablo 2 Resurrected.
+This is to be used for educational purposes only!
 Use at your own risk, there is no warranty or responsibility taken for being penalised for using this.
 
 This repo will fetch the map from a backend map server and display it in the top left corner of your D2R window as shown below:
 
 ![Worldstone Keep Level 2](worldstonekeep2.png)
 
+## Usage
+
+1. Download the latest release (on the right side).
+2. Launch D2R.
+3. Run the `d2rmap.exe`
+4. Map should appear at the top left and change as you move through the levels.
+
+Note:
+
+- Purple icon for exits
+- Yellow for waypoints
+- Red for NPCs
+- Cyan for chests
+
+- A tray icon will be present which you can right click to exit.
+- This script will exit when you exit D2R.
+- Map download might be slow as it's retrieving from my backend server.
+- Please consider donating to help with server costs.
+
 ## Setup
+
+You can change map size and opacity in `settings.ini`  
 
 This is in two parts:
 
@@ -36,7 +58,7 @@ Refer to `log.txt` to view any error messages.
 
 Tested and working on Diablo 2 Resurrected 1.0.66606
 
-### Donations
+## Donations
 
 If you'd like to donate, please send to my Bitcoin wallet below
 `18hSn32hChp1CmBYnRdQFyzkz5drpijRa2`  

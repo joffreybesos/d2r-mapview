@@ -1,5 +1,8 @@
 # Diablo 2: Resurrected map viewer
 
+Working map reveal for Diablo 2 resurrected to be used for educational purposes only.
+Use at your own risk, there is no warranty or responsibility taken for being penalised for using this.
+
 This repo will fetch the map from a backend map server and display it in the top left corner of your D2R window as shown below:
 
 ![Worldstone Keep Level 2](worldstonekeep2.png)
@@ -15,6 +18,8 @@ Or alternatively you can run the `/bin/d2rmap.exe` executable, which does the sa
 2. Map server:
 You need a running map service to send mapseed/id/difficulty values and return an image.
 This map server is not in this repository (but coming soon!)
+However it hosted on the internet for you to use.
+If you use my hosted map server, please consider donating to help with hosting costs.
 
 ## How it works
 
@@ -34,4 +39,4 @@ Tested and working on Diablo 2 Resurrected 1.0.66606
 ### Donations
 
 If you'd like to donate, please send to my Bitcoin wallet below
-`18hSn32hChp1CmBYnRdQFyzkz5drpijRa2`
+`18hSn32hChp1CmBYnRdQFyzkz5drpijRa2`  

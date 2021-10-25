@@ -10,16 +10,21 @@ This repo will fetch the map from a backend map server and display it in the top
 
 ## Usage
 
-1. Download the latest release (on the right side).
+1. Download the latest `drrmap.exe` release (on the right side).
 2. Launch D2R.
 3. Run the `d2rmap.exe`
 4. Map should appear at the top left and change as you move through the levels.
 
-Note:
+That's the lazy method, but running unknown executables is not a great idea.
 
-- Purple icon for exits
-- Yellow for waypoints
-- Red for NPCs
+Instead you can download and install <https://www.autohotkey.com/>
+Then you can directly run `src/d2r-map.ahk` instead of the executable
+
+**Notes:**
+
+- Purple icon for exits  
+- Yellow for waypoints  
+- Red for NPCs  
 - Cyan for chests
 
 - A tray icon will be present which you can right click to exit.
@@ -58,7 +63,14 @@ Refer to `log.txt` to view any error messages.
 
 Tested and working on Diablo 2 Resurrected 1.0.66606
 
+## TODO
+
+- Currently only reads maps from Hell difficulty  
+- Need to add more info for NPCs and others
+- Replace coloured blocks with icons
+- The script will occasionally exit when switching games
+
 ## Donations
 
-If you'd like to donate, please send to my Bitcoin wallet below
+If you'd like to donate, some BTC will be appreciated:  
 `18hSn32hChp1CmBYnRdQFyzkz5drpijRa2`  

@@ -8,7 +8,7 @@ ShowMap(sMapUrl, width, height, opacity) {
 
     color = FFFFFF ; White
     Gui, Map:New
-    Gui, Add, Picture, x0 y0 w%width% h%height%, %sFile%
+    Gui, Add, Picture, x0 y0 w%width% h-1, %sFile%
     Gui, Color, %color%
     Gui +E0x20 +LastFound +AlwaysOnTop -Caption +ToolWindow
     Winset, TransColor, %color% %opacity%

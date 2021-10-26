@@ -32,6 +32,8 @@ Then you can directly run `src/d2r-map.ahk` instead of the executable
 - Map download might be slow as it's retrieving from my backend server.
 - Please consider donating to help with server costs.
 
+#### Join the discord server  https://discord.gg/qEgqyVW3uj
+
 ## Setup
 
 You can change map size and opacity in `settings.ini`  
@@ -61,7 +63,7 @@ This script will exit if D2R is not running or exits.
 
 Refer to `log.txt` to view any error messages.
 
-Tested and working on Diablo 2 Resurrected 1.0.66606
+Tested and working on Diablo 2 Resurrected `1.0.66606`
 
 ## TODO
 

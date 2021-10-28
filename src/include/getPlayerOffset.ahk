@@ -8,7 +8,7 @@ checkLastOffset(startingOffset) {
 }
 
 scanForPlayerOffset(startingOffset) {
-    return getPlayerOffset(startingOffset, 1000)
+    return getPlayerOffset(startingOffset, 2000)
 }
 
 

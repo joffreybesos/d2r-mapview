@@ -1,12 +1,12 @@
 # Diablo 2: Resurrected map viewer
 
-Noob friendly map reveal for Diablo 2 Resurrected.
-This is to be used for educational purposes only!
-Use at your own risk, there is no warranty or responsibility taken for being penalised for using this.
+Noob friendly map reveal for Diablo 2 Resurrected.  
+This is to be used for educational purposes only!  
+Use at your own risk, there is no warranty or responsibility taken for being penalised for using this.  
 
 This repo will fetch the map from a backend map server and display it in the top left corner of your D2R window as shown below:
 
-![Worldstone Keep Level 2](worldstonekeep2.png)
+![Durance of Hate Level 2](duranceofhate2.png)
 
 ## Usage
 
@@ -15,24 +15,25 @@ This repo will fetch the map from a backend map server and display it in the top
 3. Run the `d2rmap.exe`
 4. Map should appear at the top left and change as you move through the levels.
 
-That's the lazy method, but running unknown executables is not a great idea.
+That's the lazy method, however running unknown executables is not a great idea in general.  
+There have been cases in the past with D2 scripts that make you drop all your gear and exit the game!  
 
-Instead you can download and install <https://www.autohotkey.com/>
-Then you can directly run `src/d2r-map.ahk` instead of the executable
+Instead you can download and install <https://www.autohotkey.com/>  
+Then you can directly run `src/d2r-map.ahk` instead of the executable.
+At least then you can verify the code yourself and ensure there are no hidden macros.
+
+Do not accept executables for this from any other source!
 
 **Notes:**
 
-- Purple icon for exits  
-- Yellow for waypoints  
-- Red for NPCs  
-- Cyan for chests
-
+- Purple icon for exits
+- Yellow for waypoints
+- Red for NPC
+- Cyan for chests  
 - A tray icon will be present which you can right click to exit.
 - This script will exit when you exit D2R.
 - Map download might be slow as it's retrieving from my backend server.
 - Please consider donating to help with server costs.
-
-#### Join the discord server  https://discord.gg/qEgqyVW3uj
 
 ## Setup
 
@@ -63,7 +64,13 @@ This script will exit if D2R is not running or exits.
 
 Refer to `log.txt` to view any error messages.
 
+Go to the discord server if you need further help <https://discord.gg/qEgqyVW3uj>
+
 Tested and working on Diablo 2 Resurrected `1.0.66606`
+
+## Discord
+
+Join the discord server  <https://discord.gg/qEgqyVW3uj>
 
 ## TODO
 

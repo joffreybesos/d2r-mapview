@@ -14,17 +14,11 @@ WriteLog("*******************************************************")
 IniRead, baseUrl, settings.ini, MapHost, baseUrl
 IniRead, width, settings.ini, MapSettings, width
 IniRead, height, settings.ini, MapSettings, height
+IniRead, topMargin, settings.ini, MapSettings, topMargin
+IniRead, leftMargin, settings.ini, MapSettings, leftMargin
 IniRead, opacity, settings.ini, MapSettings, opacity
 IniRead, startingOffset, settings.ini, Memory, playerOffset
 
-; you can override the offset in the custom.ini file
-if FileExist("custom.ini") {
-	IniRead, customPlayerOffset, custom.ini, Memory, playerOffset
-	if (customPlayerOffset != "ERROR") {  ; means it couldn't find the value
-		startingOffset := customPlayerOffset
-		WriteLog("Found 'custom.ini' will use player offset " customPlayerOffset)
-	}
-}
 playerOffset:=startingOffset
 
 SetTimer, UpdateCycle, 1000
@@ -37,7 +31,6 @@ UpdateCycle:
 		playerOffset := scanForPlayerOffset(startingOffset)
 	}
 	if (playerOffset) {
-
 		pSeedAddress := getMapSeedAddress(playerOffset)
 		pLevelNoAddress := getLevelNoAddress(playerOffset)
 		sMapUrl := getD2RMapUrl(baseUrl, pSeedAddress, pLevelNoAddress)
@@ -45,7 +38,7 @@ UpdateCycle:
 		} else {
 			WriteLog("Fetching map from " sMapUrl)
 			lastMap := sMapUrl
-			ShowMap(sMapUrl, width, height, opacity)
+			ShowMap(sMapUrl, width, height, leftMargin, topMargin, opacity)
 		}
 	} else {
 		Sleep, 5000  ; sleep longer when no offset found, this means you're in menu

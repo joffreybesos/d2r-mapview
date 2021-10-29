@@ -32,13 +32,18 @@ UpdateCycle:
 	}
 	if (playerOffset) {
 		pSeedAddress := getMapSeedAddress(playerOffset)
-		pLevelNoAddress := getLevelNoAddress(playerOffset)
-		sMapUrl := getD2RMapUrl(baseUrl, pSeedAddress, pLevelNoAddress)
-		if (InStr(lastMap, sMapUrl)) { ; if map not changed then don't update
+		if (pSeedAddress) {
+			pLevelNoAddress := getLevelNoAddress(playerOffset)
+			sMapUrl := getD2RMapUrl(baseUrl, pSeedAddress, pLevelNoAddress)
+			if (InStr(lastMap, sMapUrl)) { ; if map not changed then don't update
+			} else {
+				WriteLog("Fetching map from " sMapUrl)
+				lastMap := sMapUrl
+				ShowMap(sMapUrl, width, height, leftMargin, topMargin, opacity)
+			}
 		} else {
-			WriteLog("Fetching map from " sMapUrl)
-			lastMap := sMapUrl
-			ShowMap(sMapUrl, width, height, leftMargin, topMargin, opacity)
+			WriteLog("Found playerOffset" playerOffset ", but not map seed address")
+			Sleep, 2000
 		}
 	} else {
 		Sleep, 5000  ; sleep longer when no offset found, this means you're in menu

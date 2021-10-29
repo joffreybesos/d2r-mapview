@@ -26,13 +26,12 @@ getMapSeedAddress(playerOffset) {
     ; get the map seed
     pAct := playerUnit + 0x20
     actAddress := d2r.read(pAct, "Int64")
-    mapSeedAddress := actAddress + 0x14
-    mapSeed := d2r.read(mapSeedAddress, "UInt")
-    if (!mapSeed) {
-        WriteLog("Did not find map seed at address " mapSeedAddress " using player offset " playerOffset)    
-        ExitApp
+    if (actAddress) {
+        mapSeedAddress := actAddress + 0x14
+        if (mapSeedAddres) {
+            mapSeed := d2r.read(mapSeedAddress, "UInt")
+            ;WriteLog("Found seed " mapSeed " at address " mapSeedAddress)
+        }
     }
-    ;WriteLog("Found seed " mapSeed " at address " mapSeedAddress)
-    
     return mapSeedAddress
 }

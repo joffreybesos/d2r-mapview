@@ -43,13 +43,33 @@ This is in two parts:
 
 1. This repository:
 This repo is an AutoHotKey script, you can either install AutoHotkey which will allow you to run `d2r-map.ahk`.
-Or alternatively you can run the `/bin/d2rmap.exe` executable, which does the same thing.
+Or alternatively you can run the `d2rmap.exe` latest release, which does the same thing.
 
 2. Map server:
 You need a running map service to send mapseed/id/difficulty values and return an image.
-This map server is not in this repository (but coming soon!)
-However it hosted on the internet for you to use.
-If you use my hosted map server, please consider donating to help with hosting costs.
+
+### Use a hosted free map server
+
+There is a hosted one on the internet which you are free to use, but may be slow and occasionally go down.
+If you use this server please consider donating to help with server costs.
+If you'd like to donate, some BTC will be appreciated:  
+`18hSn32hChp1CmBYnRdQFyzkz5drpijRa2`  
+To use this server, simply use the existing configuration in `settings.ini`
+
+### Run your own map server
+
+You need an installation of Diablo 2 LOD 1.13c (NOT resurrected!).
+The map server uses the old Diablo 2 code to generate maps, since they are identical in D2R.
+
+Install Diablo 2, the LoD expansion, then the 1.13c patch.
+You must also install [Docker](https://docs.docker.com/get-docker/)  
+
+Then you can use docker to run:  
+`docker pull docker.io/joffreybesos/d2-mapserver`
+`docker run -v "./:/app/cache" -v "/c/Program Files (x86)/Diablo II":/app/game -p 3002:3002 -e PORT=3002 joffreybesos/d2-mapper:latest`
+
+Once it's running port 3002, edit your `settings.ini` file.
+Change `baseurl` to this: `baseUrl=http://0.0.0.0:3002`
 
 ## How it works
 
@@ -63,9 +83,7 @@ This script will exit if D2R is not running or exits.
 ## Troubleshooting
 
 Refer to `log.txt` to view any error messages.
-
 Go to the discord server if you need further help <https://discord.gg/qEgqyVW3uj>
-
 Tested and working on Diablo 2 Resurrected `1.0.66606`
 
 ## Discord
@@ -74,10 +92,10 @@ Join the discord server  <https://discord.gg/qEgqyVW3uj>
 
 ## TODO
 
-- Currently only reads maps from Hell difficulty  
+- Currently only reads maps for Hell difficulty  
 - Need to add more info for NPCs and others
 - Replace coloured blocks with icons
-- The script will occasionally exit when switching games
+- BUG: It will sometimes unintentionally exit when switching acts
 
 ## Donations
 

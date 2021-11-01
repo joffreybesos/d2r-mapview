@@ -66,7 +66,7 @@ You must also install [Docker](https://docs.docker.com/get-docker/)
 
 Then you can use docker to run:  
 `docker pull docker.io/joffreybesos/d2-mapserver`  
-`docker run -v "./:/app/cache" -v "/c/Program Files (x86)/Diablo II":/app/game -p 3002:3002 -e PORT=3002 joffreybesos/d2-mapper:latest`
+`docker run -v "./:/app/cache" -v "/c/Program Files (x86)/Diablo II":/app/game -p 3002:3002 -e PORT=3002 joffreybesos/d2-mapserver:latest`
 
 Once it's running port 3002, edit your `settings.ini` file.  
 Change `baseurl` to this: `baseUrl=http://0.0.0.0:3002`

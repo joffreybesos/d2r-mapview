@@ -7,8 +7,11 @@
 #Include %A_ScriptDir%\include\showMap.ahk
 #Include %A_ScriptDir%\include\logging.ahk
 
+if !FileExist(A_Scriptdir . "\settings.ini") {
+	MsgBox, , Missing settings, Could not find settings.ini file
+	ExitApp
+}
 lastMap := ""
-
 WriteLog("*******************************************************")
 WriteLog("* Map overlay started *")
 WriteLog("*******************************************************")

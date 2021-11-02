@@ -10,7 +10,7 @@ This repo will fetch the map from a backend map server and display it in the top
 
 ## Usage
 
-1. Download the latest `drrmap.exe` release (on the right side).
+1. Download the latest `drrmap.exe` release and `settings.ini` file (on the right side).
 2. Launch D2R.
 3. Run the `d2rmap.exe`
 4. Map should appear at the top left and change as you move through the levels.

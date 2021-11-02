@@ -15,7 +15,7 @@ ShowMap(sMapUrl, width, height, leftMargin, topMargin, opacity) {
 
     sFile=%a_scriptdir%\currentmap.png
     URLDownloadToFile, %sMapUrl%,%sFile%
-
+    
     Gui, 1: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
     Gui, 1: Show, NA
 

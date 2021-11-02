@@ -8,8 +8,10 @@ checkLastOffset(startingOffset) {
 }
 
 scanForPlayerOffset(startingOffset) {
-    return getPlayerOffset(startingOffset, 2000)
+    ;WriteLog("Scanning for new player offset address, starting default offset " startingOffset)
+    return getPlayerOffset(startingOffset, 128)
 }
+
 
 
 getPlayerOffset(startingOffset, loops) {
@@ -28,11 +30,9 @@ getPlayerOffset(startingOffset, loops) {
         ExitApp
     }
 
-    ;WriteLog("Looking for player offset address, starting with offset " startingOffset)
-
     loop, %loops%
     {
-        newOffset := HexAdd(startingOffset, A_Index - 1)
+        newOffset := HexAdd(startingOffset, (A_Index - 1) * 8)
         startingAddress := d2r.BaseAddress + newOffset
         playerUnit := d2r.read(startingAddress, "Int64")
         if (playerUnit) {
@@ -47,6 +47,8 @@ getPlayerOffset(startingOffset, loops) {
                 }
 	            newOffset := newOffset + 0
                 return newOffset
+            } else {
+                WriteLog("Found player unit: " playerUnit ", from " A_Index " attempts, but no mapSeed " mapSeed ", ignoring...")
             }
         }
     }

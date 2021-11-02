@@ -36,7 +36,6 @@ getLevelNoAddress(playerOffset) {
     levelNo := d2r.read(dwLevelNo, "UInt")
     if (!levelNo) {
         WriteLog("Did not find level num at address " dwLevelNo " using player offset " playerOffset)    
-        ExitApp
     }
     ;WriteLog("Found level num " levelNo " at address " dwLevelNo)
     

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.1] - 2021-11-02 - Minor improvements
+
+- No longer exits sometimes when changing acts
+- Map will no longer show when at menu
+- Other minor optimisations
+
 ## [1.1.0] - 2021-10-28 - Better map drawing
 
 - Better map alias smoothing

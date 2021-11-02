@@ -21,36 +21,47 @@ IniRead, startingOffset, settings.ini, Memory, playerOffset
 
 playerOffset:=startingOffset
 
-SetTimer, UpdateCycle, 1000
+SetTimer, UpdateCycle, 1000 ; the 1000 here is priority, not sleep
 return
 
 UpdateCycle:
 	; scan for the player offset
 	playerOffset := checkLastOffset(playerOffset)
 	if (!playerOffset) {
+		Sleep, 1000
 		playerOffset := scanForPlayerOffset(startingOffset)
 	}
 	if (playerOffset) {
 		pSeedAddress := getMapSeedAddress(playerOffset)
 		if (pSeedAddress) {
 			pLevelNoAddress := getLevelNoAddress(playerOffset)
-			sMapUrl := getD2RMapUrl(baseUrl, pSeedAddress, pLevelNoAddress)
-			if (InStr(lastMap, sMapUrl)) { ; if map not changed then don't update
-			} else {
-				WriteLog("Fetching map from " sMapUrl)
-				lastMap := sMapUrl
-				ShowMap(sMapUrl, width, height, leftMargin, topMargin, opacity)
+			if (pLevelNoAddress) {
+				sMapUrl := getD2RMapUrl(baseUrl, pSeedAddress, pLevelNoAddress)
+				if (InStr(lastMap, sMapUrl)) { ; if map not changed then don't update
+				} else {
+					WriteLog("Fetching map from " sMapUrl)
+					lastMap := sMapUrl
+					ShowMap(sMapUrl, width, height, leftMargin, topMargin, opacity)
+				}
 			}
 		} else {
 			WriteLog("Found playerOffset" playerOffset ", but not map seed address")
-			Sleep, 2000
+			Gui, 1: Hide
+			playerOffset := startingOffset ; reset the offset to default
+			Sleep, 1000
 		}
 	} else {
-		Sleep, 5000  ; sleep longer when no offset found, this means you're in menu
+		playerOffset := startingOffset ; reset the offset to default
+		Gui, 1: Hide
+		Sleep, 3000  ; sleep longer when no offset found, you're likely in menu
 	}
-	Sleep, 1000
+	Sleep, 1000 ; set a pacing of 1 second
 return
 
-+F4::ExitApp  ; shift+f4 to exit app
++F10::
+{
+	WriteLog("Pressed Shift+F10, exiting...")
+	ExitApp
+}
 
 

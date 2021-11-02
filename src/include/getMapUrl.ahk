@@ -1,7 +1,7 @@
 ﻿#Include %A_ScriptDir%\include\classMemory.ahk
 #Include %A_ScriptDir%\include\logging.ahk
 
-getD2RMapUrl(baseUrl, pSeedAddress, pLevelNoAddress) {
+getD2RMapUrl(baseUrl, pSeedAddress, pDifficultyAddress, pLevelNoAddress) {
     
     if (_ClassMemory.__Class != "_ClassMemory")
     {
@@ -19,11 +19,15 @@ getD2RMapUrl(baseUrl, pSeedAddress, pLevelNoAddress) {
 
     mapSeed := d2r.read(pSeedAddress, "UInt")
     levelNo := d2r.read(pLevelNoAddress, "UInt")
-    ;WriteLog("Got " mapSeed " from address " pSeedAddress " and " levelNo " from " pLevelNoAddress)
+    difficulty := d2r.read(pDifficultyAddress, "UShort")
+    
+    ;WriteLog("Found difficulty " difficulty " from address " pDifficultyAddress)
+    ;WriteLog("Found mapseed " mapSeed " from address " pSeedAddress)
+    ;WriteLog("Found level no " levelNo " from address " pLevelNoAddress)
     
     url := ""
     if (mapSeed) {
-        url := baseUrl . "/v1/map/" . mapSeed . "/2/" . levelNo . "/image"  
+        url := baseUrl . "/v1/map/" . mapSeed . "/" . difficulty . "/" . levelNo . "/image"  
     }
     return url
 }

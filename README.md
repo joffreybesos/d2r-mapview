@@ -32,7 +32,8 @@ Do not accept executables for this from any other source!
 - Cyan for chests  
 - A tray icon will be present which you can right click to exit.
 - This script will exit when you exit D2R.
-- Map download might be slow as it's retrieving from my backend server.
+- You can exit with Shift+F10 hotkey
+- Map download might be slow when it's retrieving from my backend server.
 - Please consider donating to help with server costs.
 
 ## Setup
@@ -92,10 +93,8 @@ Join the discord server  <https://discord.gg/qEgqyVW3uj>
 
 ## TODO
 
-- Currently only reads maps for Hell difficulty  
 - Need to add more info for NPCs and others
 - Replace coloured blocks with icons
-- BUG: It will sometimes unintentionally exit when switching acts
 
 ## Donations
 

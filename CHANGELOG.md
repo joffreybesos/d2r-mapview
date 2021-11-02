@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2021-11-02 - Difficulty is read
+
+- Difficulty is now read and used correctly
+
 ## [1.1.1] - 2021-11-02 - Minor improvements
 
 - No longer exits sometimes when changing acts

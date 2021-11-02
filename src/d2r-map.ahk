@@ -2,6 +2,7 @@
 #Include %A_ScriptDir%\include\getPlayerOffset.ahk
 #Include %A_ScriptDir%\include\getMapUrl.ahk
 #Include %A_ScriptDir%\include\getLevelNo.ahk
+#Include %A_ScriptDir%\include\getDifficulty.ahk
 #Include %A_ScriptDir%\include\getMapSeed.ahk
 #Include %A_ScriptDir%\include\showMap.ahk
 #Include %A_ScriptDir%\include\logging.ahk
@@ -34,9 +35,10 @@ UpdateCycle:
 	if (playerOffset) {
 		pSeedAddress := getMapSeedAddress(playerOffset)
 		if (pSeedAddress) {
+			pDifficultyAddress := getDifficultyAddress(playerOffset)
 			pLevelNoAddress := getLevelNoAddress(playerOffset)
 			if (pLevelNoAddress) {
-				sMapUrl := getD2RMapUrl(baseUrl, pSeedAddress, pLevelNoAddress)
+				sMapUrl := getD2RMapUrl(baseUrl, pSeedAddress, pDifficultyAddress, pLevelNoAddress)
 				if (InStr(lastMap, sMapUrl)) { ; if map not changed then don't update
 				} else {
 					WriteLog("Fetching map from " sMapUrl)

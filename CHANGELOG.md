@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.2] - 2021-11-02 - Updated logging
+
+- Logging improved, you can now turn debug logging on in settings.ini
+Simply change debug=false to debug=true
+
 ## [1.2.0] - 2021-11-02 - Difficulty is read
 
 - Difficulty is now read and used correctly

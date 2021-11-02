@@ -8,11 +8,9 @@ checkLastOffset(startingOffset) {
 }
 
 scanForPlayerOffset(startingOffset) {
-    ;WriteLog("Scanning for new player offset address, starting default offset " startingOffset)
-    return getPlayerOffset(startingOffset, 128)
+    WriteLogDebug("Scanning for new player offset address, starting default offset " startingOffset)
+    return getPlayerOffset(startingOffset, 256)
 }
-
-
 
 getPlayerOffset(startingOffset, loops) {
     
@@ -30,6 +28,7 @@ getPlayerOffset(startingOffset, loops) {
         ExitApp
     }
 
+    found := false
     loop, %loops%
     {
         newOffset := HexAdd(startingOffset, (A_Index - 1) * 8)
@@ -43,19 +42,30 @@ getPlayerOffset(startingOffset, loops) {
             if (StrLen(mapSeed) > 7) {
                 SetFormat Integer, D
                 if (A_Index > 1) {
-                    WriteLog("Found player offset: " newOffset ", from " A_Index " attempts, which gives map seed: " mapSeed)
+                    WriteLog("SUCCESS: Found player offset: " newOffset ", from " HexToDec(A_Index /8) " attempts, which gives map seed: " mapSeed)
                 }
-	            newOffset := newOffset + 0
+	            newOffset := newOffset + 0 ;convert to dec
+                found := true
                 return newOffset
             } else {
-                WriteLog("Found player unit: " playerUnit ", from " A_Index " attempts, but no mapSeed " mapSeed ", ignoring...")
+                WriteLogDebug("Possible player unit: " playerUnit ", from " HexToDec(A_Index/8) " attempts, but no mapSeed " mapSeed ", ignoring...")
             }
         }
     }
+    if (!found && loops > 1) {
+        WriteLogDebug("Did not find a player offset after " HexToDec(loops/8) " attempts, likely in game menu")
+    }
 }
 
-HexAdd(x, y){
+HexAdd(x, y) {
 	SetFormat, Integer, hex
 	l := (((lx := StrLen(x)) > (ly := StrLen(y))) ? lx : ly) - 2
 	return Format("0x{:0" Format("{:d}", l) "x}", x + y)
+}
+
+HexToDec(Hex) {
+    VarSetCapacity(dec, 66, 0)
+    , val := DllCall("msvcrt.dll\_wcstoui64", "Str", hex, "UInt", 0, "UInt", 16, "CDECL Int64")
+    , DllCall("msvcrt.dll\_i64tow", "Int64", val, "Str", dec, "UInt", 10, "CDECL")
+    return dec
 }

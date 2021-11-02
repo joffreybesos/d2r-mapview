@@ -32,7 +32,6 @@ UpdateCycle:
 	; scan for the player offset
 	playerOffset := checkLastOffset(playerOffset)
 	if (!playerOffset) {
-		Sleep, 1000
 		playerOffset := scanForPlayerOffset(startingOffset)
 	}
 	if (playerOffset) {
@@ -58,7 +57,7 @@ UpdateCycle:
 	} else {
 		playerOffset := startingOffset ; reset the offset to default
 		Gui, 1: Hide
-		Sleep, 3000  ; sleep longer when no offset found, you're likely in menu
+		Sleep, 5000  ; sleep longer when no offset found, you're likely in menu
 	}
 	Sleep, 1000 ; set a pacing of 1 second
 return

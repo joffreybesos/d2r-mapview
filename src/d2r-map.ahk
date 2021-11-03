@@ -17,11 +17,17 @@ WriteLog("* Map overlay started *")
 WriteLog("*******************************************************")
 IniRead, baseUrl, settings.ini, MapHost, baseUrl
 IniRead, width, settings.ini, MapSettings, width
-IniRead, height, settings.ini, MapSettings, height
 IniRead, topMargin, settings.ini, MapSettings, topMargin
 IniRead, leftMargin, settings.ini, MapSettings, leftMargin
 IniRead, opacity, settings.ini, MapSettings, opacity
 IniRead, startingOffset, settings.ini, Memory, playerOffset
+IniRead, debug, settings.ini, Logging, debug
+
+WriteLog("Using configuration:")
+WriteLog("    baseUrl: " baseUrl)
+WriteLog("    Map: width: " width ", topMargin: " topMargin ", leftMargin: " leftMargin ", opacity: " opacity)
+WriteLog("    startingOffset: " startingOffset)
+WriteLog("    debug logging: " debug)
 
 playerOffset:=startingOffset
 
@@ -45,7 +51,7 @@ UpdateCycle:
 				} else {
 					WriteLog("Fetching map from " sMapUrl)
 					lastMap := sMapUrl
-					ShowMap(sMapUrl, width, height, leftMargin, topMargin, opacity)
+					ShowMap(sMapUrl, width, leftMargin, topMargin, opacity)
 				}
 			}
 		} else {

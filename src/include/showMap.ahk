@@ -5,7 +5,7 @@ SetWorkingDir, %A_ScriptDir%
 
 
 
-ShowMap(sMapUrl, width, height, leftMargin, topMargin, opacity) {
+ShowMap(sMapUrl, configuredWidth, leftMargin, topMargin, opacity) {
     ; download image
     If !pToken := Gdip_Startup()
     {
@@ -29,7 +29,7 @@ ShowMap(sMapUrl, width, height, leftMargin, topMargin, opacity) {
     }
 
     Width := Gdip_GetImageWidth(pBitmap), Height := Gdip_GetImageHeight(pBitmap)
-    scaledWidth := 1000
+    scaledWidth := configuredWidth
     scaledHeight := (scaledWidth / Width) * Height
 
     hbm := CreateDIBSection(scaledWidth, scaledHeight)

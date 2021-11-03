@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.3] - 2021-11-04 - Width adjustment fixed
+
+- Fixed a bug where changing the width in settings.ini didn't work
+
 ## [1.2.2] - 2021-11-02 - Updated logging
 
 - Logging improved, you can now turn debug logging on in settings.ini

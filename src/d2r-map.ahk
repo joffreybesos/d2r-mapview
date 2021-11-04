@@ -3,6 +3,8 @@
 #Include %A_ScriptDir%\include\getMapUrl.ahk
 #Include %A_ScriptDir%\include\getLevelNo.ahk
 #Include %A_ScriptDir%\include\getDifficulty.ahk
+#Include %A_ScriptDir%\include\getPlayerPosition.ahk
+#Include %A_ScriptDir%\include\getLevelInfo.ahk
 #Include %A_ScriptDir%\include\getMapSeed.ahk
 #Include %A_ScriptDir%\include\showMap.ahk
 #Include %A_ScriptDir%\include\logging.ahk
@@ -12,6 +14,7 @@ if !FileExist(A_Scriptdir . "\settings.ini") {
 	ExitApp
 }
 lastMap := ""
+exitArray := []
 WriteLog("*******************************************************")
 WriteLog("* Map overlay started *")
 WriteLog("*******************************************************")
@@ -46,12 +49,15 @@ UpdateCycle:
 			pDifficultyAddress := getDifficultyAddress(playerOffset)
 			pLevelNoAddress := getLevelNoAddress(playerOffset)
 			if (pLevelNoAddress) {
+				playerPositionArray := getPlayerPosition(playerOffset)
 				sMapUrl := getD2RMapUrl(baseUrl, pSeedAddress, pDifficultyAddress, pLevelNoAddress)
 				if (InStr(lastMap, sMapUrl)) { ; if map not changed then don't update
 				} else {
-					WriteLog("Fetching map from " sMapUrl)
+					WriteLog("Fetching map from " sMapUrl "/image")
 					lastMap := sMapUrl
-					ShowMap(sMapUrl, width, leftMargin, topMargin, opacity)
+					ShowMap(sMapUrl "/image", width, leftMargin, topMargin, opacity)
+					mapJsonData := getLevelInfo(sMapUrl)
+					exitArray := getExits(mapJsonData)
 				}
 			}
 		} else {

@@ -27,7 +27,7 @@ getD2RMapUrl(baseUrl, pSeedAddress, pDifficultyAddress, pLevelNoAddress) {
     
     url := ""
     if (mapSeed) {
-        url := baseUrl . "/v1/map/" . mapSeed . "/" . difficulty . "/" . levelNo . "/image"  
+        url := baseUrl . "/v1/map/" . mapSeed . "/" . difficulty . "/" . levelNo 
     }
     return url
 }

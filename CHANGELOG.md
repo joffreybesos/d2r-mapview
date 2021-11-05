@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.4] - 2021-11-06 - Updated offset for new client
+
+- Settings.ini updated with new offset for client v1.0.66878
+
 ## [1.2.3] - 2021-11-04 - Width adjustment fixed
 
 - Fixed a bug where changing the width in settings.ini didn't work

@@ -73,7 +73,7 @@ This free server comes preconfigured, simply use the existing configuration in `
 ### Run your own map server
 
 Alternatively you can host your own map server which I've also shared for free.  
-Please refer to [./SERVER.md](SERVER.md)
+Please refer to [SERVER.md](SERVER.md)
 
 ## How it works
 
@@ -94,7 +94,7 @@ You can also set debug logging to `true` in `settings.ini` for verbose logging.
 
 Go to the discord server if you need further help <https://discord.gg/qEgqyVW3uj>  
 
-Tested and working on Diablo 2 Resurrected `1.0.66606`
+Tested and working on Diablo 2 Resurrected `1.0.66878`
 
 ## TODO
 

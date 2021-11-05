@@ -73,7 +73,7 @@ This free server comes preconfigured, simply use the existing configuration in `
 ### Run your own map server
 
 Alternatively you can host your own map server which I've also shared for free.  
-Please refer to SERVER.md
+Please refer to [./SERVER.md](SERVER.md)
 
 ## How it works
 

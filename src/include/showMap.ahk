@@ -2,8 +2,7 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\Gdip_All.ahk
-
-
+#Include %A_ScriptDir%\include\showText.ahk
 
 ShowMap(sMapUrl, configuredWidth, leftMargin, topMargin, opacity) {
     ; download image
@@ -13,18 +12,23 @@ ShowMap(sMapUrl, configuredWidth, leftMargin, topMargin, opacity) {
         ExitApp
     }
 
+    Gui, 1: Destroy
     sFile=%a_scriptdir%\currentmap.png
-    URLDownloadToFile, %sMapUrl%,%sFile%
     
-    Gui, 1: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-    Gui, 1: Show, NA
+    ShowText(configuredWidth, leftMargin, topMargin, "Loading map image...`nPlease wait", "22")
+    FileDelete, %sFile%
+    URLDownloadToFile, %sMapUrl%, %sFile%
 
+    Gui, 2: Hide
+    Gui, 1: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
     hwnd1 := WinExist()
     pBitmap := Gdip_CreateBitmapFromFile(sFile)
 
     If !pBitmap
     {
+        ShowText(configuredWidth, leftMargin, topMargin, "FAILED LOADING MAP!`nCheck log.txt`n`nExiting...", "ff")
         WriteLog("Could not load " sMapUrl)
+        Sleep, 5000
         ExitApp
     }
 
@@ -49,4 +53,5 @@ ShowMap(sMapUrl, configuredWidth, leftMargin, topMargin, opacity) {
     DeleteDC(hdc)
     Gdip_DeleteGraphics(G)
     Gdip_DisposeImage(pBitmap)
+    Gui, 1: Show, NA
 }

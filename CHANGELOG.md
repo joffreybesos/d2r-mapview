@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.5] - 2021-11-06 - Updated offset for new client
+
+- 'Loading' text now shown in place of map while map is downloading
+- If map fails to download an overlayed error message will be shown
+- Map will now hide when you alt-tab out of the game
+
 ## [1.2.4] - 2021-11-06 - Updated offset for new client
 
 - Settings.ini updated with new offset for client v1.0.66878

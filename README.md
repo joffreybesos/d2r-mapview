@@ -8,11 +8,16 @@ This repo will fetch the map from a backend map server and display it in the top
 
 ![Durance of Hate Level 2](duranceofhate2.png)
 
-Lower Kurast<br/>
+#### Lower Kurast
+
 <img src="lowerkurast.png" alt="Lower Kurast" width=50% height=50% style="background-color:#000">
-Canyon of the Magi<br/>
+
+#### Canyon of the Magi
+
 <img src="canyonofthemagi.png" alt="Canyon of the Magi" width=50% height=50% style="background-color:#000">
-Arcane Sanctuary<br/>
+
+#### Arcane Sanctuary
+
 <img src="arcane.png" alt="Arcane Sanctuar" width=50% height=50% style="background-color:#000">
 
 ## Usage

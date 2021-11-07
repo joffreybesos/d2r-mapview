@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.6] - 2021-11-07 - Town map no longer shown
+
+- Town maps will now be hidden
+
 ## [1.2.5] - 2021-11-06 - Added loading text
 
 - 'Loading' text now shown in place of map while map is downloading

@@ -24,8 +24,8 @@ ShowMap(sMapUrl, configuredWidth, leftMargin, topMargin, opacity) {
     ; hide the map if in town
     StringSplit, ua, sMapUrl, "/"
     if (ua8 == 1 or ua8 == 40 or ua8 == 75 or ua8 == 103 or ua8 == 109) {
+        WriteLog("At town mapid " ua8 ", hiding map")
     } else {
-
         Gui, 1: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
         hwnd1 := WinExist()
         pBitmap := Gdip_CreateBitmapFromFile(sFile)
@@ -47,13 +47,8 @@ ShowMap(sMapUrl, configuredWidth, leftMargin, topMargin, opacity) {
         obm := SelectObject(hdc, hbm)
         G := Gdip_GraphicsFromHDC(hdc)
         Gdip_SetInterpolationMode(G, 7)
-
-        ; Gdip_DrawImage(pGraphics, pBitmap, dx, dy, dw, dh, sx, sy, sw, sh, Matrix)
-        ; d is for destination and s is for source.
         Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, Width, Height, opacity)
-
         UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, scaledWidth, scaledHeight)
-
         SelectObject(hdc, obm)
         DeleteObject(hbm)
         DeleteDC(hdc)

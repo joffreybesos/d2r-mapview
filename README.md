@@ -27,6 +27,8 @@ This repo will fetch the map from a backend map server and display it in the top
 3. Run `d2rmap.exe` while in menus or in game.
 4. Map should appear at the top left and change as you move through the levels. (It might take a few seconds to first appear)
 
+The map overlay doesn't show in town.  
+
 **Note that this default method uses my hosted map server that I offer out for free.  
 This server is getting hammered lately so it would be appreciated if you supported this project with a Bitcoin donation** `18hSn32hChp1CmBYnRdQFyzkz5drpijRa2`  
 

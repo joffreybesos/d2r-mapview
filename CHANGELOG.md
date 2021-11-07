@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.2.5] - 2021-11-06 - Updated offset for new client
+## [1.2.5] - 2021-11-06 - Added loading text
 
 - 'Loading' text now shown in place of map while map is downloading
 - If map fails to download an overlayed error message will be shown

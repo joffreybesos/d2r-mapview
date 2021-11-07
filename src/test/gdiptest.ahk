@@ -29,7 +29,7 @@ pBitmap := Gdip_CreateBitmapFromFile("currentmap.png")
 ; Check to ensure we actually got a bitmap from the file, in case the file was corrupt or some other error occured
 If !pBitmap
 {
-	MsgBox "Could not load 'background.png'"
+	MsgBox "Could not load 'currentmap.png'"
 	ExitApp
 }
 

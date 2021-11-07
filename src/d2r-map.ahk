@@ -33,8 +33,19 @@ WriteLog("    startingOffset: " startingOffset)
 WriteLog("    debug logging: " debug)
 
 playerOffset:=startingOffset
+windowShow := true
 
 SetTimer, UpdateCycle, 1000 ; the 1000 here is priority, not sleep
+SetTimer, CheckScreen, 50
+return
+
+
+CheckScreen:
+	IfWinNotActive, ahk_exe D2R.exe
+		Gui, 1: Hide
+	IfWinActive, ahk_exe D2R.exe
+		if (windowShow)
+			Gui, 1: Show, NA
 return
 
 UpdateCycle:
@@ -55,20 +66,22 @@ UpdateCycle:
 				} else {
 					WriteLog("Fetching map from " sMapUrl "/image")
 					lastMap := sMapUrl
+					windowShow := true
 					ShowMap(sMapUrl "/image", width, leftMargin, topMargin, opacity)
 					mapJsonData := getLevelInfo(sMapUrl)
 					exitArray := getExits(mapJsonData)
 				}
+			} else {
+				windowShow := false
 			}
 		} else {
 			WriteLog("Found playerOffset" playerOffset ", but not map seed address")
-			Gui, 1: Hide
+			windowShow := false
 			playerOffset := startingOffset ; reset the offset to default
-			Sleep, 1000
 		}
 	} else {
 		playerOffset := startingOffset ; reset the offset to default
-		Gui, 1: Hide
+		windowShow := false
 		Sleep, 5000  ; sleep longer when no offset found, you're likely in menu
 	}
 	Sleep, 1000 ; set a pacing of 1 second

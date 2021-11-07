@@ -6,7 +6,8 @@
 #Include %A_ScriptDir%\include\getPlayerPosition.ahk
 #Include %A_ScriptDir%\include\getLevelInfo.ahk
 #Include %A_ScriptDir%\include\getMapSeed.ahk
-#Include %A_ScriptDir%\include\showMap.ahk
+#Include %A_ScriptDir%\include\showAutoMap.ahk
+#Include %A_ScriptDir%\include\getMapImage.ahk
 #Include %A_ScriptDir%\include\logging.ahk
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
@@ -34,6 +35,8 @@ WriteLog("    debug logging: " debug)
 
 playerOffset:=startingOffset
 windowShow := true
+mapJsonData := ""
+sFile := ""
 
 SetTimer, UpdateCycle, 1000 ; the 1000 here is priority, not sleep
 SetTimer, CheckScreen, 50
@@ -41,11 +44,7 @@ return
 
 
 CheckScreen:
-	IfWinNotActive, ahk_exe D2R.exe
-		Gui, 1: Hide
-	IfWinActive, ahk_exe D2R.exe
-		if (windowShow)
-			Gui, 1: Show, NA
+	Gui, 1: Show, NA
 return
 
 UpdateCycle:
@@ -62,15 +61,16 @@ UpdateCycle:
 			if (pLevelNoAddress) {
 				playerPositionArray := getPlayerPosition(playerOffset)
 				sMapUrl := getD2RMapUrl(baseUrl, pSeedAddress, pDifficultyAddress, pLevelNoAddress)
-				if (InStr(lastMap, sMapUrl)) { ; if map not changed then don't update
+				if (InStr(lastMap, sMapUrl)) {
 				} else {
-					WriteLog("Fetching map from " sMapUrl "/image")
+					; new map so refresh image and map data
+					WriteLog("Fetching new map from " sMapUrl "/image?flat=true")
 					lastMap := sMapUrl
 					windowShow := true
-					ShowMap(sMapUrl "/image", width, leftMargin, topMargin, opacity)
+					sFile := getMapImage(sMapUrl . "/image?flat=true")
 					mapJsonData := getLevelInfo(sMapUrl)
-					exitArray := getExits(mapJsonData)
 				}
+				ShowAutoMap(sFile, width, leftMargin, topMargin, opacity, mapJsonData, playerPositionArray)
 			} else {
 				windowShow := false
 			}

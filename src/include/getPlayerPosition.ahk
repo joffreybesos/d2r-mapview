@@ -40,7 +40,7 @@ getPlayerPosition(playerOffset) {
     ;WriteLog("XPos " xPos " yPos " yPos)
 
     positionArray := []
-    positionArray[0] = xPosAddress
-    positionArray[1] = yPosAddress
+    positionArray[0] := xPos
+    positionArray[1] := yPos
     return positionArray
 }

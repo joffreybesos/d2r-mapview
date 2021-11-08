@@ -16,16 +16,18 @@ WriteLog("*******************************************************")
 WriteLog("* Map overlay started *")
 WriteLog("*******************************************************")
 IniRead, baseUrl, settings.ini, MapHost, baseUrl
-IniRead, width, settings.ini, MapSettings, width
-IniRead, topMargin, settings.ini, MapSettings, topMargin
-IniRead, leftMargin, settings.ini, MapSettings, leftMargin
-IniRead, opacity, settings.ini, MapSettings, opacity
+IniRead, width, settings.ini, MapSettings, width, 1000
+IniRead, topMargin, settings.ini, MapSettings, topMargin, 50
+IniRead, leftMargin, settings.ini, MapSettings, leftMargin, 50
+IniRead, opacity, settings.ini, MapSettings, opacity, 0.5
+IniRead, hideTown, settings.ini, MapSettings, hideTown, true
 IniRead, startingOffset, settings.ini, Memory, playerOffset
-IniRead, debug, settings.ini, Logging, debug
+IniRead, debug, settings.ini, Logging, debug, false
 
 WriteLog("Using configuration:")
 WriteLog("    baseUrl: " baseUrl)
 WriteLog("    Map: width: " width ", topMargin: " topMargin ", leftMargin: " leftMargin ", opacity: " opacity)
+WriteLog("    Hide town map: " hideTown)
 WriteLog("    startingOffset: " startingOffset)
 WriteLog("    debug logging: " debug)
 
@@ -63,7 +65,7 @@ UpdateCycle:
 					WriteLog("Fetching map from " sMapUrl)
 					lastMap := sMapUrl
 					windowShow := true
-					ShowMap(sMapUrl, width, leftMargin, topMargin, opacity)
+					ShowMap(sMapUrl, width, leftMargin, topMargin, opacity, hideTown)
 				}
 			} else {
 				windowShow := false

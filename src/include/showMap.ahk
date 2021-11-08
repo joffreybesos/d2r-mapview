@@ -4,7 +4,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\Gdip_All.ahk
 #Include %A_ScriptDir%\include\showText.ahk
 
-ShowMap(sMapUrl, configuredWidth, leftMargin, topMargin, opacity) {
+ShowMap(sMapUrl, configuredWidth, leftMargin, topMargin, opacity, hideTown) {
     ; download image
     If !pToken := Gdip_Startup()
     {
@@ -23,7 +23,7 @@ ShowMap(sMapUrl, configuredWidth, leftMargin, topMargin, opacity) {
 
     ; hide the map if in town
     StringSplit, ua, sMapUrl, "/"
-    if (ua8 == 1 or ua8 == 40 or ua8 == 75 or ua8 == 103 or ua8 == 109) {
+    if ((ua8 == 1 or ua8 == 40 or ua8 == 75 or ua8 == 103 or ua8 == 109) and hideTown=="true") {
         WriteLog("At town mapid " ua8 ", hiding map")
     } else {
         Gui, 1: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs

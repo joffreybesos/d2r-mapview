@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.7] - 2021-11-08 - Hiding town maps now configurable
+
+- Hiding of town maps can now be configured in `settings.ini` with `hideTown=true|false`
+
 ## [1.2.6] - 2021-11-07 - Town map no longer shown
 
 - Town maps will now be hidden

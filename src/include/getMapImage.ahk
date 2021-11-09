@@ -19,7 +19,7 @@ getMapImage(sMapUrl) {
     ShowText(configuredWidth, leftMargin, topMargin, "Loading map data...`nPlease wait", "22")
     FileDelete, %sFile%
     URLDownloadToFile, %sMapUrl%, %sFile%
-    WriteLog("Downloading " sMapUrl)
+    ;WriteLog("Downloading " sMapUrl " to " sFile)
 
 
     Gui, 2: Hide

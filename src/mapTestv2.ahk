@@ -1,3 +1,5 @@
+#Strict [On]
+#Warnings [On]
 #SingleInstance, Force
 SendMode Input
 
@@ -10,33 +12,70 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\getLevelInfo.ahk
 
 playerPositionArray := []
-
 playerPositionArray[0] := 14620
 playerPositionArray[1] := 5690
 
-sMapUrl := "http://diab.wikiwarsgame.com:8080/v1/map/905399348/2/5"
-imageUrl := sMapUrl "/image?flat=true"
+imageUrl := "http://diab.wikiwarsgame.com:8080/v1/map/905399348/2/5/image?flat=true&trim=true"
 
 sFile=%A_Temp%\currentmap.png
 FileDelete, %sFile%
-URLDownloadToFile, %imageUrl%, %sFile%
-WriteLog("Downloading " imageUrl)
 
-mapFileName := RegExReplace(sMapUrl, "^.+?map\/.*?")
-mapFileName := StrReplace(mapFileName, "/", "_")
-jsonFile=%A_Temp%\%mapFileName%.json
-if !FileExist(jsonFile) {
-    URLDownloadToFile, %sMapUrl%, %jsonFile%
+; download file
+try {
+
+    whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+    whr.Open("GET", imageUrl, true)
+    whr.Send()
+    WriteLog("Downloading " imageUrl)
+    whr.WaitForResponse()
+    fileContents := whr.ResponseBody
+    respHeaders := whr.GetAllResponseHeaders
+    leftTrimmed := whr.getResponseHeader("lefttrimmed")
+    topTrimmed := whr.getResponseHeader("toptrimmed")
+    mapOffsetX := whr.getResponseHeader("offsetx")
+    mapOffsety := whr.getResponseHeader("offsety")
+    mapwidth := whr.getResponseHeader("mapwidth")
+    mapheight := whr.getResponseHeader("mapheight")
+    vStream := whr.ResponseStream
+    if (ComObjType(vStream) = 0xD) {      ;VT_UNKNOWN = 0xD
+        pIStream := ComObjQuery(vStream, "{0000000c-0000-0000-C000-000000000046}")	;defined in ObjIdl.h
+
+        oFile := FileOpen( sFile, "w")
+        Loop {	
+            VarSetCapacity(Buffer, 8192)
+            hResult := DllCall(NumGet(NumGet(pIStream + 0) + 3 * A_PtrSize)	; IStream::Read 
+                , "ptr", pIStream	
+                , "ptr", &Buffer			;pv [out] A pointer to the buffer which the stream data is read into.
+                , "uint", 8192			;cb [in] The number of bytes of data to read from the stream object.
+                , "ptr*", cbRead)		;pcbRead [out] A pointer to a ULONG variable that receives the actual number of bytes read from the stream object. 
+            oFile.RawWrite(&Buffer, cbRead)
+        } Until (cbRead = 0)
+        ObjRelease(pIStream) 
+        oFile.Close() 			
+    }
+
+} catch e {
+    WriteLog(e.message)
+    WriteLog("ERROR: Failed to download image from " imageUrl)
 }
-FileRead, Contents, %jsonFile%
-mapJsonData := Jxon_Load(Contents)
 
+padding := 150
+scale := 2
+Angle = 45
+leftMargin := 50
+topMargin := 50
+mapWidth := mapWidth * scale
+;WriteLog("mapOffsetX " mapOffsetX " mapOffsetY " mapOffsetY " mapWidth " mapWidth)
 
 configuredWidth := 1000
 configuredWidth := 1000
 opacity := 0.5
-leftMargin := 50
-topMargin := 50
+
+; current position of player in world
+xPosDot := ((playerPositionArray[0] - mapOffsetX) * scale)
+yPosDot := ((playerPositionArray[1] - mapOffsetY) * scale)
+;WriteLog("X playerpos " xPosDot " Y playerpos " yPosDot)
+
 
 ; download image
 If !pToken := Gdip_Startup()
@@ -57,20 +96,11 @@ If !pBitmap
     ExitApp
 }
 
-scale := 2
-padding := 150
-Angle = 45
-mapOffsetX := mapJsonData["offset"]["x"]
-mapOffsetY := mapJsonData["offset"]["y"]
-mapWidth := (mapJsonData["size"]["width"] * scale) + (padding * 2)
-;WriteLog("mapOffsetX " mapOffsetX " mapOffsetY " mapOffsetY " mapWidth " mapWidth)
 
-; current position of player in world
-xPosDot := ((playerPositionArray[0] - mapOffsetX) * scale) + padding
-yPosDot := ((playerPositionArray[1] - mapOffsetY) * scale) + padding
-;WriteLog("X playerpos " xPosDot " Y playerpos " yPosDot)
 
-Width := Gdip_GetImageWidth(pBitmap), Height := Gdip_GetImageHeight(pBitmap)
+
+Width := Gdip_GetImageWidth(pBitmap)
+Height := Gdip_GetImageHeight(pBitmap)
 scaledWidth := mapWidth
 scaledHeight := (scaledWidth / Width) * Height
 scaledHeight *= 0.66
@@ -106,12 +136,9 @@ G := Gdip_GraphicsFromHDC(hdc)
 
 newWidth := Gdip_GetImageWidth(pBitmap) 
 newHeight := Gdip_GetImageHeight(pBitmap)
-WriteLog(RWidth " " RHeight " " Width " " Height)
+WriteLog(RWidth " " RHeight " " Width " " Height " " newWidth " " newHeight)
 ; draw the actual map
 Gdip_DrawImage(G, pBitmap, 0, 0, newWidth, newHeight, 0, 0, Width, Height, opacity)
-
-
-
 UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, newWidth, newHeight)
 ;Gdip_SaveBitmapToFile(pResizedBitmap, "testfile.png")
 SelectObject(hdc, obm)
@@ -119,10 +146,6 @@ DeleteObject(hbm)
 DeleteDC(hdc)
 Gdip_DeleteGraphics(G)
 Gdip_DisposeImage(pBitmap)
-
-
-
-
 
 Esc::
 {

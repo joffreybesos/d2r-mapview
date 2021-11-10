@@ -6,23 +6,23 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\Gdip_ResizeBitmap.ahk
 #Include %A_ScriptDir%\include\Gdip_RotateBitmap.ahk
 
-ShowAutoMap(sFile, configuredWidth, leftMargin, topMargin, opacity, mapJsonData, playerPositionArray) {
-    ; download image
+ShowAutoMap(mapData, configuredWidth, leftMargin, topMargin, opacity, playerPositionArray) {
+    WriteLog(mapData["sFile"])
     If !pToken := Gdip_Startup()
     {
         MsgBox "Gdiplus failed to start. Please ensure you have gdiplus on your system"
         ExitApp
     }
 
-    
-   ; hide the map if in town
-    mapid := mapJsonData["id"]
-    if (mapid == 1 or mapid == 40 or mapid == 75 or mapid == 103 or mapid == 109) {
-        ;WriteLogDebug("At town mapid " mapid ", hiding map")
+    ; hide the map if in town
+    ;StringSplit, ua, sMapUrl, "/"
+    ;if (ua8 == 1 or ua8 == 40 or ua8 == 75 or ua8 == 103 or ua8 == 109) {
+    if (1 ==2 ) {
+        WriteLogDebug("At town mapid " mapid ", hiding map")
     } else {
         Gui, 1: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
         hwnd1 := WinExist()
-        pBitmap := Gdip_CreateBitmapFromFile(sFile)
+        pBitmap := Gdip_CreateBitmapFromFile(mapData["sFile"])
 
         If !pBitmap
         {
@@ -31,6 +31,7 @@ ShowAutoMap(sFile, configuredWidth, leftMargin, topMargin, opacity, mapJsonData,
             Sleep, 5000
             ExitApp
         }
+
         scale := 2
         padding := 150
         Angle = 45

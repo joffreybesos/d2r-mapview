@@ -7,7 +7,7 @@
 #Include %A_ScriptDir%\include\getLevelInfo.ahk
 #Include %A_ScriptDir%\include\getMapSeed.ahk
 #Include %A_ScriptDir%\include\showAutoMap.ahk
-#Include %A_ScriptDir%\include\getMapImage.ahk
+#Include %A_ScriptDir%\include\downloadMapImage.ahk
 #Include %A_ScriptDir%\include\logging.ahk
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
@@ -35,7 +35,7 @@ WriteLog("    debug logging: " debug)
 
 playerOffset:=startingOffset
 windowShow := true
-mapJsonData := ""
+mapData := []
 sFile := ""
 
 SetTimer, UpdateCycle, 1000 ; the 1000 here is priority, not sleep
@@ -64,13 +64,12 @@ UpdateCycle:
 				if (InStr(lastMap, sMapUrl)) {
 				} else {
 					; new map so refresh image and map data
-					WriteLog("Fetching new map from " sMapUrl "/image?flat=true")
+					WriteLog("Fetching new map from " sMapUrl)
 					lastMap := sMapUrl
 					windowShow := true
-					sFile := getMapImage(sMapUrl . "/image?flat=true")
-					mapJsonData := getLevelInfo(sMapUrl)
+					downloadMapImage(sMapUrl, mapData)
 				}
-				ShowAutoMap(sFile, width, leftMargin, topMargin, opacity, mapJsonData, playerPositionArray)
+				ShowAutoMap(mapData, width, leftMargin, topMargin, opacity, playerPositionArray)
 			} else {
 				windowShow := false
 			}

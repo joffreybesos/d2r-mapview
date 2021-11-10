@@ -1,23 +1,17 @@
 #SingleInstance, Force
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
-#Include %A_ScriptDir%\include\Gdip_All.ahk
-#Include %A_ScriptDir%\include\showText.ahk
 #Include %A_ScriptDir%\include\logging.ahk
 
-downloadMapImage(sMapUrl, ByRef mapData) {
-    ; Gui, 1: Destroy
-    
-    ; ShowText(1000, 50, 50, "Loading map data...`nPlease wait", "22")
-    
-    sFile=%A_Temp%\currentmap.png
+downloadMapImage(baseUrl, gameMemoryData, ByRef mapData) {
+    imageUrl := baseUrl . "/v1/map/" . gameMemoryData["mapSeed"] . "/" . gameMemoryData["difficulty"] . "/" . gameMemoryData["levelNo"] . "/image?flat=true&trim=true"
+
+    sFile := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . gameMemoryData["levelNo"] . ".png"
     FileDelete, %sFile%
 
-    ; download file
     try {
-        
         whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-        whr.Open("GET", sMapUrl, true)
+        whr.Open("GET", imageUrl, true)
         whr.Send()
         whr.WaitForResponse()
         
@@ -44,14 +38,14 @@ downloadMapImage(sMapUrl, ByRef mapData) {
                     , "ptr*", cbRead)		;pcbRead [out] A pointer to a ULONG variable that receives the actual number of bytes read from the stream object. 
                 oFile.RawWrite(&Buffer, cbRead)
             } Until (cbRead = 0)
-            ObjRelease(pIStream) 
-            oFile.Close() 			
+            ObjRelease(pIStream)
+            oFile.Close()
         }
-
     } catch e {
+        WriteLog(respHeaders)
         WriteLog(e.message)
         WriteLog("ERROR: Failed to download image from " imageUrl)
     }
-    ;WriteLog("Downloaded " sMapUrl " to " sFile)
+    WriteLog("Downloaded " imageUrl " to " sFile)
     mapData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight }
 }  

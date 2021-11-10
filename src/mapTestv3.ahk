@@ -8,14 +8,13 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\Gdip_All.ahk
 #Include %A_ScriptDir%\include\Gdip_ResizeBitmap.ahk
 #Include %A_ScriptDir%\include\Gdip_RotateBitmap.ahk
-#Include %A_ScriptDir%\include\getMapImage.ahk
 #Include %A_ScriptDir%\include\getLevelInfo.ahk
 
 playerPositionArray := []
 playerPositionArray[0] := 14620
 playerPositionArray[1] := 5690
 
-imageUrl := "http://diab.wikiwarsgame.com:8080/v1/map/905399348/2/5/image?flat=true&trim=true"
+imageUrl := "http://diab.wikiwarsgame.com:8080/v1/map/114773561/2/111/image?flat=true&trim=true"
 
 sFile=%A_Temp%\currentmap.png
 FileDelete, %sFile%
@@ -99,15 +98,15 @@ If !pBitmap
 
 Width := Gdip_GetImageWidth(pBitmap)
 Height := Gdip_GetImageHeight(pBitmap)
-scaledWidth := mapWidth
-scaledHeight := (scaledWidth / Width) * Height
-scaledHeight *= 0.5
+; scaledWidth := mapWidth
+; scaledHeight := (scaledWidth / Width) * Height
+; scaledHeight *= 0.5
 
 
-Gdip_GetRotatedDimensions(Width, Height, Angle, RWidth, RHeight)
-Gdip_GetRotatedTranslation(Width, Height, Angle, xTranslation, yTranslation)
+; Gdip_GetRotatedDimensions(Width, Height, Angle, RWidth, RHeight)
+; Gdip_GetRotatedTranslation(Width, Height, Angle, xTranslation, yTranslation)
 
-hbm := CreateDIBSection(RWidth, RHeight)
+hbm := CreateDIBSection(Width, Height)
 hdc := CreateCompatibleDC()
 obm := SelectObject(hdc, hbm)
 ;G := Gdip_GraphicsFromHDC(hdc)
@@ -127,19 +126,19 @@ Gdip_SetSmoothingMode(G, 4)
 ; Gdip_DeleteBrush(pBrush)
 
 G := Gdip_GraphicsFromHDC(hdc)
-pRotatedBitmap := Gdip_RotateBitmap(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
-newSize := "w1000 h" scaledHeight
-pResizedBitmap  := Gdip_ResizeBitmap(pRotatedBitmap, newSize)
+; pRotatedBitmap := Gdip_RotateBitmap(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
+; newSize := "w1000 h" scaledHeight
+; pResizedBitmap  := Gdip_ResizeBitmap(pRotatedBitmap, newSize)
 
-newWidth := Gdip_GetImageWidth(pResizedBitmap) 
-newHeight := Gdip_GetImageHeight(pResizedBitmap)
+; newWidth := Gdip_GetImageWidth(pBitmap) 
+; newHeight := Gdip_GetImageHeight(pBitmap)
 WriteLog("RWidth: " RWidth " RHeight: " RHeight)
 WriteLog("Width: " Width " Height: " Height)
 WriteLog("newWidth: " newWidth " newHeight: " newHeight)
 WriteLog("xTranslation: " xTranslation " yTranslation: " yTranslation)
 
-Gdip_DrawImage(G, pResizedBitmap, 0, 0, RWidth, RHeight, 0, 0, RWidth, RHeight, opacity)
-UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, newWidth, newHeight)
+Gdip_DrawImage(G, pBitmap, 0, 0, Width, Height, 0, 0, Width, Height, opacity)
+UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, Width, Height)
 ;Gdip_SaveBitmapToFile(pResizedBitmap, "testfile.png")
 SelectObject(hdc, obm)
 DeleteObject(hbm)
@@ -168,57 +167,57 @@ If !pBitmap
 
 
 
-Width := Gdip_GetImageWidth(pBitmap)
-Height := Gdip_GetImageHeight(pBitmap)
-scaledWidth := mapWidth
-scaledHeight := (scaledWidth / Width) * Height
-scaledHeight *= 0.5
+; Width := Gdip_GetImageWidth(pBitmap)
+; Height := Gdip_GetImageHeight(pBitmap)
+; scaledWidth := mapWidth
+; scaledHeight := (scaledWidth / Width) * Height
+; scaledHeight *= 0.5
 
 
-Gdip_GetRotatedDimensions(Width, Height, Angle, RWidth, RHeight)
-Gdip_GetRotatedTranslation(Width, Height, Angle, xTranslation, yTranslation)
+; Gdip_GetRotatedDimensions(Width, Height, Angle, RWidth, RHeight)
+; Gdip_GetRotatedTranslation(Width, Height, Angle, xTranslation, yTranslation)
 
-hbm := CreateDIBSection(RWidth, RHeight)
-hdc := CreateCompatibleDC()
-obm := SelectObject(hdc, hbm)
-;G := Gdip_GraphicsFromHDC(hdc)
-; G := Gdip_GraphicsFromImage(pBitmap)
+; hbm := CreateDIBSection(RWidth, RHeight)
+; hdc := CreateCompatibleDC()
+; obm := SelectObject(hdc, hbm)
+; ;G := Gdip_GraphicsFromHDC(hdc)
+; ; G := Gdip_GraphicsFromImage(pBitmap)
 
-;Gdip_SetInterpolationMode(G, 7)
-Gdip_SetSmoothingMode(G, 4)  
+; ;Gdip_SetInterpolationMode(G, 7)
+; Gdip_SetSmoothingMode(G, 4)  
 
-; ;draw player dot
-; pPen := Gdip_CreatePen(0xff00FF00, 5)
-; Gdip_DrawRectangle(G, pPen, xPosDot, yPosDot, 5, 5)
-; Gdip_DrawRectangle(G, pPen, 0, 0, Width, Height) ;outline
-; Gdip_DeletePen(pPen)
+; ; ;draw player dot
+; ; pPen := Gdip_CreatePen(0xff00FF00, 5)
+; ; Gdip_DrawRectangle(G, pPen, xPosDot, yPosDot, 5, 5)
+; ; Gdip_DrawRectangle(G, pPen, 0, 0, Width, Height) ;outline
+; ; Gdip_DeletePen(pPen)
 
-; pBrush := Gdip_BrushCreateHatch(0xff00FFFF, 0xffFFFF00, 31)
-; Gdip_FillRectangle(G, pBrush, xPosDot+60, yPosDot, 50, 50)
-; Gdip_DeleteBrush(pBrush)
+; ; pBrush := Gdip_BrushCreateHatch(0xff00FFFF, 0xffFFFF00, 31)
+; ; Gdip_FillRectangle(G, pBrush, xPosDot+60, yPosDot, 50, 50)
+; ; Gdip_DeleteBrush(pBrush)
 
-G := Gdip_GraphicsFromHDC(hdc)
-pRotatedBitmap := Gdip_RotateBitmap(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
-newSize := "w1000 h" scaledHeight
-pResizedBitmap  := Gdip_ResizeBitmap(pRotatedBitmap, newSize)
+; G := Gdip_GraphicsFromHDC(hdc)
+; pRotatedBitmap := Gdip_RotateBitmap(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
+; newSize := "w1000 h" scaledHeight
+; pResizedBitmap  := Gdip_ResizeBitmap(pRotatedBitmap, newSize)
 
-newWidth := Gdip_GetImageWidth(pResizedBitmap) 
-newHeight := Gdip_GetImageHeight(pResizedBitmap)
-WriteLog("RWidth: " RWidth " RHeight: " RHeight)
-WriteLog("Width: " Width " Height: " Height)
-WriteLog("newWidth: " newWidth " newHeight: " newHeight)
-WriteLog("xTranslation: " xTranslation " yTranslation: " yTranslation)
+; newWidth := Gdip_GetImageWidth(pResizedBitmap) 
+; newHeight := Gdip_GetImageHeight(pResizedBitmap)
+; WriteLog("RWidth: " RWidth " RHeight: " RHeight)
+; WriteLog("Width: " Width " Height: " Height)
+; WriteLog("newWidth: " newWidth " newHeight: " newHeight)
+; WriteLog("xTranslation: " xTranslation " yTranslation: " yTranslation)
 
-Gdip_DrawImage(G, pResizedBitmap, 0, 0, RWidth, RHeight, 0, 0, RWidth, RHeight, opacity)
-UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, newWidth, newHeight)
-;Gdip_SaveBitmapToFile(pResizedBitmap, "testfile.png")
-SelectObject(hdc, obm)
-DeleteObject(hbm)
-DeleteDC(hdc)
-Gdip_DeleteGraphics(G)
-Gdip_DisposeImage(pBitmap)
-ElapsedTime := A_TickCount - StartTime
-WriteLog("Draw players " ElapsedTime " ms taken")
+; Gdip_DrawImage(G, pResizedBitmap, 0, 0, RWidth, RHeight, 0, 0, RWidth, RHeight, opacity)
+; UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, newWidth, newHeight)
+; ;Gdip_SaveBitmapToFile(pResizedBitmap, "testfile.png")
+; SelectObject(hdc, obm)
+; DeleteObject(hbm)
+; DeleteDC(hdc)
+; Gdip_DeleteGraphics(G)
+; Gdip_DisposeImage(pBitmap)
+; ElapsedTime := A_TickCount - StartTime
+; WriteLog("Draw players " ElapsedTime " ms taken")
 
 
 

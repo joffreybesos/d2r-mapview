@@ -29,13 +29,12 @@ IniRead, startingOffset, settings.ini, Memory, playerOffset
 IniRead, uiOffset, settings.ini, Memory, uiOffset
 IniRead, readInterval, settings.ini, Memory, readInterval, 1000
 IniRead, debug, settings.ini, Logging, debug, false
-IniRead, hideTown, settings.ini, MapSettings, hideTown, true
+IniRead, alwaysShowMap, settings.ini, MapSettings, alwaysShowMap, false
 
 WriteLog("Using configuration:")
 WriteLog("    baseUrl: " baseUrl)
 WriteLog("    Map: width: " width ", topMargin: " topMargin ", leftMargin: " leftMargin ", opacity: " opacity)
 WriteLog("    startingOffset: " startingOffset)
-WriteLog("    hideTown: " hideTown)
 WriteLog("    debug logging: " debug)
 
 playerOffset:=startingOffset
@@ -58,21 +57,24 @@ GameState:
             ; if there's a level num then the player is in a map
             if (gameMemoryData["levelNo"] != lastlevel) {
                 ; Show loading text
-                Gui, 1: Hide  ; hide map
-                Gui, 3: Hide  ; hide player dot
+                Gui, 1: Show, NA
+                ;Gui, 1: Hide  ; hide map
+                ;Gui, 3: Hide  ; hide player dot
                 ShowText(width, leftMargin, topMargin, "Loading map data...`nPlease wait", "22") ; 22 is opacity
                 ; Download map
                 downloadMapImage(baseUrl, gameMemoryData, mapData)
                 Gui, 2: Destroy  ; remove loading text
                 ; Show Map
-                ShowMap(width, leftMargin, topMargin, mapData, gameMemoryData, uiData)
-                checkAutomapVisibility(uiOffset)
+                ShowMap(width, leftMargin, topMargin, opacity, mapData, gameMemoryData, uiData)
+                checkAutomapVisibility(uiOffset, alwaysShowMap)
             }
             
             ShowPlayer(width, leftMargin, topMargin, mapData, gameMemoryData, uiData)
 
             lastlevel := gameMemoryData["levelNo"]
         } else {
+            Gui, 1: Destroy
+            Gui, 3: Destroy
             WriteLog("In Menu " gameMemoryData["levelNo"])
         }
     }
@@ -81,19 +83,20 @@ return
 
 
 
-checkAutomapVisibility(uiOffset) {
+checkAutomapVisibility(uiOffset, alwaysShowMap) {
     if (isAutomapShown(uiOffset) == true) {
         ;showmap
         WriteLog("Map shown")
         Gui, 1: Show, NA
         Gui, 3: Show, NA
-        showMap:= true
     } else {
         ; hidemap
-        WriteLog("Hide map")
-        Gui, 1: Hide
-        Gui, 3: Hide
-        showMap:= false
+        
+        if (alwaysShowMap == "false") {
+            WriteLog("Hide map")
+            Gui, 1: Hide
+            Gui, 3: Hide
+        }
     }
     return
 }
@@ -102,7 +105,7 @@ checkAutomapVisibility(uiOffset) {
 ~TAB::
 ~Space::
 {
-    checkAutomapVisibility(uiOffset)
+    checkAutomapVisibility(uiOffset, alwaysShowMap)
     return
 }
 

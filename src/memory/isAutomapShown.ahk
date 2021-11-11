@@ -22,7 +22,7 @@ isAutomapShown(uiOffset) {
     ;WriteLog("Looking for Level No address at player offset " playerOffset)
     startingAddress := d2r.BaseAddress + uiOffset
     isMapShown := d2r.read(startingAddress, "UShort")
-    WriteLog(isMapShown " " uiOffset " " startingAddress)
+    ;WriteLog(isMapShown " " uiOffset " " startingAddress)
     if (isMapShown == 0) {
         return false
     }

@@ -3,6 +3,18 @@
 #Include %A_ScriptDir%\include\logging.ahk
 SetWorkingDir, %A_ScriptDir%
 
+
+scanOffset(lastOffset, startingOffset) {
+    ; check the one that previously worked, it's likely not checkLastOffset()
+    playerOffset := checkLastOffset(lastOffset)
+    if (playerOffset) {
+        ;WriteLogDebug("Using last offset " playerOffset " " lastOffset)
+        return playerOffset
+    }
+    ; if the last offset doesn't seem valid anymore then you're in the menu or a new game
+    return scanForPlayerOffset(startingOffset)
+}
+
 checkLastOffset(startingOffset) {
     return getPlayerOffset(startingOffset, 1)
 }

@@ -1,92 +1,117 @@
 #SingleInstance, Force
-#Include %A_ScriptDir%\include\getPlayerOffset.ahk
-#Include %A_ScriptDir%\include\getMapUrl.ahk
-#Include %A_ScriptDir%\include\getLevelNo.ahk
-#Include %A_ScriptDir%\include\getDifficulty.ahk
-#Include %A_ScriptDir%\include\getMapSeed.ahk
-#Include %A_ScriptDir%\include\showMap.ahk
+#Persistent
+SendMode Input
+SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\logging.ahk
+#Include %A_ScriptDir%\memory\scanOffset.ahk
+#Include %A_ScriptDir%\memory\readGameMemory.ahk
+#Include %A_ScriptDir%\memory\isAutomapShown.ahk
+#Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
+#Include %A_ScriptDir%\ui\showMap.ahk
+#Include %A_ScriptDir%\ui\showText.ahk
+#Include %A_ScriptDir%\ui\showPlayer.ahk
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
 	MsgBox, , Missing settings, Could not find settings.ini file
 	ExitApp
 }
 lastMap := ""
+exitArray := []
 WriteLog("*******************************************************")
 WriteLog("* Map overlay started *")
 WriteLog("*******************************************************")
-IniRead, baseUrl, settings.ini, MapHost, baseUrl
+IniRead, baseUrl, settings.ini, MapHost, baseUrl, ""
 IniRead, width, settings.ini, MapSettings, width, 1000
 IniRead, topMargin, settings.ini, MapSettings, topMargin, 50
 IniRead, leftMargin, settings.ini, MapSettings, leftMargin, 50
 IniRead, opacity, settings.ini, MapSettings, opacity, 0.5
-IniRead, hideTown, settings.ini, MapSettings, hideTown, true
 IniRead, startingOffset, settings.ini, Memory, playerOffset
+IniRead, uiOffset, settings.ini, Memory, uiOffset
+IniRead, readInterval, settings.ini, Memory, readInterval, 1000
 IniRead, debug, settings.ini, Logging, debug, false
+IniRead, alwaysShowMap, settings.ini, MapSettings, alwaysShowMap, false
 
 WriteLog("Using configuration:")
 WriteLog("    baseUrl: " baseUrl)
 WriteLog("    Map: width: " width ", topMargin: " topMargin ", leftMargin: " leftMargin ", opacity: " opacity)
-WriteLog("    Hide town map: " hideTown)
 WriteLog("    startingOffset: " startingOffset)
 WriteLog("    debug logging: " debug)
 
 playerOffset:=startingOffset
-windowShow := true
+lastlevel:=""
+uidata:={}
+showMap:=true
 
-SetTimer, UpdateCycle, 1000 ; the 1000 here is priority, not sleep
-SetTimer, CheckScreen, 50
+SetTimer, GameState, 1000 ; the 1000 here is priority, not sleep
 return
 
-
-CheckScreen:
-	IfWinNotActive, ahk_exe D2R.exe
-		Gui, 1: Hide
-	IfWinActive, ahk_exe D2R.exe
-		if (windowShow)
-			Gui, 1: Show, NA
-return
-
-UpdateCycle:
+GameState:
 	; scan for the player offset
-	playerOffset := checkLastOffset(playerOffset)
+	playerOffset := scanOffset(playerOffset, startingOffset)
+
 	if (!playerOffset) {
-		playerOffset := scanForPlayerOffset(startingOffset)
-	}
-	if (playerOffset) {
-		pSeedAddress := getMapSeedAddress(playerOffset)
-		if (pSeedAddress) {
-			pDifficultyAddress := getDifficultyAddress(playerOffset)
-			pLevelNoAddress := getLevelNoAddress(playerOffset)
-			if (pLevelNoAddress) {
-				sMapUrl := getD2RMapUrl(baseUrl, pSeedAddress, pDifficultyAddress, pLevelNoAddress)
-				if (InStr(lastMap, sMapUrl)) { ; if map not changed then don't update
-				} else {
-					WriteLog("Fetching map from " sMapUrl)
-					lastMap := sMapUrl
-					windowShow := true
-					ShowMap(sMapUrl, width, leftMargin, topMargin, opacity, hideTown)
-				}
-			} else {
-				windowShow := false
-			}
-		} else {
-			WriteLog("Found playerOffset" playerOffset ", but not map seed address")
-			windowShow := false
-			playerOffset := startingOffset ; reset the offset to default
-		}
-	} else {
-		playerOffset := startingOffset ; reset the offset to default
-		windowShow := false
 		Sleep, 5000  ; sleep longer when no offset found, you're likely in menu
-	}
-	Sleep, 1000 ; set a pacing of 1 second
+	} else {
+        readGameMemory(playerOffset, gameMemoryData)
+        if (gameMemoryData["levelNo"]) {
+            ; if there's a level num then the player is in a map
+            if (gameMemoryData["levelNo"] != lastlevel) {
+                ; Show loading text
+                Gui, 1: Show, NA
+                ;Gui, 1: Hide  ; hide map
+                ;Gui, 3: Hide  ; hide player dot
+                ShowText(width, leftMargin, topMargin, "Loading map data...`nPlease wait", "22") ; 22 is opacity
+                ; Download map
+                downloadMapImage(baseUrl, gameMemoryData, mapData)
+                Gui, 2: Destroy  ; remove loading text
+                ; Show Map
+                ShowMap(width, leftMargin, topMargin, opacity, mapData, gameMemoryData, uiData)
+                checkAutomapVisibility(uiOffset, alwaysShowMap)
+            }
+
+            ShowPlayer(width, leftMargin, topMargin, mapData, gameMemoryData, uiData)
+
+            lastlevel := gameMemoryData["levelNo"]
+        } else {
+            Gui, 1: Destroy
+            Gui, 3: Destroy
+            WriteLog("In Menu " gameMemoryData["levelNo"])
+        }
+    }
+	Sleep, %readInterval% ; this is the pace of updates
 return
+
+
+
+checkAutomapVisibility(uiOffset, alwaysShowMap) {
+    if (isAutomapShown(uiOffset) == true) {
+        ;showmap
+        WriteLog("Map shown")
+        Gui, 1: Show, NA
+        Gui, 3: Show, NA
+    } else {
+        ; hidemap
+
+        if (alwaysShowMap == "false") {
+            WriteLog("Hide map")
+            Gui, 1: Hide
+            Gui, 3: Hide
+        }
+    }
+    return
+}
+
+
+~TAB::
+~Space::
+{
+    checkAutomapVisibility(uiOffset, alwaysShowMap)
+    return
+}
+
 
 +F10::
 {
 	WriteLog("Pressed Shift+F10, exiting...")
 	ExitApp
 }
-
-

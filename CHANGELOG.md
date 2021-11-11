@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.1] - 2021-11-11 - Player location tracking
+
+- Map now shows the current play position with a bright green dot!
+- Map now only show/hides with the normal automap (TAB to toggle) rather than always displayed
+- In `settings.ini` `alwaysShowMap` can be set to true to ignore the above feature
+- Refactored code to run more efficiently
+- Player position and rendered on separate GDI GUI layer for better performance
+- Maps now rely on their native sizing with a maximum screen width rather than hard width
+- In `settings.ini` - `width` is replaced with `maxWidth` so small maps aren't overly large
+- This is a major rector so expect a few issues, if you have problems, 1.2.7 will still work.
+
 ## [1.2.7] - 2021-11-08 - Hiding town maps now configurable
 
 - Hiding of town maps can now be configured in `settings.ini` with `hideTown=true|false`

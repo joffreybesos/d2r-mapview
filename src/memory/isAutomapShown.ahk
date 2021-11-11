@@ -3,7 +3,7 @@
 #Include %A_ScriptDir%\include\logging.ahk
 SetWorkingDir, %A_ScriptDir%
 
-getDifficultyAddress(playerOffset) {
+isAutomapShown(uiOffset) {
     
     if (_ClassMemory.__Class != "_ClassMemory")
     {
@@ -20,19 +20,11 @@ getDifficultyAddress(playerOffset) {
     }
 
     ;WriteLog("Looking for Level No address at player offset " playerOffset)
-    startingAddress := d2r.BaseAddress + playerOffset
-    playerUnit := d2r.read(startingAddress, "Int64")
-
-    ; get the level number
-    pAct := playerUnit + 0x20
-    actAddress := d2r.read(pAct, "Int64")
-    pActUnk1 := actAddress +  0x70
-    aActUnk2 := d2r.read(pActUnk1, "Int64")
-    aDifficulty := aActUnk2 + 0x830
-    difficulty := d2r.read(aDifficulty, "UShort")
-
-    if (!difficulty) {
-        WriteLog("Did not find difficulty at " aDifficulty " using player offset " playerOffset)    
+    startingAddress := d2r.BaseAddress + uiOffset
+    isMapShown := d2r.read(startingAddress, "UShort")
+    ;WriteLog(isMapShown " " uiOffset " " startingAddress)
+    if (isMapShown == 0) {
+        return false
     }
-    return aDifficulty
+    return true  ; if it failed to be read return true anyway
 }

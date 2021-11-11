@@ -5,6 +5,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\logging.ahk
 #Include %A_ScriptDir%\memory\scanOffset.ahk
 #Include %A_ScriptDir%\memory\readGameMemory.ahk
+#Include %A_ScriptDir%\memory\isAutomapShown.ahk
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
 #Include %A_ScriptDir%\ui\showMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
@@ -25,6 +26,7 @@ IniRead, topMargin, settings.ini, MapSettings, topMargin, 50
 IniRead, leftMargin, settings.ini, MapSettings, leftMargin, 50
 IniRead, opacity, settings.ini, MapSettings, opacity, 0.5
 IniRead, startingOffset, settings.ini, Memory, playerOffset
+IniRead, uiOffset, settings.ini, Memory, uiOffset
 IniRead, readInterval, settings.ini, Memory, readInterval, 1000
 IniRead, debug, settings.ini, Logging, debug, false
 IniRead, hideTown, settings.ini, MapSettings, hideTown, true
@@ -39,6 +41,7 @@ WriteLog("    debug logging: " debug)
 playerOffset:=startingOffset
 lastlevel:=""
 uidata:={}
+showMap:=true
 
 SetTimer, GameState, 1000 ; the 1000 here is priority, not sleep
 return
@@ -55,14 +58,15 @@ GameState:
             ; if there's a level num then the player is in a map
             if (gameMemoryData["levelNo"] != lastlevel) {
                 ; Show loading text
-                Gui, 1: Hide
-                Gui, 3: Hide
+                Gui, 1: Hide  ; hide map
+                Gui, 3: Hide  ; hide player dot
                 ShowText(width, leftMargin, topMargin, "Loading map data...`nPlease wait", "22") ; 22 is opacity
                 ; Download map
                 downloadMapImage(baseUrl, gameMemoryData, mapData)
-                Gui, 2: Destroy
+                Gui, 2: Destroy  ; remove loading text
                 ; Show Map
                 ShowMap(width, leftMargin, topMargin, mapData, gameMemoryData, uiData)
+                checkAutomapVisibility(uiOffset)
             }
             
             ShowPlayer(width, leftMargin, topMargin, mapData, gameMemoryData, uiData)
@@ -72,8 +76,36 @@ GameState:
             WriteLog("In Menu " gameMemoryData["levelNo"])
         }
     }
-	Sleep, %readInterval% ; set a pacing of 1 second
+	Sleep, %readInterval% ; this is the pace of updates
 return
+
+
+
+checkAutomapVisibility(uiOffset) {
+    if (isAutomapShown(uiOffset) == true) {
+        ;showmap
+        WriteLog("Map shown")
+        Gui, 1: Show, NA
+        Gui, 3: Show, NA
+        showMap:= true
+    } else {
+        ; hidemap
+        WriteLog("Hide map")
+        Gui, 1: Hide
+        Gui, 3: Hide
+        showMap:= false
+    }
+    return
+}
+
+
+~TAB::
+~Space::
+{
+    checkAutomapVisibility(uiOffset)
+    return
+}
+
 
 +F10::
 {

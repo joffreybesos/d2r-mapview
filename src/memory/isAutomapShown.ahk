@@ -1,0 +1,30 @@
+#SingleInstance, Force
+#Include %A_ScriptDir%\include\classMemory.ahk
+#Include %A_ScriptDir%\include\logging.ahk
+SetWorkingDir, %A_ScriptDir%
+
+isAutomapShown(uiOffset) {
+    
+    if (_ClassMemory.__Class != "_ClassMemory")
+    {
+        WriteLog("Missing classMemory.ahk dependency. Quitting")
+        ExitApp
+    }
+
+    d2r := new _ClassMemory("ahk_exe D2R.exe", "", hProcessCopy) 
+
+    if !isObject(d2r) 
+    {
+        WriteLog("D2R.exe not found, please make sure game is running first")
+        ExitApp
+    }
+
+    ;WriteLog("Looking for Level No address at player offset " playerOffset)
+    startingAddress := d2r.BaseAddress + uiOffset
+    isMapShown := d2r.read(startingAddress, "UShort")
+    WriteLog(isMapShown " " uiOffset " " startingAddress)
+    if (isMapShown == 0) {
+        return false
+    }
+    return true  ; if it failed to be read return true anyway
+}

@@ -98,10 +98,11 @@ ShowPlayer(mapGuiWidth, leftMargin, topMargin, mapData, gameMemoryData, uiData) 
     Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
     UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, RWidth, RHeight)
     
+
     
-    Gui, 3: Show, NA
+    
     ElapsedTime := A_TickCount - StartTime
-    WriteLog("Draw players " ElapsedTime " ms taken")
+    ;WriteLog("Draw players " ElapsedTime " ms taken")
     SelectObject(hdc, obm)
     DeleteObject(hbm)
     DeleteDC(hdc)s

@@ -100,7 +100,6 @@ ShowMap(mapGuiWidth, leftMargin, topMargin, mapData, gameMemoryData, ByRef uiDat
     UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, RWidth, RHeight)
     
     
-    Gui, 1: Show, NA
     SelectObject(hdc, obm)
     DeleteObject(hbm)
     DeleteDC(hdc)

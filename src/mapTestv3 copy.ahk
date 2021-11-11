@@ -158,12 +158,6 @@ Gui, 1: Show, NA
 hwnd1 := WinExist()
 pBitmap := Gdip_CreateBitmapFromFile(sFile)
 
-StartTime := A_TickCount
-If !pBitmap
-{
-    WriteLog("Could not load " sFile)
-    ExitApp
-}
 
 
 

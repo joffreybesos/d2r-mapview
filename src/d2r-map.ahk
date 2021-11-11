@@ -8,7 +8,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
 #Include %A_ScriptDir%\ui\showMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
-
+#Include %A_ScriptDir%\ui\showPlayer.ahk
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
 	MsgBox, , Missing settings, Could not find settings.ini file
@@ -38,6 +38,7 @@ WriteLog("    debug logging: " debug)
 
 playerOffset:=startingOffset
 lastlevel:=""
+uidata:={}
 
 SetTimer, GameState, 1000 ; the 1000 here is priority, not sleep
 return
@@ -55,14 +56,16 @@ GameState:
             if (gameMemoryData["levelNo"] != lastlevel) {
                 ; Show loading text
                 Gui, 1: Hide
+                Gui, 3: Hide
                 ShowText(width, leftMargin, topMargin, "Loading map data...`nPlease wait", "22") ; 22 is opacity
                 ; Download map
                 downloadMapImage(baseUrl, gameMemoryData, mapData)
                 Gui, 2: Destroy
-                
+                ; Show Map
+                ShowMap(width, leftMargin, topMargin, mapData, gameMemoryData, uiData)
             }
-            ; Show Map
-            ShowMap(width, leftMargin, topMargin, mapData, gameMemoryData)
+            
+            ShowPlayer(width, leftMargin, topMargin, mapData, gameMemoryData, uiData)
 
             lastlevel := gameMemoryData["levelNo"]
         } else {

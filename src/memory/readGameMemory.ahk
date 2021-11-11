@@ -18,11 +18,6 @@ readGameMemory(playerOffset, ByRef gameMemoryData) {
         WriteLog("D2R.exe not found, please make sure game is running first")
         ExitApp
     }
-    mapSeed=
-    difficulty=
-    levelNo=
-    xPos=
-    yPos=
 
     ;WriteLog("Looking for Level No address at player offset " playerOffset)
     startingAddress := d2r.BaseAddress + playerOffset

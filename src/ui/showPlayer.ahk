@@ -4,29 +4,11 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\image\Gdip_ResizeBitmap.ahk
 #Include %A_ScriptDir%\ui\image\Gdip_RotateBitmap.ahk
 
-ShowMap(mapGuiWidth, leftMargin, topMargin, mapData, gameMemoryData, ByRef uiData) {
-    WriteLog("mapGuiWidth := " mapGuiWidth)
-    WriteLog("leftMargin := " leftMargin)
-    WriteLog("topMargin := " topMargin)
-    
-    
-
-
-    WriteLog(mapData["sFile"])
-    WriteLog(mapData["leftTrimmed"])
-    WriteLog(mapData["topTrimmed"])
-    WriteLog(mapData["mapOffsetX"])
-    WriteLog(mapData["mapOffsety"])
-    WriteLog(mapData["mapwidth"])
-    WriteLog(mapData["mapheight"])
-
-    WriteLog(gameMemoryData["xPos"])
-    WriteLog(gameMemoryData["yPos"])
-
+ShowPlayer(mapGuiWidth, leftMargin, topMargin, mapData, gameMemoryData, uiData) {
     StartTime := A_TickCount
     scale := 2 
     Angle := 45
-    opacity := 0.5
+    opacity := 0.9
     padding := 150
 
     ; get relative position of player in world
@@ -43,27 +25,34 @@ ShowMap(mapGuiWidth, leftMargin, topMargin, mapData, gameMemoryData, ByRef uiDat
     ;WriteLog("X playerpos " xPosDot " Y playerpos " yPosDot)
     
     sFile := mapData["sFile"] ; downloaded map image
+    Width := uiData["sizeWidth"]
+    Height := uiData["sizeHeight"]
     ; FileGetSize, sFileSize, %sFile%
     ; WriteLogDebug("Showing map " sFile " " sFileSize)
+   
+
     If !pToken := Gdip_Startup()
     {
         MsgBox "Gdiplus failed to start. Please ensure you have gdiplus on your system"
         ExitApp
     }
     
-    Gui, 1: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
     
+    
+    Gui, 3: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
     hwnd1 := WinExist()
-    pBitmap := Gdip_CreateBitmapFromFile(sFile)
+    
+    pBitmap := Gdip_CreateBitmap(Width, Height)
     If !pBitmap
     {
         WriteLog("ERROR: Could not load map image " sFile)
         ExitApp
     }
     
-    Width := Gdip_GetImageWidth(pBitmap)
-    Height := Gdip_GetImageHeight(pBitmap)
-    
+    ; Width := Gdip_GetImageWidth(pBitmap)
+    ; Height := Gdip_GetImageHeight(pBitmap)
+
+   
     ; scaledWidth := mapGuiWidth
     ; scaledHeight := (scaledWidth / Width) * Height
     ; scaledHeight *= 0.5
@@ -72,9 +61,21 @@ ShowMap(mapGuiWidth, leftMargin, topMargin, mapData, gameMemoryData, ByRef uiDat
     hbm := CreateDIBSection(RWidth, RHeight)
     hdc := CreateCompatibleDC()
     obm := SelectObject(hdc, hbm)
-    Gdip_SetSmoothingMode(G, 4)  
+    G := Gdip_GraphicsFromImage(pBitmap)
+    
+    ; ;draw player dot
+    pPen := Gdip_CreatePen(0xff00FF00, 5)
+    Gdip_DrawRectangle(G, pPen, xPosDot, yPosDot, 5, 5)
+    ;Gdip_DrawRectangle(G, pPen, 0, 0, Width, Height) ;outline
+    Gdip_DeletePen(pPen)
+    
+
     G := Gdip_GraphicsFromHDC(hdc)
     pBitmap := Gdip_RotateBitmap(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
+
+
+    
+    
     ; newSize := "w" scaledWidth " h" scaledHeight
     ;pResizedBitmap  := Gdip_ResizeBitmap(pRotatedBitmap, newSize)
 
@@ -87,26 +88,23 @@ ShowMap(mapGuiWidth, leftMargin, topMargin, mapData, gameMemoryData, ByRef uiDat
 
     scaledWidth := RWidth
     scaledHeight := RHeight * 0.5
-    ;WriteLog("scaledWidth: " scaledWidth " scaledHeight: " scaledHeight)
+    ; WriteLog("scaledWidth: " scaledWidth " scaledHeight: " scaledHeight)
     if (scaledWidth > mapGuiWidth) {
         ratio := RWidth / mapGuiWidth
         scaledWidth := mapGuiWidth
         scaledHeight := (scaledHeight / ratio)
     }
-    ;WriteLog("scaledWidth: " scaledWidth " scaledHeight: " scaledHeight)
-    
-
+    ; WriteLog("scaledWidth: " scaledWidth " scaledHeight: " scaledHeight)
     Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
     UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, RWidth, RHeight)
     
     
-    Gui, 1: Show, NA
-    SelectObject(hdc, obm)
-    DeleteObject(hbm)
-    DeleteDC(hdc)
-    Gdip_DeleteGraphics(G)
-    Gdip_DisposeImage(pBitmap)
+    Gui, 3: Show, NA
     ElapsedTime := A_TickCount - StartTime
     WriteLog("Draw players " ElapsedTime " ms taken")
-    uiData := { "scaledWidth": scaledWidth, "scaledHeight": scaledHeight, "sizeWidth": Width, "sizeHeight": Height }
+    SelectObject(hdc, obm)
+    DeleteObject(hbm)
+    DeleteDC(hdc)s
+    Gdip_DeleteGraphics(G)
+    Gdip_DisposeImage(pBitmap)
 }

@@ -25,6 +25,7 @@ IniRead, topMargin, settings.ini, MapSettings, topMargin, 50
 IniRead, leftMargin, settings.ini, MapSettings, leftMargin, 50
 IniRead, opacity, settings.ini, MapSettings, opacity, 0.5
 IniRead, startingOffset, settings.ini, Memory, playerOffset
+IniRead, readInterval, settings.ini, Memory, readInterval, 1000
 IniRead, debug, settings.ini, Logging, debug, false
 IniRead, hideTown, settings.ini, MapSettings, hideTown, true
 
@@ -68,10 +69,10 @@ GameState:
             WriteLog("In Menu " gameMemoryData["levelNo"])
         }
     }
-	Sleep, 1000 ; set a pacing of 1 second
+	Sleep, %readInterval% ; set a pacing of 1 second
 return
 
-Esc::
++F10::
 {
 	WriteLog("Pressed Shift+F10, exiting...")
 	ExitApp

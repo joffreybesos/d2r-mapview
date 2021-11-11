@@ -2,7 +2,7 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 ;===Functions===========================================================================
-#Include %A_WorkingDir%\include\Gdip_All.ahk
+#Include %A_ScriptDir%\include\Gdip_All.ahk
 
  ; by Tic www.autohotkey.com/community/viewtopic.php?f=2&t=32238
 

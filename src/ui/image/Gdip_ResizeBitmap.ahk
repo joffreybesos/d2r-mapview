@@ -1,4 +1,4 @@
-#Include %A_WorkingDir%\include\Gdip_All.ahk
+#Include %A_ScriptDir%\include\Gdip_All.ahk
 
 Gdip_ResizeBitmap(pBitmap, PercentOrWH, Dispose=1) { ; returns resized bitmap. By Learning one.
     Gdip_GetImageDimensions(pBitmap, origW, origH)

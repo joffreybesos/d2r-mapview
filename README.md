@@ -31,6 +31,8 @@ The map overlay doesn't show in town.
 
 **Note that this default method uses my hosted map server that I offer out for free.  
 This server is getting hammered lately so it would be appreciated if you supported this project with a Bitcoin donation** `18hSn32hChp1CmBYnRdQFyzkz5drpijRa2`  
+Or you can send me some D2JSP forum gold:  
+<https://forums.d2jsp.org/user.php?i=1294529>
 
 **Map Legend**
 
@@ -66,6 +68,8 @@ Please report any scams or attempts to resell this maphack on discord.
 
 Please consider donating some Bitcoin to support this project:  
 `18hSn32hChp1CmBYnRdQFyzkz5drpijRa2`  
+Or you can send me some D2JSP forum gold:  
+<https://forums.d2jsp.org/user.php?i=1294529>
 
 ## Configure
 

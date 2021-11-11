@@ -11,7 +11,7 @@ Install the following
 - Diablo 2, with LoD expansion (__NOT resurrected!__) installation - [download1](https://drive.google.com/file/d/14IQrvP_B9rBn6-yi6w5W-PbFquYMv0x6/view?usp=sharing), [download2](https://mega.nz/file/L5oQWIxb#qNJFSu0C_rC9n6mMmg7OdiIQ7QYQBsIbw6XJFRQmFOg), [download3](http://www.mediafire.com/file/i0kznwwvn4ghdrt/DiabloII_112_Installer.zip/file)
 - Diablo 2 LoD [patch 1.13c](http://ftp.blizzard.com/pub/diablo2exp/patches/PC/LODPatch_113c.exe)
 
-You don't need to run Diablo 2, the game files simply need to be available.
+You don't need to run Diablo 2, the game files simply need to be available. But it MUST be 1.13c.
 
 __Note__: Some people have trouble getting the server to access files in `C:\Program Files (x86)` so either install to a different directory, or copy the game files to a new location.
 
@@ -23,9 +23,15 @@ You can use Docker on Linux as well if you prefer.
 Download the map server docker image to your local machine:
 `docker pull docker.io/joffreybesos/d2-mapserver`
 
+If you get the error `docker: invalid reference format.` then make sure you're in cmd rather than powershell.
+
 In the below docker command, change `/d/temp` to a temporary folder on your PC and change `/d/Games/Diablo II` to your D2 installation folder:
 
 `docker run -v "/d/temp:/app/cache" -v "/d/Games/Diablo II":/app/game -p 3002:3002 -e PORT=3002 joffreybesos/d2-mapserver:latest`
+
+So if you want to cache your map data into C:\Users\username\temp and your Diablo2 files are in D:\Games\Diablo II, then this will be your docker command:
+
+`docker run -v "/c/users/username/temp:/app/cache" -v "/d/Games/Diablo II":/app/game -p 3002:3002 -e PORT=3002 joffreybesos/d2-mapserver:latest`
 
 You can also change the port from 3002 to something else if you prefer.
 
@@ -39,7 +45,8 @@ wine: configuration in L"/root/.wine" has been updated.
 [4 23:58:19.970] [LOG]   Running on http://0.0.0.0:3002/
 ```
 
-This means the server is working.
+This means the server is working.  
+If you don't see the above output, refer to the troubleeshooting section below.
 
 ## Verify
 

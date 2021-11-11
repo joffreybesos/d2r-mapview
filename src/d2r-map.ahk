@@ -68,7 +68,7 @@ GameState:
                 ShowMap(width, leftMargin, topMargin, opacity, mapData, gameMemoryData, uiData)
                 checkAutomapVisibility(uiOffset, alwaysShowMap)
             }
-            
+
             ShowPlayer(width, leftMargin, topMargin, mapData, gameMemoryData, uiData)
 
             lastlevel := gameMemoryData["levelNo"]
@@ -91,7 +91,7 @@ checkAutomapVisibility(uiOffset, alwaysShowMap) {
         Gui, 3: Show, NA
     } else {
         ; hidemap
-        
+
         if (alwaysShowMap == "false") {
             WriteLog("Hide map")
             Gui, 1: Hide

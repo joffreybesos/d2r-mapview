@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.4] - 2021-11-13 - Map scaling
+
+- The map image can now be scaled in `settings.ini` the default is a factor of 1.1
+- The size of the image is capped by the size of `maxWidth` (in pixels)
+
 ## [2.0.3] - 2021-11-13 - Fixed memory leak
 
 - Fixed a memory leak regarding player position

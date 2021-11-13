@@ -21,7 +21,8 @@ WriteLog("*******************************************************")
 WriteLog("* Map overlay started *")
 WriteLog("*******************************************************")
 IniRead, baseUrl, settings.ini, MapHost, baseUrl, ""
-IniRead, width, settings.ini, MapSettings, width, 1000
+IniRead, maxWidth, settings.ini, MapSettings, maxWidth, 2000
+IniRead, scale, settings.ini, MapSettings, scale, 1
 IniRead, topMargin, settings.ini, MapSettings, topMargin, 50
 IniRead, leftMargin, settings.ini, MapSettings, leftMargin, 50
 IniRead, opacity, settings.ini, MapSettings, opacity, 0.5
@@ -33,7 +34,7 @@ IniRead, alwaysShowMap, settings.ini, MapSettings, alwaysShowMap, false
 
 WriteLog("Using configuration:")
 WriteLog("    baseUrl: " baseUrl)
-WriteLog("    Map: width: " width ", topMargin: " topMargin ", leftMargin: " leftMargin ", opacity: " opacity)
+WriteLog("    Map: maxWidth: " maxWidth ", scale: " scale ", topMargin: " topMargin ", leftMargin: " leftMargin ", opacity: " opacity)
 WriteLog("    startingOffset: " startingOffset)
 WriteLog("    debug logging: " debug)
 
@@ -60,16 +61,16 @@ GameState:
                 Gui, 1: Show, NA
                 ;Gui, 1: Hide  ; hide map
                 ;Gui, 3: Hide  ; hide player dot
-                ShowText(width, leftMargin, topMargin, "Loading map data...`nPlease wait", "22") ; 22 is opacity
+                ShowText(maxWidth, leftMargin, topMargin, "Loading map data...`nPlease wait", "22") ; 22 is opacity
                 ; Download map
                 downloadMapImage(baseUrl, gameMemoryData, mapData)
                 Gui, 2: Destroy  ; remove loading text
                 ; Show Map
-                ShowMap(width, leftMargin, topMargin, opacity, mapData, gameMemoryData, uiData)
+                ShowMap(maxWidth, scale, leftMargin, topMargin, opacity, mapData, gameMemoryData, uiData)
                 checkAutomapVisibility(uiOffset, alwaysShowMap)
             }
 
-            ShowPlayer(width, leftMargin, topMargin, mapData, gameMemoryData, uiData)
+            ShowPlayer(maxWidth, scale, leftMargin, topMargin, mapData, gameMemoryData, uiData)
 
             lastlevel := gameMemoryData["levelNo"]
         } else {

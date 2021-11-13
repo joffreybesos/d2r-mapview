@@ -37,8 +37,6 @@ ShowPlayer(mapGuiWidth, leftMargin, topMargin, mapData, gameMemoryData, uiData) 
         ExitApp
     }
     
-    
-    
     Gui, 3: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
     hwnd1 := WinExist()
     
@@ -70,7 +68,7 @@ ShowPlayer(mapGuiWidth, leftMargin, topMargin, mapData, gameMemoryData, uiData) 
     Gdip_DeletePen(pPen)
     
 
-    G := Gdip_GraphicsFromHDC(hdc)
+    G2 := Gdip_GraphicsFromHDC(hdc)
     pBitmap := Gdip_RotateBitmap(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
 
 
@@ -95,7 +93,7 @@ ShowPlayer(mapGuiWidth, leftMargin, topMargin, mapData, gameMemoryData, uiData) 
         scaledHeight := (scaledHeight / ratio)
     }
     ; WriteLog("scaledWidth: " scaledWidth " scaledHeight: " scaledHeight)
-    Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
+    Gdip_DrawImage(G2, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
     UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, RWidth, RHeight)
     
 
@@ -105,7 +103,8 @@ ShowPlayer(mapGuiWidth, leftMargin, topMargin, mapData, gameMemoryData, uiData) 
     ;WriteLog("Draw players " ElapsedTime " ms taken")
     SelectObject(hdc, obm)
     DeleteObject(hbm)
-    DeleteDC(hdc)s
+    DeleteDC(hdc)
     Gdip_DeleteGraphics(G)
+    Gdip_DeleteGraphics(G2)
     Gdip_DisposeImage(pBitmap)
 }

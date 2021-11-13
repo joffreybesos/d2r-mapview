@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3] - 2021-11-13 - Fixed memory leak
+
+- Fixed a memory leak regarding player position`
+
+## [2.0.2] - 2021-11-13 - Updated offsets for new D2R client version
+
+Updated for the new Diablo 2 Resurrected client version 1.0.67005.
+Needed new offsets.
+The executable hasn't changed, but thought I should keep it simple and publish a new release.
+
 ## [2.0.1] - 2021-11-11 - Player location tracking
 
 - Map now shows the current play position with a bright green dot!

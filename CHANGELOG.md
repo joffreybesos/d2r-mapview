@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [2.0.3] - 2021-11-13 - Fixed memory leak
 
-- Fixed a memory leak regarding player position`
+- Fixed a memory leak regarding player position
 
 ## [2.0.2] - 2021-11-13 - Updated offsets for new D2R client version
 

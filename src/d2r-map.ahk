@@ -88,14 +88,14 @@ return
 checkAutomapVisibility(uiOffset, alwaysShowMap) {
     if (isAutomapShown(uiOffset) == true) {
         ;showmap
-        WriteLog("Map shown")
+        WriteLogDebug("Map shown")
         Gui, 1: Show, NA
         Gui, 3: Show, NA
     } else {
         ; hidemap
 
         if (alwaysShowMap == "false") {
-            WriteLog("Hide map")
+            WriteLogDebug("Hide map")
             Gui, 1: Hide
             Gui, 3: Hide
         }

@@ -11,6 +11,7 @@ downloadMapImage(baseUrl, gameMemoryData, ByRef mapData) {
 
     try {
         whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+        WinHttpReq.SetTimeouts("60000", "60000", "60000", "60000")
         whr.Open("GET", imageUrl, true)
         whr.Send()
         whr.WaitForResponse()

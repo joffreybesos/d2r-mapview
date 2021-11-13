@@ -44,7 +44,7 @@ downloadMapImage(baseUrl, gameMemoryData, ByRef mapData) {
     } catch e {
         WriteLog(respHeaders)
         WriteLog(e.message)
-        WriteLog("ERROR: Failed to download image from " imageUrl)
+        WriteLog("ERROR: Error downloading image from " imageUrl)
     }
     WriteLog("Downloaded " imageUrl " to " sFile)
     mapData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight }

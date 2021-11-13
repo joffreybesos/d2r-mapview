@@ -54,7 +54,8 @@ GameState:
 		Sleep, 5000  ; sleep longer when no offset found, you're likely in menu
 	} else {
         readGameMemory(playerOffset, gameMemoryData)
-        if (gameMemoryData["levelNo"]) {
+        
+        if ((gameMemoryData["difficulty"] > 0 & gameMemoryData["difficulty"] < 3) and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
             ; if there's a level num then the player is in a map
             if (gameMemoryData["levelNo"] != lastlevel) {
                 ; Show loading text
@@ -76,7 +77,7 @@ GameState:
         } else {
             Gui, 1: Destroy
             Gui, 3: Destroy
-            WriteLog("In Menu " gameMemoryData["levelNo"])
+            WriteLog("In Menu - no valid difficulty, levelno and mapseed found " gameMemoryData["difficulty"] " " gameMemoryData["levelNo"] " " gameMemoryData["mapSeed"] )
         }
     }
 	Sleep, %readInterval% ; this is the pace of updates

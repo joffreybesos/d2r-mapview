@@ -56,7 +56,7 @@ ShowPlayer(mapGuiWidth, scale, leftMargin, topMargin, mapData, gameMemoryData, u
     if (scaledWidth > mapGuiWidth) {
         scaleAdjust := mapGuiWidth / (RWidth * scale)
         scaledWidth := mapGuiWidth
-        WriteLog("OverSized map, reducing scale to " scale ", maxWidth set to " mapGuiWidth)
+        WriteLogDebug("OverSized map, reducing scale to " scale ", maxWidth set to " mapGuiWidth)
     }
     scaledHeight := (RHeight * 0.5) * scale * scaleAdjust
     rotatedWidth := RWidth * scale * scaleAdjust

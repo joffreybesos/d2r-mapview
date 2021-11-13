@@ -50,7 +50,9 @@ readGameMemory(playerOffset, ByRef gameMemoryData) {
         mapSeedAddress := actAddress + 0x14
         if (mapSeedAddress) {
             mapSeed := d2r.read(mapSeedAddress, "UInt")
-            ;WriteLog("Found seed " mapSeed " at address " mapSeedAddress)
+            WriteLogDebug("Found seed " mapSeed " at address " mapSeedAddress)
+        } else {
+            WriteLogDebug("Did not find seed " mapSeed " at address " mapSeedAddress)
         }
     }
 
@@ -61,10 +63,10 @@ readGameMemory(playerOffset, ByRef gameMemoryData) {
     aDifficulty := aActUnk2 + 0x830
     difficulty := d2r.read(aDifficulty, "UShort")
 
-    if (!difficulty) {
-        WriteLog("Did not find difficulty at " aDifficulty " using player offset " playerOffset)    
+    if ((difficulty != 0) & (difficulty != 1) & (difficulty != 2)) {
+        WriteLog("Did not find " difficulty " difficulty at " aDifficulty " using player offset " playerOffset)    
     }
-    
+
     ; player position
      pPath := playerUnit + 0x38
     pathAddress := d2r.read(pPath, "Int64")

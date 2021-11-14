@@ -75,8 +75,6 @@ GameState:
 
             lastlevel := gameMemoryData["levelNo"]
         } else {
-            Gui, 1: Destroy
-            Gui, 3: Destroy
             WriteLog("In Menu - no valid difficulty, levelno and mapseed found " gameMemoryData["difficulty"] " " gameMemoryData["levelNo"] " " gameMemoryData["mapSeed"] )
         }
     }

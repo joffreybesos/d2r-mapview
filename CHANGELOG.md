@@ -2,7 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.0.5] - 2021-11-13 - Resize map in game
+## [2.0.6] - 2021-11-15 - Fixed map not showing sometimes
+
+- Fixed a bug introduced in the last version:
+- Occasionally when changing acts the map would no longer show.
+
+## [2.0.5] - 2021-11-15 - Resize map in game
 
 - Increase scale of map with Shift + Equals
 - Decrease scale of map with Shift + Minus

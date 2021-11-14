@@ -111,6 +111,29 @@ checkAutomapVisibility(uiOffset, alwaysShowMap) {
     return
 }
 
++=::
+{
+	WriteLog("Pressed Shift+F10, exiting...")
+	ExitApp
+}
+
+++::
+{
+    scale := scale + 0.1
+    ShowMap(maxWidth, scale, leftMargin, topMargin, opacity, mapData, gameMemoryData, uiData)
+    ShowPlayer(maxWidth, scale, leftMargin, topMargin, mapData, gameMemoryData, uiData)
+    IniWrite, %scale%, settings.ini, MapSettings, scale
+    return
+}
+
++_::
+{
+    scale := scale - 0.1
+    ShowMap(maxWidth, scale, leftMargin, topMargin, opacity, mapData, gameMemoryData, uiData)
+    ShowPlayer(maxWidth, scale, leftMargin, topMargin, mapData, gameMemoryData, uiData)
+    IniWrite, %scale%, settings.ini, MapSettings, scale
+    return
+}
 
 +F10::
 {

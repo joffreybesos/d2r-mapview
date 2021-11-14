@@ -43,9 +43,18 @@ downloadMapImage(baseUrl, gameMemoryData, ByRef mapData) {
             oFile.Close()
         }
     } catch e {
-        WriteLog(respHeaders)
-        WriteLog(e.message)
-        WriteLog("ERROR: Error downloading image from " imageUrl)
+        errMsg = e.message
+        if (Instr(errMsg, "The operation timed out")) {
+            WriteLog("ERROR: Timeout downloading image from " imageUrl)
+            WriteLog("You can try opening the above URL in your browser to test connectivity")
+        } else if (Instr(errMsg, "The requested header was not found")) {
+            WriteLog(respHeaders)
+            WriteLog("ERROR: Did not find an expected header " imageUrl)
+            WriteLog("If it didn't find the correct headers, you may be using an old version of the server")
+        } else {
+            WriteLog(e.message)
+            WriteLog("ERROR: Error downloading image from " imageUrl)
+        }
     }
     WriteLog("Downloaded " imageUrl " to " sFile)
     mapData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight }

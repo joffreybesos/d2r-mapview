@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.5] - 2021-11-13 - Resize map in game
+
+- Increase scale of map with Shift + Equals
+- Decrease scale of map with Shift + Minus
+- Size change will be saved to your settings.ini
+- Fixed bug where map image would try to download without all the necessary data
+- Timeout increased for downloading images.
+
 ## [2.0.4] - 2021-11-13 - Map scaling
 
 - The map image can now be scaled in `settings.ini` the default is a factor of 1.1

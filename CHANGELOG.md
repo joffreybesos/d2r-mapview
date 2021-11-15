@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.7] - 2021-11-15 - Player position updates faster
+
+- Player position on the map is now less laggy
+- The 'hideTown' feature has been restored. Set this to true to hide maps of town.
+- The feature to hide the map when alt-tabbing away from D2R has also been restored.
+- Fixed issues around maps flickering and appearing when they shouldn't
+
 ## [2.0.6] - 2021-11-15 - Fixed map not showing sometimes
 
 - Fixed a bug introduced in the last version:

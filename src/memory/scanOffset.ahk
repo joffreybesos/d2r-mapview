@@ -8,7 +8,7 @@ scanOffset(lastOffset, startingOffset) {
     ; check the one that previously worked, it's likely not checkLastOffset()
     playerOffset := checkLastOffset(lastOffset)
     if (playerOffset) {
-        WriteLogDebug("Using last offset " playerOffset " " lastOffset)
+        ;WriteLogDebug("Using last offset " playerOffset " " lastOffset)
         return playerOffset
     }
     ; if the last offset doesn't seem valid anymore then you're in the menu or a new game
@@ -20,7 +20,7 @@ checkLastOffset(startingOffset) {
 }
 
 scanForPlayerOffset(startingOffset) {
-    WriteLogDebug("Scanning for new player offset address, starting default offset " startingOffset)
+    ;WriteLogDebug("Scanning for new player offset address, starting default offset " startingOffset)
     return getPlayerOffset(startingOffset, 256)
 }
 

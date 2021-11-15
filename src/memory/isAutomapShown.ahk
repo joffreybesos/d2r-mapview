@@ -23,8 +23,9 @@ isAutomapShown(uiOffset) {
     startingAddress := d2r.BaseAddress + uiOffset
     isMapShown := d2r.read(startingAddress, "UShort")
     ;WriteLog(isMapShown " " uiOffset " " startingAddress)
-    if (isMapShown == 0) {
-        return false
+    if (isMapShown == 1) {
+        return true
+    } else {
+        return false  ; if it failed to be read return true anyway
     }
-    return true  ; if it failed to be read return true anyway
 }

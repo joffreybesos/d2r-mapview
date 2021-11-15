@@ -62,7 +62,6 @@ ShowPlayer(mapGuiWidth, scale, leftMargin, topMargin, mapData, gameMemoryData, u
     rotatedWidth := RWidth * scale * scaleAdjust
     rotatedHeight := RHeight * scale * scaleAdjust
     
-
     hbm := CreateDIBSection(rotatedWidth, rotatedHeight)
     hdc := CreateCompatibleDC()
     obm := SelectObject(hdc, hbm)

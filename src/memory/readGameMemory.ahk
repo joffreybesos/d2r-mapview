@@ -50,7 +50,7 @@ readGameMemory(playerOffset, ByRef gameMemoryData) {
         mapSeedAddress := actAddress + 0x14
         if (mapSeedAddress) {
             mapSeed := d2r.read(mapSeedAddress, "UInt")
-            WriteLogDebug("Found seed " mapSeed " at address " mapSeedAddress)
+            ;WriteLogDebug("Found seed " mapSeed " at address " mapSeedAddress)
         } else {
             WriteLogDebug("Did not find seed " mapSeed " at address " mapSeedAddress)
         }

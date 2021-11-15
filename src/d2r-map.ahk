@@ -21,16 +21,21 @@ WriteLog("*******************************************************")
 WriteLog("* Map overlay started *")
 WriteLog("*******************************************************")
 IniRead, baseUrl, settings.ini, MapHost, baseUrl, ""
+
 IniRead, maxWidth, settings.ini, MapSettings, maxWidth, 2000
 IniRead, scale, settings.ini, MapSettings, scale, 1
 IniRead, topMargin, settings.ini, MapSettings, topMargin, 50
 IniRead, leftMargin, settings.ini, MapSettings, leftMargin, 50
 IniRead, opacity, settings.ini, MapSettings, opacity, 0.5
+IniRead, alwaysShowMap, settings.ini, MapSettings, alwaysShowMap, false
+IniRead, hideTown, settings.ini, MapSettings, hideTown, false
+
 IniRead, startingOffset, settings.ini, Memory, playerOffset
 IniRead, uiOffset, settings.ini, Memory, uiOffset
 IniRead, readInterval, settings.ini, Memory, readInterval, 1000
+
 IniRead, debug, settings.ini, Logging, debug, false
-IniRead, alwaysShowMap, settings.ini, MapSettings, alwaysShowMap, false
+
 
 WriteLog("Using configuration:")
 WriteLog("    baseUrl: " baseUrl)
@@ -43,10 +48,7 @@ lastlevel:=""
 uidata:={}
 showMap:=true
 
-SetTimer, GameState, 1000 ; the 1000 here is priority, not sleep
-return
-
-GameState:
+While 1 {
 	; scan for the player offset
 	playerOffset := scanOffset(playerOffset, startingOffset)
 
@@ -59,53 +61,73 @@ GameState:
             ; if there's a level num then the player is in a map
             if (gameMemoryData["levelNo"] != lastlevel) {
                 ; Show loading text
-                Gui, 1: Show, NA
-                ;Gui, 1: Hide  ; hide map
-                ;Gui, 3: Hide  ; hide player dot
+                ;Gui, 1: Show, NA
+                Gui, 1: Hide  ; hide map
+                Gui, 3: Hide  ; hide player dot
                 ShowText(maxWidth, leftMargin, topMargin, "Loading map data...`nPlease wait", "22") ; 22 is opacity
                 ; Download map
                 downloadMapImage(baseUrl, gameMemoryData, mapData)
                 Gui, 2: Destroy  ; remove loading text
                 ; Show Map
+                if (lastlevel == "") {
+                    Gui, 1: Show, NA
+                }
+                ;Gui, 1: Show, NA
+                ;Gui, 3: Show, NA
                 ShowMap(maxWidth, scale, leftMargin, topMargin, opacity, mapData, gameMemoryData, uiData)
-                checkAutomapVisibility(uiOffset, alwaysShowMap)
+                checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, gameMemoryData["levelNo"])
             }
 
             ShowPlayer(maxWidth, scale, leftMargin, topMargin, mapData, gameMemoryData, uiData)
+            checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, gameMemoryData["levelNo"])
 
             lastlevel := gameMemoryData["levelNo"]
         } else {
             WriteLog("In Menu - no valid difficulty, levelno and mapseed found " gameMemoryData["difficulty"] " " gameMemoryData["levelNo"] " " gameMemoryData["mapSeed"] )
+            hideMap(alwaysShowMap)
         }
     }
 	Sleep, %readInterval% ; this is the pace of updates
-return
+}
 
 
 
-checkAutomapVisibility(uiOffset, alwaysShowMap) {
-    if (isAutomapShown(uiOffset) == true) {
-        ;showmap
-        WriteLogDebug("Map shown")
-        Gui, 1: Show, NA
-        Gui, 3: Show, NA
-    } else {
+checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, levelNo) {
+    ;WriteLogDebug("Checking visibility, hideTown: " hideTown " alwaysShowMap: " alwaysShowMap)
+    if ((levelNo == 1 or levelNo == 40 or levelNo == 75 or levelNo == 103 or levelNo == 109) and hideTown=="true") {
+        WriteLog("Hiding town " levelNo " since hideTown is set to true")
+        hideMap("false")
+    } else if not WinActive("ahk_exe D2R.exe") {
+        WriteLog("D2R is not active window, hiding map")
+        hideMap(alwaysShowMap)
+    } else if (isAutomapShown(uiOffset) == false) {
         ; hidemap
-
-        if (alwaysShowMap == "false") {
-            WriteLogDebug("Hide map")
-            Gui, 1: Hide
-            Gui, 3: Hide
-        }
-    }
+        hideMap(alwaysShowMap)
+    } else {
+        unHideMap()
+    } 
     return
 }
 
+hideMap(alwaysShowMap) {
+    if (alwaysShowMap == "false") {
+        WriteLogDebug("Hide map")
+        Gui, 1: Hide
+        Gui, 3: Hide
+    }
+}
+
+unHideMap() {
+    ;showmap
+    WriteLogDebug("Map shown")
+    Gui, 1: Show, NA
+    Gui, 3: Show, NA
+}
 
 ~TAB::
 ~Space::
 {
-    checkAutomapVisibility(uiOffset, alwaysShowMap)
+    checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, gameMemoryData["levelNo"])
     return
 }
 
@@ -129,6 +151,6 @@ checkAutomapVisibility(uiOffset, alwaysShowMap) {
 
 +F10::
 {
-	WriteLog("Pressed Shift+F10, exiting...")
-	ExitApp
+    WriteLog("Pressed Shift+F10, exiting...")
+    ExitApp
 }

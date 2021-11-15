@@ -109,12 +109,6 @@ checkAutomapVisibility(uiOffset, alwaysShowMap) {
     return
 }
 
-+=::
-{
-	WriteLog("Pressed Shift+F10, exiting...")
-	ExitApp
-}
-
 ++::
 {
     scale := scale + 0.1

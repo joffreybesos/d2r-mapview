@@ -8,7 +8,7 @@ scanOffset(lastOffset, startingOffset) {
     ; check the one that previously worked, it's likely not checkLastOffset()
     playerOffset := checkLastOffset(lastOffset)
     if (playerOffset) {
-        ;WriteLogDebug("Using last offset " playerOffset " " lastOffset)
+        WriteLogDebug("Using last offset " playerOffset " " lastOffset)
         return playerOffset
     }
     ; if the last offset doesn't seem valid anymore then you're in the menu or a new game
@@ -43,6 +43,7 @@ getPlayerOffset(startingOffset, loops) {
     found := false
     loop, %loops%
     {
+        ;WriteLogDebug("Attempt " A_Index)
         newOffset := HexAdd(startingOffset, (A_Index - 1) * 8)
         startingAddress := d2r.BaseAddress + newOffset
         playerUnit := d2r.read(startingAddress, "Int64")
@@ -54,18 +55,18 @@ getPlayerOffset(startingOffset, loops) {
             if (StrLen(mapSeed) > 7) {
                 SetFormat Integer, D
                 if (A_Index > 1) {
-                    WriteLog("SUCCESS: Found player offset: " newOffset ", from " HexToDec(A_Index /8) " attempts, which gives map seed: " mapSeed)
+                    WriteLog("SUCCESS: Found player offset: " newOffset ", from " A_Index " attempts, which gives map seed: " mapSeed)
                 }
 	            newOffset := newOffset + 0 ;convert to dec
                 found := true
                 return newOffset
             } else {
-                WriteLogDebug("Possible player unit: " playerUnit ", from " HexToDec(A_Index/8) " attempts, but no mapSeed " mapSeed ", ignoring...")
+                WriteLogDebug("Possible player unit: " playerUnit ", from " A_Index " attempts, but no mapSeed " mapSeed ", ignoring...")
             }
         }
     }
     if (!found && loops > 1) {
-        WriteLogDebug("Did not find a player offset after " HexToDec(loops/8) " attempts, likely in game menu")
+        WriteLogDebug("Did not find a player offset after " loops "(256) attempts, likely in game menu")
     }
 }
 
@@ -75,9 +76,3 @@ HexAdd(x, y) {
 	return Format("0x{:0" Format("{:d}", l) "x}", x + y)
 }
 
-HexToDec(Hex) {
-    VarSetCapacity(dec, 66, 0)
-    , val := DllCall("msvcrt.dll\_wcstoui64", "Str", hex, "UInt", 0, "UInt", 16, "CDECL Int64")
-    , DllCall("msvcrt.dll\_i64tow", "Int64", val, "Str", dec, "UInt", 10, "CDECL")
-    return dec
-}

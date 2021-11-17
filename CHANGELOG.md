@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2021-11-17 - Nearby monsters now appear on map
+
+- Nearby monsters now appear on the map in real time
+- Normal monsters appear as small white dots
+- Unique and Champion monsters appear as larger coloured dots
+- You can show/hide normal monters with `showNormalMobs` in `settings.ini`
+- You can show/hide unique monters with `showUniqueMobs` in `settings.ini`
+- You can change the colour of normal mobs with `normalMobColor` in `settings.ini`
+- You can change the colour of unique mobs with `uniqueMobColor` in `settings.ini`
+- Note: champion and unique monsters will appear the same, this will likely change later
+
+Please monitor this release for excess CPU/memory usage. Report any bugs in discord.
+
 ## [2.0.7] - 2021-11-15 - Player position updates faster
 
 - Player position on the map is now less laggy

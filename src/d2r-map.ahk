@@ -27,26 +27,40 @@ IniRead, scale, settings.ini, MapSettings, scale, 1
 IniRead, topMargin, settings.ini, MapSettings, topMargin, 50
 IniRead, leftMargin, settings.ini, MapSettings, leftMargin, 50
 IniRead, opacity, settings.ini, MapSettings, opacity, 0.5
-IniRead, alwaysShowMap, settings.ini, MapSettings, alwaysShowMap, false
-IniRead, hideTown, settings.ini, MapSettings, hideTown, false
+IniRead, alwaysShowMap, settings.ini, MapSettings, alwaysShowMap, "false"
+IniRead, hideTown, settings.ini, MapSettings, hideTown, "false"
+
+IniRead, showNormalMobs, settings.ini, MapSettings, showNormalMobs, "true"
+IniRead, showUniqueMobs, settings.ini, MapSettings, showUniqueMobs, "true"
+IniRead, normalMobColor, settings.ini, MapSettings, normalMobColor, "FFFFFF"
+IniRead, uniqueMobColor, settings.ini, MapSettings, uniqueMobColor, "D4AF37"
 
 IniRead, startingOffset, settings.ini, Memory, playerOffset
 IniRead, uiOffset, settings.ini, Memory, uiOffset
 IniRead, readInterval, settings.ini, Memory, readInterval, 1000
 
-IniRead, debug, settings.ini, Logging, debug, false
+IniRead, debug, settings.ini, Logging, debug, "false"
+hideTown := hideTown = "true" ; convert to bool
+alwaysShowMap := alwaysShowMap = "true" ; convert to bool
+debug := debug = "true" ; convert to bool
+showNormalMobs := showNormalMobs = "true" ; convert to bool
+showUniqueMobs := showUniqueMobs = "true" ; convert to bool
+global debug := debug
 
+mapConfig := {"showNormalMobs": showNormalMobs, "showUniqueMobs": showUniqueMobs, "normalMobColor": normalMobColor, "uniqueMobColor": uniqueMobColor}
 
 WriteLog("Using configuration:")
 WriteLog("    baseUrl: " baseUrl)
 WriteLog("    Map: maxWidth: " maxWidth ", scale: " scale ", topMargin: " topMargin ", leftMargin: " leftMargin ", opacity: " opacity)
+WriteLog("    hideTown: " hideTown ", alwaysShowMap: " alwaysShowMap)
+WriteLog("    showNormalMobs: " showNormalMobs " showUniqueMobs: " showUniqueMobs)
+WriteLog("    normalMobColor: " normalMobColor " uniqueMobColor: " uniqueMobColor)
 WriteLog("    startingOffset: " startingOffset)
 WriteLog("    debug logging: " debug)
 
 playerOffset:=startingOffset
 lastlevel:=""
 uidata:={}
-showMap:=true
 
 While 1 {
 	; scan for the player offset
@@ -55,7 +69,7 @@ While 1 {
 	if (!playerOffset) {
 		Sleep, 5000  ; sleep longer when no offset found, you're likely in menu
 	} else {
-        readGameMemory(playerOffset, gameMemoryData)
+        readGameMemory(playerOffset, startingOffset, gameMemoryData)
         
         if ((gameMemoryData["difficulty"] > 0 & gameMemoryData["difficulty"] < 3) and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
             ; if there's a level num then the player is in a map
@@ -78,7 +92,7 @@ While 1 {
                 checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, gameMemoryData["levelNo"])
             }
 
-            ShowPlayer(maxWidth, scale, leftMargin, topMargin, mapData, gameMemoryData, uiData)
+            ShowPlayer(maxWidth, scale, leftMargin, topMargin, mapConfig, mapData, gameMemoryData, uiData)
             checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, gameMemoryData["levelNo"])
 
             lastlevel := gameMemoryData["levelNo"]
@@ -94,11 +108,11 @@ While 1 {
 
 checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, levelNo) {
     ;WriteLogDebug("Checking visibility, hideTown: " hideTown " alwaysShowMap: " alwaysShowMap)
-    if ((levelNo == 1 or levelNo == 40 or levelNo == 75 or levelNo == 103 or levelNo == 109) and hideTown=="true") {
-        WriteLog("Hiding town " levelNo " since hideTown is set to true")
-        hideMap("false")
+    if ((levelNo == 1 or levelNo == 40 or levelNo == 75 or levelNo == 103 or levelNo == 109) and hideTown==true) {
+        ;WriteLogDebug("Hiding town " levelNo " since hideTown is set to true")
+        hideMap(false)
     } else if not WinActive("ahk_exe D2R.exe") {
-        WriteLog("D2R is not active window, hiding map")
+        ;WriteLogDebug("D2R is not active window, hiding map")
         hideMap(alwaysShowMap)
     } else if (isAutomapShown(uiOffset) == false) {
         ; hidemap
@@ -110,8 +124,8 @@ checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, levelNo) {
 }
 
 hideMap(alwaysShowMap) {
-    if (alwaysShowMap == "false") {
-        WriteLogDebug("Hide map")
+    if (alwaysShowMap == false) {
+        ;WriteLogDebug("Hide map, alwaysShowMap was set to false")
         Gui, 1: Hide
         Gui, 3: Hide
     }
@@ -119,7 +133,7 @@ hideMap(alwaysShowMap) {
 
 unHideMap() {
     ;showmap
-    WriteLogDebug("Map shown")
+    ;WriteLogDebug("Map shown")
     Gui, 1: Show, NA
     Gui, 3: Show, NA
 }
@@ -131,20 +145,20 @@ unHideMap() {
     return
 }
 
-++::
+~++::
 {
     scale := scale + 0.1
     ShowMap(maxWidth, scale, leftMargin, topMargin, opacity, mapData, gameMemoryData, uiData)
-    ShowPlayer(maxWidth, scale, leftMargin, topMargin, mapData, gameMemoryData, uiData)
+    ShowPlayer(maxWidth, scale, leftMargin, topMargin, mapConfig, mapData, gameMemoryData, uiData)
     IniWrite, %scale%, settings.ini, MapSettings, scale
     return
 }
 
-+_::
+~+_::
 {
     scale := scale - 0.1
     ShowMap(maxWidth, scale, leftMargin, topMargin, opacity, mapData, gameMemoryData, uiData)
-    ShowPlayer(maxWidth, scale, leftMargin, topMargin, mapData, gameMemoryData, uiData)
+    ShowPlayer(maxWidth, scale, leftMargin, topMargin, mapConfig, mapData, gameMemoryData, uiData)
     IniWrite, %scale%, settings.ini, MapSettings, scale
     return
 }

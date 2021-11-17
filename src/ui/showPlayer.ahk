@@ -4,7 +4,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\image\Gdip_ResizeBitmap.ahk
 #Include %A_ScriptDir%\ui\image\Gdip_RotateBitmap.ahk
 
-ShowPlayer(mapGuiWidth, scale, leftMargin, topMargin, mapData, gameMemoryData, uiData) {
+ShowPlayer(mapGuiWidth, scale, leftMargin, topMargin, mapConfig, mapData, gameMemoryData, uiData) {
     StartTime := A_TickCount
     serverScale := 2 
     Angle := 45
@@ -14,8 +14,9 @@ ShowPlayer(mapGuiWidth, scale, leftMargin, topMargin, mapData, gameMemoryData, u
     ; get relative position of player in world
     ; xpos is absolute world pos in game
     ; each map has offset x and y which is absolute world position
-    xPosDot := ((gameMemoryData["xPos"] - mapData["mapOffsetX"]) * serverScale) + 150
-    yPosDot := ((gameMemoryData["yPos"] - mapData["mapOffsetY"]) * serverScale) + 150
+    xPosDot := ((gameMemoryData["xPos"] - mapData["mapOffsetX"]) * serverScale) + padding
+    yPosDot := ((gameMemoryData["yPos"] - mapData["mapOffsetY"]) * serverScale) + padding
+    
     ; WriteLog("xPos raw " gameMemoryData["xPos"] " yPos raw " gameMemoryData["yPos"])
     ; WriteLog("xPosDot " xPosDot " yPosDot " yPosDot)
     ; WriteLog("xPosDot no trim " ((gameMemoryData["xPos"] - mapData["mapOffsetX"]) * serverScale) " yPosDot no trim " ((gameMemoryData["yPos"] - mapData["mapOffsetY"]) * serverScale))
@@ -67,11 +68,35 @@ ShowPlayer(mapGuiWidth, scale, leftMargin, topMargin, mapData, gameMemoryData, u
     obm := SelectObject(hdc, hbm)
     G := Gdip_GraphicsFromImage(pBitmap)
     
-    ; ;draw player dot
-    pPen := Gdip_CreatePen(0xff00FF00, 5)
-    Gdip_DrawRectangle(G, pPen, xPosDot, yPosDot, 5, 5)
-    ;Gdip_DrawRectangle(G, pPen, 0, 0, Width, Height) ;outline
+    ; ;draw player
+    pPen := Gdip_CreatePen(0xff00FF00, 6)
+    Gdip_DrawRectangle(G, pPen, xPosDot-2, yPosDot-2, 6, 6)
+    ;Gdip_DrawRectangle(G, pPen, 0, 0, Width, Height) ;outline for whole map
     Gdip_DeletePen(pPen)
+
+    ; draw monsters
+    mobs := gameMemoryData["mobs"]
+    normalMobColor := 0xff . mapConfig["normalMobColor"] 
+    uniqueMobColor := 0xff . mapConfig["uniqueMobColor"] 
+    ;WriteLog(uniqueMobColor)
+    pPenWhite := Gdip_CreatePen(normalMobColor, 2)
+    pPenGold := Gdip_CreatePen(uniqueMobColor, 6)
+    for index, mob in mobs
+    {
+        mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
+        moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+        if (mob["isUnique"] == 0) {
+            if (mapConfig["showNormalMobs"]) {
+                Gdip_DrawEllipse(G, pPenWhite, mobx-1, moby-1, 3, 3)
+            }
+        } else {
+            if (mapConfig["showUniqueMobs"]) {
+                Gdip_DrawEllipse(G, pPenGold, mobx-3, moby-3, 6, 6)
+            }
+        }
+    }
+    Gdip_DeletePen(pPenWhite)
+    Gdip_DeletePen(pPenGold)
     
 
     G2 := Gdip_GraphicsFromHDC(hdc)

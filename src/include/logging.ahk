@@ -8,7 +8,6 @@ WriteLog(text) {
 }
 
 WriteLogDebug(text) {
-	IniRead, debug, settings.ini, Logging, debug
 	if (debug == "true") {
 		FormatTime, vDate,, yyyy-MM-dd HH-mm-ss ;24-hour
 		FileAppend, % vDate ": DEBUG: " text "`n", log.txt ; can provide a full path to write to another directory

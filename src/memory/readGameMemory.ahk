@@ -3,7 +3,7 @@
 #Include %A_ScriptDir%\include\logging.ahk
 SetWorkingDir, %A_ScriptDir%
 
-readGameMemory(playerOffset, ByRef gameMemoryData) {
+readGameMemory(playerOffset, startingOffset, ByRef gameMemoryData) {
     
     if (_ClassMemory.__Class != "_ClassMemory")
     {
@@ -83,5 +83,33 @@ readGameMemory(playerOffset, ByRef gameMemoryData) {
     }
     ;WriteLog("XPos " xPos " yPos " yPos)
     ;WriteLog("Map Seed " mapSeed)
-    gameMemoryData := {"mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos }
+
+
+    ; monsters
+    mobs := []
+    monstersOffset := 0x20AF660 + 1024
+    Loop, 128
+    {
+    
+        newOffset := monstersOffset + (8 * (A_Index - 1))
+        mobAddress := d2r.BaseAddress + newOffset
+        mobUnit := d2r.read(mobAddress, "Int64")
+        
+        if (mobUnit) {
+            mobType := d2r.read(mobUnit + 0x00, "UInt")
+            txtFileNo := d2r.read(mobUnit + 0x04, "UInt")
+            unitId :=  d2r.read(mobUnit + 0x08, "UInt")
+            mode := d2r.read(mobUnit + 0x0c, "UInt")
+            pUnitData :=  d2r.read(mobUnit + 0x10, "Int64")
+            pPath :=  d2r.read(mobUnit + 0x38, "Int64")
+            if (mode != 0 && mode != 12) {
+                isUnique :=  d2r.read(pUnitData + 0x18, "UShort")
+                monx :=  d2r.read(pPath + 0x02, "UShort")
+                mony :=  d2r.read(pPath + 0x06, "UShort")
+                mob := {"txtFileNo": txtFileNo, "x": monx, "y": mony, "isUnique": isUnique }
+                mobs.push(mob)
+            }
+        }
+    }   
+    gameMemoryData := {"mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs }
 }

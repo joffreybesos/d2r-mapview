@@ -1,10 +1,13 @@
 # Diablo 2: Resurrected map viewer
 
-Noob friendly map reveal for Diablo 2 Resurrected.  
+Noob friendly FREE map reveal tool for Diablo 2 Resurrected.  
 Use at your own risk, there is no warranty or responsibility taken for being penalised for using this.
 
-This repo will fetch the map from a backend map server and display it in the top left corner of your D2R window as shown below.
-The player position will also be shown with a bright green dot.
+This map hack is as simple as running an executable. It relies on a backend server that is offered for free but runs on donations.  
+
+This tool is licenced under GPLv3.
+
+The backend map server relies on this project [blacha/diablo2](https://github.com/blacha/diablo2/tree/master/packages/map). This tool uses a modified version of that executable to generate map data.
 
 ![Durance of Hate Level 2](duranceofhate2.png)
 
@@ -30,10 +33,13 @@ This server is getting hammered lately so it would be appreciated if you support
 
 **Map Legend**
 
+- Green dot for player position
+- White dots for normal monsters
+- Large yellow dot for unique monsters
 - Purple square for exits
 - Yellow square for waypoints
-- Red dot for NPCs
 - Most quest items should be marked with their respective icons
+- Special unique monsters such as Radament and Summoner should have large red dots on their spawn location
 
 **Other notes**
 
@@ -41,7 +47,6 @@ This server is getting hammered lately so it would be appreciated if you support
 - You can also right click the icon in the system tray.
 - This MH will automatically exit when you exit D2R.
 - Map download might be slow, just give it a second.
-- Please consider donating to help support the project (and server costs).
 
 ## Run from source
 
@@ -68,8 +73,24 @@ D2JSP forum gold: <https://forums.d2jsp.org/user.php?i=1294529>
 
 In `settings.ini` you should see some options to make configuration changes.
 
-- You can change the map opacity, setting 0-1, 1 being more opaque. Default is 0.5.
-- If you want the map to appear on a second display, change the `leftMargin` value in `settings.ini` to be larger than the width of your primary monitor (in pixels). Negative values also work.
+| Setting |     Default     |    Description    |
+| :-------------- | :------------------ | :---------------------- |
+| baseUrl | http://diab.wikiwarsgame.com:8080 | URL of the map server, set to public server by default |
+| maxWidth | 2000 | Maximum map image width in pixels, prevents oversized maps covering too much of the screen |
+| scale | 1.1 | The global scale setting applied to all map images, press Shift + equals and Shift + minus to adjust in game|
+| leftMargin | 20 | The left margin of the map image, set this to wider than your primary monitor to push it onto your secondary monitor. |
+| topMargin | 20 | Top margin of map image |
+| opacity | 0.5 | How transparent the map image should be, between 0 and 1 |
+| alwaysShowMap | false | You can show hide map with TAB key, this setting will force it to always show |
+| hideTown | false | This will hide town maps so they will never show |
+| showNormalMobs | true | Set to false to hide normal non-unique monsters on the map |
+| showUniqueMobs | true | Set to false to hide unique monsters on the map |
+| normalMobColor | FFFFFF | Colour of the dot of normal monsters |
+| uniqueMobColor | D4AF37 | Colour of the dot of unique monsters |
+| playerOffset | 0x20AF660 | The static memory offset, when a new D2R client is released this will need to be updated |
+| uiOffset | 0x20BF322 | The offset used to determine whether your minimap is open or not |
+| readInterval |  10| How long to sleep between memory reads. Increase this if you are having performance problems |
+| debug| false | Turn this one to increase the level of the logging, note this will create huse `log.txt` files |
 
 ## Map Server
 
@@ -77,6 +98,7 @@ In `settings.ini` you should see some options to make configuration changes.
 
 I offer a free to use map server on the internet, but it may be slow and occasionally go down.  
 If you use this server please consider donating to help with server costs.  
+
 Bitcoin donation `18hSn32hChp1CmBYnRdQFyzkz5drpijRa2`  
 D2JSP forum gold: <https://forums.d2jsp.org/user.php?i=1294529>
 
@@ -100,11 +122,26 @@ No one can say for sure. Blizzard do have Warden anti-cheat that will scan your 
 
 If you are having trouble with the map server, refer to troubleshooting steps at [SERVER.md](SERVER.md)
 
+## Licence
+
+This repo is licenced under GPLv3
+
+1. Anyone can copy, modify and distribute this software.
+2. You have to include the license and copyright notice with each and every distribution.
+3. You can use this software privately.
+4. You can use this software for commercial purposes.
+5. Any modifications of this code base MUST be distributed with the same license, GPLv3.
+6. This software is provided without warranty.
+7. The software author or license can not be held liable for any damages inflicted by the software.
+
+Violations of the licence may make you liable for DMCA takedowns.
+
 ## TODO
 
-- Need to add more info for NPCs and others
-- Option to change the map to a floating window
-- Path finding algorithm?
-- Indicate on the screen which way waypoints/exits are relative to your position
+- Super uniques
+- Immunities
+- Map image scale on a per map basis
+- Shrine types
+- Moving arrows on screen edge showing direction to lower level/waypoint
 
 If you have ideas for more features, feel free to share them on discord

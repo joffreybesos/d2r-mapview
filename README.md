@@ -13,7 +13,7 @@ The backend map server relies on this project [blacha/diablo2](https://github.co
 
 ## Map examples
 
-| Arcane Sanctuary |     Lower Kurasy     |    Canyon of the Magi    |
+| Arcane Sanctuary |     Lower Kurast     |    Canyon of the Magi    |
 | :--------------: | :------------------: | :----------------------: |
 | ![](arcane.png)  | ![](lowerkurast.png) | ![](canyonofthemagi.png) |
 

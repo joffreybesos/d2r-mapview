@@ -38,11 +38,23 @@ You can also change the port from 3002 to something else if you prefer.
 Once it's running you should see the following output:
 
 ```text
-[4 23:58:10.874] [LOG]   Updating wine registry....
-wine: created the configuration directory '/root/.wine'
+[18.11.2021 22:39.11.843] [LOG]   Adding font /app/build/static/Roboto-Regular.ttf
+[18.11.2021 22:39.11.851] [LOG]   Updating wine registry....
+wine: created the configuration directory '/app/wine_d2'
 Could not find Wine Gecko. HTML rendering will be disabled.
-wine: configuration in L"/root/.wine" has been updated.
-[4 23:58:19.970] [LOG]   Running on http://0.0.0.0:3002/
+wine: configuration in L"/app/wine_d2" has been updated.
+
+Note that '(null)/.local/share' is not in the search path
+set by the XDG_DATA_HOME and XDG_DATA_DIRS
+environment variables, so applications may not
+be able to find it until you set them. The
+directories currently searched are:
+
+- /root/.local/share
+- /usr/local/share/
+- /usr/share/
+
+[18.11.2021 22:39.28.667] [LOG]   Running on http://0.0.0.0:3002
 ```
 
 This means the server is working.  
@@ -52,19 +64,46 @@ If you don't see the above output, refer to the troubleeshooting section below.
 
 You can test your map server by opening the URL <http://localhost:3002/v1/map/123456/2/46/image> in your browser.
 
-## Implement
+## Usage
 
-Once the server is working, edit your `settings.ini` file.  
+Once the server is working, edit your `settings.ini` file of your client.  
 Change `baseurl` to this: `baseUrl=http://localhost:3002`  
 Make sure there is no trailing slash.
 
+## Performance
+
+If you find the local map server is running slow (you're likely on windows) there is a fix.  
+The problem lies in WSL in how it handles mapped docker volumes, it has an overhead that causes performance issues.
+The fix is to copy the game files to inside your docker container, rather than map to a volume outside the container.
+
+To achieve this, simply:
+
+- Download `server.bat` from this code repostory.
+- Save `server.bat` to your Diablo 2 Classic game files folder.
+- Make sure you don't have any running map servers.
+- Run the file and wait for it to build.
+
+It will take some time to build, but will run the map server at the end.
+Then you should be able to use the mapserver like normal on `localhost:3002`
+
 ## Troubleshoot
 
-__Error message: "docker: invalid reference format."__
+1. __Error message: "docker: invalid reference format."__
   If you get the error "docker: invalid reference format." then make sure you are running in cmd rather than powershell
+  If you opened <http://localhost:3002/v1/map/123456/2/46/image> and didn't get an image you can try the following:
 
-If you opened <http://localhost:3002/v1/map/123456/2/46/image> and didn't get an image you can try the following:
+2. __`VMMem` process is taking up all my memory__
+  VMMem will grow in size, technically this shouldn't be an issue.  
+  But if you want to free this up, simply open an admin powershell window and run:  
+  `Restart-Service LxssManager`  
+  This will close any running containers and restart your docker daemon.  
 
+3. __I'm getting `{}` as a response__
+
+- __Double and triple check your game folder__
+  Ensure you have the right version 1.13c with LoD
+  Ensure the folder name is correct
+  
 - __Check raw data is being served__
   Remove the trailing `/image` from the URL <http://localhost:3002/v1/map/123456/2/46>
   You should see JSON data being returned.  

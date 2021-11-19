@@ -11,9 +11,9 @@ The backend map server relies on this project [blacha/diablo2](https://github.co
 
 ![Durance of Hate Level 2](duranceofhate2.png)
 
-## Youtube demo
+## Demonstration
 
-[![d2r-mapview demo](https://img.youtube.com/vi/-tezpjrZwEI/0.jpg)](https://www.youtube.com/watch?v=-tezpjrZwEI)
+https://www.youtube.com/watch?v=-tezpjrZwEI
 
 ## Map examples
 

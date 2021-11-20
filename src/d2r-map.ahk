@@ -41,8 +41,8 @@ IniRead, startingOffset, settings.ini, Memory, playerOffset
 IniRead, uiOffset, settings.ini, Memory, uiOffset
 IniRead, readInterval, settings.ini, Memory, readInterval, 1000
 
-IniRead, enableD2ML, settings.ini, MultiLaunch, "false"
-IniRead, enableCustomWindowTitle, settings.ini, MultiLaunch, "false"
+IniRead, enableD2ML, settings.ini, MultiLaunch, enableD2ML, "false"
+IniRead, enableCustomWindowTitle, settings.ini, MultiLaunch, enableCustomWindowTitle, "false"
 if (enableCustomWindowTitle == "true") {
     IniRead, windowName, settings.ini, MultiLaunch, windowName
     gameWindowId = %windowName%

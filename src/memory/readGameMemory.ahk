@@ -15,7 +15,7 @@ readGameMemory(playerOffset, startingOffset, ByRef gameMemoryData) {
 
     if !isObject(d2r) 
     {
-        WriteLog("D2R.exe not found, please make sure game is running first")
+        WriteLog(gameWindowId " not found, please make sure game is running first")
         ExitApp
     }
 

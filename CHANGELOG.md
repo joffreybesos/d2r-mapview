@@ -2,9 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.1.1] - 2021-11-20 - Added help text
+## [2.1.1] - 2021-11-20 - MultiLauncher support
 
-- Press H to see help in game now.
+- D2R Multi launcher support added
+  To use you must enable in settings.ini and define your token for that session
+  You must also launch this MH as admin for ML to work
+  D2RML support is very much in beta, so expect bugs.
+- Press Ctrl+H to see help in game now.
 - Other tweaks to logging
 
 ## [2.1.0] - 2021-11-17 - Nearby monsters now appear on map

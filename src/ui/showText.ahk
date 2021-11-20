@@ -36,7 +36,7 @@ ShowHelpText(Width, leftMargin, topMargin) {
     (
 d2r-mapview
 
-- H to toggle this help
+- Ctrl+H to toggle this help
 - TAB to show/hide map
 - Numpad+ to increase map size
 - Numpad- to decrease map size

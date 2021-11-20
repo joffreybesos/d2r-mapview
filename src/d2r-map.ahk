@@ -40,14 +40,25 @@ IniRead, startingOffset, settings.ini, Memory, playerOffset
 IniRead, uiOffset, settings.ini, Memory, uiOffset
 IniRead, readInterval, settings.ini, Memory, readInterval, 1000
 
+IniRead, enableD2ML, settings.ini, MultiLaunch, enableD2ML
+if (enableD2ML == "true") {
+    IniRead, tokenName, settings.ini, MultiLaunch, tokenName
+    gameWindowId = D2R:%tokenName%
+} else {
+    gameWindowId := "ahk_exe D2R.exe"
+}
+
+
 IniRead, debug, settings.ini, Logging, debug, "false"
+
+; Here is a good example of why AHK sucks
 hideTown := hideTown = "true" ; convert to bool
 alwaysShowMap := alwaysShowMap = "true" ; convert to bool
 debug := debug = "true" ; convert to bool
 showNormalMobs := showNormalMobs = "true" ; convert to bool
 showUniqueMobs := showUniqueMobs = "true" ; convert to bool
 global debug := debug
-
+global gameWindowId := gameWindowId
 mapConfig := {"showNormalMobs": showNormalMobs, "showUniqueMobs": showUniqueMobs, "normalMobColor": normalMobColor, "uniqueMobColor": uniqueMobColor}
 
 WriteLog("Using configuration:")
@@ -57,6 +68,7 @@ WriteLog("    hideTown: " hideTown ", alwaysShowMap: " alwaysShowMap)
 WriteLog("    showNormalMobs: " showNormalMobs " showUniqueMobs: " showUniqueMobs)
 WriteLog("    normalMobColor: " normalMobColor " uniqueMobColor: " uniqueMobColor)
 WriteLog("    startingOffset: " startingOffset)
+WriteLog("    gameWindowId: " gameWindowId)
 WriteLog("    debug logging: " debug)
 
 playerOffset:=startingOffset
@@ -79,7 +91,7 @@ While 1 {
                 ;Gui, 1: Show, NA
                 Gui, 1: Hide  ; hide map
                 Gui, 3: Hide  ; hide player dot
-                ShowText(maxWidth, leftMargin, topMargin, "Loading map data...`nPlease wait`nPress H for help", "22") ; 22 is opacity
+                ShowText(maxWidth, leftMargin, topMargin, "Loading map data...`nPlease wait`nPress Ctrl+H for help", "22") ; 22 is opacity
                 ; Download map
                 downloadMapImage(baseUrl, gameMemoryData, mapData)
                 Gui, 2: Destroy  ; remove loading text
@@ -112,7 +124,7 @@ checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, levelNo) {
     if ((levelNo == 1 or levelNo == 40 or levelNo == 75 or levelNo == 103 or levelNo == 109) and hideTown==true) {
         ;WriteLogDebug("Hiding town " levelNo " since hideTown is set to true")
         hideMap(false)
-    } else if not WinActive("ahk_exe D2R.exe") {
+    } else if not WinActive(gameWindowId) {
         ;WriteLogDebug("D2R is not active window, hiding map")
         hideMap(alwaysShowMap)
     } else if (isAutomapShown(uiOffset) == false) {
@@ -171,7 +183,7 @@ unHideMap() {
     return
 }
 
-H::
+^H::
 {
     if (helpToggle) {
         ShowHelpText(maxWidth, 400, 200)

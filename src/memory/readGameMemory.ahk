@@ -11,7 +11,7 @@ readGameMemory(playerOffset, startingOffset, ByRef gameMemoryData) {
         ExitApp
     }
 
-    d2r := new _ClassMemory("ahk_exe D2R.exe", "", hProcessCopy) 
+    d2r := new _ClassMemory(gameWindowId, "", hProcessCopy) 
 
     if !isObject(d2r) 
     {

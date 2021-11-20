@@ -40,11 +40,17 @@ IniRead, startingOffset, settings.ini, Memory, playerOffset
 IniRead, uiOffset, settings.ini, Memory, uiOffset
 IniRead, readInterval, settings.ini, Memory, readInterval, 1000
 
-IniRead, enableD2ML, settings.ini, MultiLaunch, enableD2ML
-if (enableD2ML == "true") {
+IniRead, enableD2ML, settings.ini, MultiLaunch, "false"
+IniRead, enableCustomWindowTitle, settings.ini, MultiLaunch, "false"
+if (enableCustomWindowTitle == "true") {
+    IniRead, windowName, settings.ini, MultiLaunch, windowName
+    gameWindowId = %windowName%
+}
+else if (enableD2ML == "true") {
     IniRead, tokenName, settings.ini, MultiLaunch, tokenName
     gameWindowId = D2R:%tokenName%
-} else {
+} 
+else {
     gameWindowId := "ahk_exe D2R.exe"
 }
 

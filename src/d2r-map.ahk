@@ -17,6 +17,7 @@ if !FileExist(A_Scriptdir . "\settings.ini") {
 }
 lastMap := ""
 exitArray := []
+helpToggle:= true
 WriteLog("*******************************************************")
 WriteLog("* Map overlay started *")
 WriteLog("*******************************************************")
@@ -78,7 +79,7 @@ While 1 {
                 ;Gui, 1: Show, NA
                 Gui, 1: Hide  ; hide map
                 Gui, 3: Hide  ; hide player dot
-                ShowText(maxWidth, leftMargin, topMargin, "Loading map data...`nPlease wait", "22") ; 22 is opacity
+                ShowText(maxWidth, leftMargin, topMargin, "Loading map data...`nPlease wait`nPress H for help", "22") ; 22 is opacity
                 ; Download map
                 downloadMapImage(baseUrl, gameMemoryData, mapData)
                 Gui, 2: Destroy  ; remove loading text
@@ -145,7 +146,14 @@ unHideMap() {
     return
 }
 
-~++::
++F10::
+{
+    WriteLog("Pressed Shift+F10, exiting...")
+    ExitApp
+}
+
+#IfWinActive ahk_exe D2R.exe
+~NumpadAdd::
 {
     scale := scale + 0.1
     ShowMap(maxWidth, scale, leftMargin, topMargin, opacity, mapData, gameMemoryData, uiData)
@@ -154,7 +162,7 @@ unHideMap() {
     return
 }
 
-~+_::
+~NumpadSub::
 {
     scale := scale - 0.1
     ShowMap(maxWidth, scale, leftMargin, topMargin, opacity, mapData, gameMemoryData, uiData)
@@ -163,8 +171,14 @@ unHideMap() {
     return
 }
 
-+F10::
+H::
 {
-    WriteLog("Pressed Shift+F10, exiting...")
-    ExitApp
+    if (helpToggle) {
+        ShowHelpText(maxWidth, 400, 200)
+    } else {
+        Gui, 5: Hide
+    }
+    helpToggle := !helpToggle
+    return
 }
+return

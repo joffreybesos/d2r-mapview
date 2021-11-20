@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.1] - 2021-11-20 - Added help text
+
+- Press H to see help in game now.
+- Other tweaks to logging
+
 ## [2.1.0] - 2021-11-17 - Nearby monsters now appear on map
 
 - Nearby monsters now appear on the map in real time

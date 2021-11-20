@@ -47,6 +47,7 @@ This server is getting hammered lately so it would be appreciated if you support
 
 **Other notes**
 
+- Press H to see help in game
 - You can exit the maphack with Shift+F10
 - You can also right click the icon in the system tray.
 - This MH will automatically exit when you exit D2R.
@@ -81,7 +82,7 @@ In `settings.ini` you should see some options to make configuration changes.
 | :-------------- | :------------------ | :---------------------- |
 | baseUrl | http://diab.wikiwarsgame.com:8080 | URL of the map server, set to public server by default |
 | maxWidth | 2000 | Maximum map image width in pixels, prevents oversized maps covering too much of the screen |
-| scale | 1.1 | The global scale setting applied to all map images, press Shift + equals and Shift + minus to adjust in game|
+| scale | 1.1 | The global scale setting applied to all map images, press NumpadPlus and NumpadSubtract to adjust in game|
 | leftMargin | 20 | The left margin of the map image, set this to wider than your primary monitor to push it onto your secondary monitor. |
 | topMargin | 20 | Top margin of map image |
 | opacity | 0.5 | How transparent the map image should be, between 0 and 1 |

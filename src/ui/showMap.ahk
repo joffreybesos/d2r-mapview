@@ -4,10 +4,17 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\image\Gdip_ResizeBitmap.ahk
 #Include %A_ScriptDir%\ui\image\Gdip_RotateBitmap.ahk
 
-ShowMap(mapGuiWidth, scale, leftMargin, topMargin, opacity, mapData, gameMemoryData, ByRef uiData) {
-    ; WriteLog("mapGuiWidth := " mapGuiWidth)
+ShowMap(settings, mapData, gameMemoryData, ByRef uiData) {
+    mapGuiWidth:= settings["maxWidth"]
+    scale:= settings["scale"]
+    leftMargin:= settings["leftMargin"]
+    topMargin:= settings["topMargin"]
+    opacity:= settings["opacity"]
+    ; WriteLog("maxGuiWidth := " maxGuiWidth)
+    ; WriteLog("scale := " scale)
     ; WriteLog("leftMargin := " leftMargin)
     ; WriteLog("topMargin := " topMargin)
+    ; WriteLog("opacity := " opacity)
     ; WriteLog(mapData["sFile"])
     ; WriteLog(mapData["leftTrimmed"])
     ; WriteLog(mapData["topTrimmed"])
@@ -77,6 +84,6 @@ ShowMap(mapGuiWidth, scale, leftMargin, topMargin, opacity, mapData, gameMemoryD
     Gdip_DeleteGraphics(G)
     Gdip_DisposeImage(pBitmap)
     ElapsedTime := A_TickCount - StartTime
-    WriteLogDebug("Draw players " ElapsedTime " ms taken")
+    WriteLogDebug("Drew map " ElapsedTime " ms taken")
     uiData := { "scaledWidth": scaledWidth, "scaledHeight": scaledHeight, "sizeWidth": Width, "sizeHeight": Height }
 }

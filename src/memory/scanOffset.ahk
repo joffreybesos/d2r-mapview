@@ -43,7 +43,7 @@ getPlayerOffset(startingOffset, loops) {
     found := false
     loop, %loops%
     {
-        ;WriteLogDebug("Attempt " A_Index)
+        ;WriteLogDebug("Attempt " A_Index " with starting offset " startingOffset)
         newOffset := HexAdd(startingOffset, (A_Index - 1) * 8)
         startingAddress := d2r.BaseAddress + newOffset
         playerUnit := d2r.read(startingAddress, "Int64")

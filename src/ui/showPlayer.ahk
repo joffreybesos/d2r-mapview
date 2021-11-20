@@ -4,8 +4,25 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\image\Gdip_ResizeBitmap.ahk
 #Include %A_ScriptDir%\ui\image\Gdip_RotateBitmap.ahk
 
-ShowPlayer(mapGuiWidth, scale, leftMargin, topMargin, mapConfig, mapData, gameMemoryData, uiData) {
+ShowPlayer(settings, mapData, gameMemoryData, uiData) {
     StartTime := A_TickCount
+
+    mapGuiWidth:= settings["maxWidth"]
+    scale:= settings["scale"]
+    leftMargin:= settings["leftMargin"]
+    topMargin:= settings["topMargin"]
+
+    ; WriteLog("maxWidth := " maxWidth)
+    ; WriteLog("leftMargin := " leftMargin)
+    ; WriteLog("topMargin := " topMargin)
+    ; WriteLog(mapData["sFile"])
+    ; WriteLog(mapData["leftTrimmed"])
+    ; WriteLog(mapData["topTrimmed"])
+    ; WriteLog(mapData["mapOffsetX"])
+    ; WriteLog(mapData["mapOffsety"])
+    ; WriteLog(mapData["mapwidth"])
+    ; WriteLog(mapData["mapheight"])
+
     serverScale := 2 
     Angle := 45
     opacity := 0.9
@@ -76,8 +93,8 @@ ShowPlayer(mapGuiWidth, scale, leftMargin, topMargin, mapConfig, mapData, gameMe
 
     ; draw monsters
     mobs := gameMemoryData["mobs"]
-    normalMobColor := 0xff . mapConfig["normalMobColor"] 
-    uniqueMobColor := 0xff . mapConfig["uniqueMobColor"] 
+    normalMobColor := 0xff . settings["normalMobColor"] 
+    uniqueMobColor := 0xff . settings["uniqueMobColor"] 
     ;WriteLog(uniqueMobColor)
     pPenWhite := Gdip_CreatePen(normalMobColor, 2)
     pPenGold := Gdip_CreatePen(uniqueMobColor, 6)
@@ -86,11 +103,11 @@ ShowPlayer(mapGuiWidth, scale, leftMargin, topMargin, mapConfig, mapData, gameMe
         mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
         moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
         if (mob["isUnique"] == 0) {
-            if (mapConfig["showNormalMobs"]) {
+            if (settings["showNormalMobs"]) {
                 Gdip_DrawEllipse(G, pPenWhite, mobx-1, moby-1, 3, 3)
             }
         } else {
-            if (mapConfig["showUniqueMobs"]) {
+            if (settings["showUniqueMobs"]) {
                 Gdip_DrawEllipse(G, pPenGold, mobx-3, moby-3, 6, 6)
             }
         }

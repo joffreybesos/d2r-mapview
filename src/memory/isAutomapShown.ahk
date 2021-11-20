@@ -4,7 +4,7 @@
 SetWorkingDir, %A_ScriptDir%
 
 isAutomapShown(uiOffset) {
-    
+
     if (_ClassMemory.__Class != "_ClassMemory")
     {
         WriteLog("Missing classMemory.ahk dependency. Quitting")
@@ -26,6 +26,6 @@ isAutomapShown(uiOffset) {
     if (isMapShown == 1) {
         return true
     } else {
-        return false  ; if it failed to be read return true anyway
+        return false ; if it failed to be read return true anyway
     }
 }

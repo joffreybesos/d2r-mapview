@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.2] - 2021-11-21 - Better MultiLauncher support
+
+- Multi launcher supports both D2RML and D2RMIM.
+  Just set `windowTitle` in `settings.ini` for the session you want to use
+  This is untested so please leave feedback on discord
+- Refactor of how settings are handled
+
 ## [2.1.1] - 2021-11-20 - MultiLauncher support
 
 - D2R Multi launcher support added

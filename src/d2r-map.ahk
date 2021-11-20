@@ -35,6 +35,7 @@ IniRead, showNormalMobs, settings.ini, MapSettings, showNormalMobs, "true"
 IniRead, showUniqueMobs, settings.ini, MapSettings, showUniqueMobs, "true"
 IniRead, normalMobColor, settings.ini, MapSettings, normalMobColor, "FFFFFF"
 IniRead, uniqueMobColor, settings.ini, MapSettings, uniqueMobColor, "D4AF37"
+IniRead, showOverlayWhenInGameMapHidden, settings.ini, MapSettings, showOverlayWhenInGameMapHidden, "false"
 
 IniRead, startingOffset, settings.ini, Memory, playerOffset
 IniRead, uiOffset, settings.ini, Memory, uiOffset
@@ -53,6 +54,9 @@ else if (enableD2ML == "true") {
 else {
     gameWindowId := "ahk_exe D2R.exe"
 }
+
+
+
 
 
 IniRead, debug, settings.ini, Logging, debug, "false"
@@ -132,11 +136,12 @@ checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, levelNo) {
         hideMap(false)
     } else if not WinActive(gameWindowId) {
         ;WriteLogDebug("D2R is not active window, hiding map")
-        hideMap(alwaysShowMap)
-    } else if (isAutomapShown(uiOffset) == false) {
+        hideMap(true)
+    } else if (isAutomapShown(uiOffset) == false and showOverlayWhenInGameMapHidden == false) {
         ; hidemap
         hideMap(alwaysShowMap)
-    } else {
+    } 
+    else {
         unHideMap()
     } 
     return

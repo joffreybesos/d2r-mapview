@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.4] - 2021-11-21 - Line to indicate direction to next exit
+
+- Now there is a purple line drawn from your player location to the next exit
+  So if you are on Durance of Hate Level 2, a line will be drawn to lvl 3 stairs
+- A yellow line can also be drawn to the nearest waypoint (turned off by default).
+- You can toggle either of above with `showWaypointLine` and `showNextExitLine` in `settings.ini`
+- Fixed a bug where `alwaysShowMap` didn't save when pressing NumpadAsterisk
+- Code cleanup
+
 ## [2.1.3] - 2021-11-21 - Shortcut support
 
 - Fixed map scaling and opacity config bug

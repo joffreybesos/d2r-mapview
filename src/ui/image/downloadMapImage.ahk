@@ -23,7 +23,10 @@ downloadMapImage(baseUrl, gameMemoryData, ByRef mapData) {
         mapOffsetX := whr.getResponseHeader("offsetx")
         mapOffsety := whr.getResponseHeader("offsety")
         mapwidth := whr.getResponseHeader("mapwidth")
-        mapheight := whr.getResponseHeader("mapheight")
+        mapheight := whr.getResponseHeader("mapheight") 
+        exits := whr.getResponseHeader("exits")
+        waypoint := whr.getResponseHeader("waypoint")
+        bosses := whr.getResponseHeader("bosses") 
         vStream := whr.ResponseStream
         
         if (ComObjType(vStream) = 0xD) {      ;VT_UNKNOWN = 0xD
@@ -57,5 +60,5 @@ downloadMapImage(baseUrl, gameMemoryData, ByRef mapData) {
         }
     }
     WriteLog("Downloaded " imageUrl " to " sFile)
-    mapData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight }
+    mapData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight, "exits": exits, "waypoint": waypoint, "bosses": bosses }
 }  

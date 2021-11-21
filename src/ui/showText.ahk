@@ -4,16 +4,16 @@ ShowText(settings, Text, opacity) {
     Width:= settings["maxWidth"]
     leftMargin:=settings["leftMargin"]
     topMargin:= settings["topMargin"]
-    
+
     pToken := Gdip_Startup()
-    
+
     Height = 500
     Options = x0 y0 Center vCenter c%opacity%ffffff r4 s20
     Font = Arial
 
     DetectHiddenWindows, On
-    Gui, 2: -Caption +E0x20 +E0x80000 +LastFound +OwnDialogs +Owner +AlwaysOnTop
-    Gui, 2: Show, NA
+    Gui, LoadingText: -Caption +E0x20 +E0x80000 +LastFound +OwnDialogs +Owner +AlwaysOnTop
+    Gui, LoadingText: Show, NA
     hwnd1 := WinExist()
     hbm := CreateDIBSection(Width, Height)
     hdc := CreateCompatibleDC()
@@ -28,6 +28,6 @@ ShowText(settings, Text, opacity) {
     DeleteObject(hbm)
     DeleteDC(hdc)
     Gdip_DeleteGraphics(G)
-    
+
     Return
 }

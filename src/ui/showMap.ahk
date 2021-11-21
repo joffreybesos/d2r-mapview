@@ -31,7 +31,6 @@ ShowMap(settings, mapData, gameMemoryData, ByRef uiData) {
     Angle := 45
     padding := 150
 
-    
     sFile := mapData["sFile"] ; downloaded map image
     ; FileGetSize, sFileSize, %sFile%
     ; WriteLogDebug("Showing map " sFile " " sFileSize)
@@ -40,8 +39,8 @@ ShowMap(settings, mapData, gameMemoryData, ByRef uiData) {
         MsgBox "Gdiplus failed to start. Please ensure you have gdiplus on your system"
         ExitApp
     }
-    
-    Gui, 1: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+
+    Gui, Map: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
     hwnd1 := WinExist()
     pBitmap := Gdip_CreateBitmapFromFile(sFile)
     If !pBitmap
@@ -55,23 +54,22 @@ ShowMap(settings, mapData, gameMemoryData, ByRef uiData) {
     Gdip_GetRotatedTranslation(Width, Height, Angle, xTranslation, yTranslation)
     ; WriteLog("scale: " scale)
     ; WriteLog("RWidth: " RWidth " RHeight: " RHeight)
-    
+
     scaledWidth := (RWidth * scale)
     scaleAdjust := 1 ; need to adjust the scale for oversized maps
     if (scaledWidth > mapGuiWidth) {
         scaleAdjust := mapGuiWidth / (RWidth * scale)
         scaledWidth := mapGuiWidth
-        WriteLogDebug("OverSized map, reducing scale to " scale ", maxWidth set to " mapGuiWidth)
+        WriteLogDebug("Oversized map, reducing scale to " scale ", maxWidth set to " mapGuiWidth)
     }
     scaledHeight := (RHeight * 0.5) * scale * scaleAdjust
     rotatedWidth := RWidth * scale * scaleAdjust
     rotatedHeight := RHeight * scale * scaleAdjust
-    
-    
+
     hbm := CreateDIBSection(rotatedWidth, rotatedHeight)
     hdc := CreateCompatibleDC()
     obm := SelectObject(hdc, hbm)
-    Gdip_SetSmoothingMode(G, 4)  
+    Gdip_SetSmoothingMode(G, 4) 
     G := Gdip_GraphicsFromHDC(hdc)
     pBitmap := Gdip_RotateBitmap(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
 

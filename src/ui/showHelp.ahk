@@ -11,13 +11,10 @@ d2r-mapview
 
 - Ctrl+H to toggle this help
 - TAB to show/hide map
+- Numpad* to permanently show map
 - Numpad+ to increase map size
 - Numpad- to decrease map size
-- Numpad* to permanently show map
 - Shift+F10 to exit d2r-mapview
-
-If you want map to always show, set 'alwaysShow' to true in settings.ini
-If you want town map to never show, set 'hideTown' to true.
 
 Configuration options here:
 https://github.com/joffreybesos/d2r-mapview#configure
@@ -30,8 +27,8 @@ Please report scams on the discord, link found on Github.
     Options = x0 y0 Left vCenter cFFffffff r4 s20
     Font = Arial
     DetectHiddenWindows, On
-    Gui, 5: -Caption +E0x20 +E0x80000 +LastFound +OwnDialogs +Owner +AlwaysOnTop
-    Gui, 5: Show, NA
+    Gui, HelpText: -Caption +E0x20 +E0x80000 +LastFound +OwnDialogs +Owner +AlwaysOnTop
+    Gui, HelpText: Show, NA
     hwnd1 := WinExist()
     hbm := CreateDIBSection(Width, Height)
     hdc := CreateCompatibleDC()

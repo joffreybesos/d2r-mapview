@@ -8,8 +8,8 @@ Options = x0 y0 Center vCenter c22ffffff r4 s20
 Font = Arial
 
 DetectHiddenWindows, On
-Gui, 2: -Caption +E0x20 +E0x80000 +LastFound +OwnDialogs +Owner +AlwaysOnTop
-Gui, 2: Show, NA
+Gui, LoadingText: -Caption +E0x20 +E0x80000 +LastFound +OwnDialogs +Owner +AlwaysOnTop
+Gui, LoadingText: Show, NA
 hwnd1 := WinExist()
 hbm := CreateDIBSection(Width, Height)
 hdc := CreateCompatibleDC()

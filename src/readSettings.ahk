@@ -30,14 +30,14 @@ readSettings(settingsFile, ByRef settings) {
     }
     IniRead, debug, settings.ini, Logging, debug, "false"
 
-    if (scale < 0.2)
-        scale := 0.2
-    if (scale > 5.0)
-        scale := 5.0
-    if (opacity < 0.1)
-        opacity := 0.1
-    if (opacity > 1.0)
-        opacity := 1.0
+    ; if (scale < 0.2)
+    ;     scale := 0.2
+    ; if (scale > 5.0)
+    ;     scale := 5.0
+    ; if (opacity < 0.1)
+    ;     opacity := 0.1
+    ; if (opacity > 1.0)
+    ;     opacity := 1.0
 
     ; Here is a good example of why AHK sucks
     hideTown := hideTown = "true" ; convert to bool

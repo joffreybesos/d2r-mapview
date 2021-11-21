@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.3] - 2021-11-21 - Shortcut support
+
+- Fixed map scaling and opacity config bug
+- Numpad asterix key will now toggle 'alwaysShowMap'
+- Pressing Numpad * will now toggle between 'always showing the map', and 'show/hide when you press TAB'
+- When 'alwaysShowMap' is turned on, the map will hide when you alt+tab out of the game
+
 ## [2.1.2] - 2021-11-21 - Better MultiLauncher support
 
 - Multi launcher supports both D2RML and D2RMIM.

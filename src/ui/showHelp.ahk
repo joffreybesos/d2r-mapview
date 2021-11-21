@@ -13,6 +13,7 @@ d2r-mapview
 - TAB to show/hide map
 - Numpad+ to increase map size
 - Numpad- to decrease map size
+- Numpad* to permanently show map
 - Shift+F10 to exit d2r-mapview
 
 If you want map to always show, set 'alwaysShow' to true in settings.ini
@@ -21,7 +22,7 @@ If you want town map to never show, set 'hideTown' to true.
 Configuration options here:
 https://github.com/joffreybesos/d2r-mapview#configure
 
-Problems? See log.txt for troubleshooting.
+See log.txt for troubleshooting.
 
 Please report scams on the discord, link found on Github.
     )

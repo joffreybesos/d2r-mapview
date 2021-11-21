@@ -83,13 +83,13 @@ checkAutomapVisibility(settings, levelNo) {
     uiOffset:= settings["uiOffset"]
     alwaysShowMap:= settings["alwaysShowMap"]
     hideTown:= settings["hideTown"]
-        ;WriteLogDebug("Checking visibility, hideTown: " hideTown " alwaysShowMap: " alwaysShowMap)
+    ;WriteLogDebug("Checking visibility, hideTown: " hideTown " alwaysShowMap: " alwaysShowMap)
     if ((levelNo == 1 or levelNo == 40 or levelNo == 75 or levelNo == 103 or levelNo == 109) and hideTown==true) {
         ;WriteLogDebug("Hiding town " levelNo " since hideTown is set to true")
         hideMap(false)
     } else if not WinActive(gameWindowId) {
         ;WriteLogDebug("D2R is not active window, hiding map")
-        hideMap(alwaysShowMap)
+        hideMap(false)
     } else if (isAutomapShown(uiOffset) == false) {
         ; hidemap
         hideMap(alwaysShowMap)
@@ -127,13 +127,20 @@ unHideMap() {
     ExitApp
 }
 
-^z::
+#IfWinActive ahk_exe D2R.exe
+~NumpadMult::
 {
-    alwaysShowMap := !alwaysShowMap
+    settings["alwaysShowMap"] := !settings["alwaysShowMap"]
+    checkAutomapVisibility(settings, gameMemoryData["levelNo"])
+    if (settings["alwaysShowMap"]) {
+        unHideMap()
+    }
+    alwaysShowMap := settings["alwaysShowMap"]
+    IniWrite, %alwaysShowMap%, settings.ini, MapSettings, alwaysShowMap
+    WriteLog("alwaysShowMap set to " settings["alwaysShowMap"])
     return
 }
 
-#IfWinActive ahk_exe D2R.exe
 ~NumpadAdd::
 {
     settings["scale"] := settings["scale"] + 0.1
@@ -145,6 +152,7 @@ unHideMap() {
     ShowPlayer(settings, mapData, gameMemoryData, uiData)
     scale := settings["scale"]
     IniWrite, %scale%, settings.ini, MapSettings, scale
+    WriteLog("Increased scaled by 0.1 to " scale)
     return
 }
 
@@ -157,8 +165,8 @@ unHideMap() {
     }
     ShowMap(settings, mapData, gameMemoryData, uiData)
     ShowPlayer(settings, mapData, gameMemoryData, uiData)
-    
     IniWrite, %scale%, settings.ini, MapSettings, scale
+    WriteLog("Decreased scaled by 0.1 to " scale)
     return
 }
 

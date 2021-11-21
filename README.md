@@ -23,11 +23,23 @@ https://www.youtube.com/watch?v=-tezpjrZwEI
 
 ## Installation
 
+### Executable
 1. Download the latest `d2rmap-vx.x.x.exe` and `settings.ini` files (found on the [releases page](https://github.com/joffreybesos/d2r-mapview/releases))
 2. Launch D2R.
 3. Run `d2rmap.exe` while in menus or in game.
 4. You show see a 'Loading map data' message on the top left of the screen, this initial loading may take 10-15 seconds.
 5. Make sure you press TAB to show the minimap, this map will only display when your minmap is displayed.
+
+### I'm getting a virus alert
+
+The compiled executable will get false positives in virus scans. This is because the tool is written in Autohotkey.
+Autohotkey, while a powerful tool, has been used for all sorts of nefarious applications in the past.  
+
+However, you can alternatively download and install <https://www.autohotkey.com/>  
+Then you can run `src/d2r-map.ahk` directly from source.
+This way you can be fully aware of what code you're executing and you don't have to trust an opaque executable.
+
+Do not accept executables for this from any other source!
 
 **Please note that running this map utility this way uses my freely hosted map server.
 This server is getting hammered lately so it would be appreciated if you supported this project**.
@@ -53,13 +65,6 @@ This server is getting hammered lately so it would be appreciated if you support
 - This MH will automatically exit when you exit D2R.
 - Map download might be slow, just give it a second.
 
-## Run from source
-
-If you don't trust a precompiled executable, you can alternatively download and install <https://www.autohotkey.com/>  
-Then you can run `src/d2r-map.ahk` directly from source.
-This way you can verify the code yourself and ensure there are no hidden macros.
-
-Do not accept executables for this from any other source!
 
 ## Discord
 

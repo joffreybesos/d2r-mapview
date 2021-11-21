@@ -27,7 +27,7 @@ All notable changes to this project will be documented in this file.
 - You can show/hide unique monters with `showUniqueMobs` in `settings.ini`
 - You can change the colour of normal mobs with `normalMobColor` in `settings.ini`
 - You can change the colour of unique mobs with `uniqueMobColor` in `settings.ini`
-- Note: champion and unique monsters will appear the same, this will likely change later
+- Note: champion and unique monsters will appear the same, this will likely change later    
 
 Please monitor this release for excess CPU/memory usage. Report any bugs in discord.
 

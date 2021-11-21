@@ -37,6 +37,7 @@ IniRead, normalMobColor, settings.ini, MapSettings, normalMobColor, "FFFFFF"
 IniRead, uniqueMobColor, settings.ini, MapSettings, uniqueMobColor, "D4AF37"
 IniRead, showOverlayWhenInGameMapHidden, settings.ini, MapSettings, showOverlayWhenInGameMapHidden, "false"
 
+
 IniRead, startingOffset, settings.ini, Memory, playerOffset
 IniRead, uiOffset, settings.ini, Memory, uiOffset
 IniRead, readInterval, settings.ini, Memory, readInterval, 1000
@@ -67,6 +68,8 @@ alwaysShowMap := alwaysShowMap = "true" ; convert to bool
 debug := debug = "true" ; convert to bool
 showNormalMobs := showNormalMobs = "true" ; convert to bool
 showUniqueMobs := showUniqueMobs = "true" ; convert to bool
+showOverlayWhenInGameMapHidden := showOverlayWhenInGameMapHidden = "true"
+
 global debug := debug
 global gameWindowId := gameWindowId
 mapConfig := {"showNormalMobs": showNormalMobs, "showUniqueMobs": showUniqueMobs, "normalMobColor": normalMobColor, "uniqueMobColor": uniqueMobColor}
@@ -112,11 +115,12 @@ While 1 {
                 ;Gui, 1: Show, NA
                 ;Gui, 3: Show, NA
                 ShowMap(maxWidth, scale, leftMargin, topMargin, opacity, mapData, gameMemoryData, uiData)
-                checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, gameMemoryData["levelNo"])
+				
+                checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, gameMemoryData["levelNo"], showOverlayWhenInGameMapHidden)
             }
 
             ShowPlayer(maxWidth, scale, leftMargin, topMargin, mapConfig, mapData, gameMemoryData, uiData)
-            checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, gameMemoryData["levelNo"])
+            checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, gameMemoryData["levelNo"], showOverlayWhenInGameMapHidden)
 
             lastlevel := gameMemoryData["levelNo"]
         } else {
@@ -129,18 +133,39 @@ While 1 {
 
 
 
-checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, levelNo) {
+checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, levelNo, showOverlayWhenInGameMapHidden) {
+	
     ;WriteLogDebug("Checking visibility, hideTown: " hideTown " alwaysShowMap: " alwaysShowMap)
     if ((levelNo == 1 or levelNo == 40 or levelNo == 75 or levelNo == 103 or levelNo == 109) and hideTown==true) {
         ;WriteLogDebug("Hiding town " levelNo " since hideTown is set to true")
         hideMap(false)
-    } else if not WinActive(gameWindowId) {
-        ;WriteLogDebug("D2R is not active window, hiding map")
-        hideMap(true)
-    } else if (isAutomapShown(uiOffset) == false and showOverlayWhenInGameMapHidden == false) {
-        ; hidemap
-        hideMap(alwaysShowMap)
     } 
+	else if not WinActive(gameWindowId) {
+        ;WriteLogDebug("D2R is not active window, hiding map")
+        hideMap(false)
+    } 
+	else if (showOverlayWhenInGameMapHidden == false) {
+			if (isAutomapShown(uiOffset) == false) {
+				; hidemap
+				hideMap(alwaysShowMap)
+			}
+			else {
+				unHideMap()
+			}
+		}
+		else if (showOverlayWhenInGameMapHidden == true) {
+			if (isAutomapShown(uiOffset) == true) {
+				; hidemap
+				hideMap(alwaysShowMap)
+			}
+			else {
+				unHideMap()
+			}
+		
+		
+    }
+		
+	
     else {
         unHideMap()
     } 
@@ -165,7 +190,7 @@ unHideMap() {
 ~TAB::
 ~Space::
 {
-    checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, gameMemoryData["levelNo"])
+    checkAutomapVisibility(uiOffset, alwaysShowMap, hideTown, gameMemoryData["levelNo"], showOverlayWhenInGameMapHidden)
     return
 }
 

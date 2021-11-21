@@ -30,10 +30,11 @@ https://www.youtube.com/watch?v=-tezpjrZwEI
 4. You show see a 'Loading map data' message on the top left of the screen, this initial loading may take 10-15 seconds.
 5. Make sure you press TAB to show the minimap, this map will only display when your minmap is displayed.
 
-### I'm getting a virus alert
+### Virtual total gave me an alert
 
 The compiled executable will get false positives in virus scans. This is because the tool is written in Autohotkey.
 Autohotkey, while a powerful tool, has been used for all sorts of nefarious applications in the past.  
+If you look on the Autohotkey forums, you'll see this is a widely reported problem.  
 
 However, you can alternatively download and install <https://www.autohotkey.com/>  
 Then you can run `src/d2r-map.ahk` directly from source.

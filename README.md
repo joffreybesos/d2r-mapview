@@ -24,11 +24,14 @@ https://www.youtube.com/watch?v=-tezpjrZwEI
 ## Installation
 
 ### Executable
+
 1. Download the latest `d2rmap-vx.x.x.exe` and `settings.ini` files (found on the [releases page](https://github.com/joffreybesos/d2r-mapview/releases))
 2. Launch D2R.
 3. Run `d2rmap.exe` while in menus or in game.
 4. You show see a 'Loading map data' message on the top left of the screen, this initial loading may take 10-15 seconds.
 5. Make sure you press TAB to show the minimap, this map will only display when your minmap is displayed.
+
+The executable does not require administrator unless you are running the game as administrator
 
 ### Virustotal gave me an alert
 
@@ -48,6 +51,14 @@ This server is getting hammered lately so it would be appreciated if you support
 ***Bitcoin donation: `18hSn32hChp1CmBYnRdQFyzkz5drpijRa2`***  
 ***D2JSP forum gold: <https://forums.d2jsp.org/user.php?i=1294529>***  
 
+### Features
+
+- Live player position on map
+- Live monster position on map
+- Unique/champion monsters live location marked on map
+- Super chests specially marked
+- All quest items, doors, waypoints marked
+
 **Map Legend**
 
 - Green dot for player position
@@ -65,7 +76,7 @@ This server is getting hammered lately so it would be appreciated if you support
 - You can also right click the icon in the system tray.
 - This MH will automatically exit when you exit D2R.
 - Map download might be slow, just give it a second.
-
+- Please ignore the message at the top, it's to alert anyone who may have been scammed.
 
 ## Discord
 

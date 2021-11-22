@@ -61,7 +61,7 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
     if (scaledWidth > mapGuiWidth) {
         scaleAdjust := mapGuiWidth / (RWidth * scale)
         scaledWidth := mapGuiWidth
-        WriteLogDebug("OverSized map, reducing scale to " scale ", maxWidth set to " mapGuiWidth)
+        ;WriteLogDebug("OverSized map, reducing scale to " scale ", maxWidth set to " mapGuiWidth)
     }
     scaledHeight := (RHeight * 0.5) * scale * scaleAdjust
     rotatedWidth := RWidth * scale * scaleAdjust
@@ -76,8 +76,10 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
     mobs := gameMemoryData["mobs"]
     normalMobColor := 0xff . settings["normalMobColor"] 
     uniqueMobColor := 0xff . settings["uniqueMobColor"] 
+    bossColor := 0xff . settings["bossColor"] 
     pPenNormal := Gdip_CreatePen(normalMobColor, 2)
-    pPenUnique := Gdip_CreatePen(uniqueMobColor, 6)
+    pPenUnique := Gdip_CreatePen(uniqueMobColor, 5)
+    pPenBoss := Gdip_CreatePen(bossColor, 6)
     if (settings["showNormalMobs"]) {
         for index, mob in mobs
         {
@@ -88,17 +90,29 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
             }
         }
     }
+
     ; having this in a separate loop forces it to be drawn on top
-    if (settings["showUniqueMobs"]) {
-        for index, mob in mobs
-        {
-            if (mob["isUnique"]) {
+    for index, mob in mobs
+    {
+        if (mob["isBoss"]) {
+            if (settings["showBosses"]) {
+                WriteLog(mob["textTitle"])
                 mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
                 moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
-                Gdip_DrawEllipse(G, pPenUnique, mobx-3, moby-3, 6, 6)
+                Gdip_DrawEllipse(G, pPenBoss, mobx-3, moby-3, 6, 6)
+            }
+        }
+        else if (mob["isUnique"]) {
+            if (settings["showUniqueMobs"]) {
+                mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
+                moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+                Gdip_DrawEllipse(G, pPenUnique, mobx-3, moby-3, 5, 5)
             }
         }
     }
+    
+
+    Gdip_DeletePen(pPenBoss)
     Gdip_DeletePen(pPenNormal)
     Gdip_DeletePen(pPenUnique)
 

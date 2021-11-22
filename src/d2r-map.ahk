@@ -167,6 +167,7 @@ unHideMap() {
         }
         ShowMap(settings, mapData, gameMemoryData, uiData)
         ShowPlayer(settings, mapData, gameMemoryData, uiData)
+        scale := settings["scale"]
         IniWrite, %scale%, settings.ini, MapSettings, scale
         WriteLog("Decreased scaled by 0.1 to " scale)
         return

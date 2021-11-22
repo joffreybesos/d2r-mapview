@@ -15,8 +15,10 @@ readSettings(settingsFile, ByRef settings) {
 
     IniRead, showNormalMobs, settings.ini, MapSettings, showNormalMobs, "true"
     IniRead, showUniqueMobs, settings.ini, MapSettings, showUniqueMobs, "true"
+    IniRead, showBosses, settings.ini, MapSettings, showBosses, "true"
     IniRead, normalMobColor, settings.ini, MapSettings, normalMobColor, "FFFFFF"
     IniRead, uniqueMobColor, settings.ini, MapSettings, uniqueMobColor, "D4AF37"
+    IniRead, bossColor, settings.ini, MapSettings, bossColor, "FF0000"
 
     IniRead, showWaypointLine, settings.ini, MapSettings, showWaypointLine, "false"
     IniRead, showNextExitLine, settings.ini, MapSettings, showNextExitLine, "true"
@@ -62,8 +64,10 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("hideTown", hideTown)
     settings.Insert("showNormalMobs", showNormalMobs)
     settings.Insert("showUniqueMobs", showUniqueMobs)
+    settings.Insert("showBosses", showBosses)
     settings.Insert("normalMobColor", normalMobColor)
     settings.Insert("uniqueMobColor", uniqueMobColor)
+    settings.Insert("bossColor", bossColor)
     settings.Insert("showWaypointLine", showWaypointLine)
     settings.Insert("showNextExitLine", showNextExitLine)
     settings.Insert("playerOffset", playerOffset)

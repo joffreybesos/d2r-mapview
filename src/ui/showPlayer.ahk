@@ -96,7 +96,7 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
     {
         if (mob["isBoss"]) {
             if (settings["showBosses"]) {
-                WriteLog(mob["textTitle"])
+                ;WriteLog("Boss: " mob["textTitle"])
                 mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
                 moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
                 Gdip_DrawEllipse(G, pPenBoss, mobx-3, moby-3, 6, 6)
@@ -104,6 +104,7 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
         }
         else if (mob["isUnique"]) {
             if (settings["showUniqueMobs"]) {
+                ;WriteLog("Unique: " mob["textTitle"])
                 mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
                 moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
                 Gdip_DrawEllipse(G, pPenUnique, mobx-3, moby-3, 5, 5)
@@ -114,7 +115,7 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
 
     Gdip_DeletePen(pPenBoss)
     Gdip_DeletePen(pPenNormal)
-    Gdip_DeletePen(pPenUnique)
+    Gdip_DeletePen(pPenUnique)s
 
     ; draw way point line
     if (settings["showWaypointLine"]) {

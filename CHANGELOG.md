@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.1.5] - 2021-11-22 - Bosses now appear
+## [2.1.5] - 2021-11-22 - Bosses now appear on map
 
 - Bosses such as Diablo, Baal, Summoner, Nihilthak will now appear as a red dot
 - Their colour can be configured with `bossColor` in `settings.ini`

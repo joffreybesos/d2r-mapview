@@ -105,16 +105,13 @@ readGameMemory(playerOffset, startingOffset, ByRef gameMemoryData) {
                 isUnique := d2r.read(pUnitData + 0x18, "UShort")
                 monx := d2r.read(pPath + 0x02, "UShort")
                 mony := d2r.read(pPath + 0x06, "UShort")
-                isBoss := false
+                isBoss := 0
                 textTitle := getBossName(txtFileNo)
                 if (textTitle) {
                     isBoss:= 1
                 } else {
                     if (isUnique > 0) {
                         textTitle := getSuperUniqueName(txtFileNo)
-                        if (textTitle) {
-                            isBoss:= 1
-                        }
                     }
                 }
                 mob := {"txtFileNo": txtFileNo, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "textTitle": textTitle }
@@ -149,6 +146,8 @@ getBossName(txtFileNo) {
     }
     return ""
 }
+
+
 
 getSuperUniqueName(txtFileNo) {
     switch (txtFileNo) {

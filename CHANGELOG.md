@@ -6,7 +6,6 @@ All notable changes to this project will be documented in this file.
 
 - Bosses such as Diablo, Baal, Summoner, Nihilthak will now appear as a red dot
 - Their colour can be configured with `bossColor` in `settings.ini`
-- A 'boss' can also include super uniques such as Lord De Seis in Chaos Sanctuary
 - Also fixed a bug where shrinking the map scale caused a config issue
 
 ## [2.1.4] - 2021-11-21 - Line to indicate direction to next exit

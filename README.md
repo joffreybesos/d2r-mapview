@@ -97,7 +97,7 @@ In `settings.ini` you should see some options to make configuration changes.
 
 | Setting |     Default     |    Description    |
 | :-------------- | :------------------ | :---------------------- |
-| baseUrl | http://diab.wikiwarsgame.com:8080 | URL of the map server, set to public server by default |
+| baseUrl | http://localhost:3002 | URL of the map server, set to public server by default, but you can use localhost if you [run your own server](SERVER.md) |
 | maxWidth | 2000 | Maximum map image width in pixels, prevents oversized maps covering too much of the screen |
 | scale | 1.1 | The global scale setting applied to all map images, press NumpadPlus and NumpadSubtract to adjust in game|
 | leftMargin | 20 | The left margin of the map image, set this to wider than your primary monitor to push it onto your secondary monitor. |

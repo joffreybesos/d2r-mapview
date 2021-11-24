@@ -16,6 +16,7 @@ isAutomapShown(uiOffset) {
     if !isObject(d2r) 
     {
         WriteLog(gameWindowId " not found, please make sure game is running first")
+        WriteTimedLog()
         ExitApp
     }
 

@@ -35,7 +35,7 @@ readSettings(settingsFile, ByRef settings) {
     if (enableD2ML == "true") {
         IniRead, gameWindowId, settings.ini, MultiLaunch, windowTitle
     } else {
-        gameWindowId := "ahk_exe D2R.exe"
+        gameWindowId := "ahk_exe D2R.exe"  ;default to normal window id
     }
     IniRead, debug, settings.ini, Logging, debug, "false"
 

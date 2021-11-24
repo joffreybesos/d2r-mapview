@@ -36,6 +36,7 @@ getPlayerOffset(startingOffset, loops, uiOffset) {
     if !isObject(d2r) 
     {
         WriteLog(gameWindowId " not found, please make sure game is running first")
+        WriteTimedLog()
         ExitApp
     }
     expOffset := uiOffset + 0x13
@@ -63,13 +64,20 @@ getPlayerOffset(startingOffset, loops, uiOffset) {
                     actAddress := d2r.read(pAct, "Int64")
                     mapSeedAddress := actAddress + 0x14
                     mapSeed := d2r.read(mapSeedAddress, "UInt")
-                    SetFormat Integer, D
-                    if (A_Index > 1) {
-                        WriteLog("SUCCESS: Found player offset: " newOffset ", from " A_Index " attempts, which gives map seed: " mapSeed)
+
+                    pPath := playerUnit + 0x38
+                    pathAddress := d2r.read(pPath, "Int64")
+                    xPos := d2r.read(pathAddress + 0x02, "UShort")
+                    yPos := d2r.read(pathAddress + 0x06, "UShort")
+                    if (xPos > 0 and yPos > 0) {
+                        SetFormat Integer, D
+                        if (A_Index > 1) {
+                            WriteLog("SUCCESS: Found player offset: " newOffset ", from " A_Index " attempts, which gives map seed: " mapSeed)
+                        }
+                        newOffset := newOffset + 0 ;convert to decimal
+                        found := true
+                        return newOffset
                     }
-                    newOffset := newOffset + 0 ;convert to decimal
-                    found := true
-                    return newOffset
                 }
             }
         }

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.7] - 2021-11-24 - Game sessions now timed
+
+- Game sessions are now timed, an entry is added to `log.txt`
+  Entries look like this `STOPWATCH: Game session duration: 13.172000`
+- Fixed a bug where scanning memory would sometimes return incorrect player data
+
 ## [2.1.6] - 2021-11-24 - Assignable hotkeys
 
 - Increase/decrease map size shortcut key can now be configured

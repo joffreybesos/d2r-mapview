@@ -33,10 +33,13 @@ startingOffset := settings["playerOffset"]
 readInterval := settings["readInterval"]
 uiOffset := settings["uiOffset"]
 lastlevel:=""
+lastSeed:=""
 uidata:={}
 
 global debug := settings["debug"]
 global gameWindowId := settings["gameWindowId"]
+global measureSession := settings["measureSession"]
+global gameStartTime:=0
 
 increaseMapSizeKey := settings["increaseMapSizeKey"]
 decreaseMapSizeKey := settings["decreaseMapSizeKey"]
@@ -56,13 +59,25 @@ While 1 {
     playerOffset := scanOffset(playerOffset, startingOffset, uiOffset)
 
     if (!playerOffset) {
+        ;WriteLog("Could not find playerOffset, likely in menu " gameStartTime)
+        hideMap(false)
+        lastlevel:=
+        if (gameStartTime > 0) {
+            WriteTimedLog()
+            gameStartTime := 0
+        }
         Sleep, 5000 ; sleep longer when no offset found, you're likely in menu
     } else {
         readGameMemory(playerOffset, playerOffset, gameMemoryData)
 
         if ((gameMemoryData["difficulty"] > 0 & gameMemoryData["difficulty"] < 3) and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
+            if (gameMemoryData["mapSeed"] != lastSeed) {
+                gameStartTime := A_TickCount
+                lastSeed := gameMemoryData["mapSeed"]
+            }
             ; if there's a level num then the player is in a map
             if (gameMemoryData["levelNo"] != lastlevel) { ; only redraw map when it changes
+                
                 ; Show loading text
                 ;Gui, Map: Show, NA
                 Gui, Map: Hide ; hide map
@@ -88,7 +103,9 @@ While 1 {
             lastlevel := gameMemoryData["levelNo"]
         } else {
             WriteLog("In Menu - no valid difficulty, levelno, or mapseed found '" gameMemoryData["difficulty"] "' '" gameMemoryData["levelNo"] "' '" gameMemoryData["mapSeed"] "'")
-            hideMap(settings["alwaysShowMap"])
+            hideMap(false)
+            lastlevel:=
+            Sleep, 1000
         }
     }
     Sleep, %readInterval% ; this is the pace of updates
@@ -133,6 +150,7 @@ unHideMap() {
 +F10::
 {
     WriteLog("Pressed Shift+F10, exiting...")
+    WriteTimedLog()
     ExitApp
 }
 

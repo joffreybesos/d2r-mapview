@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.6] - 2021-11-24 - Assignable hotkeys
+
+- Increase/decrease map size shortcut key can now be configured
+- 'Always show map' shortcut can now be configured as well
+  Look for `increaseMapSizeKey`, `decreaseMapSizeKey`, and `alwaysShowKey` in `settings.ini`
+- Also refactored how player offset is detected to be more robust
+- Better error handling when downloading images
+
 ## [2.1.5] - 2021-11-22 - Bosses now appear on map
 
 - Bosses such as Diablo, Baal, Summoner, Nihilthak will now appear as a red dot

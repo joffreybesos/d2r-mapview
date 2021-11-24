@@ -23,6 +23,10 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, showWaypointLine, settings.ini, MapSettings, showWaypointLine, "false"
     IniRead, showNextExitLine, settings.ini, MapSettings, showNextExitLine, "true"
 
+    IniRead, increaseMapSizeKey, settings.ini, Shortcuts, increaseMapSizeKey, NumpadAdd
+    IniRead, decreaseMapSizeKey, settings.ini, Shortcuts, decreaseMapSizeKey, NumpadSub
+    IniRead, alwaysShowKey, settings.ini, Shortcuts, alwaysShowKey, NumpadMult
+
     IniRead, playerOffset, settings.ini, Memory, playerOffset
     IniRead, uiOffset, settings.ini, Memory, uiOffset
     IniRead, readInterval, settings.ini, Memory, readInterval, 1000
@@ -34,15 +38,6 @@ readSettings(settingsFile, ByRef settings) {
         gameWindowId := "ahk_exe D2R.exe"
     }
     IniRead, debug, settings.ini, Logging, debug, "false"
-
-    ; if (scale < 0.2)
-    ;     scale := 0.2
-    ; if (scale > 5.0)
-    ;     scale := 5.0
-    ; if (opacity < 0.1)
-    ;     opacity := 0.1
-    ; if (opacity > 1.0)
-    ;     opacity := 1.0
 
     ; Here is a good example of why AHK sucks
     hideTown := hideTown = "true" ; convert to bool
@@ -70,6 +65,9 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("bossColor", bossColor)
     settings.Insert("showWaypointLine", showWaypointLine)
     settings.Insert("showNextExitLine", showNextExitLine)
+    settings.Insert("increaseMapSizeKey", increaseMapSizeKey)
+    settings.Insert("decreaseMapSizeKey", decreaseMapSizeKey)
+    settings.Insert("alwaysShowKey", alwaysShowKey)
     settings.Insert("playerOffset", playerOffset)
     settings.Insert("uiOffset", uiOffset)
     settings.Insert("readInterval", readInterval)

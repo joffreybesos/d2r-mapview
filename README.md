@@ -56,8 +56,11 @@ This server is getting hammered lately so it would be appreciated if you support
 - Live player position on map
 - Live monster position on map
 - Unique/champion monsters live location marked on map
-- Super chests specially marked
+- Super chests specially marked (LK chests)
 - All quest items, doors, waypoints marked
+- Line drawn from your player position to the next level
+
+If you want server IP to show, look at my extra standalone tool for that <https://github.com/joffreybesos/DcloneIPview>
 
 **Map Legend**
 
@@ -71,7 +74,7 @@ This server is getting hammered lately so it would be appreciated if you support
 
 **Other notes**
 
-- Press H to see help in game
+- Press Ctrl+H to see help in game
 - You can exit the maphack with Shift+F10
 - You can also right click the icon in the system tray.
 - This MH will automatically exit when you exit D2R.

@@ -31,15 +31,29 @@ readSettings(settings.ini, settings)
 playerOffset := settings["playerOffset"]
 startingOffset := settings["playerOffset"]
 readInterval := settings["readInterval"]
+uiOffset := settings["uiOffset"]
 lastlevel:=""
 uidata:={}
 
 global debug := settings["debug"]
 global gameWindowId := settings["gameWindowId"]
 
+increaseMapSizeKey := settings["increaseMapSizeKey"]
+decreaseMapSizeKey := settings["decreaseMapSizeKey"]
+alwaysShowKey := settings["alwaysShowKey"]
+
+Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, %alwaysShowKey%, MapSizeAlwaysShow
+
+Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, %increaseMapSizeKey%, MapSizeIncrease
+
+Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, %decreaseMapSizeKey%, MapSizeDecrease
+
 While 1 {
     ; scan for the player offset
-    playerOffset := scanOffset(playerOffset, startingOffset)
+    playerOffset := scanOffset(playerOffset, startingOffset, uiOffset)
 
     if (!playerOffset) {
         Sleep, 5000 ; sleep longer when no offset found, you're likely in menu
@@ -73,7 +87,7 @@ While 1 {
 
             lastlevel := gameMemoryData["levelNo"]
         } else {
-            WriteLog("In Menu - no valid difficulty, levelno and mapseed found " gameMemoryData["difficulty"] " " gameMemoryData["levelNo"] " " gameMemoryData["mapSeed"] )
+            WriteLog("In Menu - no valid difficulty, levelno, or mapseed found '" gameMemoryData["difficulty"] "' '" gameMemoryData["levelNo"] "' '" gameMemoryData["mapSeed"] "'")
             hideMap(settings["alwaysShowMap"])
         }
     }
@@ -115,64 +129,59 @@ unHideMap() {
     Gui, Units: Show, NA
 }
 
-~TAB::
-~Space::
-    {
-        checkAutomapVisibility(settings, gameMemoryData["levelNo"])
-        return
-    }
 
 +F10::
-    {
-        WriteLog("Pressed Shift+F10, exiting...")
-        ExitApp
-    }
+{
+    WriteLog("Pressed Shift+F10, exiting...")
+    ExitApp
+}
 
-#IfWinActive ahk_exe D2R.exe
-    ~NumpadMult::
-    {
-        settings["alwaysShowMap"] := !settings["alwaysShowMap"]
-        checkAutomapVisibility(settings, gameMemoryData["levelNo"])
-        if (settings["alwaysShowMap"]) {
-            unHideMap()
-            IniWrite, true, settings.ini, MapSettings, alwaysShowMap
-        } else {
-            IniWrite, false, settings.ini, MapSettings, alwaysShowMap
-        }
-        WriteLog("alwaysShowMap set to " settings["alwaysShowMap"])
-        return
-    }
 
-    ~NumpadAdd::
-    {
-        settings["scale"] := settings["scale"] + 0.1
-        if (settings["scale"] > 5.0) {
-            WriteLog("Scale is larger than max scale of 5: " settings["scale"])
-            settings["scale"] := 5.0
-        }
-        ShowMap(settings, mapData, gameMemoryData, uiData)
-        ShowPlayer(settings, mapData, gameMemoryData, uiData)
-        scale := settings["scale"]
-        IniWrite, %scale%, settings.ini, MapSettings, scale
-        WriteLog("Increased scaled by 0.1 to " scale)
-        return
+MapSizeAlwaysShow:
+{
+    settings["alwaysShowMap"] := !settings["alwaysShowMap"]
+    checkAutomapVisibility(settings, gameMemoryData["levelNo"])
+    if (settings["alwaysShowMap"]) {
+        unHideMap()
+        IniWrite, true, settings.ini, MapSettings, alwaysShowMap
+    } else {
+        IniWrite, false, settings.ini, MapSettings, alwaysShowMap
     }
+    WriteLog("alwaysShowMap set to " settings["alwaysShowMap"])
+    return
+}
 
-    ~NumpadSub::
-    {
-        settings["scale"] := settings["scale"] - 0.1
-        if (settings["scale"] < 0.2) {
-            WriteLog("Scale is lower than minimum scale 0.2: " settings["scale"])
-            settings["scale"] := 0.2
-        }
-        ShowMap(settings, mapData, gameMemoryData, uiData)
-        ShowPlayer(settings, mapData, gameMemoryData, uiData)
-        scale := settings["scale"]
-        IniWrite, %scale%, settings.ini, MapSettings, scale
-        WriteLog("Decreased scaled by 0.1 to " scale)
-        return
+MapSizeIncrease:
+{
+    settings["scale"] := settings["scale"] + 0.1
+    if (settings["scale"] > 5.0) {
+        WriteLog("Scale is larger than max scale of 5: " settings["scale"])
+        settings["scale"] := 5.0
     }
+    ShowMap(settings, mapData, gameMemoryData, uiData)
+    ShowPlayer(settings, mapData, gameMemoryData, uiData)
+    scale := settings["scale"]
+    IniWrite, %scale%, settings.ini, MapSettings, scale
+    WriteLog("Increased scaled by 0.1 to " scale)
+    return
+}
 
+MapSizeDecrease:
+{
+    settings["scale"] := settings["scale"] - 0.1
+    if (settings["scale"] < 0.2) {
+        WriteLog("Scale is lower than minimum scale 0.2: " settings["scale"])
+        settings["scale"] := 0.2
+    }
+    ShowMap(settings, mapData, gameMemoryData, uiData)
+    ShowPlayer(settings, mapData, gameMemoryData, uiData)
+    scale := settings["scale"]
+    IniWrite, %scale%, settings.ini, MapSettings, scale
+    WriteLog("Decreased scaled by 0.1 to " scale)
+    return
+}
+
+#IfWinActive, ahk_exe D2R.exe
     ^H::
     {
         if (helpToggle) {
@@ -183,4 +192,11 @@ unHideMap() {
         helpToggle := !helpToggle
         return
     }
+    ~TAB::
+    ~Space::
+    {
+        checkAutomapVisibility(settings, gameMemoryData["levelNo"])
+        return
+    }
 return
+

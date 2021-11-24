@@ -46,19 +46,31 @@ downloadMapImage(baseUrl, gameMemoryData, ByRef mapData) {
             oFile.Close()
         }
     } catch e {
-        errMsg = e.message
+        errMsg := e.message
         if (Instr(errMsg, "The operation timed out")) {
             WriteLog("ERROR: Timeout downloading image from " imageUrl)
             WriteLog("You can try opening the above URL in your browser to test connectivity")
         } else if (Instr(errMsg, "The requested header was not found")) {
-            WriteLog(respHeaders)
+            Loop, Parse, respHeaders, `n
+            {
+                WriteLog("Response Header: " A_LoopField)
+            }
             WriteLog("ERROR: Did not find an expected header " imageUrl)
-            WriteLog("If it didn't find the correct headers, you may be using an old version of the server")
+            WriteLog("If it didn't find the correct headers, you likely need to update your server docker image")
         } else {
-            WriteLog(e.message)
+            WriteLog(errMsg)
+            Loop, Parse, respHeaders, `n
+            {
+                WriteLog("Response Header: " A_LoopField)
+            }
             WriteLog("ERROR: Error downloading image from " imageUrl)
+            if (FileExist(sFile)) {
+                WriteLog("Downloaded file, but something else went wrong " sFile)
+            }
         }
     }
-    WriteLog("Downloaded " imageUrl " to " sFile)
+    if (FileExist(sFile)) {
+        WriteLog("Downloaded " imageUrl " to " sFile)
+    }
     mapData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight, "exits": exits, "waypoint": waypoint, "bosses": bosses }
 }  

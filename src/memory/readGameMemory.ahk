@@ -93,16 +93,17 @@ readGameMemory(playerOffset, startingOffset, ByRef gameMemoryData) {
 
         newOffset := monstersOffset + (8 * (A_Index - 1))
         mobAddress := d2r.BaseAddress + newOffset
-        mobUnit := d2r.read(mobAddress, "Int64")
+        while (mobAddress > 0) { ; keep following the next pointer
+            mobUnit := d2r.read(mobAddress, "Int64")
 
-        if (mobUnit) {
-            mobType := d2r.read(mobUnit + 0x00, "UInt")
-            txtFileNo := d2r.read(mobUnit + 0x04, "UInt")
-            unitId := d2r.read(mobUnit + 0x08, "UInt")
-            mode := d2r.read(mobUnit + 0x0c, "UInt")
-            pUnitData := d2r.read(mobUnit + 0x10, "Int64")
-            pPath := d2r.read(mobUnit + 0x38, "Int64")
-            if (mode != 0 && mode != 12) {
+            if (mobUnit) {
+                mobType := d2r.read(mobUnit + 0x00, "UInt")
+                txtFileNo := d2r.read(mobUnit + 0x04, "UInt")
+                unitId := d2r.read(mobUnit + 0x08, "UInt")
+                mode := d2r.read(mobUnit + 0x0c, "UInt")
+                pUnitData := d2r.read(mobUnit + 0x10, "Int64")
+                pPath := d2r.read(mobUnit + 0x38, "Int64")
+            
                 isUnique := d2r.read(pUnitData + 0x18, "UShort")
                 monx := d2r.read(pPath + 0x02, "UShort")
                 mony := d2r.read(pPath + 0x06, "UShort")
@@ -110,13 +111,13 @@ readGameMemory(playerOffset, startingOffset, ByRef gameMemoryData) {
                 textTitle := getBossName(txtFileNo)
                 if (textTitle) {
                     isBoss:= 1
-                } else {
-                    if (isUnique > 0) {
-                        textTitle := getSuperUniqueName(txtFileNo)
-                    }
                 }
-                mob := {"txtFileNo": txtFileNo, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "textTitle": textTitle }
+                mob := {"txtFileNo": txtFileNo, "mode": mode, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "textTitle": textTitle }
                 mobs.push(mob)
+                
+                mobAddress := d2r.read(mobUnit + 0x150, "Int64")  ; get next mob
+            } else {
+                mobAddress := 0
             }
         }
     } 

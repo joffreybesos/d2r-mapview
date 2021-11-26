@@ -16,6 +16,7 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, showNormalMobs, settings.ini, MapSettings, showNormalMobs, "true"
     IniRead, showUniqueMobs, settings.ini, MapSettings, showUniqueMobs, "true"
     IniRead, showBosses, settings.ini, MapSettings, showBosses, "true"
+    IniRead, showDeadMobs, settings.ini, MapSettings, showDeadMobs, "true"
     IniRead, normalMobColor, settings.ini, MapSettings, normalMobColor, "FFFFFF"
     IniRead, uniqueMobColor, settings.ini, MapSettings, uniqueMobColor, "D4AF37"
     IniRead, bossColor, settings.ini, MapSettings, bossColor, "FF0000"
@@ -46,6 +47,7 @@ readSettings(settingsFile, ByRef settings) {
     showUniqueMobs := showUniqueMobs = "true" ; convert to bool
     showWaypointLine := showWaypointLine = "true" ; convert to bool
     showNextExitLine := showNextExitLine = "true" ; convert to bool
+    showDeadMobs := showDeadMobs = "true"
 
     ; AHK also doesn't let you declare an array a more sensible way
     settings := {}
@@ -60,6 +62,7 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("showNormalMobs", showNormalMobs)
     settings.Insert("showUniqueMobs", showUniqueMobs)
     settings.Insert("showBosses", showBosses)
+    settings.Insert("showDeadMobs", showDeadMobs)
     settings.Insert("normalMobColor", normalMobColor)
     settings.Insert("uniqueMobColor", uniqueMobColor)
     settings.Insert("bossColor", bossColor)
@@ -79,7 +82,7 @@ readSettings(settingsFile, ByRef settings) {
     WriteLog(" baseUrl: " baseUrl)
     WriteLog(" Map: maxWidth: " maxWidth ", scale: " scale ", topMargin: " topMargin ", leftMargin: " leftMargin ", opacity: " opacity)
     WriteLog(" hideTown: " hideTown ", alwaysShowMap: " alwaysShowMap)
-    WriteLog(" showNormalMobs: " showNormalMobs " showUniqueMobs: " showUniqueMobs)
+    WriteLog(" showNormalMobs: " showNormalMobs " showUniqueMobs: " showUniqueMobs " showBosses: " showBosses " showDeadMobs: " showDeadMobs)
     WriteLog(" normalMobColor: " normalMobColor " uniqueMobColor: " uniqueMobColor)
     WriteLog(" startingOffset: " startingOffset)
     WriteLog(" showWaypointLine: " showWaypointLine)

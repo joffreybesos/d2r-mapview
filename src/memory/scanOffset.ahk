@@ -52,9 +52,9 @@ getPlayerOffset(startingOffset, loops, uiOffset) {
             pInventory := playerUnit + 0x90
             inventory := d2r.read(pInventory, "Int64")
             if (inventory) {
-                ; check if expansion character or not
+                
                 expChar := d2r.read(d2r.BaseAddress + expOffset, "UShort")
-                basecheck := (d2r.read(inventory + 0x30, "U Short")) != 1
+                basecheck := (d2r.read(inventory + 0x30, "UShort")) != 1
                 if (expChar) {
                     basecheck := (d2r.read(inventory + 0x70, "UShort")) != 0
                 }
@@ -69,21 +69,31 @@ getPlayerOffset(startingOffset, loops, uiOffset) {
                     pathAddress := d2r.read(pPath, "Int64")
                     xPos := d2r.read(pathAddress + 0x02, "UShort")
                     yPos := d2r.read(pathAddress + 0x06, "UShort")
-                    if (xPos > 0 and yPos > 0) {
+
+                    pUnitData := playerUnit + 0x10
+                    playerNameAddress := d2r.read(pUnitData, "Int64")
+                    name :=
+                    Loop, 16
+                    {
+                        name := name . Chr(d2r.read(playerNameAddress + (A_Index -1), "UChar"))
+                    }
+                    if (xPos > 0 and yPos > 0 and StrLen(mapSeed) > 6) {
                         SetFormat Integer, D
                         if (A_Index > 1) {
-                            WriteLog("SUCCESS: Found player offset: " newOffset ", from " A_Index " attempts, which gives map seed: " mapSeed)
+                            WriteLog("SUCCESS: Found player " name " offset: " newOffset ", from " A_Index " attempts, which gives map seed: " mapSeed)
                         }
                         newOffset := newOffset + 0 ;convert to decimal
                         found := true
                         return newOffset
+                    } else {
+                        WriteLogDebug("Found possible player " name " offset: " newOffset ", from " A_Index " attempts, which gives map seed: " mapSeed)
                     }
                 }
             }
         }
     }
     if (!found && loops > 1) {
-        WriteLogDebug("Did not find a player offset after " loops "(128) attempts, likely in game menu")
+        WriteLogDebug("Did not find a player offset after " loops "(128) attempts, likely in game menu. If you are seeing this incorrectly, try starting a new game.")
     }
 }
 

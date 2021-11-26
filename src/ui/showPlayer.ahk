@@ -77,16 +77,32 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
     normalMobColor := 0xff . settings["normalMobColor"] 
     uniqueMobColor := 0xff . settings["uniqueMobColor"] 
     bossColor := 0xff . settings["bossColor"] 
-    pPenNormal := Gdip_CreatePen(normalMobColor, 2)
+    pPenNormal := Gdip_CreatePen(normalMobColor, 3)
     pPenUnique := Gdip_CreatePen(uniqueMobColor, 5)
     pPenBoss := Gdip_CreatePen(bossColor, 6)
+    pPenDead := Gdip_CreatePen(0xff000000, 3)
+
+    if (settings["showDeadMobs"]) {
+        for index, mob in mobs
+        {
+            if (mob["mode"] == 0 or mob["mode"] == 12) { ; dead
+                mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
+                moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+                Gdip_DrawEllipse(G, pPenDead, mobx-1, moby-1, 3, 3)
+            }
+        }
+    }
+    
     if (settings["showNormalMobs"]) {
         for index, mob in mobs
         {
             if (mob["isUnique"] == 0) {
-                mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
-                moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
-                Gdip_DrawEllipse(G, pPenNormal, mobx-1, moby-1, 3, 3)
+                if (mob["mode"] != 0 and mob["mode"] != 12) { ; not dead
+                    mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
+                    moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+                    Gdip_DrawEllipse(G, pPenNormal, mobx-1, moby-1, 3, 3)
+                }
+                
             }
         }
     }
@@ -96,18 +112,22 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
     {
         if (mob["isBoss"]) {
             if (settings["showBosses"]) {
-                ;WriteLog("Boss: " mob["textTitle"])
-                mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
-                moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
-                Gdip_DrawEllipse(G, pPenBoss, mobx-3, moby-3, 6, 6)
+                if (mob["mode"] != 0 and mob["mode"] != 12) {
+                    ;WriteLog("Boss: " mob["textTitle"])
+                    mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
+                    moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+                    Gdip_DrawEllipse(G, pPenBoss, mobx-3, moby-3, 6, 6)
+                }
             }
         }
         else if (mob["isUnique"]) {
             if (settings["showUniqueMobs"]) {
-                ;WriteLog("Unique: " mob["textTitle"])
-                mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
-                moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
-                Gdip_DrawEllipse(G, pPenUnique, mobx-3, moby-3, 5, 5)
+                if (mob["mode"] != 0 and mob["mode"] != 12) { ; not dead
+                    ;WriteLog("Unique: " mob["textTitle"])
+                    mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
+                    moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+                    Gdip_DrawEllipse(G, pPenUnique, mobx-3, moby-3, 5, 5)
+                }
             }
         }
     }
@@ -115,11 +135,12 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
 
     Gdip_DeletePen(pPenBoss)
     Gdip_DeletePen(pPenNormal)
-    Gdip_DeletePen(pPenUnique)s
+    Gdip_DeletePen(pPenUnique)
+    Gdip_DeletePen(pPenDead)
 
     ; draw way point line
     if (settings["showWaypointLine"]) {
-        WriteLog(settings["showWaypointLine"])
+        ;WriteLog(settings["showWaypointLine"])
         waypointHeader := mapData["waypoint"]
         if (waypointHeader) {
             wparray := StrSplit(waypointHeader, ",")

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.8] - 2021-11-26 - Dead monsters now show on map
+
+- Dying and dead monsters now appear as a black dot on the map
+  This is handy for cows to know which areas have been cleared
+- Improved a bug where certain mobs wouldn't show on the map
+  There is a still a bug where this may still happen
+- Slightly improved player offset scanning
+
 ## [2.1.7] - 2021-11-24 - Game sessions now timed
 
 - Game sessions are now timed, an entry is added to `log.txt`

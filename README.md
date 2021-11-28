@@ -9,6 +9,8 @@ This tool is licenced under GPLv3.
 
 The backend map server relies on this project [blacha/diablo2](https://github.com/blacha/diablo2/tree/master/packages/map). This tool uses a modified version of that executable to generate map data.
 
+Join the discord server <https://discord.gg/qEgqyVW3uj>
+
 ![Durance of Hate Level 2](duranceofhate2.png)
 
 ## Demonstration
@@ -145,6 +147,9 @@ No one can say for sure. Blizzard do have Warden anti-cheat that will scan your 
 - Go to the discord server if you need further help <https://discord.gg/qEgqyVW3uj>
 - Tested and working on Diablo 2 Resurrected `1.0.67005`
 
+**Warning: The keyboard and/or mouse hook could not be activated; some parts of the script will not function**:
+This happens with certain antivirus where it will block hotkeys, you may need to 'allow' the script for hotkeys to work.
+
 If you are having trouble with the map server, refer to troubleshooting steps at [SERVER.md](SERVER.md)
 
 ## Licence
@@ -168,5 +173,6 @@ Violations of the licence may make you liable for DMCA takedowns.
 - Map image scale on a per map basis
 - Shrine types
 - Moving arrows on screen edge showing direction to lower level/waypoint
+- Map replaces automap
 
 If you have ideas for more features, feel free to share them on discord

@@ -20,6 +20,7 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, normalMobColor, settings.ini, MapSettings, normalMobColor, "FFFFFF"
     IniRead, uniqueMobColor, settings.ini, MapSettings, uniqueMobColor, "D4AF37"
     IniRead, bossColor, settings.ini, MapSettings, bossColor, "FF0000"
+    IniRead, showImmunities, settings.ini, MapSettings, showImmunities, "true"
 
     IniRead, showWaypointLine, settings.ini, MapSettings, showWaypointLine, "false"
     IniRead, showNextExitLine, settings.ini, MapSettings, showNextExitLine, "true"
@@ -48,6 +49,7 @@ readSettings(settingsFile, ByRef settings) {
     showWaypointLine := showWaypointLine = "true" ; convert to bool
     showNextExitLine := showNextExitLine = "true" ; convert to bool
     showDeadMobs := showDeadMobs = "true"
+    showImmunities := showImmunities = "true"
 
     ; AHK also doesn't let you declare an array a more sensible way
     settings := {}
@@ -66,6 +68,7 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("normalMobColor", normalMobColor)
     settings.Insert("uniqueMobColor", uniqueMobColor)
     settings.Insert("bossColor", bossColor)
+    settings.Insert("showImmunities", showImmunities)
     settings.Insert("showWaypointLine", showWaypointLine)
     settings.Insert("showNextExitLine", showNextExitLine)
     settings.Insert("increaseMapSizeKey", increaseMapSizeKey)

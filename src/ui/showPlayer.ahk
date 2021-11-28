@@ -80,7 +80,15 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
     pPenNormal := Gdip_CreatePen(normalMobColor, 3)
     pPenUnique := Gdip_CreatePen(uniqueMobColor, 5)
     pPenBoss := Gdip_CreatePen(bossColor, 6)
-    pPenDead := Gdip_CreatePen(0xff000000, 3)
+    pPenDead := Gdip_CreatePen(0xff000000, 2)
+
+
+    pPenPhysical := Gdip_CreatePen(0xffCD853f, 4)
+    pPenMagic := Gdip_CreatePen(0xffff8800, 4)
+    pPenFire := Gdip_CreatePen(0xffFF0000, 4)
+    pPenLight := Gdip_CreatePen(0xffFFFF00, 4)
+    pPenCold := Gdip_CreatePen(0xff0000FF, 4)
+    pPenPoison := Gdip_CreatePen(0xFF32CD32, 4)
 
     if (settings["showDeadMobs"]) {
         for index, mob in mobs
@@ -88,7 +96,7 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
             if (mob["mode"] == 0 or mob["mode"] == 12) { ; dead
                 mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
                 moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
-                Gdip_DrawEllipse(G, pPenDead, mobx-1, moby-1, 3, 3)
+                Gdip_DrawEllipse(G, pPenDead, mobx-1, moby-1, 2, 2)
             }
         }
     }
@@ -100,7 +108,39 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
                 if (mob["mode"] != 0 and mob["mode"] != 12) { ; not dead
                     mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
                     moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
-                    Gdip_DrawEllipse(G, pPenNormal, mobx-1, moby-1, 3, 3)
+                    if (settings["showImmunities"]) {
+                        immunities := mob["immunities"]
+                        noImmunities := immunities["physical"] + immunities["magic"] + immunities["fire"] + immunities["light"] + immunities["cold"] + immunities["poison"]
+                        sliceSize := 360 / noImmunities
+                        angleDegrees := 35
+                        dotSize := 4
+                        if (immunities["physical"]) {
+                            Gdip_DrawPie(G, pPenMagic, mobx-2, moby-2, dotSize, dotSize, angleDegrees, sliceSize)
+                            angleDegrees := angleDegrees + sliceSize
+                        }
+                        if (immunities["magic"]) {
+                            Gdip_DrawPie(G, pPenMagic, mobx-2, moby-2, dotSize, dotSize, angleDegrees, sliceSize)
+                            angleDegrees := angleDegrees + sliceSize
+                        }
+                        if (immunities["fire"]) {
+                            Gdip_DrawPie(G, pPenFire, mobx-2, moby-2, dotSize, dotSize, angleDegrees, sliceSize)
+                            angleDegrees := angleDegrees + sliceSize
+                        }
+                        if (immunities["light"]) {
+                            Gdip_DrawPie(G, pPenLight, mobx-2, moby-2, dotSize, dotSize, angleDegrees, sliceSize)
+                            angleDegrees := angleDegrees + sliceSize
+                        }
+                        if (immunities["cold"]) {
+                            Gdip_DrawPie(G, pPenCold, mobx-2, moby-2, dotSize, dotSize, angleDegrees, sliceSize)
+                            angleDegrees := angleDegrees + sliceSize
+                        }
+                        if (immunities["poison"]) {
+                            Gdip_DrawPie(G, pPenPoison, mobx-2, moby-2, dotSize, dotSize,angleDegrees, sliceSize)
+                            angleDegrees := angleDegrees + sliceSize
+                        }
+                    }
+                    Gdip_DrawEllipse(G, pPenNormal, mobx-1, moby-1, 2.5, 2.5)
+
                 }
                 
             }
@@ -126,17 +166,57 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
                     ;WriteLog("Unique: " mob["textTitle"])
                     mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
                     moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+                    if (settings["showImmunities"]) {
+                        immunities := mob["immunities"]
+                        noImmunities := immunities["physical"] + immunities["magic"] + immunities["fire"] + immunities["light"] + immunities["cold"] + immunities["poison"]
+                        sliceSize := 360 / noImmunities
+                        angleDegrees := 40
+                        dotSize := 10
+                        ;WriteLog(mob["txtFileNo"] " " immunities["fire"] immunities["light"] immunities["cold"] immunities["poison"])
+                        txtFileNo := mob["txtFileNo"]
+                        WriteLog("noImmunities: " noImmunities ", txtFileNo: " txtFileNo ", " immunities["physical"] immunities["magic"] immunities["fire"] immunities["light"] immunities["cold"] immunities["poison"])
+                        if (immunities["physical"]) {
+                            Gdip_DrawPie(G, pPenPhysical, mobx-5, moby-5, dotSize, dotSize, angleDegrees, sliceSize)
+                            angleDegrees := angleDegrees + sliceSize
+                        }
+                        if (immunities["magic"]) {
+                            Gdip_DrawPie(G, pPenMagic, mobx-5, moby-5, dotSize, dotSize, angleDegrees, sliceSize)
+                            angleDegrees := angleDegrees + sliceSize
+                        }
+                        if (immunities["fire"]) {
+                            Gdip_DrawPie(G, pPenFire, mobx-5, moby-5, dotSize, dotSize, angleDegrees, sliceSize)
+                            angleDegrees := angleDegrees + sliceSize
+                        }
+                        if (immunities["light"]) {
+                            Gdip_DrawPie(G, pPenLight, mobx-5, moby-5, dotSize, dotSize, angleDegrees, sliceSize)
+                            angleDegrees := angleDegrees + sliceSize
+                        }
+                        if (immunities["cold"]) {
+                            Gdip_DrawPie(G, pPenCold, mobx-5, moby-5, dotSize, dotSize, angleDegrees, sliceSize)
+                            angleDegrees := angleDegrees + sliceSize
+                        }
+                        if (immunities["poison"]) {
+                            Gdip_DrawPie(G, pPenPoison, mobx-2, moby-2, dotSize, dotSize, angleDegrees, sliceSize)
+                            angleDegrees := angleDegrees + sliceSize
+                        }
+                    }
                     Gdip_DrawEllipse(G, pPenUnique, mobx-3, moby-3, 5, 5)
                 }
             }
         }
     }
     
-
     Gdip_DeletePen(pPenBoss)
     Gdip_DeletePen(pPenNormal)
     Gdip_DeletePen(pPenUnique)
     Gdip_DeletePen(pPenDead)
+    
+    Gdip_DeletePen(pPenPhysical)
+    Gdip_DeletePen(pPenMagic)
+    Gdip_DeletePen(pPenFire)
+    Gdip_DeletePen(pPenLight)
+    Gdip_DeletePen(pPenCold)
+    Gdip_DeletePen(pPenPoison)
 
     ; draw way point line
     if (settings["showWaypointLine"]) {

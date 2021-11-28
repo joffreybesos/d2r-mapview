@@ -47,48 +47,53 @@ getPlayerOffset(startingOffset, loops, uiOffset) {
         ;WriteLogDebug("Attempt " A_Index " with starting offset " startingOffset)
         newOffset := HexAdd(startingOffset, (A_Index - 1) * 8)
         startingAddress := d2r.BaseAddress + newOffset
-        playerUnit := d2r.read(startingAddress, "Int64")
-        if (playerUnit) {
-            pInventory := playerUnit + 0x90
-            inventory := d2r.read(pInventory, "Int64")
-            if (inventory) {
-                
-                expChar := d2r.read(d2r.BaseAddress + expOffset, "UShort")
-                basecheck := (d2r.read(inventory + 0x30, "UShort")) != 1
-                if (expChar) {
-                    basecheck := (d2r.read(inventory + 0x70, "UShort")) != 0
-                }
-                
-                if (basecheck) {
-                    pAct := playerUnit + 0x20
-                    actAddress := d2r.read(pAct, "Int64")
-                    mapSeedAddress := actAddress + 0x14
-                    mapSeed := d2r.read(mapSeedAddress, "UInt")
-
-                    pPath := playerUnit + 0x38
-                    pathAddress := d2r.read(pPath, "Int64")
-                    xPos := d2r.read(pathAddress + 0x02, "UShort")
-                    yPos := d2r.read(pathAddress + 0x06, "UShort")
-
-                    pUnitData := playerUnit + 0x10
-                    playerNameAddress := d2r.read(pUnitData, "Int64")
-                    name :=
-                    Loop, 16
-                    {
-                        name := name . Chr(d2r.read(playerNameAddress + (A_Index -1), "UChar"))
+        while (startingAddress > 0) { ; keep following the next pointer
+            playerUnit := d2r.read(startingAddress, "Int64")
+            if (playerUnit) {
+                pInventory := playerUnit + 0x90
+                inventory := d2r.read(pInventory, "Int64")
+                if (inventory) {
+                    
+                    expChar := d2r.read(d2r.BaseAddress + expOffset, "UShort")
+                    basecheck := (d2r.read(inventory + 0x30, "UShort")) != 1
+                    if (expChar) {
+                        basecheck := (d2r.read(inventory + 0x70, "UShort")) != 0
                     }
-                    if (xPos > 0 and yPos > 0 and StrLen(mapSeed) > 6) {
-                        SetFormat Integer, D
-                        if (A_Index > 1) {
-                            WriteLog("SUCCESS: Found player " name " offset: " newOffset ", from " A_Index " attempts, which gives map seed: " mapSeed)
+                    
+                    if (basecheck) {
+                        pAct := playerUnit + 0x20
+                        actAddress := d2r.read(pAct, "Int64")
+                        mapSeedAddress := actAddress + 0x14
+                        mapSeed := d2r.read(mapSeedAddress, "UInt")
+
+                        pPath := playerUnit + 0x38
+                        pathAddress := d2r.read(pPath, "Int64")
+                        xPos := d2r.read(pathAddress + 0x02, "UShort")
+                        yPos := d2r.read(pathAddress + 0x06, "UShort")
+
+                        pUnitData := playerUnit + 0x10
+                        playerNameAddress := d2r.read(pUnitData, "Int64")
+                        name :=
+                        Loop, 16
+                        {
+                            name := name . Chr(d2r.read(playerNameAddress + (A_Index -1), "UChar"))
                         }
-                        newOffset := newOffset + 0 ;convert to decimal
-                        found := true
-                        return newOffset
-                    } else {
-                        WriteLogDebug("Found possible player " name " offset: " newOffset ", from " A_Index " attempts, which gives map seed: " mapSeed)
+                        if (xPos > 0 and yPos > 0 and StrLen(mapSeed) > 6) {
+                            SetFormat Integer, D
+                            if (A_Index > 1) {
+                                WriteLog("SUCCESS: Found player offset: " newOffset ", from " A_Index " attempts, which gives map seed: " mapSeed)
+                            }
+                            newOffset := newOffset + 0 ;convert to decimal
+                            found := true
+                            return newOffset
+                        } else {
+                            WriteLogDebug("Found possible player offset: " newOffset ", from " A_Index " attempts, which gives map seed: " mapSeed)
+                        }
                     }
                 }
+                startingAddress := d2r.read(playerUnit + 0x150, "Int64")  ; get next player
+            } else {
+                startingAddress := 0
             }
         }
     }

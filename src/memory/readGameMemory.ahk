@@ -99,21 +99,51 @@ readGameMemory(playerOffset, startingOffset, ByRef gameMemoryData) {
             if (mobUnit) {
                 mobType := d2r.read(mobUnit + 0x00, "UInt")
                 txtFileNo := d2r.read(mobUnit + 0x04, "UInt")
-                unitId := d2r.read(mobUnit + 0x08, "UInt")
-                mode := d2r.read(mobUnit + 0x0c, "UInt")
-                pUnitData := d2r.read(mobUnit + 0x10, "Int64")
-                pPath := d2r.read(mobUnit + 0x38, "Int64")
-            
-                isUnique := d2r.read(pUnitData + 0x18, "UShort")
-                monx := d2r.read(pPath + 0x02, "UShort")
-                mony := d2r.read(pPath + 0x06, "UShort")
-                isBoss := 0
-                textTitle := getBossName(txtFileNo)
-                if (textTitle) {
-                    isBoss:= 1
+                if (!HideNPC(txtFileNo)) {
+                    unitId := d2r.read(mobUnit + 0x08, "UInt")
+                    mode := d2r.read(mobUnit + 0x0c, "UInt")
+                    pUnitData := d2r.read(mobUnit + 0x10, "Int64")
+                    pPath := d2r.read(mobUnit + 0x38, "Int64")
+                
+                    isUnique := d2r.read(pUnitData + 0x18, "UShort")
+                    monx := d2r.read(pPath + 0x02, "UShort")
+                    mony := d2r.read(pPath + 0x06, "UShort")
+                    isBoss := 0
+                    textTitle := getBossName(txtFileNo)
+                    if (textTitle) {
+                        isBoss:= 1
+                    }
+
+                    ;get immunities
+                    pStatsListEx := d2r.read(mobUnit + 0x88, "Int64")
+                    ownerType := d2r.read(pStatsListEx + 0x08, "UInt")
+                    ownerId := d2r.read(pStatsListEx + 0x0C, "UInt")
+
+                    statPtr := d2r.read(pStatsListEx + 0x30, "Int64")
+                    statCount := d2r.read(pStatsListEx + 0x38, "Int64")
+
+                    immunities := { physical: 0, magic: 0, fire: 0, light: 0, cold: 0, poison: 0 }
+                    Loop, %statCount%
+                    {
+                        offset := (A_Index -1) * 8
+                        ;statParam := d2r.read(statPtr + offset, "UShort")
+                        statEnum := d2r.read(statPtr + 0x2 + offset, "UShort")
+                        statValue := d2r.read(statPtr + 0x4 + offset, "UInt")
+                        if (statValue >= 100) {
+                            switch (statEnum) {
+                                ; no enums here, just bad practices instead
+                                case 36: immunities["physical"] := 1 ;physicaml immune
+                                case 37: immunities["magic"] := 1    ;magic imune
+                                case 39: immunities["fire"] := 1     ;fire resist
+                                case 41: immunities["light"] := 1    ;light resist
+                                case 43: immunities["cold"] := 1     ;cold resist
+                                case 45: immunities["poison"] := 1   ;poison resist
+                            }
+                        }
+                    }
+                    mob := {"txtFileNo": txtFileNo, "mode": mode, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "textTitle": textTitle, "immunities": immunities }
+                    mobs.push(mob)
                 }
-                mob := {"txtFileNo": txtFileNo, "mode": mode, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "textTitle": textTitle }
-                mobs.push(mob)
                 
                 mobAddress := d2r.read(mobUnit + 0x150, "Int64")  ; get next mob
             } else {
@@ -148,8 +178,6 @@ getBossName(txtFileNo) {
     }
     return ""
 }
-
-
 
 getSuperUniqueName(txtFileNo) {
     switch (txtFileNo) {
@@ -212,4 +240,65 @@ getSuperUniqueName(txtFileNo) {
         case "736": return "Dark Elder"
     }
     return ""
+}
+
+; certain NPCs we don't want to see such as mercs
+HideNPC(txtFileNo) {
+    switch (txtFileNo) {
+        case 149: return 1
+        case 151: return 1
+        case 152: return 1
+        case 153: return 1
+        case 157: return 1
+        case 158: return 1
+        case 159: return 1
+        case 195: return 1
+        case 196: return 1
+        case 197: return 1
+        case 179: return 1
+        case 185: return 1
+        case 203: return 1
+        case 204: return 1
+        case 205: return 1
+        case 268: return 1
+        case 269: return 1
+        case 271: return 1
+        case 272: return 1
+        case 293: return 1
+        case 294: return 1
+        case 289: return 1
+        case 290: return 1
+        case 291: return 1
+        case 292: return 1
+        case 296: return 1
+        case 318: return 1
+        case 319: return 1
+        case 320: return 1
+        case 321: return 1
+        case 322: return 1
+        case 323: return 1
+        case 324: return 1
+        case 325: return 1
+        case 332: return 1
+        case 338: return 1
+        case 339: return 1
+        case 344: return 1
+        case 355: return 1
+        case 359: return 1
+        case 363: return 1
+        case 364: return 1
+        case 370: return 1
+        case 377: return 1
+        case 378: return 1
+        case 392: return 1
+        case 393: return 1
+        case 401: return 1
+        case 411: return 1
+        case 412: return 1
+        case 414: return 1
+        case 415: return 1
+        case 416: return 1
+        case 711: return 1
+    }
+    return 0
 }

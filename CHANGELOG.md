@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.0] - 2021-11-29 - Immunities now show on map
+
+- Immunities now show on map
+- Each monster will have a colour (or multiple colours) indicating it's immunities
+- Can be turned of with `showImmunities=false` in `settings.ini`
+- Mercs and other useless NPCs are now hidden from map
+- Slight improvement to player offset scanning
+- Removed player name from showing in logs
+
 ## [2.1.8] - 2021-11-26 - Dead monsters now show on map
 
 - Dying and dead monsters now appear as a black dot on the map

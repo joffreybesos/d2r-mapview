@@ -132,8 +132,8 @@ readGameMemory(playerOffset, startingOffset, ByRef gameMemoryData) {
                         if (statValue >= 100) {
                             switch (statEnum) {
                                 ; no enums here, just bad practices instead
-                                case 36: immunities["physical"] := 1 ;physicaml immune
-                                case 37: immunities["magic"] := 1    ;magic imune
+                                case 36: immunities["physical"] := 1 ;physical immune
+                                case 37: immunities["magic"] := 1    ;magic immune
                                 case 39: immunities["fire"] := 1     ;fire resist
                                 case 41: immunities["light"] := 1    ;light resist
                                 case 43: immunities["cold"] := 1     ;cold resist

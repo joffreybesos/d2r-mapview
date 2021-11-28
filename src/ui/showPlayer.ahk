@@ -174,7 +174,7 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
                         dotSize := 10
                         ;WriteLog(mob["txtFileNo"] " " immunities["fire"] immunities["light"] immunities["cold"] immunities["poison"])
                         txtFileNo := mob["txtFileNo"]
-                        WriteLog("noImmunities: " noImmunities ", txtFileNo: " txtFileNo ", " immunities["physical"] immunities["magic"] immunities["fire"] immunities["light"] immunities["cold"] immunities["poison"])
+                        ;WriteLog("noImmunities: " noImmunities ", txtFileNo: " txtFileNo ", " immunities["physical"] immunities["magic"] immunities["fire"] immunities["light"] immunities["cold"] immunities["poison"])
                         if (immunities["physical"]) {
                             Gdip_DrawPie(G, pPenPhysical, mobx-5, moby-5, dotSize, dotSize, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize

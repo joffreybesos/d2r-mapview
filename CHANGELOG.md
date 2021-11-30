@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.1] - 2021-11-30 - Red line from player to boss
+
+- Red line now drawn from player to boss (nihlithak, summoner etc)
+- Pressing Ctrl+H for help now gives useful help
+- Using help screen to test new GDIP drawing library
+
 ## [2.2.0] - 2021-11-29 - Immunities now show on map
 
 - Immunities now show on map

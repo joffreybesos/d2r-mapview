@@ -44,13 +44,17 @@ ShowHelpText(settings, leftMargin, topMargin) {
 
     s .= "`n"
     s .= "`n"
+    s .= "This MH does not replace the normal automap.`n"
+    s .= "It is intended to appear in the top left to assist you.`n"
+    s .= "`n"
     s .= "- CTRL+H to show/hide this help`n"
-    s .= "- TAB to show/hide map`n"
+    s .= "- TAB to show/hide map view`n"
     s .= "- " alwaysShowKey " key to permanently show map`n"
     s .= "- " increaseMapSizeKey " key to increase map size`n"
     s .= "- " decreaseMapSizeKey " key to decrease map size`n"
     s .= "- Shift+F10 to exit d2r-mapview`n"
     s .= "`n"
+    s .= "You can remap keys, and change colours in settings.ini`n"
     s .= "Configuration options here:`n"
     s .= "https://github.com/joffreybesos/d2r-mapview#configure`n"
     s .= "`n"
@@ -61,7 +65,7 @@ ShowHelpText(settings, leftMargin, topMargin) {
 
 
     whiteTextFont := new OGdip.Font("Arial", 36)
-    bmp.G.DrawString("Press CTRL+H to hide", whiteTextFont, 20, 450, 0, 0, textFormat)
+    bmp.G.DrawString("Press CTRL+H to hide", whiteTextFont, 20, 500, 0, 0, textFormat)
 
 
 
@@ -135,6 +139,7 @@ ShowHelpText(settings, leftMargin, topMargin) {
     bmp.G.SetPen(pPenNormal).DrawEllipse(mobx+(dotSize/2), moby + (rowHeight * 10)+(dotSize/2), dotSize, dotSize)
 
     bmp.SetToControl(HelpText1)
+    leftMargin := A_ScreenWidth / 4
     gui, HelpText: Show, x%leftMargin% y%topMargin% NA
     Return
 }

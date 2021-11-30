@@ -218,5 +218,11 @@ MapSizeDecrease:
         checkAutomapVisibility(settings, gameMemoryData["levelNo"])
         return
     }
+    ~Esc::
+    {
+        Gui, HelpText: Hide
+        helpToggle := 1
+        WriteLogDebug("Hide Help")
+    }
 return
 

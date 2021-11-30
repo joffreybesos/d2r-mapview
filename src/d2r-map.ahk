@@ -203,9 +203,11 @@ MapSizeDecrease:
     ^H::
     {
         if (helpToggle) {
-            ShowHelpText(settings["maxWidth"], 400, 200)
+            ShowHelpText(settings, 400, 200)
+            WriteLogDebug("Show Help")
         } else {
             Gui, HelpText: Hide
+            WriteLogDebug("Hide Help")
         }
         helpToggle := !helpToggle
         return

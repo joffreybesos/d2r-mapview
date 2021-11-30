@@ -43,7 +43,7 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
         ExitApp
     }
 
-    Gui, Units: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+    Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
     hwnd1 := WinExist()
 
     pBitmap := Gdip_CreateBitmap(Width, Height)
@@ -251,6 +251,22 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
                     Gdip_DeletePen(pPen)
                 }
             }
+        }
+    }
+
+    ; ;draw boss lines
+    if (settings["showBossLine"]) {
+        bossHeader := mapData["bosses"]
+        if (bossHeader) {
+            bossArray := StrSplit(bossHeader, ",")
+            ;bossArray[1] ; name of boss
+            bossX := (bossArray[2] * serverScale) + padding
+            bossY := (bossArray[3] * serverScale) + padding
+
+            ; only draw the line if it's a 'next' exit
+            pPen := Gdip_CreatePen(0xFFFF0000, 3)
+            Gdip_DrawLine(G, pPen, xPosDot, yPosDot, bossX, bossY)
+            Gdip_DeletePen(pPen)
         }
     }
 

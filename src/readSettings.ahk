@@ -24,6 +24,7 @@ readSettings(settingsFile, ByRef settings) {
 
     IniRead, showWaypointLine, settings.ini, MapSettings, showWaypointLine, "false"
     IniRead, showNextExitLine, settings.ini, MapSettings, showNextExitLine, "true"
+    IniRead, showBossLine, settings.ini, MapSettings, showBossLine, "true"
 
     IniRead, increaseMapSizeKey, settings.ini, Shortcuts, increaseMapSizeKey, NumpadAdd
     IniRead, decreaseMapSizeKey, settings.ini, Shortcuts, decreaseMapSizeKey, NumpadSub
@@ -48,6 +49,7 @@ readSettings(settingsFile, ByRef settings) {
     showUniqueMobs := showUniqueMobs = "true" ; convert to bool
     showWaypointLine := showWaypointLine = "true" ; convert to bool
     showNextExitLine := showNextExitLine = "true" ; convert to bool
+    showBossLine := showBossLine = "true" ; convert to bool
     showDeadMobs := showDeadMobs = "true"
     showImmunities := showImmunities = "true"
 
@@ -71,6 +73,7 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("showImmunities", showImmunities)
     settings.Insert("showWaypointLine", showWaypointLine)
     settings.Insert("showNextExitLine", showNextExitLine)
+    settings.Insert("showBossLine", showBossLine)
     settings.Insert("increaseMapSizeKey", increaseMapSizeKey)
     settings.Insert("decreaseMapSizeKey", decreaseMapSizeKey)
     settings.Insert("alwaysShowKey", alwaysShowKey)
@@ -90,6 +93,7 @@ readSettings(settingsFile, ByRef settings) {
     WriteLog(" startingOffset: " startingOffset)
     WriteLog(" showWaypointLine: " showWaypointLine)
     WriteLog(" showNextExitLine: " showNextExitLine)
+    WriteLog(" showBossLine: " showBossLine)
     WriteLog(" gameWindowId: " gameWindowId)
     WriteLog(" debug logging: " debug)
 }

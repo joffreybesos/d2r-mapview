@@ -1,47 +1,140 @@
 #SingleInstance, Force
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
+#include %A_ScriptDir%\include\OGdip.ahk
 
-ShowHelpText(Width, leftMargin, topMargin) {
+
+ShowHelpText(settings, leftMargin, topMargin) {
     pToken := Gdip_Startup()
-    Height = 500
-    Text = 
-    (
-d2r-mapview
+    increaseMapSizeKey := settings["increaseMapSizeKey"]
+    decreaseMapSizeKey:= settings["decreaseMapSizeKey"]
+    alwaysShowKey:= settings["alwaysShowKey"]
 
-- Ctrl+H to toggle this help
-- TAB to show/hide map
-- Numpad* to permanently show map
-- Numpad+ to increase map size
-- Numpad- to decrease map size
-- Shift+F10 to exit d2r-mapview
+    OGdip.Startup()  ; This function initializes GDI+ and must be called first.
+    Width := 1800
+    Height := 900
 
-Configuration options here:
-https://github.com/joffreybesos/d2r-mapview#configure
+    Gui, HelpText: -Caption +E0x20 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+    gui, HelpText: add, Picture, w%Width% h%Height% x0 y0 hwndHelpText1
+    Gui, HelpText: +E0x02000000 +E0x00080000 ; WS_EX_COMPOSITED & WS_EX_LAYERED => Double Buffer
 
-See log.txt for troubleshooting.
+    ; make transparent
+    Gui, HelpText: Color,000000
+    WinSet,Transcolor, 000000 255
 
-Please report scams on the discord, link found on Github.
-    )
+    bmp := new OGdip.Bitmap(Width,Height)  ; Create new empty Bitmap with given width and height
+    bmp.GetGraphics()                                  ; .G refers to Graphics surface of this Bitmap, it's used to draw things
+    Gui, HelpText: +LastFound
 
-    Options = x0 y0 Left vCenter cFFffffff r4 s20
-    Font = Arial
-    DetectHiddenWindows, On
-    Gui, HelpText: -Caption +E0x20 +E0x80000 +LastFound +OwnDialogs +Owner +AlwaysOnTop
-    Gui, HelpText: Show, NA
-    hwnd1 := WinExist()
-    hbm := CreateDIBSection(Width, Height)
-    hdc := CreateCompatibleDC()
-    obm := SelectObject(hdc, hbm)
-    G := Gdip_GraphicsFromHDC(hdc)
-    Gdip_SetSmoothingMode(G, 4)
-    pBrush := Gdip_BrushCreateSolid(0xAA000000)
-    Gdip_DeleteBrush(pBrush)
-    Gdip_TextToGraphics(G, Text, Options, Font, Width, Height)
-    UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, Width, Height)
-    SelectObject(hdc, obm)
-    DeleteObject(hbm)
-    DeleteDC(hdc)
-    Gdip_DeleteGraphics(G)
+    ; add the title
+    YellowBrush:= new OGdip.Brush(0xffFFFF00)
+    bmp.G.SetBrush(YellowBrush)
+    bmp.G.SetOptions( {textHint:"Antialias"})
+    yellowTextFont := new OGdip.Font("Arial", 38, "Bold")
+    textFormat := new OGdip.StringFormat(0)
+    bmp.G.DrawString("D2R-mapview", yellowTextFont, 20, 0, 0, 0, textFormat)
+
+
+    ; add the static help text
+    WhiteBrush:= new OGdip.Brush(0xFFFFFFFF)
+    bmp.G.SetBrush(WhiteBrush)
+    bmp.G.SetOptions( {textHint:"Antialias"})
+    whiteTextFont := new OGdip.Font("Arial", 21)
+    textFormat := new OGdip.StringFormat(0)
+
+    s .= "`n"
+    s .= "`n"
+    s .= "- CTRL+H to show/hide this help`n"
+    s .= "- TAB to show/hide map`n"
+    s .= "- " alwaysShowKey " key to permanently show map`n"
+    s .= "- " increaseMapSizeKey " key to increase map size`n"
+    s .= "- " decreaseMapSizeKey " key to decrease map size`n"
+    s .= "- Shift+F10 to exit d2r-mapview`n"
+    s .= "`n"
+    s .= "Configuration options here:`n"
+    s .= "https://github.com/joffreybesos/d2r-mapview#configure`n"
+    s .= "`n"
+    s .= "See log.txt for troubleshooting.`n"
+    s .= "`n"
+    s .= "Please report scams on the discord, link found on Github.`n"
+    bmp.G.DrawString(s, whiteTextFont, 20, 20, 0, 0, textFormat)
+
+
+    whiteTextFont := new OGdip.Font("Arial", 36)
+    bmp.G.DrawString("Press CTRL+H to hide", whiteTextFont, 20, 450, 0, 0, textFormat)
+
+
+
+    ; add map legend        
+    WhiteBrush:= new OGdip.Brush(0xFFFFFFFF)
+    bmp.G.SetBrush(WhiteBrush)
+    bmp.G.SetOptions( {textHint:"Antialias"})
+    whiteTextFont := new OGdip.Font("Arial", 21)
+    textFormat := new OGdip.StringFormat(0)
+
+    alwaysShowKey:= "NumpadMult"
+    increaseMapSizeKey:= "NumpadAdd"
+    decreaseMapSizeKey:= "NumpadSub"
+    m .= "`n"
+    m .= "`n"
+    m .= " = Player`n"
+    m .= " = Normal monster`n"
+    m .= " = Unique/Champion/Superunique monster`n"
+    m .= " = Boss (Nihlithak, Summoner, Diablo, etc)`n"
+    m .= "`n"
+    m .= " = Cold immune normal monster`n"
+    m .= " = Fire immune normal monster`n"
+    m .= " = Poison immune normal monster`n"
+    m .= " = Lightning immune normal monster`n"
+    m .= " = Magic immune normal monster`n"
+    m .= " = Physical immune nqormal monster`n"
+    bmp.G.DrawString(m, whiteTextFont, 700, 20, 0, 0, textFormat)
+
+
+    pPlayer := new OGdip.Pen(0xff00FF00, 6)
+    normalMobColor := 0xff . settings["normalMobColor"] 
+    uniqueMobColor := 0xff . settings["uniqueMobColor"] 
+    bossColor := 0xff . settings["bossColor"] 
+
+    ; draw dots
+    mobx := 687
+    moby := 76.6
+    rowHeight := 23.9
+    dotSize:= 5  
+    uDotSize:= 8  
+    ldotSize:= 10
+
+    pPenNormal := new OGdip.Pen(normalMobColor, dotSize)
+    pPenUnique := new OGdip.Pen(uniqueMobColor, uDotSize)
+    pPenBoss := new OGdip.Pen(bossColor, uDotSize)
+    pPenExit := new OGdip.Pen(0xff00ff, uDotSize)
+
+    pPenPhysical := new OGdip.Pen(0xffCD853f, dotSize)
+    pPenMagic := new OGdip.Pen(0xffff8800, dotSize)
+    pPenFire := new OGdip.Pen(0xffFF0000, dotSize)
+    pPenLight := new OGdip.Pen(0xffFFFF00, dotSize)
+    pPenCold := new OGdip.Pen(0xff0000FF, dotSize)
+    pPenPoison := new OGdip.Pen(0xFF32CD32, dotSize)
+
+
+    bmp.G.SetPen(pPlayer).DrawRectangle(mobx+1, moby + (rowHeight * 0), 6, 6)
+    bmp.G.SetPen(pPenNormal).DrawEllipse(mobx+1, moby + (rowHeight * 1), dotSize, dotSize)
+    bmp.G.SetPen(pPenUnique).DrawEllipse(mobx, moby + (rowHeight * 2), uDotSize, uDotSize)
+    bmp.G.SetPen(pPenBoss).DrawEllipse(mobx, moby + (rowHeight * 3), uDotSize, uDotSize)
+    bmp.G.SetPen(pPenCold).DrawEllipse(mobx, moby + (rowHeight * 5), ldotSize, ldotSize)
+    bmp.G.SetPen(pPenFire).DrawEllipse(mobx, moby + (rowHeight * 6), ldotSize, ldotSize)
+    bmp.G.SetPen(pPenPoison).DrawEllipse(mobx, moby + (rowHeight * 7), ldotSize, ldotSize)
+    bmp.G.SetPen(pPenLight).DrawEllipse(mobx, moby + (rowHeight * 8), ldotSize, ldotSize)
+    bmp.G.SetPen(pPenMagic).DrawEllipse(mobx, moby + (rowHeight * 9), ldotSize, ldotSize)
+    bmp.G.SetPen(pPenPhysical).DrawEllipse(mobx, moby + (rowHeight * 10), ldotSize, ldotSize)
+    bmp.G.SetPen(pPenNormal).DrawEllipse(mobx+(dotSize/2), moby + (rowHeight * 5)+(dotSize/2), dotSize, dotSize)
+    bmp.G.SetPen(pPenNormal).DrawEllipse(mobx+(dotSize/2), moby + (rowHeight * 6)+(dotSize/2), dotSize, dotSize)
+    bmp.G.SetPen(pPenNormal).DrawEllipse(mobx+(dotSize/2), moby + (rowHeight * 7)+(dotSize/2), dotSize, dotSize)
+    bmp.G.SetPen(pPenNormal).DrawEllipse(mobx+(dotSize/2), moby + (rowHeight * 8)+(dotSize/2), dotSize, dotSize)
+    bmp.G.SetPen(pPenNormal).DrawEllipse(mobx+(dotSize/2), moby + (rowHeight * 9)+(dotSize/2), dotSize, dotSize)
+    bmp.G.SetPen(pPenNormal).DrawEllipse(mobx+(dotSize/2), moby + (rowHeight * 10)+(dotSize/2), dotSize, dotSize)
+
+    bmp.SetToControl(HelpText1)
+    gui, HelpText: Show, x%leftMargin% y%topMargin% NA
     Return
 }

@@ -94,10 +94,12 @@ Or you can do `docker stop d2-mapserver` (if you've used the `--name d2-mapserve
 
 ## Updating
 
-Occasionally you need to update your mapserver.
-You should first stop your existing container.
-Then do `docker pull docker.io/joffreybesos/d2-mapserver:latest`
-Then run as normal.
+Occasionally you need to update your mapserver. Follow these steps:
+
+- Stop your existing map server (see above)
+- Pull the latest `docker pull docker.io/joffreybesos/d2-mapserver:latest`
+- Delete your old container `docker rm d2-mapserver`
+- Then run as normal.
 
 ## Troubleshoot
 

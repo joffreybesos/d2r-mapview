@@ -21,17 +21,17 @@ You can use Docker on Linux as well if you prefer.
 ## Launch
 
 Download the map server docker image to your local machine:
-`docker pull docker.io/joffreybesos/d2-mapserver`
+`docker pull docker.io/joffreybesos/d2-mapserver:latest`
 
 If you get the error `docker: invalid reference format.` then make sure you're in cmd rather than powershell.
 
 In the below docker command, change `/d/temp` to a temporary folder on your PC and change `/d/Games/Diablo II` to your D2 installation folder:
 
-`docker run -v "/d/temp:/app/cache" -v "/d/Games/Diablo II":/app/game -p 3002:3002 -e PORT=3002 joffreybesos/d2-mapserver:latest`
+`docker run -d -v "/d/temp:/app/cache" -v "/e/Games/Diablo II:/app/game" --name d2-mapserver -p 3002:3002 -e PORT=3002 joffreybesos/d2-mapserver:latest`
 
-So if you want to cache your map data into C:\Users\username\temp and your Diablo2 files are in D:\Games\Diablo II, then this will be your docker command:
+So if you want to cache your map data into `C:\Users\username\temp` and your Diablo2 files are in `D:\Games\Diablo II`, then this will be your docker command:
 
-`docker run -v "/c/users/username/temp:/app/cache" -v "/d/Games/Diablo II":/app/game -p 3002:3002 -e PORT=3002 joffreybesos/d2-mapserver:latest`
+`docker run -d -v "/c/users/username/temp:/app/cache" -v "/d/Games/Diablo II:/app/game" --name d2-mapserver -p 3002:3002 -e PORT=3002 joffreybesos/d2-mapserver:latest`
 
 You can also change the port from 3002 to something else if you prefer.
 
@@ -62,7 +62,8 @@ If you don't see the above output, refer to the troubleeshooting section below.
 
 ## Verify
 
-You can test your map server by opening the URL <http://localhost:3002/v1/map/123456/2/46/image> in your browser.
+You can test your map server by opening the URL <http://localhost:3002/v1/map/123456/2/46/image> in your browser.  
+If you get `{}` as a response, see troubleshooting steps below.
 
 ## Usage
 
@@ -86,7 +87,53 @@ To achieve this, simply:
 It will take some time to build, but will run the map server at the end.
 Then you should be able to use the mapserver like normal on `localhost:3002`
 
+## Shutting down
+
+You can either go to Docker Desktop, select the running container and click the stop button.
+Or you can do `docker stop d2-mapserver` (if you've used the `--name d2-mapserver` parameter when you ran it)
+
+## Updating
+
+Occasionally you need to update your mapserver.
+You should first stop your existing container.
+Then do `docker pull docker.io/joffreybesos/d2-mapserver:latest`
+Then run as normal.
+
 ## Troubleshoot
+
+1. __Double and triple check your game folder__
+  Ensure you have the right version 1.13c with LoD
+  Ensure the folder name is correct
+  
+2. ___Check wine errors__
+  Go to your cache folder, look for `wineerrors.log`. Most likely it has a problem with your game files.
+
+3. __Check raw data is being served__
+  Remove the trailing `/image` from the URL <http://localhost:3002/v1/map/123456/2/46>
+  You should see JSON data being returned.  
+
+4. __Verify map data is being saved__
+  Go to your cache folder used in your server docker command, e.g `/d/temp`. Check that JSON files are present, open them to ensure they are filled with map data. They should be about 1mb in size.  
+
+5. __Delete your cache__
+  Delete all of the JSON files out of your cache folder. You won't need to restart your server. This will force generation of fresh data.  
+
+6. __Confirm server is actually processing data__
+  Run this command (but replace the cache and game paths with your own):  
+
+    `docker run -it -v "/c/users/name/temp:/app/cache" -v "/c/users/name/Diablo II":/app/game joffreybesos/d2-mapserver:latest /bin/bash`  
+    - You need to make sure you have the `-it` and `/bin/bash`  
+    - It should launch a bash session of that docker container    
+  Run these commands in that bash session:  
+    - `wine regedit /app/d2.install.reg`  
+    - `wine bin/d2-map.exe game --seed 10 --map 1 --difficulty 2`  
+  You should see rogue encampment map data.  
+
+      Also try:
+    - `wine bin/d2-map.exe game --seed 10 --difficulty 2`
+    This will generate a massive amount of output, but if it completes without error then your server is generating map data successfully.
+
+### Other errors
 
 1. __Error message: "docker: invalid reference format."__
   If you get the error "docker: invalid reference format." then make sure you are running in cmd rather than powershell
@@ -97,35 +144,3 @@ Then you should be able to use the mapserver like normal on `localhost:3002`
   But if you want to free this up, simply open an admin powershell window and run:  
   `Restart-Service LxssManager`  
   This will close any running containers and restart your docker daemon.  
-
-3. __I'm getting `{}` as a response__
-
-- __Double and triple check your game folder__
-  Ensure you have the right version 1.13c with LoD
-  Ensure the folder name is correct
-  
-- __Check raw data is being served__
-  Remove the trailing `/image` from the URL <http://localhost:3002/v1/map/123456/2/46>
-  You should see JSON data being returned.  
-
-- __Verify map data is being saved__
-  Go to your cache folder used in your server docker command, e.g `/d/temp`. Check that JSON files are present, open them to ensure they are filled with map data. They should be about 1mb in size.  
-
-- __Delete your cache__
-  Delete all of the JSON files out of your cache folder. You won't need to restart your server. This will force generation of fresh data.  
-
-- __Confirm server is actually processing data__
-  Run this command (but replace the cache and game paths with your own):
-
-  - `docker run -it -v "/c/users/name/temp:/app/cache" -v "/c/users/name/Diablo II":/app/game joffreybesos/d2-mapserver:latest /bin/bash`  
-  You need to make sure you have the `-it` and `/bin/bash`  
-  It should launch a bash session of that docker container  
-
-  Run these commands:  
-  - `wine regedit /app/d2.install.reg`  
-  - `wine bin/d2-map.exe game --seed 10 --map 1 --difficulty 2`  
-  You should see rogue encampment map data.  
-
-  Also try:
-  - `wine bin/d2-map.exe game --seed 10 --difficulty 2`
-  This will generate a massive amount of output, but if it completes without error then your server is generating map data successfully.

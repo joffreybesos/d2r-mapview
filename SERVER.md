@@ -107,7 +107,7 @@ Occasionally you need to update your mapserver. Follow these steps:
   Ensure you have the right version 1.13c with LoD
   Ensure the folder name is correct
   
-2. ___Check wine errors__
+2. __Check wine errors__
   Go to your cache folder, look for `wineerrors.log`. Most likely it has a problem with your game files.
 
 3. __Check raw data is being served__

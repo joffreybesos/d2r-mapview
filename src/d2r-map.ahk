@@ -84,7 +84,7 @@ While 1 {
                 Gui, Units: Hide ; hide player dot
                 ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help", "22") ; 22 is opacity
                 ; Download map
-                downloadMapImage(settings["baseUrl"], gameMemoryData, mapData)
+                downloadMapImage(settings, gameMemoryData, mapData)
                 Gui, LoadingText: Destroy ; remove loading text
                 ; Show Map
                 if (lastlevel == "") {

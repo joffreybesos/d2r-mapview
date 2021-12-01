@@ -12,6 +12,7 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, opacity, settings.ini, MapSettings, opacity, 0.5
     IniRead, alwaysShowMap, settings.ini, MapSettings, alwaysShowMap, "false"
     IniRead, hideTown, settings.ini, MapSettings, hideTown, "false"
+    IniRead, edges, settings.ini, MapSettings, edges, "true"
 
     IniRead, showNormalMobs, settings.ini, MapSettings, showNormalMobs, "true"
     IniRead, showUniqueMobs, settings.ini, MapSettings, showUniqueMobs, "true"
@@ -45,6 +46,7 @@ readSettings(settingsFile, ByRef settings) {
     ; Here is a good example of why AHK sucks
     hideTown := hideTown = "true" ; convert to bool
     alwaysShowMap := alwaysShowMap = "true" ; convert to bool
+    edges := edges = "true" ; convert to bool
     showNormalMobs := showNormalMobs = "true" ; convert to bool
     showUniqueMobs := showUniqueMobs = "true" ; convert to bool
     showWaypointLine := showWaypointLine = "true" ; convert to bool
@@ -63,6 +65,7 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("opacity", opacity)
     settings.Insert("alwaysShowMap", alwaysShowMap)
     settings.Insert("hideTown", hideTown)
+    settings.Insert("edges", edges)
     settings.Insert("showNormalMobs", showNormalMobs)
     settings.Insert("showUniqueMobs", showUniqueMobs)
     settings.Insert("showBosses", showBosses)

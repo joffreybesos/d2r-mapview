@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.2] - 2021-12-01 - Edge filter added to map images
+
+- Added edge filter to map images
+- Map images will now appear as walls rather than floors
+  Just the walls of each map will show instead of grey walkable area
+- You can revert to the old style with `edges=false` in `settings.ini`
+- Made some minor improvements to Ctrl+H help screen
+
 ## [2.2.1] - 2021-11-30 - Red line from player to boss
 
 - Red line now drawn from player to boss (nihlithak, summoner etc)

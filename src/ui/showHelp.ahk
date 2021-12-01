@@ -65,7 +65,7 @@ ShowHelpText(settings, leftMargin, topMargin) {
 
 
     whiteTextFont := new OGdip.Font("Arial", 36)
-    bmp.G.DrawString("Press CTRL+H to hide", whiteTextFont, 20, 500, 0, 0, textFormat)
+    bmp.G.DrawString("Press CTRL+H to hide", whiteTextFont, 15, 550, 0, 0, textFormat)
 
 
 
@@ -82,16 +82,16 @@ ShowHelpText(settings, leftMargin, topMargin) {
     m .= "`n"
     m .= "`n"
     m .= " = Player`n"
-    m .= " = Normal monster`n"
+    m .= " = Normal monster (or NPC)`n"
     m .= " = Unique/Champion/Superunique monster`n"
-    m .= " = Boss (Nihlithak, Summoner, Diablo, etc)`n"
+    m .= " = Boss (Diablo, Nihlithak, Summoner, etc)`n"
     m .= "`n"
     m .= " = Cold immune normal monster`n"
     m .= " = Fire immune normal monster`n"
     m .= " = Poison immune normal monster`n"
     m .= " = Lightning immune normal monster`n"
     m .= " = Magic immune normal monster`n"
-    m .= " = Physical immune nqormal monster`n"
+    m .= " = Physical immune normal monster`n"
     bmp.G.DrawString(m, whiteTextFont, 700, 20, 0, 0, textFormat)
 
 
@@ -120,26 +120,27 @@ ShowHelpText(settings, leftMargin, topMargin) {
     pPenCold := new OGdip.Pen(0xff0000FF, dotSize)
     pPenPoison := new OGdip.Pen(0xFF32CD32, dotSize)
 
-
     bmp.G.SetPen(pPlayer).DrawRectangle(mobx+1, moby + (rowHeight * 0), 6, 6)
-    bmp.G.SetPen(pPenNormal).DrawEllipse(mobx+1, moby + (rowHeight * 1), dotSize, dotSize)
-    bmp.G.SetPen(pPenUnique).DrawEllipse(mobx, moby + (rowHeight * 2), uDotSize, uDotSize)
-    bmp.G.SetPen(pPenBoss).DrawEllipse(mobx, moby + (rowHeight * 3), uDotSize, uDotSize)
-    bmp.G.SetPen(pPenCold).DrawEllipse(mobx, moby + (rowHeight * 5), ldotSize, ldotSize)
-    bmp.G.SetPen(pPenFire).DrawEllipse(mobx, moby + (rowHeight * 6), ldotSize, ldotSize)
-    bmp.G.SetPen(pPenPoison).DrawEllipse(mobx, moby + (rowHeight * 7), ldotSize, ldotSize)
-    bmp.G.SetPen(pPenLight).DrawEllipse(mobx, moby + (rowHeight * 8), ldotSize, ldotSize)
-    bmp.G.SetPen(pPenMagic).DrawEllipse(mobx, moby + (rowHeight * 9), ldotSize, ldotSize)
-    bmp.G.SetPen(pPenPhysical).DrawEllipse(mobx, moby + (rowHeight * 10), ldotSize, ldotSize)
-    bmp.G.SetPen(pPenNormal).DrawEllipse(mobx+(dotSize/2), moby + (rowHeight * 5)+(dotSize/2), dotSize, dotSize)
-    bmp.G.SetPen(pPenNormal).DrawEllipse(mobx+(dotSize/2), moby + (rowHeight * 6)+(dotSize/2), dotSize, dotSize)
-    bmp.G.SetPen(pPenNormal).DrawEllipse(mobx+(dotSize/2), moby + (rowHeight * 7)+(dotSize/2), dotSize, dotSize)
-    bmp.G.SetPen(pPenNormal).DrawEllipse(mobx+(dotSize/2), moby + (rowHeight * 8)+(dotSize/2), dotSize, dotSize)
-    bmp.G.SetPen(pPenNormal).DrawEllipse(mobx+(dotSize/2), moby + (rowHeight * 9)+(dotSize/2), dotSize, dotSize)
-    bmp.G.SetPen(pPenNormal).DrawEllipse(mobx+(dotSize/2), moby + (rowHeight * 10)+(dotSize/2), dotSize, dotSize)
-
+    
+    drawHelpDot(bmp, pPenNormal, mobx+1, moby + (rowHeight * 1), dotsize)
+    drawHelpDot(bmp, pPenUnique, mobx, moby + (rowHeight * 2), uDotsize)
+    drawHelpDot(bmp, pPenBoss, mobx, moby + (rowHeight * 3), uDotsize)
+    drawHelpDot(bmp, pPenCold, mobx, moby + (rowHeight * 5), ldotsize)
+    drawHelpDot(bmp, pPenFire, mobx, moby + (rowHeight * 6), ldotsize)
+    drawHelpDot(bmp, pPenPoison, mobx, moby + (rowHeight * 7), ldotsize)
+    drawHelpDot(bmp, pPenLight, mobx, moby + (rowHeight * 8), ldotsize)
+    drawHelpDot(bmp, pPenMagic, mobx, moby + (rowHeight * 9), ldotsize)
+    drawHelpDot(bmp, pPenPhysical, mobx, moby + (rowHeight * 10), ldotsize)
+    Loop, 6
+    {
+        drawHelpDot(bmp, pPenNormal, mobx+(dotSize/2), moby + (rowHeight * (4 + A_Index)+(dotSize/2)), dotSize)
+    }
     bmp.SetToControl(HelpText1)
     leftMargin := A_ScreenWidth / 4
     gui, HelpText: Show, x%leftMargin% y%topMargin% NA
     Return
+}
+
+drawHelpDot(bmp, pen, x, y, dotsize) {
+    bmp.G.SetPen(pen).DrawEllipse(x, y, dotSize, dotSize)
 }

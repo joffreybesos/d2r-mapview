@@ -8,8 +8,8 @@ This will spawn a server on your machine running on port 3002 which you can conf
 Install the following
 
 - [Docker](https://docs.docker.com/get-docker/)
-- Diablo 2, with LoD expansion (__NOT resurrected!__) installation - [download1](https://drive.google.com/file/d/14IQrvP_B9rBn6-yi6w5W-PbFquYMv0x6/view?usp=sharing), [download2](https://mega.nz/file/L5oQWIxb#qNJFSu0C_rC9n6mMmg7OdiIQ7QYQBsIbw6XJFRQmFOg), [download3](http://www.mediafire.com/file/i0kznwwvn4ghdrt/DiabloII_112_Installer.zip/file)
-- Diablo 2 LoD [patch 1.13c](http://ftp.blizzard.com/pub/diablo2exp/patches/PC/LODPatch_113c.exe)
+- Diablo 2, with LoD expansion (__NOT resurrected!__) installation - [download](https://archive.org/details/diablo-ii-1.13c-minimal.-7z)
+- Diablo 2 LoD [patch 1.13c](http://ftp.blizzard.com/pub/diablo2exp/patches/PC/LODPatch_113c.exe) if not already patched
 
 You don't need to run Diablo 2, the game files simply need to be available. But it MUST be 1.13c.
 

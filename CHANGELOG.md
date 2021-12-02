@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.3] - 2021-12-02 - Show other players
+
+- Other nearby players now show as green squares
+- Fixed bug where sometimes certain monsters didn't show
+
 ## [2.2.2] - 2021-12-01 - Edge filter added to map images
 
 - Added edge filter to map images

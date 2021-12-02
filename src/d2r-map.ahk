@@ -68,7 +68,7 @@ While 1 {
         }
         Sleep, 5000 ; sleep longer when no offset found, you're likely in menu
     } else {
-        readGameMemory(playerOffset, playerOffset, gameMemoryData)
+        readGameMemory(playerOffset, startingOffset, gameMemoryData)
 
         if ((gameMemoryData["difficulty"] > 0 & gameMemoryData["difficulty"] < 3) and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
             if (gameMemoryData["mapSeed"] != lastSeed) {
@@ -198,7 +198,7 @@ MapSizeDecrease:
     WriteLog("Decreased scaled by 0.1 to " scale)
     return
 }
-
+    
 #IfWinActive, ahk_exe D2R.exe
     ^H::
     {

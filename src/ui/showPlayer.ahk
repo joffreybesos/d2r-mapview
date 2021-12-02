@@ -269,6 +269,16 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
             Gdip_DeletePen(pPen)
         }
     }
+    ; draw other players
+    otherPlayers := gameMemoryData["otherPlayers"]
+    pPen := Gdip_CreatePen(0xff00AA00, 4)
+    for index, player in otherPlayers
+    {
+        playerx := ((player["x"] - mapData["mapOffsetX"]) * serverScale) + padding - mapData["leftTrimmed"]
+        playery := ((player["y"] - mapData["mapOffsetY"]) * serverScale) + padding - mapData["topTrimmed"]
+        Gdip_DrawRectangle(G, pPen, playerx-2, playery-2, 4, 4)
+    }
+    Gdip_DeletePen(pPen)    
 
     ; draw player
     pPen := Gdip_CreatePen(0xff00FF00, 6)

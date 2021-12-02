@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.4] - 2021-12-03 - Updated offsets
+
+- Updated offests following patch `1.167314`
+
 ## [2.2.3] - 2021-12-02 - Show other players
+
+https://github.com/joffreybesos/d2r-mapview/releases/tag/v2.2.3
 
 - Other nearby players now show as green squares
 - Fixed bug where sometimes certain monsters didn't show

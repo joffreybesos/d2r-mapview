@@ -14,6 +14,11 @@ ShowMap(settings, mapData, gameMemoryData, ByRef uiData) {
     levelNo:= gameMemoryData["levelNo"]
     IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
     scale := levelScale * scale
+    IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
+    IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0
+    leftMargin := leftMargin + levelxmargin
+    topMargin := topMargin + levelymargin
+
     ; WriteLog("maxGuiWidth := " maxGuiWidth)
     ; WriteLog("scale := " scale)
     ; WriteLog("leftMargin := " leftMargin)

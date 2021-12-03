@@ -9,3 +9,4 @@ log.txt
 /bin/currentmap.png
 currentmap.png
 /src/debug.ahk
+/src/mapconfig.ini

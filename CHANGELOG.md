@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.5] - 2021-12-03 - Individual map sizes and positions
+
+Map position changes:
+
+- Now each level keeps it's own position and scale on the screen.
+- You can change the scale with `Numpad+` and `Numpad-`, (you can configure different keys)
+- To _move_ the map, press `Windows Key+Left` `Windows Key+Right` `Windows Key+Up` `Windows Key+Down`
+- Map movement keys are not yet configurable
+- Map location and scale for each map are saved in a new file `mapconfig.ini`
+- The first time you run this version, a new `mapconfig.ini` file will be created with default values.
+- If you have an existing `mapconfig.ini` it will not be overwritten, so you can keep your settings for future releases.
+- The default values are not ideal, but in the next release I'll include better defaults (I need someone to manually configure every map)
+- Normal `scale` and `leftMargin`/`topMargin` settings in `settings.ini` still work but will apply to ALL maps.  
+  The individual map scale and location are relative to these values.  
+  So if you set global scale `1.5` and an individual map scale is `1.2` then the actual scale is `1.5 x 1.2` (1.8).  
+
+Other changes:
+
+- Removed `maxWidth` setting as it didn't make sense anymore  
+- Added the ability to turn off other players on the map `showOtherPlayers=true` in `settings.ini`
+- Other minor tweaks for performance
+
 ## [2.2.4] - 2021-12-03 - Updated offsets
 
 - Updated offests following patch `1.167314`

@@ -174,12 +174,12 @@ MapSizeIncrease:
     levelNo := gameMemoryData["levelNo"]
     levelScale := mapData["levelScale"]
     if (levelNo and levelScale) {
-        levelScale := levelScale + 0.1
+        levelScale := levelScale + 0.05
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
         mapData["levelScale"] := levelScale
         ShowMap(settings, mapData, gameMemoryData, uiData)
         ShowPlayer(settings, mapData, gameMemoryData, uiData)
-        WriteLog("Increased level " levelNo " scale by 0.1 to " levelScale)
+        WriteLog("Increased level " levelNo " scale by 0.05 to " levelScale)
     }
     return
 }
@@ -189,17 +189,73 @@ MapSizeDecrease:
     levelNo := gameMemoryData["levelNo"]
     levelScale := mapData["levelScale"]
     if (levelNo and levelScale) {
-        levelScale := levelScale - 0.1
+        levelScale := levelScale - 0.05
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
         mapData["levelScale"] := levelScale
         ShowMap(settings, mapData, gameMemoryData, uiData)
         ShowPlayer(settings, mapData, gameMemoryData, uiData)
-        WriteLog("Decreased level " levelNo " scale by 0.1 to " levelScale)
+        WriteLog("Decreased level " levelNo " scale by 0.05 to " levelScale)
     }
     return
 }
     
 #IfWinActive, ahk_exe D2R.exe
+    #Left::
+    {
+        levelNo := gameMemoryData["levelNo"]
+        levelxmargin := mapData["levelxmargin"]
+        levelymargin := mapData["levelymargin"]
+        if (levelNo) {
+            levelxmargin := levelxmargin - 25
+            IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
+            mapData["levelxmargin"] := levelxmargin
+            ShowMap(settings, mapData, gameMemoryData, uiData)
+            ShowPlayer(settings, mapData, gameMemoryData, uiData)
+        }
+        return
+    }
+    #Right::
+    {
+        levelNo := gameMemoryData["levelNo"]
+        levelxmargin := mapData["levelxmargin"]
+        levelymargin := mapData["levelymargin"]
+        if (levelNo) {
+            levelxmargin := levelxmargin + 25
+            IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
+            mapData["levelxmargin"] := levelxmargin
+            ShowMap(settings, mapData, gameMemoryData, uiData)
+            ShowPlayer(settings, mapData, gameMemoryData, uiData)
+        }
+        return
+    }
+    #Up::
+    {
+        levelNo := gameMemoryData["levelNo"]
+        levelxmargin := mapData["levelxmargin"]
+        levelymargin := mapData["levelymargin"]
+        if (levelNo) {
+            levelymargin := levelymargin - 25
+            IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
+            mapData["levelymargin"] := levelymargin
+            ShowMap(settings, mapData, gameMemoryData, uiData)
+            ShowPlayer(settings, mapData, gameMemoryData, uiData)
+        }
+        return
+    }
+    #Down::
+    {
+        levelNo := gameMemoryData["levelNo"]
+        levelxmargin := mapData["levelxmargin"]
+        levelymargin := mapData["levelymargin"]
+        if (levelNo) {
+            levelymargin := levelymargin + 25
+            IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
+            mapData["levelymargin"] := levelymargin
+            ShowMap(settings, mapData, gameMemoryData, uiData)
+            ShowPlayer(settings, mapData, gameMemoryData, uiData)
+        }
+        return
+    }
     ^H::
     {
         if (helpToggle) {

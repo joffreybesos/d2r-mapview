@@ -3,6 +3,8 @@ SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
 readSettings(settingsFile, ByRef settings) {
+    FileInstall, mapconfig-default.ini, mapconfig.ini , 0
+
     IniRead, baseUrl, settings.ini, MapHost, baseUrl, ""
 
     IniRead, maxWidth, settings.ini, MapSettings, maxWidth, 2000
@@ -92,20 +94,19 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("debug", debug)
 
     WriteLog("Using configuration:")
-    WriteLog(" baseUrl: " baseUrl)
-    WriteLog(" Map: maxWidth: " maxWidth ", scale: " scale ", topMargin: " topMargin ", leftMargin: " leftMargin ", opacity: " opacity)
-    WriteLog(" hideTown: " hideTown ", alwaysShowMap: " alwaysShowMap)
-    WriteLog(" showNormalMobs: " showNormalMobs " showUniqueMobs: " showUniqueMobs " showBosses: " showBosses " showDeadMobs: " showDeadMobs)
-    WriteLog(" normalMobColor: " normalMobColor " uniqueMobColor: " uniqueMobColor)
-    WriteLog(" playerOffset: " playerOffset)
-    WriteLog(" showWaypointLine: " showWaypointLine)
-    WriteLog(" showNextExitLine: " showNextExitLine)
-    WriteLog(" showBossLine: " showBossLine)
-    WriteLog(" gameWindowId: " gameWindowId)
-    WriteLog(" debug logging: " debug)
+    WriteLog("- baseUrl: " baseUrl)
+    WriteLog("- Map: global scale: " scale ", global top margin: " topMargin ", global left margin: " leftMargin ", opacity: " opacity)
+    WriteLog("- hideTown: " hideTown ", alwaysShowMap: " alwaysShowMap)
+    WriteLog("- playerOffset: " playerOffset)
+    WriteLog("- gameWindowId: " gameWindowId)
+    WriteLog("- debug logging: " debug)
+    if FileExist(A_Scriptdir . "\mapconfig.ini") {
+        WriteLog("Found existing mapconfig.ini")
+    }
+    WriteLog("Starting d2r-mapview...")
 
     if (!playerOffset) {
-        WriteLog("startingOffset not set, this is mandatory for this MH to function")
+        WriteLog("ERROR: startingOffset not set, this is mandatory for this MH to function")
         ExitApp
     }
 }

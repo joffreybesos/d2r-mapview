@@ -57,26 +57,19 @@ This server is getting hammered lately so it would be appreciated if you support
 
 - Live player position on map
 - Live monster position on map
-- Unique/champion monsters live location marked on map
+- Other player positions on map
+- Unique/champion monsters marked specially
+- Immunities of monsters highlighted
 - Super chests specially marked (LK chests)
 - All quest items, doors, waypoints marked
-- Line drawn from your player position to the next level
+- Line drawn from your player position to the next level/waypoint
+- Highly configurable
 
-If you want server IP to show, look at my extra standalone tool for that <https://github.com/joffreybesos/DcloneIPview>
-
-**Map Legend**
-
-- Green dot for player position
-- White dots for normal monsters
-- Large yellow dot for unique monsters
-- Purple square for exits
-- Yellow square for waypoints
-- Most quest items should be marked with their respective icons
-- Special unique monsters such as Radament and Summoner should have large red dots on their spawn location
+If you want D2R server IP to show, look at my extra standalone tool for that <https://github.com/joffreybesos/DcloneIPview>
 
 **Other notes**
 
-- Press Ctrl+H to see help in game
+- Press Ctrl+H to see help in game, including a map legend
 - You can exit the maphack with Shift+F10
 - You can also right click the icon in the system tray.
 - This MH will automatically exit when you exit D2R.
@@ -103,21 +96,32 @@ In `settings.ini` you should see some options to make configuration changes.
 | Setting |     Default     |    Description    |
 | :-------------- | :------------------ | :---------------------- |
 | baseUrl | http://localhost:3002 | URL of the map server, set to public server by default, but you can use localhost if you [run your own server](SERVER.md) |
-| maxWidth | 2000 | Maximum map image width in pixels, prevents oversized maps covering too much of the screen |
-| scale | 1.1 | The global scale setting applied to all map images, press NumpadPlus and NumpadSubtract to adjust in game|
-| leftMargin | 20 | The left margin of the map image, set this to wider than your primary monitor to push it onto your secondary monitor. |
+| scale | 1.0 | The global scale setting applied to all map images, press NumpadPlus and NumpadSubtract to adjust in game|
+| leftMargin | 20 | The left margin of all map images, set this to wider than your primary monitor to push it onto your secondary monitor. |
 | topMargin | 20 | Top margin of map image |
 | opacity | 0.5 | How transparent the map image should be, between 0 and 1 |
-| alwaysShowMap | false | You can show hide map with TAB key, this setting will force it to always show |
+| alwaysShowMap | false | This setting will force the map to always show, ignoring the TAB key |
 | hideTown | false | This will hide town maps so they will never show |
 | showNormalMobs | true | Set to false to hide normal non-unique monsters on the map |
 | showUniqueMobs | true | Set to false to hide unique monsters on the map |
+| showBosses | true | Show bosses with a red dot, such as Diablo, Summoner etc |
+| showDeadMobs | true | Show dead mobs as a black square (useful to know which areas are clear) |
 | normalMobColor | FFFFFF | Colour of the dot of normal monsters |
 | uniqueMobColor | D4AF37 | Colour of the dot of unique monsters |
+| bossColor | FF0000 | Colour of boss dots on the map |
+| showImmunuties | true | Show immunties of normal and unique monsters |
+| showWaypointLine | false | Draws a yellow line to the nearest waypoint, turned off by default |
+| showNextExitLine | true | Draws a purple line to the next relevant exit |
+| showBossLine | true | Draws a red line to the boss in that level (Nihlithak, Summoner etc) |
+| increaseMapSizeKey | NumpadAdd | Key to increase the size of the map |
+| decreaseMapSizeKey | NumpadSub | Key to decrease the size of the map |
+| alwaysShowKey | NumpadMult | Key to toggle `alwaysShowMap` setting |
 | playerOffset | 0x20AF660 | The static memory offset, when a new D2R client is released this will need to be updated |
 | uiOffset | 0x20BF322 | The offset used to determine whether your minimap is open or not |
 | readInterval |  10| How long to sleep between memory reads. Increase this if you are having performance problems |
-| debug| false | Turn this one to increase the level of the logging, note this will create huse `log.txt` files |
+| enableD2ML | false | Only enable if you use multiple D2R sessions, not tested well |
+| windowTitle | D2R:main | this is ignored unless `enableD2ML` is turned on. It is the window title of one D2R session for multi sesion |
+| debug| false | Turn this one to increase the level of the logging, note this will create huge `log.txt` files |
 
 ## Map Server
 

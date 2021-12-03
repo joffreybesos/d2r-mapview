@@ -5,8 +5,8 @@
 #Include %A_ScriptDir%\include\logging.ahk
 SetWorkingDir, %A_ScriptDir%
 
-readGameMemory(playerOffset, startingOffset, ByRef gameMemoryData) {
-
+readGameMemory(settings, playerOffset, ByRef gameMemoryData) {
+    startingOffset := settings["playerOffset"]  ;default offset
     if (_ClassMemory.__Class != "_ClassMemory")
     {
         WriteLog("Missing classMemory.ahk dependency. Quitting")
@@ -21,7 +21,7 @@ readGameMemory(playerOffset, startingOffset, ByRef gameMemoryData) {
         WriteTimedLog()
         ExitApp
     }
-
+    
     ;WriteLog("Looking for Level No address at player offset " playerOffset)
     startingAddress := d2r.BaseAddress + playerOffset
     playerUnit := d2r.read(startingAddress, "Int64")
@@ -71,10 +71,14 @@ readGameMemory(playerOffset, startingOffset, ByRef gameMemoryData) {
     }
 
     ; get other players
-    ReadOtherPlayers(d2r, startingOffset, name, otherPlayerData)
+    if (settings["showOtherPlayers"]) {
+        ReadOtherPlayers(d2r, startingOffset, name, otherPlayerData)
+    }
 
     ; get mobs
-    ReadMobs(d2r, startingOffset, name, mobs)
+    if (settings["showNormalMobs"] or settings["showUniqueMobs"] or settings["showBosses"] or settings["showDeadMobs"]) {
+        ReadMobs(d2r, startingOffset, name, mobs)
+    }
 
     ; player position
     pPath := playerUnit + 0x38

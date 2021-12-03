@@ -10,6 +10,15 @@ ShowMap(settings, mapData, gameMemoryData, ByRef uiData) {
     leftMargin:= settings["leftMargin"]
     topMargin:= settings["topMargin"]
     opacity:= settings["opacity"]
+    sFile := mapData["sFile"] ; downloaded map image
+    levelNo:= gameMemoryData["levelNo"]
+    IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
+    scale := levelScale * scale
+    IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
+    IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0
+    leftMargin := leftMargin + levelxmargin
+    topMargin := topMargin + levelymargin
+
     ; WriteLog("maxGuiWidth := " maxGuiWidth)
     ; WriteLog("scale := " scale)
     ; WriteLog("leftMargin := " leftMargin)
@@ -30,10 +39,6 @@ ShowMap(settings, mapData, gameMemoryData, ByRef uiData) {
     serverScale := 2 
     Angle := 45
     padding := 150
-
-    sFile := mapData["sFile"] ; downloaded map image
-    ; FileGetSize, sFileSize, %sFile%
-    ; WriteLogDebug("Showing map " sFile " " sFileSize)
     If !pToken := Gdip_Startup()
     {
         MsgBox "Gdiplus failed to start. Please ensure you have gdiplus on your system"
@@ -52,19 +57,11 @@ ShowMap(settings, mapData, gameMemoryData, ByRef uiData) {
     Height := Gdip_GetImageHeight(pBitmap)
     Gdip_GetRotatedDimensions(Width, Height, Angle, RWidth, RHeight)
     Gdip_GetRotatedTranslation(Width, Height, Angle, xTranslation, yTranslation)
-    ; WriteLog("scale: " scale)
-    ; WriteLog("RWidth: " RWidth " RHeight: " RHeight)
 
     scaledWidth := (RWidth * scale)
-    scaleAdjust := 1 ; need to adjust the scale for oversized maps
-    if (scaledWidth > mapGuiWidth) {
-        scaleAdjust := mapGuiWidth / (RWidth * scale)
-        scaledWidth := mapGuiWidth
-        WriteLogDebug("Oversized map, reducing scale to " scale ", maxWidth set to " mapGuiWidth)
-    }
-    scaledHeight := (RHeight * 0.5) * scale * scaleAdjust
-    rotatedWidth := RWidth * scale * scaleAdjust
-    rotatedHeight := RHeight * scale * scaleAdjust
+    scaledHeight := (RHeight * 0.5) * scale
+    rotatedWidth := RWidth * scale
+    rotatedHeight := RHeight * scale
 
     hbm := CreateDIBSection(rotatedWidth, rotatedHeight)
     hdc := CreateCompatibleDC()
@@ -73,7 +70,6 @@ ShowMap(settings, mapData, gameMemoryData, ByRef uiData) {
     G := Gdip_GraphicsFromHDC(hdc)
     pBitmap := Gdip_RotateBitmap(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
 
-    ;WriteLog("scaledWidth: " scaledWidth " scaledHeight: " scaledHeight)
     Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
     UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, rotatedWidth, rotatedHeight)
     SelectObject(hdc, obm)
@@ -82,6 +78,6 @@ ShowMap(settings, mapData, gameMemoryData, ByRef uiData) {
     Gdip_DeleteGraphics(G)
     Gdip_DisposeImage(pBitmap)
     ElapsedTime := A_TickCount - StartTime
-    WriteLogDebug("Drew map " ElapsedTime " ms taken")
+    ;WriteLogDebug("Drew map " ElapsedTime " ms taken")
     uiData := { "scaledWidth": scaledWidth, "scaledHeight": scaledHeight, "sizeWidth": Width, "sizeHeight": Height }
 }

@@ -18,6 +18,8 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, showUniqueMobs, settings.ini, MapSettings, showUniqueMobs, "true"
     IniRead, showBosses, settings.ini, MapSettings, showBosses, "true"
     IniRead, showDeadMobs, settings.ini, MapSettings, showDeadMobs, "true"
+    IniRead, showOtherPlayers, settings.ini, MapSettings, showOtherPlayers, "true"
+    
     IniRead, normalMobColor, settings.ini, MapSettings, normalMobColor, "FFFFFF"
     IniRead, uniqueMobColor, settings.ini, MapSettings, uniqueMobColor, "D4AF37"
     IniRead, bossColor, settings.ini, MapSettings, bossColor, "FF0000"
@@ -49,6 +51,7 @@ readSettings(settingsFile, ByRef settings) {
     edges := edges = "true" ; convert to bool
     showNormalMobs := showNormalMobs = "true" ; convert to bool
     showUniqueMobs := showUniqueMobs = "true" ; convert to bool
+    showOtherPlayers := showOtherPlayers = "true"
     showWaypointLine := showWaypointLine = "true" ; convert to bool
     showNextExitLine := showNextExitLine = "true" ; convert to bool
     showBossLine := showBossLine = "true" ; convert to bool
@@ -70,6 +73,7 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("showUniqueMobs", showUniqueMobs)
     settings.Insert("showBosses", showBosses)
     settings.Insert("showDeadMobs", showDeadMobs)
+    settings.Insert("showOtherPlayers", showOtherPlayers)
     settings.Insert("normalMobColor", normalMobColor)
     settings.Insert("uniqueMobColor", uniqueMobColor)
     settings.Insert("bossColor", bossColor)
@@ -93,10 +97,15 @@ readSettings(settingsFile, ByRef settings) {
     WriteLog(" hideTown: " hideTown ", alwaysShowMap: " alwaysShowMap)
     WriteLog(" showNormalMobs: " showNormalMobs " showUniqueMobs: " showUniqueMobs " showBosses: " showBosses " showDeadMobs: " showDeadMobs)
     WriteLog(" normalMobColor: " normalMobColor " uniqueMobColor: " uniqueMobColor)
-    WriteLog(" startingOffset: " startingOffset)
+    WriteLog(" playerOffset: " playerOffset)
     WriteLog(" showWaypointLine: " showWaypointLine)
     WriteLog(" showNextExitLine: " showNextExitLine)
     WriteLog(" showBossLine: " showBossLine)
     WriteLog(" gameWindowId: " gameWindowId)
     WriteLog(" debug logging: " debug)
+
+    if (!playerOffset) {
+        WriteLog("startingOffset not set, this is mandatory for this MH to function")
+        ExitApp
+    }
 }

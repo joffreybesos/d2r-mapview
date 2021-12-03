@@ -11,11 +11,14 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
     scale:= settings["scale"]
     leftMargin:= settings["leftMargin"]
     topMargin:= settings["topMargin"]
-
+    Width := uiData["sizeWidth"]
+    Height := uiData["sizeHeight"]
+    levelNo:= gameMemoryData["levelNo"]
+    IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
+    scale := levelScale * scale
     ; WriteLog("maxWidth := " maxWidth)
     ; WriteLog("leftMargin := " leftMargin)
     ; WriteLog("topMargin := " topMargin)
-    ; WriteLog(mapData["sFile"])
     ; WriteLog(mapData["leftTrimmed"])
     ; WriteLog(mapData["topTrimmed"])
     ; WriteLog(mapData["mapOffsetX"])
@@ -31,11 +34,9 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
     ; get relative position of player in world
     ; xpos is absolute world pos in game
     ; each map has offset x and y which is absolute world position
-    xPosDot := ((gameMemoryData["xPos"] - mapData["mapOffsetX"]) * serverScale) + padding
-    yPosDot := ((gameMemoryData["yPos"] - mapData["mapOffsetY"]) * serverScale) + padding
-    sFile := mapData["sFile"] ; downloaded map image
-    Width := uiData["sizeWidth"]
-    Height := uiData["sizeHeight"]
+    xPosDot := ((gameMemoryData["xPos"] - mapData["mapOffsetX"]) * serverScale) + padding - mapData["leftTrimmed"]
+    yPosDot := ((gameMemoryData["yPos"] - mapData["mapOffsetY"]) * serverScale) + padding - mapData["topTrimmed"]
+    
 
     If !pToken := Gdip_Startup()
     {
@@ -49,7 +50,7 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
     pBitmap := Gdip_CreateBitmap(Width, Height)
     If !pBitmap
     {
-        WriteLog("ERROR: Could not load map image " sFile)
+        WriteLog("ERROR: Could not create bitmap to show players/mobs")
         ExitApp
     }
 
@@ -57,15 +58,9 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
     Gdip_GetRotatedTranslation(Width, Height, Angle, xTranslation, yTranslation)
 
     scaledWidth := (RWidth * scale)
-    scaleAdjust := 1 ; need to adjust the scale for oversized maps
-    if (scaledWidth > mapGuiWidth) {
-        scaleAdjust := mapGuiWidth / (RWidth * scale)
-        scaledWidth := mapGuiWidth
-        ;WriteLogDebug("OverSized map, reducing scale to " scale ", maxWidth set to " mapGuiWidth)
-    }
-    scaledHeight := (RHeight * 0.5) * scale * scaleAdjust
-    rotatedWidth := RWidth * scale * scaleAdjust
-    rotatedHeight := RHeight * scale * scaleAdjust
+    scaledHeight := (RHeight * 0.5) * scale
+    rotatedWidth := RWidth * scale
+    rotatedHeight := RHeight * scale
 
     hbm := CreateDIBSection(rotatedWidth, rotatedHeight)
     hdc := CreateCompatibleDC()
@@ -94,8 +89,8 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
         for index, mob in mobs
         {
             if (mob["mode"] == 0 or mob["mode"] == 12) { ; dead
-                mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
-                moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+                mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding - mapData["leftTrimmed"]
+                moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding - mapData["topTrimmed"]
                 Gdip_DrawEllipse(G, pPenDead, mobx-1, moby-1, 2, 2)
             }
         }
@@ -106,8 +101,8 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
         {
             if (mob["isUnique"] == 0) {
                 if (mob["mode"] != 0 and mob["mode"] != 12) { ; not dead
-                    mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
-                    moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+                    mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding - mapData["leftTrimmed"]
+                    moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding - mapData["topTrimmed"]
                     if (settings["showImmunities"]) {
                         immunities := mob["immunities"]
                         noImmunities := immunities["physical"] + immunities["magic"] + immunities["fire"] + immunities["light"] + immunities["cold"] + immunities["poison"]
@@ -154,8 +149,8 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
             if (settings["showBosses"]) {
                 if (mob["mode"] != 0 and mob["mode"] != 12) {
                     ;WriteLog("Boss: " mob["textTitle"])
-                    mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
-                    moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+                    mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding - mapData["leftTrimmed"]
+                    moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding - mapData["topTrimmed"]
                     Gdip_DrawEllipse(G, pPenBoss, mobx-3, moby-3, 6, 6)
                 }
             }
@@ -164,8 +159,8 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
             if (settings["showUniqueMobs"]) {
                 if (mob["mode"] != 0 and mob["mode"] != 12) { ; not dead
                     ;WriteLog("Unique: " mob["textTitle"])
-                    mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
-                    moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+                    mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding - mapData["leftTrimmed"]
+                    moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding - mapData["topTrimmed"]
                     if (settings["showImmunities"]) {
                         immunities := mob["immunities"]
                         noImmunities := immunities["physical"] + immunities["magic"] + immunities["fire"] + immunities["light"] + immunities["cold"] + immunities["poison"]
@@ -224,8 +219,8 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
         waypointHeader := mapData["waypoint"]
         if (waypointHeader) {
             wparray := StrSplit(waypointHeader, ",")
-            waypointX := (wparray[1] * serverScale) + padding
-            wayPointY := (wparray[2] * serverScale) + padding
+            waypointX := (wparray[1] * serverScale) + padding - mapData["leftTrimmed"]
+            wayPointY := (wparray[2] * serverScale) + padding - mapData["topTrimmed"]
             pPen := Gdip_CreatePen(0x55ffFF00, 3)
             Gdip_DrawLine(G, pPen, xPosDot, yPosDot, waypointX, wayPointY)
             Gdip_DeletePen(pPen)
@@ -241,8 +236,8 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
                 exitArray := StrSplit(A_LoopField, ",")
                 ;exitArray[1] ; id of exit
                 ;exitArray[2] ; name of exit
-                exitX := (exitArray[3] * serverScale) + padding
-                exitY := (exitArray[4] * serverScale) + padding
+                exitX := (exitArray[3] * serverScale) + padding - mapData["leftTrimmed"]
+                exitY := (exitArray[4] * serverScale) + padding - mapData["topTrimmed"]
 
                 ; only draw the line if it's a 'next' exit
                 if (isNextExit(gameMemoryData["levelNo"]) == exitArray[1]) {
@@ -260,8 +255,8 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
         if (bossHeader) {
             bossArray := StrSplit(bossHeader, ",")
             ;bossArray[1] ; name of boss
-            bossX := (bossArray[2] * serverScale) + padding
-            bossY := (bossArray[3] * serverScale) + padding
+            bossX := (bossArray[2] * serverScale) + padding - mapData["leftTrimmed"]
+            bossY := (bossArray[3] * serverScale) + padding - mapData["topTrimmed"]
 
             ; only draw the line if it's a 'next' exit
             pPen := Gdip_CreatePen(0xFFFF0000, 3)
@@ -270,15 +265,17 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
         }
     }
     ; draw other players
-    otherPlayers := gameMemoryData["otherPlayers"]
-    pPen := Gdip_CreatePen(0xff00AA00, 4)
-    for index, player in otherPlayers
-    {
-        playerx := ((player["x"] - mapData["mapOffsetX"]) * serverScale) + padding - mapData["leftTrimmed"]
-        playery := ((player["y"] - mapData["mapOffsetY"]) * serverScale) + padding - mapData["topTrimmed"]
-        Gdip_DrawRectangle(G, pPen, playerx-2, playery-2, 4, 4)
+    if (settings["showOtherPlayers"]) {
+        otherPlayers := gameMemoryData["otherPlayers"]
+        pPen := Gdip_CreatePen(0xff00AA00, 4)
+        for index, player in otherPlayers
+        {
+            playerx := ((player["x"] - mapData["mapOffsetX"]) * serverScale) + padding - mapData["leftTrimmed"]
+            playery := ((player["y"] - mapData["mapOffsetY"]) * serverScale) + padding - mapData["topTrimmed"]
+            Gdip_DrawRectangle(G, pPen, playerx-2, playery-2, 4, 4)
+        }
+        Gdip_DeletePen(pPen)    
     }
-    Gdip_DeletePen(pPen)    
 
     ; draw player
     pPen := Gdip_CreatePen(0xff00FF00, 6)

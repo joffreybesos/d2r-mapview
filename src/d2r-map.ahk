@@ -68,7 +68,7 @@ While 1 {
         }
         Sleep, 5000 ; sleep longer when no offset found, you're likely in menu
     } else {
-        readGameMemory(playerOffset, startingOffset, gameMemoryData)
+        readGameMemory(settings, playerOffset, gameMemoryData)
 
         if ((gameMemoryData["difficulty"] > 0 & gameMemoryData["difficulty"] < 3) and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
             if (gameMemoryData["mapSeed"] != lastSeed) {
@@ -171,31 +171,31 @@ MapSizeAlwaysShow:
 
 MapSizeIncrease:
 {
-    settings["scale"] := settings["scale"] + 0.1
-    if (settings["scale"] > 5.0) {
-        WriteLog("Scale is larger than max scale of 5: " settings["scale"])
-        settings["scale"] := 5.0
+    levelNo := gameMemoryData["levelNo"]
+    levelScale := mapData["levelScale"]
+    if (levelNo and levelScale) {
+        levelScale := levelScale + 0.1
+        IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
+        mapData["levelScale"] := levelScale
+        ShowMap(settings, mapData, gameMemoryData, uiData)
+        ShowPlayer(settings, mapData, gameMemoryData, uiData)
+        WriteLog("Increased level " levelNo " scale by 0.1 to " levelScale)
     }
-    ShowMap(settings, mapData, gameMemoryData, uiData)
-    ShowPlayer(settings, mapData, gameMemoryData, uiData)
-    scale := settings["scale"]
-    IniWrite, %scale%, settings.ini, MapSettings, scale
-    WriteLog("Increased scaled by 0.1 to " scale)
     return
 }
 
 MapSizeDecrease:
 {
-    settings["scale"] := settings["scale"] - 0.1
-    if (settings["scale"] < 0.2) {
-        WriteLog("Scale is lower than minimum scale 0.2: " settings["scale"])
-        settings["scale"] := 0.2
+    levelNo := gameMemoryData["levelNo"]
+    levelScale := mapData["levelScale"]
+    if (levelNo and levelScale) {
+        levelScale := levelScale - 0.1
+        IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
+        mapData["levelScale"] := levelScale
+        ShowMap(settings, mapData, gameMemoryData, uiData)
+        ShowPlayer(settings, mapData, gameMemoryData, uiData)
+        WriteLog("Decreased level " levelNo " scale by 0.1 to " levelScale)
     }
-    ShowMap(settings, mapData, gameMemoryData, uiData)
-    ShowPlayer(settings, mapData, gameMemoryData, uiData)
-    scale := settings["scale"]
-    IniWrite, %scale%, settings.ini, MapSettings, scale
-    WriteLog("Decreased scaled by 0.1 to " scale)
     return
 }
     

@@ -6,14 +6,17 @@ SetWorkingDir, %A_ScriptDir%
 downloadMapImage(settings, gameMemoryData, ByRef mapData) {
     baseUrl:= settings["baseUrl"]
     if (settings["edges"]) {
-        imageUrl := baseUrl . "/v1/map/" . gameMemoryData["mapSeed"] . "/" . gameMemoryData["difficulty"] . "/" . gameMemoryData["levelNo"] . "/image?flat=true&edge=true"
+        imageUrl := baseUrl . "/v1/map/" . gameMemoryData["mapSeed"] . "/" . gameMemoryData["difficulty"] . "/" . gameMemoryData["levelNo"] . "/image?trim=true&flat=true&edge=true"
     } else {
-        imageUrl := baseUrl . "/v1/map/" . gameMemoryData["mapSeed"] . "/" . gameMemoryData["difficulty"] . "/" . gameMemoryData["levelNo"] . "/image?flat=true"
+        imageUrl := baseUrl . "/v1/map/" . gameMemoryData["mapSeed"] . "/" . gameMemoryData["difficulty"] . "/" . gameMemoryData["levelNo"] . "/image?trim=true&flat=true"
     }
 
     sFile := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . gameMemoryData["levelNo"] . ".png"
     FileDelete, %sFile%
 
+    levelNo := gameMemoryData["levelNo"]
+    IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 0.5
+    WriteLog("Read levelScale " levelScale " from file")
     try {
         whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
         WinHttpReq.SetTimeouts("60000", "60000", "60000", "60000")
@@ -77,5 +80,5 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
     if (FileExist(sFile)) {
         WriteLog("Downloaded " imageUrl " to " sFile)
     }
-    mapData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight, "exits": exits, "waypoint": waypoint, "bosses": bosses }
-}  
+    mapData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "levelScale": levelScale, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight, "exits": exits, "waypoint": waypoint, "bosses": bosses }
+} 

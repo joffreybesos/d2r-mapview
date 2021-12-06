@@ -16,29 +16,48 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, hideTown, settings.ini, MapSettings, hideTown, "false"
     IniRead, edges, settings.ini, MapSettings, edges, "true"
 
-    IniRead, showNormalMobs, settings.ini, MapSettings, showNormalMobs, "true"
-    IniRead, showUniqueMobs, settings.ini, MapSettings, showUniqueMobs, "true"
-    IniRead, showBosses, settings.ini, MapSettings, showBosses, "true"
-    IniRead, showDeadMobs, settings.ini, MapSettings, showDeadMobs, "true"
-    IniRead, showOtherPlayers, settings.ini, MapSettings, showOtherPlayers, "true"
+    ; units
+    IniRead, showNormalMobs, settings.ini, Units, showNormalMobs, "true"
+    IniRead, showUniqueMobs, settings.ini, Units, showUniqueMobs, "true"
+    IniRead, showBosses, settings.ini, Units, showBosses, "true"
+    IniRead, showDeadMobs, settings.ini, Units, showDeadMobs, "true"
+    IniRead, showImmunities, settings.ini, Units, showImmunities, "true"
+    IniRead, showOtherPlayers, settings.ini, Units, showOtherPlayers, "true"
     
-    IniRead, normalMobColor, settings.ini, MapSettings, normalMobColor, "FFFFFF"
-    IniRead, uniqueMobColor, settings.ini, MapSettings, uniqueMobColor, "D4AF37"
-    IniRead, bossColor, settings.ini, MapSettings, bossColor, "FF0000"
-    IniRead, showImmunities, settings.ini, MapSettings, showImmunities, "true"
+    ; colours
+    IniRead, normalMobColor, settings.ini, Colors, normalMobColor, "FFFFFF"
+    IniRead, uniqueMobColor, settings.ini, Colors, uniqueMobColor, "D4AF37"
+    IniRead, bossColor, settings.ini, Colors, bossColor, "FF0000"
+    IniRead, deadColor, settings.ini, Colors, deadColor, "000000"
+    IniRead, physicalImmuneColor, settings.ini, Colors, physicalImmuneColor, "CD853f"
+    IniRead, magicImmuneColor, settings.ini, Colors, magicImmuneColor, "ff8800"
+    IniRead, fireImmuneColor, settings.ini, Colors, fireImmuneColor, "FF0000"
+    IniRead, lightImmuneColor, settings.ini, Colors, lightImmuneColor, "FFFF00"
+    IniRead, coldImmuneColor, settings.ini, Colors, coldImmuneColor, "0000FF"
+    IniRead, poisonImmuneColor, settings.ini, Colors, poisonImmuneColor, "32CD32"
+    
+    ; lines
+    IniRead, showWaypointLine, settings.ini, Lines, showWaypointLine, "false"
+    IniRead, showNextExitLine, settings.ini, Lines, showNextExitLine, "true"
+    IniRead, showBossLine, settings.ini, Lines, showBossLine, "true"
 
-    IniRead, showWaypointLine, settings.ini, MapSettings, showWaypointLine, "false"
-    IniRead, showNextExitLine, settings.ini, MapSettings, showNextExitLine, "true"
-    IniRead, showBossLine, settings.ini, MapSettings, showBossLine, "true"
+    ; hot keys
+    IniRead, increaseMapSizeKey, settings.ini, Hotkeys, increaseMapSizeKey, NumpadAdd
+    IniRead, decreaseMapSizeKey, settings.ini, Hotkeys, decreaseMapSizeKey, NumpadSub
+    IniRead, alwaysShowKey, settings.ini, Hotkeys, alwaysShowKey, NumpadMult
 
-    IniRead, increaseMapSizeKey, settings.ini, Shortcuts, increaseMapSizeKey, NumpadAdd
-    IniRead, decreaseMapSizeKey, settings.ini, Shortcuts, decreaseMapSizeKey, NumpadSub
-    IniRead, alwaysShowKey, settings.ini, Shortcuts, alwaysShowKey, NumpadMult
+    IniRead, moveMapLeft, settings.ini, Hotkeys, moveMapLeft, #Left
+    IniRead, moveMapRight, settings.ini, Hotkeys, moveMapRight, #Right
+    IniRead, moveMapUp, settings.ini, Hotkeys, moveMapUp, #Up
+    IniRead, moveMapDown, settings.ini, Hotkeys, moveMapDown, #Down
 
+
+    ; memory
     IniRead, playerOffset, settings.ini, Memory, playerOffset
     IniRead, uiOffset, settings.ini, Memory, uiOffset
     IniRead, readInterval, settings.ini, Memory, readInterval, 1000
 
+    ; multi session
     IniRead, enableD2ML, settings.ini, MultiLaunch, enableD2ML
     if (enableD2ML == "true") {
         IniRead, gameWindowId, settings.ini, MultiLaunch, windowTitle
@@ -79,6 +98,13 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("normalMobColor", normalMobColor)
     settings.Insert("uniqueMobColor", uniqueMobColor)
     settings.Insert("bossColor", bossColor)
+    settings.Insert("deadColor", deadColor)
+    settings.Insert("physicalImmuneColor", physicalImmuneColor)
+    settings.Insert("magicImmuneColor", magicImmuneColor)
+    settings.Insert("fireImmuneColor", fireImmuneColor)
+    settings.Insert("lightImmuneColor", lightImmuneColor)
+    settings.Insert("coldImmuneColor", coldImmuneColor)
+    settings.Insert("poisonImmuneColor", poisonImmuneColor)
     settings.Insert("showImmunities", showImmunities)
     settings.Insert("showWaypointLine", showWaypointLine)
     settings.Insert("showNextExitLine", showNextExitLine)
@@ -86,6 +112,11 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("increaseMapSizeKey", increaseMapSizeKey)
     settings.Insert("decreaseMapSizeKey", decreaseMapSizeKey)
     settings.Insert("alwaysShowKey", alwaysShowKey)
+
+    settings.Insert("moveMapLeft", moveMapLeft)
+    settings.Insert("moveMapRight", moveMapRight)
+    settings.Insert("moveMapUp", moveMapUp)
+    settings.Insert("moveMapDown", moveMapDown)
     settings.Insert("playerOffset", playerOffset)
     settings.Insert("uiOffset", uiOffset)
     settings.Insert("readInterval", readInterval)

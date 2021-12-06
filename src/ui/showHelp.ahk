@@ -6,9 +6,13 @@ SetWorkingDir, %A_ScriptDir%
 
 ShowHelpText(settings, leftMargin, topMargin) {
     pToken := Gdip_Startup()
-    increaseMapSizeKey := settings["increaseMapSizeKey"]
-    decreaseMapSizeKey:= settings["decreaseMapSizeKey"]
-    alwaysShowKey:= settings["alwaysShowKey"]
+    increaseMapSizeKey := formatHotkeyString(settings["increaseMapSizeKey"])
+    decreaseMapSizeKey:= formatHotkeyString(settings["decreaseMapSizeKey"])
+    alwaysShowKey:= formatHotkeyString(settings["alwaysShowKey"])
+    moveMapLeft:= formatHotkeyString(settings["moveMapLeft"])
+    moveMapRight:= formatHotkeyString(settings["moveMapRight"])
+    moveMapUp:= formatHotkeyString(settings["moveMapUp"])
+    moveMapDown:= formatHotkeyString(settings["moveMapDown"])
 
     OGdip.Startup()  ; This function initializes GDI+ and must be called first.
     Width := 1800
@@ -52,6 +56,10 @@ ShowHelpText(settings, leftMargin, topMargin) {
     s .= "- " alwaysShowKey " key to permanently show map`n"
     s .= "- " increaseMapSizeKey " key to increase map size`n"
     s .= "- " decreaseMapSizeKey " key to decrease map size`n"
+    s .= "- " moveMapLeft " key to move map left`n"
+    s .= "- " moveMapRight " key to move map right`n"
+    s .= "- " moveMapUp " key to move map up`n"
+    s .= "- " moveMapDown " key to move map down`n"
     s .= "- Shift+F10 to exit d2r-mapview`n"
     s .= "`n"
     s .= "You can remap keys, and change colours in settings.ini`n"
@@ -63,11 +71,8 @@ ShowHelpText(settings, leftMargin, topMargin) {
     s .= "Please report scams on the discord, link found on Github.`n"
     bmp.G.DrawString(s, whiteTextFont, 20, 20, 0, 0, textFormat)
 
-
     whiteTextFont := new OGdip.Font("Arial", 36)
-    bmp.G.DrawString("Press CTRL+H to hide", whiteTextFont, 15, 550, 0, 0, textFormat)
-
-
+    bmp.G.DrawString("Press CTRL+H to hide", whiteTextFont, 15, 600, 0, 0, textFormat)
 
     ; add map legend        
     WhiteBrush:= new OGdip.Brush(0xFFFFFFFF)
@@ -113,12 +118,19 @@ ShowHelpText(settings, leftMargin, topMargin) {
     pPenBoss := new OGdip.Pen(bossColor, uDotSize)
     pPenExit := new OGdip.Pen(0xff00ff, uDotSize)
 
-    pPenPhysical := new OGdip.Pen(0xffCD853f, dotSize)
-    pPenMagic := new OGdip.Pen(0xffff8800, dotSize)
-    pPenFire := new OGdip.Pen(0xffFF0000, dotSize)
-    pPenLight := new OGdip.Pen(0xffFFFF00, dotSize)
-    pPenCold := new OGdip.Pen(0xff0000FF, dotSize)
-    pPenPoison := new OGdip.Pen(0xFF32CD32, dotSize)
+    physicalImmuneColor := 0xff . settings["physicalImmuneColor"] 
+    magicImmuneColor := 0xff . settings["magicImmuneColor"] 
+    fireImmuneColor := 0xff . settings["fireImmuneColor"] 
+    lightImmuneColor := 0xff . settings["lightImmuneColor"] 
+    coldImmuneColor := 0xff . settings["coldImmuneColor"] 
+    poisonImmuneColor := 0xff . settings["poisonImmuneColor"] 
+
+    pPenPhysical := new OGdip.Pen(physicalImmuneColor, dotSize)
+    pPenMagic := new OGdip.Pen(magicImmuneColor, dotSize)
+    pPenFire := new OGdip.Pen(fireImmuneColor, dotSize)
+    pPenLight := new OGdip.Pen(lightImmuneColor, dotSize)
+    pPenCold := new OGdip.Pen(coldImmuneColor, dotSize)
+    pPenPoison := new OGdip.Pen(poisonImmuneColor, dotSize)
 
     bmp.G.SetPen(pPlayer).DrawRectangle(mobx+1, moby + (rowHeight * 0), 6, 6)
     
@@ -143,4 +155,18 @@ ShowHelpText(settings, leftMargin, topMargin) {
 
 drawHelpDot(bmp, pen, x, y, dotsize) {
     bmp.G.SetPen(pen).DrawEllipse(x, y, dotSize, dotSize)
+}
+
+formatHotkeyString(keyString) {
+    ; make hotkey look more logical
+    firstChar := SubStr(keyString, 1, 1)
+    if (firstChar == "#")
+        keyString := StrReplace(keyString, "#", "Win+")
+    if (firstChar == "+")
+        keyString := StrReplace(keyString, "#", "Shift+")
+    if (firstChar == "^")
+        keyString := StrReplace(keyString, "#", "Ctrl+")
+    if (firstChar == "!")
+        keyString := StrReplace(keyString, "#", "Alt+")
+    return keyString
 }

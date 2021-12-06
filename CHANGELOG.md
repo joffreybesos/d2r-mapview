@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.6] - 2021-12-06 - More configuration options
+
+- You can now configure:
+  - Colors of immunities (useful for the vision impaired)
+  - Colors of dead bodies
+  - HotKeys which move the map around the screen
+- Help screen updated to show correct Hotkeys and Colors
+- `settings.ini` now checks the version, you will get a warning when using a different version `settings.ini`
+
 ## [2.2.5] - 2021-12-03 - Individual map sizes and positions
 
 Map position changes:

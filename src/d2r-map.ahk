@@ -13,10 +13,19 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showPlayer.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
+expectedVersion := "2.2.6"
+
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
     ExitApp
 }
+
+IniRead, version, settings.ini, VersionControl, version, ""
+if (version != expectedVersion) {
+    MsgBox, , Mismatched settings version, Your settings.ini is not the expected version %expectedVersion%`nIn future please update executable AND settings.ini`nPress OK to continue anyway
+    
+}
+
 lastMap := ""
 exitArray := []
 helpToggle:= true
@@ -54,6 +63,22 @@ Hotkey, %increaseMapSizeKey%, MapSizeIncrease
 Hotkey, IfWinActive, ahk_exe D2R.exe
 Hotkey, %decreaseMapSizeKey%, MapSizeDecrease
 
+moveMapLeftKey := settings["moveMapLeft"]
+moveMapRightKey := settings["moveMapRight"]
+moveMapUpKey := settings["moveMapUp"]
+moveMapDownKey := settings["moveMapDown"]
+
+Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, %moveMapLeftKey%, MoveMapLeft
+Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, %moveMapRightKey%, MoveMapRight
+Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, %moveMapUpKey%, MoveMapUp
+Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, %moveMapDownKey%, MoveMapDown
+
+
+
 While 1 {
     ; scan for the player offset
     playerOffset := scanOffset(playerOffset, startingOffset, uiOffset)
@@ -66,7 +91,7 @@ While 1 {
             WriteTimedLog()
             gameStartTime := 0
         }
-        Sleep, 5000 ; sleep longer when no offset found, you're likely in menu
+        Sleep, 1000 ; sleep longer when no offset found, you're likely in menu
     } else {
         readGameMemory(settings, playerOffset, gameMemoryData)
 
@@ -82,7 +107,7 @@ While 1 {
                 ;Gui, Map: Show, NA
                 Gui, Map: Hide ; hide map
                 Gui, Units: Hide ; hide player dot
-                ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help", "22") ; 22 is opacity
+                ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help", "44") ; 22 is opacity
                 ; Download map
                 downloadMapImage(settings, gameMemoryData, mapData)
                 Gui, LoadingText: Destroy ; remove loading text
@@ -105,7 +130,6 @@ While 1 {
             WriteLog("In Menu - no valid difficulty, levelno, or mapseed found '" gameMemoryData["difficulty"] "' '" gameMemoryData["levelNo"] "' '" gameMemoryData["mapSeed"] "'")
             hideMap(false)
             lastlevel:=
-            Sleep, 1000
         }
     }
     Sleep, %readInterval% ; this is the pace of updates
@@ -200,7 +224,7 @@ MapSizeDecrease:
 }
     
 #IfWinActive, ahk_exe D2R.exe
-    #Left::
+    MoveMapLeft:
     {
         levelNo := gameMemoryData["levelNo"]
         levelxmargin := mapData["levelxmargin"]
@@ -214,7 +238,7 @@ MapSizeDecrease:
         }
         return
     }
-    #Right::
+    MoveMapRight:
     {
         levelNo := gameMemoryData["levelNo"]
         levelxmargin := mapData["levelxmargin"]
@@ -228,7 +252,7 @@ MapSizeDecrease:
         }
         return
     }
-    #Up::
+    MoveMapUp:
     {
         levelNo := gameMemoryData["levelNo"]
         levelxmargin := mapData["levelxmargin"]
@@ -242,7 +266,7 @@ MapSizeDecrease:
         }
         return
     }
-    #Down::
+    MoveMapDown:
     {
         levelNo := gameMemoryData["levelNo"]
         levelxmargin := mapData["levelxmargin"]

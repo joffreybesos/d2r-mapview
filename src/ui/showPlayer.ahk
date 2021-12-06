@@ -76,18 +76,26 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
     normalMobColor := 0xff . settings["normalMobColor"] 
     uniqueMobColor := 0xff . settings["uniqueMobColor"] 
     bossColor := 0xff . settings["bossColor"] 
+    deadColor := 0xff . settings["deadColor"] 
+
     pPenNormal := Gdip_CreatePen(normalMobColor, 3)
     pPenUnique := Gdip_CreatePen(uniqueMobColor, 5)
     pPenBoss := Gdip_CreatePen(bossColor, 6)
-    pPenDead := Gdip_CreatePen(0xff000000, 2)
+    pPenDead := Gdip_CreatePen(deadColor, 2)
 
+    physicalImmuneColor := 0xff . settings["physicalImmuneColor"] 
+    magicImmuneColor := 0xff . settings["magicImmuneColor"] 
+    fireImmuneColor := 0xff . settings["fireImmuneColor"] 
+    lightImmuneColor := 0xff . settings["lightImmuneColor"] 
+    coldImmuneColor := 0xff . settings["coldImmuneColor"] 
+    poisonImmuneColor := 0xff . settings["poisonImmuneColor"] 
 
-    pPenPhysical := Gdip_CreatePen(0xffCD853f, 4)
-    pPenMagic := Gdip_CreatePen(0xffff8800, 4)
-    pPenFire := Gdip_CreatePen(0xffFF0000, 4)
-    pPenLight := Gdip_CreatePen(0xffFFFF00, 4)
-    pPenCold := Gdip_CreatePen(0xff0000FF, 4)
-    pPenPoison := Gdip_CreatePen(0xFF32CD32, 4)
+    pPenPhysical := Gdip_CreatePen(physicalImmuneColor, 4)
+    pPenMagic := Gdip_CreatePen(magicImmuneColor, 4)
+    pPenFire := Gdip_CreatePen(fireImmuneColor, 4)
+    pPenLight := Gdip_CreatePen(lightImmuneColor, 4)
+    pPenCold := Gdip_CreatePen(coldImmuneColor, 4)
+    pPenPoison := Gdip_CreatePen(poisonImmuneColor, 4)
 
     if (settings["showDeadMobs"]) {
         for index, mob in mobs

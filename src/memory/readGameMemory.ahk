@@ -89,10 +89,10 @@ readGameMemory(settings, playerOffset, ByRef gameMemoryData) {
     yPos := d2r.read(yPosAddress, "UShort")
 
     if (!xPos) {
-        WriteLog("Did not find position at " xPosAddress " using player offset " playerOffset) 
+        WriteLog("Did not find player position at " xPosAddress " using player offset " playerOffset) 
     }
     if (!yPos) {
-        WriteLog("Did not find position at " xPosAddress " using player offset " playerOffset) 
+        WriteLog("Did not find player position at " xPosAddress " using player offset " playerOffset) 
     }
-    gameMemoryData := {"mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "otherPlayers": otherPlayerData }
+    gameMemoryData := {"gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "otherPlayers": otherPlayerData }
 }

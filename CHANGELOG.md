@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.7] - 2021-12-06 - Previous game name and duration
+
+- The name of your previous game will now display in the top right while in menus
+- If you had the program running during the session you will also see the last game time
+- Text will only appear on the top right of your screen
+- You can turn it off with `showGameInfo` in `settings.ini`
+
 ## [2.2.6] - 2021-12-06 - More configuration options
 
 - You can now configure:

@@ -16,6 +16,8 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, hideTown, settings.ini, MapSettings, hideTown, "false"
     IniRead, edges, settings.ini, MapSettings, edges, "true"
 
+    IniRead, showGameInfo, settings.ini, GameInfo, showGameInfo, "true"
+
     ; units
     IniRead, showNormalMobs, settings.ini, Units, showNormalMobs, "true"
     IniRead, showUniqueMobs, settings.ini, Units, showUniqueMobs, "true"
@@ -55,6 +57,7 @@ readSettings(settingsFile, ByRef settings) {
     ; memory
     IniRead, playerOffset, settings.ini, Memory, playerOffset
     IniRead, uiOffset, settings.ini, Memory, uiOffset
+    IniRead, gameNameOffset, settings.ini, Memory, gameNameOffset
     IniRead, readInterval, settings.ini, Memory, readInterval, 1000
 
     ; multi session
@@ -78,6 +81,7 @@ readSettings(settingsFile, ByRef settings) {
     showBossLine := showBossLine = "true" ; convert to bool
     showDeadMobs := showDeadMobs = "true"
     showImmunities := showImmunities = "true"
+    showGameInfo := showGameInfo = "true"
 
     ; AHK also doesn't let you declare an array a more sensible way
     settings := {}
@@ -119,6 +123,8 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("moveMapDown", moveMapDown)
     settings.Insert("playerOffset", playerOffset)
     settings.Insert("uiOffset", uiOffset)
+    settings.Insert("gameNameOffset", gameNameOffset)
+    settings.Insert("showGameInfo", showGameInfo)
     settings.Insert("readInterval", readInterval)
     settings.Insert("enableD2ML", enableD2ML)
     settings.Insert("gameWindowId", gameWindowId)

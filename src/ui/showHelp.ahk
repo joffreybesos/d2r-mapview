@@ -5,7 +5,6 @@ SetWorkingDir, %A_ScriptDir%
 
 
 ShowHelpText(settings, leftMargin, topMargin) {
-    pToken := Gdip_Startup()
     increaseMapSizeKey := formatHotkeyString(settings["increaseMapSizeKey"])
     decreaseMapSizeKey:= formatHotkeyString(settings["decreaseMapSizeKey"])
     alwaysShowKey:= formatHotkeyString(settings["alwaysShowKey"])

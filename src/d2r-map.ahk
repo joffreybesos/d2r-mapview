@@ -11,9 +11,10 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
 #Include %A_ScriptDir%\ui\showPlayer.ahk
+#Include %A_ScriptDir%\ui\showLastGame.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.2.6"
+expectedVersion := "2.2.7"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -22,8 +23,7 @@ if !FileExist(A_Scriptdir . "\settings.ini") {
 
 IniRead, version, settings.ini, VersionControl, version, ""
 if (version != expectedVersion) {
-    MsgBox, , Mismatched settings version, Your settings.ini is not the expected version %expectedVersion%`nIn future please update executable AND settings.ini`nPress OK to continue anyway
-    
+    MsgBox, , Mismatched settings version, Your settings.ini is not the expected version %expectedVersion%`nIn future please update executable AND settings.ini`nPress OK to continue anyway   
 }
 
 lastMap := ""
@@ -43,6 +43,7 @@ readInterval := settings["readInterval"]
 uiOffset := settings["uiOffset"]
 lastlevel:=""
 lastSeed:=""
+lastGameStartTime:=0
 uidata:={}
 
 global debug := settings["debug"]
@@ -84,15 +85,21 @@ While 1 {
     playerOffset := scanOffset(playerOffset, startingOffset, uiOffset)
 
     if (!playerOffset) {
-        ;WriteLog("Could not find playerOffset, likely in menu " gameStartTime)
+        WriteLogDebug("Could not find playerOffset, likely in menu " gameStartTime)
         hideMap(false)
         lastlevel:=
+        
         if (gameStartTime > 0) {
             WriteTimedLog()
+            lastGameDuration := (A_TickCount - gameStartTime)/1000.0
             gameStartTime := 0
         }
-        Sleep, 1000 ; sleep longer when no offset found, you're likely in menu
+        if (settings["showGameInfo"]) {
+            ShowLastGame(settings, lastGameDuration)
+        }
+        Sleep, 500 ; sleep longer when no offset found, you're likely in menu
     } else {
+        Gui, GameInfo: Destroy
         readGameMemory(settings, playerOffset, gameMemoryData)
 
         if ((gameMemoryData["difficulty"] > 0 & gameMemoryData["difficulty"] < 3) and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.8] - 2021-12-07 - Updated offets following D2R patch
+
+- Updated offests following release of D2R `1.1.67358`
+
 ## [2.2.7] - 2021-12-06 - Previous game name and duration
 
 - The name of your previous game will now display in the top right while in menus

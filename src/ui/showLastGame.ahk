@@ -5,14 +5,14 @@ SetWorkingDir, %A_ScriptDir%
 
 ShowGameText(gameName, HelpText1, gameTime, gameWindowId) {
     SetFormat Integer, D
-    WinGetPos, , , Width, Height, %gameWindowId%
+    ;WinGetPos, , , Width, Height, %gameWindowId%
     
-    leftMargin := (Width - 400)
+    leftMargin := 0
     topMargin := 20
 
-    if (Width) {
+    if (WinExist(gameWindowId)) {
         OGdip.Startup()  ; This function initializes GDI+ and must be called first.
-        bmp := new OGdip.Bitmap(Width,Height)  ; Create new empty Bitmap with given width and height
+        bmp := new OGdip.Bitmap(400,400)  ; Create new empty Bitmap with given width and height
         bmp.GetGraphics()                                  ; .G refers to Graphics surface of this Bitmap, it's used to draw things
 
         if (gameName != "") {
@@ -52,7 +52,11 @@ ShowGameText(gameName, HelpText1, gameTime, gameWindowId) {
 
         bmp.SetToControl(HelpText1)
         if WinActive(gameWindowId) {
-            gui, GameInfo: Show, NA
+            WinGetPos, , , Width, Height, %gameWindowId%
+            gameInfoLeftMargin := (Width - 400)
+            Gui, GameInfo: Color,000000
+            WinSet,Transcolor, 000000 255
+            Gui, GameInfo: Show, w400 h400 x%gameInfoLeftMargin% y0 NA
         } else {
             gui, GameInfo: Hide
         }

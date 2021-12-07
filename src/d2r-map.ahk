@@ -50,7 +50,6 @@ uidata:={}
 
 global debug := settings["debug"]
 global gameWindowId := settings["gameWindowId"]
-global measureSession := settings["measureSession"]
 global gameStartTime:=0
 
 increaseMapSizeKey := settings["increaseMapSizeKey"]
@@ -82,17 +81,10 @@ Hotkey, %moveMapDownKey%, MoveMapDown
 d2rprocess := initMemory(gameWindowId)
 
 ; create GUI windows
-; WinGetPos, , , W, H, %gameWindowId%
-; Gui, GameInfo: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-; gui, GameInfo: add, Picture, w%W% h%H% x0 y0 hwndGameInfoHwnd1
-WinGetPos, , , Width, Height, %gameWindowId%
 Gui, GameInfo: -Caption +E0x20 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-gui, GameInfo: add, Picture, w%Width% h%Height% x0 y0 hwndHelpText1
-Gui, GameInfo: +E0x02000000 +E0x00080000 ; WS_EX_COMPOSITED & WS_EX_LAYERED => Double Buffer
-
-; make transparent
 Gui, GameInfo: Color,000000
 WinSet,Transcolor, 000000 255
+gui, GameInfo: add, Picture, +BackgroundTrans hwndHelpText1
 
 Gui, Map: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
 mapHwnd1 := WinExist()
@@ -111,7 +103,6 @@ While 1 {
         lastlevel:=
         
         if (gameStartTime > 0) {
-                ()
             lastGameDuration := (A_TickCount - gameStartTime)/1000.0
             gameStartTime := 0
         }
@@ -145,10 +136,7 @@ While 1 {
                     Gui, Map: Show, NA
                     Gui, Units: Show, NA
                 }
-                ;Gui, Map: Show, NA
-                ;Gui, Units: Show, NA
                 ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-                ;checkAutomapVisibility(settings, gameMemoryData["levelNo"])
             }
             ; update player layer on each loop
             ShowPlayer(settings, unitHwnd1, imageData, gameMemoryData, uiData)

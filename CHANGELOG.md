@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 - You can now configure map wall thickness with `wallThickness`
 - `wallThickness` can be from 1-10, default is 1.2
+- Only applies to `edge` mode (which is default)
 - Refactor of how memory is read, should be more efficient
 - Fixed memory leak when leaving game in menu
 - Downloaded map images will now be reused as cache

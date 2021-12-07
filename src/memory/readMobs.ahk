@@ -3,27 +3,27 @@ SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
 
-ReadMobs(d2r, startingOffset, name, ByRef mobs) {
+ReadMobs(d2rprocess, startingOffset, name, ByRef mobs) {
     ; monsters
     mobs := []
     monstersOffset := startingOffset + 1024
     Loop, 128
     {
         newOffset := monstersOffset + (8 * (A_Index - 1))
-        mobAddress := d2r.BaseAddress + newOffset
-        mobUnit := d2r.read(mobAddress, "Int64")
+        mobAddress := d2rprocess.BaseAddress + newOffset
+        mobUnit := d2rprocess.read(mobAddress, "Int64")
         while (mobUnit > 0) { ; keep following the next pointer
-            mobType := d2r.read(mobUnit + 0x00, "UInt")
-            txtFileNo := d2r.read(mobUnit + 0x04, "UInt")
+            mobType := d2rprocess.read(mobUnit + 0x00, "UInt")
+            txtFileNo := d2rprocess.read(mobUnit + 0x04, "UInt")
             if (!HideNPC(txtFileNo)) {
-                unitId := d2r.read(mobUnit + 0x08, "UInt")
-                mode := d2r.read(mobUnit + 0x0c, "UInt")
-                pUnitData := d2r.read(mobUnit + 0x10, "Int64")
-                pPath := d2r.read(mobUnit + 0x38, "Int64")
+                unitId := d2rprocess.read(mobUnit + 0x08, "UInt")
+                mode := d2rprocess.read(mobUnit + 0x0c, "UInt")
+                pUnitData := d2rprocess.read(mobUnit + 0x10, "Int64")
+                pPath := d2rprocess.read(mobUnit + 0x38, "Int64")
             
-                isUnique := d2r.read(pUnitData + 0x18, "UShort")
-                monx := d2r.read(pPath + 0x02, "UShort")
-                mony := d2r.read(pPath + 0x06, "UShort")
+                isUnique := d2rprocess.read(pUnitData + 0x18, "UShort")
+                monx := d2rprocess.read(pPath + 0x02, "UShort")
+                mony := d2rprocess.read(pPath + 0x06, "UShort")
                 isBoss := 0
                 textTitle := getBossName(txtFileNo)
                 if (textTitle) {
@@ -31,20 +31,20 @@ ReadMobs(d2r, startingOffset, name, ByRef mobs) {
                 }
 
                 ;get immunities
-                pStatsListEx := d2r.read(mobUnit + 0x88, "Int64")
-                ownerType := d2r.read(pStatsListEx + 0x08, "UInt")
-                ownerId := d2r.read(pStatsListEx + 0x0C, "UInt")
+                pStatsListEx := d2rprocess.read(mobUnit + 0x88, "Int64")
+                ownerType := d2rprocess.read(pStatsListEx + 0x08, "UInt")
+                ownerId := d2rprocess.read(pStatsListEx + 0x0C, "UInt")
 
-                statPtr := d2r.read(pStatsListEx + 0x30, "Int64")
-                statCount := d2r.read(pStatsListEx + 0x38, "Int64")
+                statPtr := d2rprocess.read(pStatsListEx + 0x30, "Int64")
+                statCount := d2rprocess.read(pStatsListEx + 0x38, "Int64")
 
                 immunities := { physical: 0, magic: 0, fire: 0, light: 0, cold: 0, poison: 0 }
                 Loop, %statCount%
                 {
                     offset := (A_Index -1) * 8
-                    ;statParam := d2r.read(statPtr + offset, "UShort")
-                    statEnum := d2r.read(statPtr + 0x2 + offset, "UShort")
-                    statValue := d2r.read(statPtr + 0x4 + offset, "UInt")
+                    ;statParam := d2rprocess.read(statPtr + offset, "UShort")
+                    statEnum := d2rprocess.read(statPtr + 0x2 + offset, "UShort")
+                    statValue := d2rprocess.read(statPtr + 0x4 + offset, "UInt")
                     if (statValue >= 100) {
                         switch (statEnum) {
                             ; no enums here, just bad practices instead
@@ -61,7 +61,7 @@ ReadMobs(d2r, startingOffset, name, ByRef mobs) {
                 mobs.push(mob)
             }
             
-            mobUnit := d2r.read(mobUnit + 0x150, "Int64")  ; get next mob
+            mobUnit := d2rprocess.read(mobUnit + 0x150, "Int64")  ; get next mob
         }
     } 
 }

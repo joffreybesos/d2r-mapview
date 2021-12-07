@@ -87,6 +87,8 @@ To achieve this, simply:
 It will take some time to build, but will run the map server at the end.
 Then you should be able to use the mapserver like normal on `localhost:3002`
 
+Note: This performance method isn't really supported. It may take up too much memory, some people have had success with it.
+
 ## Shutting down
 
 You can either go to Docker Desktop, select the running container and click the stop button.

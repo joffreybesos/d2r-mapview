@@ -2,58 +2,18 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-ShowLastGame(settings, lastGameDuration) {
 
-
-    if (_ClassMemory.__Class != "_ClassMemory")
-    {
-        WriteLog("Missing classMemory.ahk dependency. Quitting")
-        ExitApp
-    }
-
-    d2r := new _ClassMemory(gameWindowId, "", hProcessCopy) 
-
-    if !isObject(d2r) 
-    {
-        WriteLog(gameWindowId " not found, please make sure game is running")
-        WriteTimedLog()
-        ExitApp
-    }
-    
-    gameNameOffset := settings["gameNameOffset"]
-    gameNameAddress := d2r.BaseAddress + gameNameOffset
-    gameName :=
-    Loop, 16
-    {
-        gameName := gameName . Chr(d2r.read(gameNameAddress + (A_Index -1), "UChar"))
-    }
-    ShowGameText(gameName, lastGameDuration, gameWindowId)
-}
-
-
-ShowGameText(gameName, gameTime, gameWindowId) {
+ShowGameText(gameName, HelpText1, gameTime, gameWindowId) {
     SetFormat Integer, D
-    WinGetPos, , , W, H, %gameWindowId%
+    WinGetPos, , , Width, Height, %gameWindowId%
     
-    leftMargin := (W - 400)
+    leftMargin := (Width - 400)
     topMargin := 20
 
-    if (W) {
+    if (Width) {
         OGdip.Startup()  ; This function initializes GDI+ and must be called first.
-        Width := W
-        Height := H
-
-        Gui, GameInfo: -Caption +E0x20 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-        gui, GameInfo: add, Picture, w%Width% h%Height% x0 y0 hwndHelpText1
-        Gui, GameInfo: +E0x02000000 +E0x00080000 ; WS_EX_COMPOSITED & WS_EX_LAYERED => Double Buffer
-
-        ; make transparent
-        Gui, GameInfo: Color,000000
-        WinSet,Transcolor, 000000 255
-
         bmp := new OGdip.Bitmap(Width,Height)  ; Create new empty Bitmap with given width and height
         bmp.GetGraphics()                                  ; .G refers to Graphics surface of this Bitmap, it's used to draw things
-        Gui, GameInfo: +LastFound
 
         if (gameName != "") {
             WhiteBrush:= new OGdip.Brush(0xFFFFFFFF)

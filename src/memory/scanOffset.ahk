@@ -3,42 +3,28 @@
 #Include %A_ScriptDir%\include\logging.ahk
 SetWorkingDir, %A_ScriptDir%
 
-scanOffset(lastOffset, startingOffset, uiOffset) {
+scanOffset(d2rprocess, lastOffset, startingOffset, uiOffset) {
     ; check the one that previously worked, it's likely not checkLastOffset()
-    playerOffset := checkLastOffset(lastOffset, uiOffset)
+    playerOffset := checkLastOffset(d2rprocess, lastOffset, uiOffset)
     if (playerOffset) {
         ;WriteLogDebug("Using last offset " playerOffset " " lastOffset)
         return playerOffset
     }
     ; if the last offset doesn't seem valid anymore then you're in the menu or a new game
-    return scanForPlayerOffset(startingOffset, uiOffset)
+    return scanForPlayerOffset(d2rprocess, startingOffset, uiOffset)
 }
 
-checkLastOffset(startingOffset, uiOffset) {
-    return getPlayerOffset(startingOffset, 1, uiOffset)
+checkLastOffset(d2rprocess, startingOffset, uiOffset) {
+    return getPlayerOffset(d2rprocess, startingOffset, 1, uiOffset)
 }
 
-scanForPlayerOffset(startingOffset, uiOffset) {
+scanForPlayerOffset(d2rprocess, startingOffset, uiOffset) {
     ;WriteLogDebug("Scanning for new player offset address, starting default offset " startingOffset)
-    return getPlayerOffset(startingOffset, 128, uiOffset)
+    return getPlayerOffset(d2rprocess, startingOffset, 128, uiOffset)
 }
 
-getPlayerOffset(startingOffset, loops, uiOffset) {
+getPlayerOffset(d2r, startingOffset, loops, uiOffset) {
 
-    if (_ClassMemory.__Class != "_ClassMemory")
-    {
-        WriteLog("Missing classMemory.ahk dependency. Quitting")
-        ExitApp
-    }
-
-    d2r := new _ClassMemory(gameWindowId, "", hProcessCopy) 
-
-    if !isObject(d2r) 
-    {
-        WriteLog(gameWindowId " not found, please make sure game is running first")
-        WriteTimedLog()
-        ExitApp
-    }
     expOffset := uiOffset + 0x13
 
     found := false

@@ -4,7 +4,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\image\Gdip_ResizeBitmap.ahk
 #Include %A_ScriptDir%\ui\image\Gdip_RotateBitmap.ahk
 
-ShowPlayer(settings, mapData, gameMemoryData, uiData) {
+ShowPlayer(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     StartTime := A_TickCount
 
     mapGuiWidth:= settings["maxWidth"]
@@ -48,8 +48,7 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
         ExitApp
     }
 
-    Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
-    hwnd1 := WinExist()
+
 
     pBitmap := Gdip_CreateBitmap(Width, Height)
     If !pBitmap
@@ -299,7 +298,7 @@ ShowPlayer(settings, mapData, gameMemoryData, uiData) {
     pBitmap := Gdip_RotateBitmap(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
 
     Gdip_DrawImage(G2, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
-    UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, rotatedWidth, rotatedHeight)
+    UpdateLayeredWindow(unitHwnd1, hdc, leftMargin, topMargin, rotatedWidth, rotatedHeight)
 
     ElapsedTime := A_TickCount - StartTime
     ;WriteLog("Draw players " ElapsedTime " ms taken")

@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.9] - 2021-12-07 - Wall thickness setting and performance improvements
+
+- You can now configure map wall thickness with `wallThickness`
+- `wallThickness` can be from 1-10, default is 1.2
+- Refactor of how memory is read, should be more efficient
+- Fixed memory leak when leaving game in menu
+- Downloaded map images will now be reused as cache
+- GUI window optimisations, update rate should be improved
+- Fixed bug where previous game name would show extra characters
+
+If you run your own map server, you will need to update it for wallthickness to work.
+
 ## [2.2.8] - 2021-12-07 - Updated offets following D2R patch
 
 - Updated offests following release of D2R `1.1.67358`

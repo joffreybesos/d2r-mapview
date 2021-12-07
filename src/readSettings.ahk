@@ -15,6 +15,7 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, alwaysShowMap, settings.ini, MapSettings, alwaysShowMap, "false"
     IniRead, hideTown, settings.ini, MapSettings, hideTown, "false"
     IniRead, edges, settings.ini, MapSettings, edges, "true"
+    IniRead, wallThickness, settings.ini, MapSettings, wallThickness, 1
 
     IniRead, showGameInfo, settings.ini, GameInfo, showGameInfo, "true"
 
@@ -94,6 +95,7 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("alwaysShowMap", alwaysShowMap)
     settings.Insert("hideTown", hideTown)
     settings.Insert("edges", edges)
+    settings.Insert("wallThickness", wallThickness)
     settings.Insert("showNormalMobs", showNormalMobs)
     settings.Insert("showUniqueMobs", showUniqueMobs)
     settings.Insert("showBosses", showBosses)

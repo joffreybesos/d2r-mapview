@@ -4,7 +4,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\image\Gdip_ResizeBitmap.ahk
 #Include %A_ScriptDir%\ui\image\Gdip_RotateBitmap.ahk
 
-ShowMap(settings, mapData, gameMemoryData, ByRef uiData) {
+ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
     mapGuiWidth:= settings["maxWidth"]
     scale:= settings["scale"]
     leftMargin:= settings["leftMargin"]
@@ -45,8 +45,6 @@ ShowMap(settings, mapData, gameMemoryData, ByRef uiData) {
         ExitApp
     }
 
-    Gui, Map: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-    hwnd1 := WinExist()
     pBitmap := Gdip_CreateBitmapFromFile(sFile)
     If !pBitmap
     {
@@ -56,7 +54,6 @@ ShowMap(settings, mapData, gameMemoryData, ByRef uiData) {
     Width := Gdip_GetImageWidth(pBitmap)
     Height := Gdip_GetImageHeight(pBitmap)
     Gdip_GetRotatedDimensions(Width, Height, Angle, RWidth, RHeight)
-    Gdip_GetRotatedTranslation(Width, Height, Angle, xTranslation, yTranslation)
 
     scaledWidth := (RWidth * scale)
     scaledHeight := (RHeight * 0.5) * scale
@@ -71,7 +68,7 @@ ShowMap(settings, mapData, gameMemoryData, ByRef uiData) {
     pBitmap := Gdip_RotateBitmap(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
 
     Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
-    UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, rotatedWidth, rotatedHeight)
+    UpdateLayeredWindow(mapHwnd1, hdc, leftMargin, topMargin, scaledWidth, scaledHeight)
     SelectObject(hdc, obm)
     DeleteObject(hbm)
     DeleteDC(hdc)

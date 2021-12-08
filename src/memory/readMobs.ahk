@@ -3,7 +3,7 @@ SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
 
-ReadMobs(d2rprocess, startingOffset, name, ByRef mobs) {
+ReadMobs(d2rprocess, startingOffset, ByRef mobs) {
     ; monsters
     mobs := []
     monstersOffset := startingOffset + 1024

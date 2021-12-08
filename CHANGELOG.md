@@ -2,10 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.3.0] - 2021-12-08 - Last game bug fix
+## [2.3.0] - 2021-12-08 - Items on ground show on map
 
-- Last game name would occasionally show wrong name, this may still have issues
-- Last game time would occasionally be wrong, this should be resolved
+- Runes, unique items, and set items now show on the map with a flashing large dot
+- Only runes Lem and above will show
+- All uniques and set items on the ground will show
+- You can turn this feature off with `showItems=false` in `settings.ini`
+- Bug: Last game _name_ would occasionally show wrong name, this may still have issues
+- Bug: Last game _time_ would occasionally be wrong, this should be resolved
+- Bug where you have white screen at game menu should be fixed, but can be worked around with `showGameInfo=false`
 
 ## [2.2.9] - 2021-12-07 - Wall thickness setting and performance improvements
 

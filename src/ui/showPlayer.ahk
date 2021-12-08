@@ -288,11 +288,77 @@ ShowPlayer(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
         Gdip_DeletePen(pPen)    
     }
 
+
+
     ; draw player
     pPen := Gdip_CreatePen(0xff00FF00, 6)
     Gdip_DrawRectangle(G, pPen, xPosDot-2, yPosDot-2, 6, 6)
     ;Gdip_DrawRectangle(G, pPen, 0, 0, Width, Height) ;outline for whole map used for troubleshooting
     Gdip_DeletePen(pPen)
+
+        ;runeColor := 0xff . settings["runeColor"] 
+    runeColor := 0xccFFa700
+    uniqueColor := 0xccBBA45B
+    setColor := 0xcc00FC00
+
+    pPenRune := Gdip_CreatePen(runeColor, 12)
+    pPenRune2 := Gdip_CreatePen(0xccffffff, 8)
+
+    pPenUnique := Gdip_CreatePen(uniqueColor, 12)
+    pPenUnique2 := Gdip_CreatePen(0xccffffff, 8)
+
+    pPenSetItem := Gdip_CreatePen(setColor, 12)
+    pPenSetItem2 := Gdip_CreatePen(0xccffffff, 8)
+
+
+    ; show items
+    if (settings["showItems"]) {
+        items := gameMemoryData["items"]
+        for index, item in items
+        {
+            if (item["isRune"] == 1) { ; rune
+            
+                itemx := ((item["itemx"] - mapData["mapOffsetX"]) * serverScale) + padding
+                itemy := ((item["itemy"] - mapData["mapOffsetY"]) * serverScale) + padding
+                ticktock := uiData["ticktock"]
+                if (ticktock) {
+                    Gdip_DrawEllipse(G, pPenRune, itemx-2, itemy-2, 12, 12)
+                } else {
+                    Gdip_DrawEllipse(G, pPenRune2, itemx, itemy, 8, 8)
+                }
+            }
+
+            if (item["itemQuality"] == 7) { ; unique
+            
+                itemx := ((item["itemx"] - mapData["mapOffsetX"]) * serverScale) + padding
+                itemy := ((item["itemy"] - mapData["mapOffsetY"]) * serverScale) + padding
+                ticktock := uiData["ticktock"]
+                if (ticktock) {
+                    Gdip_DrawEllipse(G, pPenUnique, itemx-2, itemy-2, 12, 12)
+                } else {
+                    Gdip_DrawEllipse(G, pPenUnique2, itemx, itemy, 8, 8)
+                }
+            }
+
+            if (item["itemQuality"] == 5) { ; set
+            
+                itemx := ((item["itemx"] - mapData["mapOffsetX"]) * serverScale) + padding
+                itemy := ((item["itemy"] - mapData["mapOffsetY"]) * serverScale) + padding
+                ticktock := uiData["ticktock"]
+                if (ticktock) {
+                    Gdip_DrawEllipse(G, pPenSetItem, itemx-2, itemy-2, 12, 12)
+                } else {
+                    Gdip_DrawEllipse(G, pPenSetItem2, itemx, itemy, 8, 8)
+                }
+            }
+        }
+    }
+    Gdip_DeletePen(pPenRune)
+    Gdip_DeletePen(pPenRune2)
+    Gdip_DeletePen(pPenUnique)
+    Gdip_DeletePen(pPenUnique2)
+    Gdip_DeletePen(pPenSetItem)
+    Gdip_DeletePen(pPenSetItem2)
 
     G2 := Gdip_GraphicsFromHDC(hdc)
     pBitmap := Gdip_RotateBitmap(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.

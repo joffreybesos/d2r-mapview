@@ -91,6 +91,7 @@ Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +Tool
 unitHwnd1 := WinExist()
 
 offsetAttempts := 6
+ticktock := 0
 While 1 {
     ; scan for the player offset
     playerOffset := scanOffset(d2rprocess, playerOffset, startingOffset, uiOffset)
@@ -146,6 +147,7 @@ While 1 {
                 ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
             }
             ; update player layer on each loop
+            uiData["ticktock"] := ticktock
             ShowPlayer(settings, unitHwnd1, imageData, gameMemoryData, uiData)
             checkAutomapVisibility(d2rprocess, settings, gameMemoryData["levelNo"])
 
@@ -156,6 +158,7 @@ While 1 {
             lastlevel:=
         }
     }
+    ticktock := not ticktock
     Sleep, %readInterval% ; this is the pace of updates
 }
 

@@ -2,6 +2,8 @@
 
 #Include %A_ScriptDir%\memory\readOtherPlayers.ahk
 #Include %A_ScriptDir%\memory\readMobs.ahk
+#Include %A_ScriptDir%\memory\readItems.ahk
+
 #Include %A_ScriptDir%\include\logging.ahk
 SetWorkingDir, %A_ScriptDir%
 
@@ -58,12 +60,17 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
 
     ; get other players
     if (settings["showOtherPlayers"]) {
-        ReadOtherPlayers(d2rprocess, startingOffset, name, otherPlayerData)
+        ReadOtherPlayers(d2rprocess, startingOffset, otherPlayerData)
     }
 
     ; get mobs
     if (settings["showNormalMobs"] or settings["showUniqueMobs"] or settings["showBosses"] or settings["showDeadMobs"]) {
-        ReadMobs(d2rprocess, startingOffset, name, mobs)
+        ReadMobs(d2rprocess, startingOffset, mobs)
+    }
+
+    ; get items
+    if (settings["showItems"]) {
+        ReadItems(d2rprocess, startingOffset, items)
     }
 
     ; player position
@@ -77,5 +84,5 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     if (!xPos) {
         WriteLog("Did not find player position at player offset " playerOffset) 
     }
-    gameMemoryData := {"gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "otherPlayers": otherPlayerData }
+    gameMemoryData := {"gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "otherPlayers": otherPlayerData, "items": items }
 }

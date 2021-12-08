@@ -3,7 +3,7 @@ SendMode Input
 SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\classMemory.ahk
 
-ReadOtherPlayers(d2rprocess, startingOffset, playerName, ByRef otherPlayers) {
+ReadOtherPlayers(d2rprocess, startingOffset, ByRef otherPlayers) {
     otherPlayers := []
     SetFormat Integer, D
 

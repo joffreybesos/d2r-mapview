@@ -26,6 +26,7 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, showDeadMobs, settings.ini, Units, showDeadMobs, "true"
     IniRead, showImmunities, settings.ini, Units, showImmunities, "true"
     IniRead, showOtherPlayers, settings.ini, Units, showOtherPlayers, "true"
+    IniRead, showItems, settings.ini, Units, showItems, "true"
     
     ; colours
     IniRead, normalMobColor, settings.ini, Colors, normalMobColor, "FFFFFF"
@@ -83,6 +84,7 @@ readSettings(settingsFile, ByRef settings) {
     showDeadMobs := showDeadMobs = "true"
     showImmunities := showImmunities = "true"
     showGameInfo := showGameInfo = "true"
+    showItems := showItems = "true"
 
     ; AHK also doesn't let you declare an array a more sensible way
     settings := {}
@@ -101,6 +103,7 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("showBosses", showBosses)
     settings.Insert("showDeadMobs", showDeadMobs)
     settings.Insert("showOtherPlayers", showOtherPlayers)
+    settings.Insert("showItems", showItems)
     settings.Insert("normalMobColor", normalMobColor)
     settings.Insert("uniqueMobColor", uniqueMobColor)
     settings.Insert("bossColor", bossColor)

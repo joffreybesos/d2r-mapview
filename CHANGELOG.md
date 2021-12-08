@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.0] - 2021-12-08 - Last game bug fix
+
+- Last game name would occasionally show wrong name, this may still have issues
+- Last game time would occasionally be wrong, this should be resolved
+
 ## [2.2.9] - 2021-12-07 - Wall thickness setting and performance improvements
 
 - You can now configure map wall thickness with `wallThickness`

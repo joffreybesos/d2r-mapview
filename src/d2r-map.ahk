@@ -16,7 +16,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showLastGame.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.2.9"
+expectedVersion := "2.3.0"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -81,10 +81,8 @@ Hotkey, %moveMapDownKey%, MoveMapDown
 d2rprocess := initMemory(gameWindowId)
 
 ; create GUI windows
-Gui, GameInfo: -Caption +E0x20 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-Gui, GameInfo: Color,000000
-WinSet,Transcolor, 000000 255
-gui, GameInfo: add, Picture, +BackgroundTrans hwndHelpText1
+Gui, GameInfo: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+gamenameHwnd1 := WinExist()
 
 Gui, Map: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
 mapHwnd1 := WinExist()
@@ -92,32 +90,41 @@ mapHwnd1 := WinExist()
 Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
 unitHwnd1 := WinExist()
 
-
+offsetAttempts := 6
 While 1 {
     ; scan for the player offset
     playerOffset := scanOffset(d2rprocess, playerOffset, startingOffset, uiOffset)
 
     if (!playerOffset) {
-        WriteLogDebug("Could not find playerOffset, likely in menu " gameStartTime)
-        hideMap(false)
-        lastlevel:=
-        
-        if (gameStartTime > 0) {
-            lastGameDuration := (A_TickCount - gameStartTime)/1000.0
-            gameStartTime := 0
-        }
-        if (settings["showGameInfo"]) {
-            lastGameName := readLastGameName(d2rprocess, gameWindowId, settings)
-            ShowGameText(lastGameName, HelpText1, lastGameDuration, gameWindowId)
+        offsetAttempts += 1
+        if (offsetAttempts > 5) {
+            WriteLogDebug("Could not find playerOffset, likely in menu " gameStartTime)
+            hideMap(false)
+            lastlevel:=
+            
+            if (gameStartTime > 0) {
+                SetFormat Integer, D
+                gameStartTime += 0
+                lastGameDuration := (A_TickCount - gameStartTime)/1000.0
+                WriteTimedLog()
+                gameStartTime := 0
+            }
+            if (settings["showGameInfo"]) {
+                lastGameName := readLastGameName(d2rprocess, gameWindowId, settings)
+                ShowGameText(lastGameName, gamenameHwnd1, lastGameDuration, gameWindowId)
+            }
+            offsetAttempts := 6
         }
         Sleep, 500 ; sleep longer when no offset found, you're likely in menu
     } else {
-        Gui, GameInfo: Hide
+        offsetAttempts := 0
+        Gui, GameInfo: Hide  ; hide the last game info
         readGameMemory(d2rprocess, settings, playerOffset, gameMemoryData)
 
         if ((gameMemoryData["difficulty"] > 0 & gameMemoryData["difficulty"] < 3) and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
             if (gameMemoryData["mapSeed"] != lastSeed) {
-                gameStartTime := A_TickCount
+                gameStartTime := A_TickCount    
+                WriteLog("Start time: " gameStartTime)
                 lastSeed := gameMemoryData["mapSeed"]
             }
             ; if there's a level num then the player is in a map

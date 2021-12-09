@@ -84,7 +84,7 @@ getPlayerOffset(d2r, startingOffset, loops, uiOffset) {
         }
     }
     if (!found && loops > 1) {
-        WriteLogDebug("Did not find a player offset after " loops "(128) attempts, likely in game menu. If you are seeing this incorrectly, try starting a new game.")
+        WriteLogDebug("Did not find a player offset in unit hashtable, likely in game menu.")
     }
 }
 

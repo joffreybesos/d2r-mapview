@@ -60,7 +60,8 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, playerOffset, settings.ini, Memory, playerOffset
     IniRead, uiOffset, settings.ini, Memory, uiOffset
     IniRead, gameNameOffset, settings.ini, Memory, gameNameOffset
-    IniRead, readInterval, settings.ini, Memory, readInterval, 1000
+    IniRead, readInterval, settings.ini, Memory, readInterval, 10
+    IniRead, performanceMode, settings.ini, Memory, performanceMode, 0
 
     ; multi session
     IniRead, enableD2ML, settings.ini, MultiLaunch, enableD2ML
@@ -131,6 +132,7 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("gameNameOffset", gameNameOffset)
     settings.Insert("showGameInfo", showGameInfo)
     settings.Insert("readInterval", readInterval)
+    settings.Insert("performanceMode", performanceMode)
     settings.Insert("enableD2ML", enableD2ML)
     settings.Insert("gameWindowId", gameWindowId)
     settings.Insert("debug", debug)

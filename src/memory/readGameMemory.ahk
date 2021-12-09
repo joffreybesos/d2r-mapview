@@ -13,6 +13,9 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     ;WriteLog("Looking for Level No address at player offset " playerOffset)
     startingAddress := d2rprocess.BaseAddress + playerOffset
     playerUnit := d2rprocess.read(startingAddress, "Int64")
+    if (!playerUnit) {
+        WriteLogDebug("Could not read playerunit from memory")
+    }
 
     ; get the level number
     pPathAddress := playerUnit + 0x38
@@ -26,7 +29,7 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     dwLevelNo := pLevelAddress + 0x1F8
     levelNo := d2rprocess.read(dwLevelNo, "UInt")
     if (!levelNo) {
-        WriteLog("Did not find level num using player offset " playerOffset) 
+        WriteLogDebug("Did not find level num using player offset " playerOffset) 
     }
 
     ; get the map seed
@@ -55,7 +58,7 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     difficulty := d2rprocess.read(aDifficulty, "UShort")
 
     if ((difficulty != 0) & (difficulty != 1) & (difficulty != 2)) {
-        WriteLog("Did not find difficulty using player offset " playerOffset) 
+        WriteLogDebug("Did not find difficulty using player offset " playerOffset) 
     }
 
     ; get other players

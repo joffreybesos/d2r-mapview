@@ -9,6 +9,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\memory\isAutomapShown.ahk
 #Include %A_ScriptDir%\memory\readLastGameName.ahk
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
+#Include %A_ScriptDir%\ui\image\clearCache.ahk
 #Include %A_ScriptDir%\ui\showMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
@@ -16,7 +17,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showLastGame.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.3.0"
+expectedVersion := "2.3.1"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -37,7 +38,9 @@ WriteLog("*******************************************************************")
 WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyVW3uj")
 WriteLog("This map hack may not work on Windows 11")
 
+ClearCache(A_Temp)
 readSettings(settings.ini, settings)
+
 
 playerOffset := settings["playerOffset"]
 startingOffset := settings["playerOffset"]
@@ -47,19 +50,26 @@ lastlevel:=""
 lastSeed:=""
 lastGameStartTime:=0
 uidata:={}
+performanceMode := settings["performanceMode"]
+if (performanceMode != 0) {
+    SetBatchLines, %performanceMode%
+    readInterval := 0
+}
 
+global isMapShowing:=1
 global debug := settings["debug"]
 global gameWindowId := settings["gameWindowId"]
 global gameStartTime:=0
 
-increaseMapSizeKey := settings["increaseMapSizeKey"]
-decreaseMapSizeKey := settings["decreaseMapSizeKey"]
 alwaysShowKey := settings["alwaysShowKey"]
-
 Hotkey, IfWinActive, ahk_exe D2R.exe
 Hotkey, %alwaysShowKey%, MapSizeAlwaysShow
+
+increaseMapSizeKey := settings["increaseMapSizeKey"]
 Hotkey, IfWinActive, ahk_exe D2R.exe
 Hotkey, %increaseMapSizeKey%, MapSizeIncrease
+
+decreaseMapSizeKey := settings["decreaseMapSizeKey"]
 Hotkey, IfWinActive, ahk_exe D2R.exe
 Hotkey, %decreaseMapSizeKey%, MapSizeDecrease
 
@@ -99,7 +109,6 @@ While 1 {
     if (!playerOffset) {
         offsetAttempts += 1
         if (offsetAttempts > 5) {
-            WriteLogDebug("Could not find playerOffset, likely in menu " gameStartTime)
             hideMap(false)
             lastlevel:=
             
@@ -158,6 +167,11 @@ While 1 {
             lastlevel:=
         }
     }
+    if (not WinExist(gameWindowId)) {
+        WriteLog(gameWindowId " not found, please make sure game is running")
+        WriteTimedLog()
+        ExitApp
+    }
     ticktock := not ticktock
     Sleep, %readInterval% ; this is the pace of updates
 }
@@ -168,10 +182,14 @@ checkAutomapVisibility(d2rprocess, settings, levelNo) {
     hideTown:= settings["hideTown"]
     ;WriteLogDebug("Checking visibility, hideTown: " hideTown " alwaysShowMap: " alwaysShowMap)
     if ((levelNo == 1 or levelNo == 40 or levelNo == 75 or levelNo == 103 or levelNo == 109) and hideTown) {
-        ;WriteLogDebug("Hiding town " levelNo " since hideTown is set to true")
+        if (isMapShowing) {
+            WriteLogDebug("Hiding town " levelNo " since hideTown is set to true")
+        }
         hideMap(false)
     } else if not WinActive(gameWindowId) {
-        ;WriteLogDebug("D2R is not active window, hiding map")
+        if (isMapShowing) {
+            WriteLogDebug("D2R is not active window, hiding map")
+        }
         hideMap(false)
     } else if (!isAutomapShown(d2rprocess, uiOffset) and !alwaysShowMap) {
         ; hidemap
@@ -184,15 +202,21 @@ checkAutomapVisibility(d2rprocess, settings, levelNo) {
 
 hideMap(alwaysShowMap) {
     if (alwaysShowMap == false) {
-        ;WriteLogDebug("Hide map, alwaysShowMap was set to false")
         Gui, Map: Hide
         Gui, Units: Hide
+        if (isMapShowing) {
+            WriteLogDebug("Map hidden")
+        }
+        isMapShowing:= 0
     }
 }
 
 unHideMap() {
     ;showmap
-    ;WriteLogDebug("Map shown")
+    if (!isMapShowing) {
+        WriteLogDebug("Map shown")
+    }
+    isMapShowing:= 1
     Gui, Map: Show, NA
     Gui, Units: Show, NA
 }
@@ -329,7 +353,6 @@ MapSizeDecrease:
     {
         Gui, HelpText: Hide
         helpToggle := 1
-        WriteLogDebug("Hide Help")
     }
 return
 

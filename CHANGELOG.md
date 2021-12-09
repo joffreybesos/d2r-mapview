@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.1] - 2021-12-09 - Bug fixes
+
+- Fixed a bug where the MH didn't exit after closing D2R
+- Debug logging has been improved, especially around memory
+- Scanning for the player unit in memory has been improved
+- When starting the MH any cached files will be deleted
+- Experimental performance option has been implemented (off by default)
+- If you want to use this experimental option, please read <https://www.autohotkey.com/docs/commands/SetBatchLines.htm>
+
 ## [2.3.0] - 2021-12-08 - Items on ground show on map
 
 - Runes, unique items, and set items now show on the map with a flashing large dot

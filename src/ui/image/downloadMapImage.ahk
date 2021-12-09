@@ -28,7 +28,9 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
     ;WriteLog("Read levelScale " levelScale " " levelxmargin " " levelymargin " from file")
 
     if (not FileExist(sFile) or not FileExist(sFileTxt)) {
+        ; if either file is missing, do a fresh download
         FileDelete, %sFile%
+        FileDelete, %sFileTxt%
 
         try {
             whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
@@ -86,14 +88,13 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
                 }
                 WriteLog("ERROR: Error downloading image from " imageUrl)
                 if (FileExist(sFile)) {
-                    WriteLog("Downloaded file, but something else went wrong " sFile)
+                    WriteLog("Downloaded image to file, but something else went wrong " sFile)
                 }
             }
         }
         FileAppend, %respHeaders%, %sFileTxt%
     }
     if (FileExist(sFileTxt)) {
-        WriteLogDebug("Reading cached data")
         FileRead, respHeaders, %sFileTxt%
     }
     if (FileExist(sFile)) {

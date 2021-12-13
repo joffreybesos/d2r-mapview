@@ -8,6 +8,7 @@
 SetWorkingDir, %A_ScriptDir%
 
 readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
+    StartTime := A_TickCount
     startingOffset := settings["playerOffset"]  ;default offset
     
     ;WriteLog("Looking for Level No address at player offset " playerOffset)
@@ -31,6 +32,7 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     if (!levelNo) {
         WriteLogDebug("Did not find level num using player offset " playerOffset) 
     }
+    
 
     ; get the map seed
     startingAddress := d2rprocess.BaseAddress + playerOffset
@@ -61,6 +63,11 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
         WriteLogDebug("Did not find difficulty using player offset " playerOffset) 
     }
 
+    ; get playername
+    pUnitData := playerUnit + 0x10
+    playerNameAddress := d2rprocess.read(pUnitData, "Int64")
+    playerName := d2rprocess.readString(playerNameAddress, length := 0)
+
     ; get other players
     if (settings["showOtherPlayers"]) {
         ReadOtherPlayers(d2rprocess, startingOffset, otherPlayerData)
@@ -87,5 +94,7 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     if (!xPos) {
         WriteLog("Did not find player position at player offset " playerOffset) 
     }
-    gameMemoryData := {"gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "otherPlayers": otherPlayerData, "items": items }
+    gameMemoryData := {"gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "otherPlayers": otherPlayerData, "items": items, "playerName": playerName }
+    ElapsedTime := A_TickCount - StartTime
+    ;ToolTip % "`n`n`n`n" ElapsedTime
 }

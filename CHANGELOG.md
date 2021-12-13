@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.2] - 2021-12-13 - Performance improvements
+
+- Major refactor of how mobs/player units are drawn, which gives better performance
+- Aliasing may be improved in a later release
+- Colors of items on the ground is now configurable
+- Experimental performance mode is still experimental (and off by default), but can be activated for additional performance
+
 ## [2.3.1] - 2021-12-09 - Bug fixes
 
 - Fixed a bug where the MH didn't exit after closing D2R

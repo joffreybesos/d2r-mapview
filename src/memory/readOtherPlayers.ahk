@@ -38,15 +38,12 @@ ReadOtherPlayers(d2rprocess, startingOffset, ByRef otherPlayers) {
 
                     pUnitData := playerUnit + 0x10
                     playerNameAddress := d2rprocess.read(pUnitData, "Int64")
-                    name :=
-                    Loop, 16
-                    {
-                        name := name . Chr(d2rprocess.read(playerNameAddress + (A_Index -1), "UChar"))
-                    }
+                    playerName := d2rprocess.readString(playerNameAddress, length := 0)
+                    
                     if (xPos > 0 and yPos > 0) {
                         SetFormat Integer, D
                         ;WriteLog("SUCCESS: Found other player: " name " " newOffset ", at " A_Index " position " xPos " " yPos)
-                        otherPlayers.push({ "player": A_Index, "playerName": name, "x": xPos, "y": yPos})
+                        otherPlayers.push({ "player": A_Index, "playerName": playerName, "x": xPos, "y": yPos})
                     }
                 }
             }

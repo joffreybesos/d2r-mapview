@@ -1,8 +1,6 @@
 #SingleInstance, Force
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
-#Include %A_ScriptDir%\ui\image\Gdip_ResizeBitmap.ahk
-#Include %A_ScriptDir%\ui\image\Gdip_RotateBitmap.ahk
 
 ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
     mapGuiWidth:= settings["maxWidth"]
@@ -65,7 +63,7 @@ ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
     obm := SelectObject(hdc, hbm)
     Gdip_SetSmoothingMode(G, 4) 
     G := Gdip_GraphicsFromHDC(hdc)
-    pBitmap := Gdip_RotateBitmap(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
+    pBitmap := Gdip_RotateBitmapAtCenter(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
 
     Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
     UpdateLayeredWindow(mapHwnd1, hdc, leftMargin, topMargin, scaledWidth, scaledHeight)

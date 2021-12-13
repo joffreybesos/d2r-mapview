@@ -1,8 +1,6 @@
 #SingleInstance, Force
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
-#Include %A_ScriptDir%\ui\image\Gdip_ResizeBitmap.ahk
-#Include %A_ScriptDir%\ui\image\Gdip_RotateBitmap.ahk
 
 ShowPlayer(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     StartTime := A_TickCount
@@ -35,21 +33,11 @@ ShowPlayer(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     opacity := 0.9
     padding := 150
 
-    ; get relative position of player in world
-    ; xpos is absolute world pos in game
-    ; each map has offset x and y which is absolute world position
-    xPosDot := ((gameMemoryData["xPos"] - mapData["mapOffsetX"]) * serverScale) + padding
-    yPosDot := ((gameMemoryData["yPos"] - mapData["mapOffsetY"]) * serverScale) + padding
-    
-
     If !pToken := Gdip_Startup()
     {
         MsgBox "Gdiplus failed to start. Please ensure you have gdiplus on your system"
         ExitApp
     }
-
-
-
     pBitmap := Gdip_CreateBitmap(Width, Height)
     If !pBitmap
     {
@@ -65,10 +53,25 @@ ShowPlayer(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     rotatedWidth := RWidth * scale
     rotatedHeight := RHeight * scale
 
+    ; get relative position of player in world
+    ; xpos is absolute world pos in game
+    ; each map has offset x and y which is absolute world position
+    xPosDot := ((gameMemoryData["xPos"] - mapData["mapOffsetX"]) * serverScale) + padding
+    yPosDot := ((gameMemoryData["yPos"] - mapData["mapOffsetY"]) * serverScale) + padding
+    correctedPos := findNewPos(xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+    xPosDot := correctedPos["x"]
+    yPosDot := correctedPos["y"]
+
+
     hbm := CreateDIBSection(rotatedWidth, rotatedHeight)
     hdc := CreateCompatibleDC()
     obm := SelectObject(hdc, hbm)
-    G := Gdip_GraphicsFromImage(pBitmap)
+    ;G := Gdip_GraphicsFromImage(pBitmap)
+    
+    G := Gdip_GraphicsFromHDC(hdc)
+    Gdip_SetInterpolationMode(G, 7)
+    Gdip_SetSmoothingMode(G, 6)
+
 
     ; draw monsters
     mobs := gameMemoryData["mobs"]
@@ -102,7 +105,10 @@ ShowPlayer(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
             if (mob["mode"] == 0 or mob["mode"] == 12) { ; dead
                 mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
                 moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
-                Gdip_DrawEllipse(G, pPenDead, mobx-1, moby-1, 2, 2)
+                correctedPos := findNewPos(mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                mobx := correctedPos["x"]
+                moby := correctedPos["y"]
+                Gdip_DrawEllipse(G, pPenDead, mobx-1, moby-1, 2, 2/2)
             }
         }
     }
@@ -110,42 +116,49 @@ ShowPlayer(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     if (settings["showNormalMobs"]) {
         for index, mob in mobs
         {
+            mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
+            moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+            correctedPos := findNewPos(mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+            mobx := correctedPos["x"]
+            moby := correctedPos["y"]
+
+            ;WriteLog(mobx " " moby)
             if (mob["isUnique"] == 0) {
                 if (mob["mode"] != 0 and mob["mode"] != 12) { ; not dead
-                    mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
-                    moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
                     if (settings["showImmunities"]) {
                         immunities := mob["immunities"]
                         noImmunities := immunities["physical"] + immunities["magic"] + immunities["fire"] + immunities["light"] + immunities["cold"] + immunities["poison"]
                         sliceSize := 360 / noImmunities
-                        angleDegrees := 35
+                        angleDegrees := 90
                         dotSize := 4
+                        dotAdjust := 1.2
                         if (immunities["physical"]) {
-                            Gdip_DrawPie(G, pPenMagic, mobx-2, moby-2, dotSize, dotSize, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenMagic, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["magic"]) {
-                            Gdip_DrawPie(G, pPenMagic, mobx-2, moby-2, dotSize, dotSize, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenMagic, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["fire"]) {
-                            Gdip_DrawPie(G, pPenFire, mobx-2, moby-2, dotSize, dotSize, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenFire, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["light"]) {
-                            Gdip_DrawPie(G, pPenLight, mobx-2, moby-2, dotSize, dotSize, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenLight, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["cold"]) {
-                            Gdip_DrawPie(G, pPenCold, mobx-2, moby-2, dotSize, dotSize, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenCold, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["poison"]) {
-                            Gdip_DrawPie(G, pPenPoison, mobx-2, moby-2, dotSize, dotSize,angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenPoison, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2,angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                     }
-                    Gdip_DrawEllipse(G, pPenNormal, mobx-1, moby-1, 2.5, 2.5)
+                    
+                    Gdip_DrawEllipse(G, pPenNormal, mobx-1, moby-1, 2.5, 2.5/2)
 
                 }
                 
@@ -156,13 +169,17 @@ ShowPlayer(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     ; having this in a separate loop forces it to be drawn on top
     for index, mob in mobs
     {
+        
+        mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
+        moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+        correctedPos := findNewPos(mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+        mobx := correctedPos["x"]
+        moby := correctedPos["y"]
         if (mob["isBoss"]) {
             if (settings["showBosses"]) {
                 if (mob["mode"] != 0 and mob["mode"] != 12) {
                     ;WriteLog("Boss: " mob["textTitle"])
-                    mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
-                    moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
-                    Gdip_DrawEllipse(G, pPenBoss, mobx-3, moby-3, 6, 6)
+                    Gdip_DrawEllipse(G, pPenBoss, mobx-3, moby-3, 6, 6/2)
                 }
             }
         }
@@ -170,43 +187,44 @@ ShowPlayer(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
             if (settings["showUniqueMobs"]) {
                 if (mob["mode"] != 0 and mob["mode"] != 12) { ; not dead
                     ;WriteLog("Unique: " mob["textTitle"])
-                    mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
-                    moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+                    
                     if (settings["showImmunities"]) {
                         immunities := mob["immunities"]
                         noImmunities := immunities["physical"] + immunities["magic"] + immunities["fire"] + immunities["light"] + immunities["cold"] + immunities["poison"]
                         sliceSize := 360 / noImmunities
-                        angleDegrees := 40
-                        dotSize := 10
+                        angleDegrees := 90
+                        dotSize := 11
+                        dotAdjust := 5
                         ;WriteLog(mob["txtFileNo"] " " immunities["fire"] immunities["light"] immunities["cold"] immunities["poison"])
                         txtFileNo := mob["txtFileNo"]
                         ;WriteLog("noImmunities: " noImmunities ", txtFileNo: " txtFileNo ", " immunities["physical"] immunities["magic"] immunities["fire"] immunities["light"] immunities["cold"] immunities["poison"])
                         if (immunities["physical"]) {
-                            Gdip_DrawPie(G, pPenPhysical, mobx-5, moby-5, dotSize, dotSize, angleDegrees, sliceSize)
+                            
+                            Gdip_DrawPie(G, pPenPhysical, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["magic"]) {
-                            Gdip_DrawPie(G, pPenMagic, mobx-5, moby-5, dotSize, dotSize, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenMagic, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["fire"]) {
-                            Gdip_DrawPie(G, pPenFire, mobx-5, moby-5, dotSize, dotSize, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenFire, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["light"]) {
-                            Gdip_DrawPie(G, pPenLight, mobx-5, moby-5, dotSize, dotSize, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenLight, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["cold"]) {
-                            Gdip_DrawPie(G, pPenCold, mobx-5, moby-5, dotSize, dotSize, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenCold, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["poison"]) {
-                            Gdip_DrawPie(G, pPenPoison, mobx-2, moby-2, dotSize, dotSize, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenPoison, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                     }
-                    Gdip_DrawEllipse(G, pPenUnique, mobx-3, moby-3, 5, 5)
+                    Gdip_DrawEllipse(G, pPenUnique, mobx-3, moby-3, 5, 5/2)
                 }
             }
         }
@@ -224,6 +242,7 @@ ShowPlayer(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     Gdip_DeletePen(pPenCold)
     Gdip_DeletePen(pPenPoison)
 
+    
     ; draw way point line
     if (settings["showWaypointLine"]) {
         ;WriteLog(settings["showWaypointLine"])
@@ -232,6 +251,9 @@ ShowPlayer(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
             wparray := StrSplit(waypointHeader, ",")
             waypointX := (wparray[1] * serverScale) + padding
             wayPointY := (wparray[2] * serverScale) + padding
+            correctedPos := findNewPos(waypointX, wayPointY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+            waypointX := correctedPos["x"]
+            wayPointY := correctedPos["y"]
             pPen := Gdip_CreatePen(0x55ffFF00, 3)
             Gdip_DrawLine(G, pPen, xPosDot, yPosDot, waypointX, wayPointY)
             Gdip_DeletePen(pPen)
@@ -249,6 +271,9 @@ ShowPlayer(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
                 ;exitArray[2] ; name of exit
                 exitX := (exitArray[3] * serverScale) + padding
                 exitY := (exitArray[4] * serverScale) + padding
+                correctedPos := findNewPos(exitX, exitY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                exitX := correctedPos["x"]
+                exitY := correctedPos["y"]
 
                 ; only draw the line if it's a 'next' exit
                 if (isNextExit(gameMemoryData["levelNo"]) == exitArray[1]) {
@@ -268,6 +293,9 @@ ShowPlayer(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
             ;bossArray[1] ; name of boss
             bossX := (bossArray[2] * serverScale) + padding
             bossY := (bossArray[3] * serverScale) + padding
+            correctedPos := findNewPos(bossX, bossY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+            bossX := correctedPos["x"]
+            bossY := correctedPos["y"]
 
             ; only draw the line if it's a 'next' exit
             pPen := Gdip_CreatePen(0xFFFF0000, 3)
@@ -281,74 +309,66 @@ ShowPlayer(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
         pPen := Gdip_CreatePen(0xff00AA00, 4)
         for index, player in otherPlayers
         {
-            playerx := ((player["x"] - mapData["mapOffsetX"]) * serverScale) + padding
-            playery := ((player["y"] - mapData["mapOffsetY"]) * serverScale) + padding
-            Gdip_DrawRectangle(G, pPen, playerx-2, playery-2, 4, 4)
+            
+            if (gameMemoryData["playerName"] != player["playerName"]) {
+                ;WriteLog(gameMemoryData["playerName"] " " player["playerName"])
+                playerx := ((player["x"] - mapData["mapOffsetX"]) * serverScale) + padding
+                playery := ((player["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+                correctedPos := findNewPos(playerx, playery, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                playerx := correctedPos["x"]
+                playery := correctedPos["y"]
+
+                Gdip_DrawRectangle(G, pPen, playerx-2, playery-2, 4, 4)
+            }
         }
         Gdip_DeletePen(pPen)    
     }
 
-
-
-    ; draw player
-    pPen := Gdip_CreatePen(0xff00FF00, 6)
-    Gdip_DrawRectangle(G, pPen, xPosDot-2, yPosDot-2, 6, 6)
-    ;Gdip_DrawRectangle(G, pPen, 0, 0, Width, Height) ;outline for whole map used for troubleshooting
-    Gdip_DeletePen(pPen)
-
-        ;runeColor := 0xff . settings["runeColor"] 
-    runeColor := 0xccFFa700
-    uniqueColor := 0xccBBA45B
-    setColor := 0xcc00FC00
-
+    ; draw items
+    ;runeColor := 0xff . settings["runeColor"] 
+    runeColor := 0xcc . settings["runeItemColor"] 
+    uniqueColor := 0xcc . settings["uniqueItemColor"] 
+    setColor := 0xcc . settings["setItemColor"] 
     pPenRune := Gdip_CreatePen(runeColor, 12)
     pPenRune2 := Gdip_CreatePen(0xccffffff, 8)
-
     pPenUnique := Gdip_CreatePen(uniqueColor, 12)
     pPenUnique2 := Gdip_CreatePen(0xccffffff, 8)
-
     pPenSetItem := Gdip_CreatePen(setColor, 12)
     pPenSetItem2 := Gdip_CreatePen(0xccffffff, 8)
-
-
     ; show items
     if (settings["showItems"]) {
         items := gameMemoryData["items"]
         for index, item in items
         {
+            itemx := ((item["itemx"] - mapData["mapOffsetX"]) * serverScale) + padding
+            itemy := ((item["itemy"] - mapData["mapOffsetY"]) * serverScale) + padding
+            correctedPos := findNewPos(itemx, itemy, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+            itemx := correctedPos["x"]
+            itemy := correctedPos["y"]
             if (item["isRune"] == 1) { ; rune
-            
-                itemx := ((item["itemx"] - mapData["mapOffsetX"]) * serverScale) + padding
-                itemy := ((item["itemy"] - mapData["mapOffsetY"]) * serverScale) + padding
                 ticktock := uiData["ticktock"]
                 if (ticktock) {
-                    Gdip_DrawEllipse(G, pPenRune, itemx-2, itemy-2, 12, 12)
+                    Gdip_DrawEllipse(G, pPenRune, itemx-2, itemy-1, 12, 12/2)
                 } else {
-                    Gdip_DrawEllipse(G, pPenRune2, itemx, itemy, 8, 8)
+                    Gdip_DrawEllipse(G, pPenRune2, itemx, itemy, 8, 8/2)
                 }
             }
 
             if (item["itemQuality"] == 7) { ; unique
-            
-                itemx := ((item["itemx"] - mapData["mapOffsetX"]) * serverScale) + padding
-                itemy := ((item["itemy"] - mapData["mapOffsetY"]) * serverScale) + padding
                 ticktock := uiData["ticktock"]
                 if (ticktock) {
-                    Gdip_DrawEllipse(G, pPenUnique, itemx-2, itemy-2, 12, 12)
+                    Gdip_DrawEllipse(G, pPenUnique, itemx-2, itemy-1, 12, 12/2)
                 } else {
-                    Gdip_DrawEllipse(G, pPenUnique2, itemx, itemy, 8, 8)
+                    Gdip_DrawEllipse(G, pPenUnique2, itemx, itemy, 8, 8/2)
                 }
             }
 
             if (item["itemQuality"] == 5) { ; set
-            
-                itemx := ((item["itemx"] - mapData["mapOffsetX"]) * serverScale) + padding
-                itemy := ((item["itemy"] - mapData["mapOffsetY"]) * serverScale) + padding
                 ticktock := uiData["ticktock"]
                 if (ticktock) {
-                    Gdip_DrawEllipse(G, pPenSetItem, itemx-2, itemy-2, 12, 12)
+                    Gdip_DrawEllipse(G, pPenSetItem, itemx-2, itemy-1, 12, 12/2)
                 } else {
-                    Gdip_DrawEllipse(G, pPenSetItem2, itemx, itemy, 8, 8)
+                    Gdip_DrawEllipse(G, pPenSetItem2, itemx, itemy, 8, 8/2)
                 }
             }
         }
@@ -360,14 +380,21 @@ ShowPlayer(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     Gdip_DeletePen(pPenSetItem)
     Gdip_DeletePen(pPenSetItem2)
 
-    G2 := Gdip_GraphicsFromHDC(hdc)
-    pBitmap := Gdip_RotateBitmap(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
+    ; draw player
+    pPen := Gdip_CreatePen(0xff00FF00, 6)
+    ;correctedPos := findNewPos(xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+    ;WriteLog(xPosDot " " yPosDot " " midW " " midH " " scaledWidth " " scaledHeight " " scale " " newPos["x"] " " newPos["y"])
+    Gdip_DrawRectangle(G, pPen, xPosDot-3, (yPosDot)-2 , 6, 6)
+    ; Gdip_DrawRectangle(G, pPen, 0, 0, scaledWidth, scaledHeight) ;outline for whole map used for troubleshooting
+    Gdip_DeletePen(pPen)
 
-    Gdip_DrawImage(G2, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
+    Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
     UpdateLayeredWindow(unitHwnd1, hdc, leftMargin, topMargin, rotatedWidth, rotatedHeight)
 
     ElapsedTime := A_TickCount - StartTime
+    ;ToolTip % "`n`n`n`n" ElapsedTime
     ;WriteLog("Draw players " ElapsedTime " ms taken")
+    
     SelectObject(hdc, obm)
     DeleteObject(hbm)
     DeleteDC(hdc)
@@ -437,4 +464,34 @@ isNextExit(currentLvl) {
         case "130": return "131"
     }
     return
+}
+
+
+; converting to cartesian to polar and back again sucks
+; I wish my matrix transformations worked
+findNewPos(xPosDot, yPosDot, centerX, centerY, RWidth, RHeight, scale) {
+    newAngle := findAngle(xPosDot, yPosDot, centerX, centerY) + 45
+    distance := getDistanceFromCoords(xPosDot, yPosDot, centerX, centerY) * scale
+    newPos := getPosFromAngle((RWidth/2),(RHeight/2),distance,newAngle)
+    newPos["y"] := (RHeight/2) + ((RHeight/2) - newPos["y"]) /2
+    return newPos
+}
+
+
+findAngle(xPosDot, yPosDot, midW, midH) {
+    Pi := 4 * ATan(1)
+    Conversion := -180 / Pi  ; Radians to deg.
+    Angle2 := DllCall("msvcrt.dll\atan2", "Double", yPosDot-midH, "Double", xPosDot-midW, "CDECL Double") * Conversion
+    if (Angle2 < 0)
+        Angle2 += 360
+    return Angle2
+}
+
+getDistanceFromCoords(x2,y2,x1,y1){
+    return sqrt((y2-y1)**2+(x2-x1)**2)
+}
+
+getPosFromAngle(x1,y1,len,ang){
+	ang:=(ang-90) * 0.0174532925
+	return {"x": x1+len*cos(ang),"y": y1+len*sin(ang)}
 }

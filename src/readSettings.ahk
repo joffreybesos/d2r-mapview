@@ -40,6 +40,10 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, coldImmuneColor, settings.ini, Colors, coldImmuneColor, "0000FF"
     IniRead, poisonImmuneColor, settings.ini, Colors, poisonImmuneColor, "32CD32"
     
+    IniRead, runeItemColor, settings.ini, Colors, runeItemColor, "FFa700"
+    IniRead, uniqueItemColor, settings.ini, Colors, uniqueItemColor, "BBA45B"
+    IniRead, setItemColor, settings.ini, Colors, setItemColor, "00FC00"
+
     ; lines
     IniRead, showWaypointLine, settings.ini, Lines, showWaypointLine, "false"
     IniRead, showNextExitLine, settings.ini, Lines, showNextExitLine, "true"
@@ -115,6 +119,9 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("lightImmuneColor", lightImmuneColor)
     settings.Insert("coldImmuneColor", coldImmuneColor)
     settings.Insert("poisonImmuneColor", poisonImmuneColor)
+    settings.Insert("runeItemColor", runeItemColor)
+    settings.Insert("uniqueItemColor", uniqueItemColor)
+    settings.Insert("setItemColor", setItemColor)
     settings.Insert("showImmunities", showImmunities)
     settings.Insert("showWaypointLine", showWaypointLine)
     settings.Insert("showNextExitLine", showNextExitLine)

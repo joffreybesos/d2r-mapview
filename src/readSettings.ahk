@@ -27,6 +27,8 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, showImmunities, settings.ini, Units, showImmunities, "true"
     IniRead, showOtherPlayers, settings.ini, Units, showOtherPlayers, "true"
     IniRead, showItems, settings.ini, Units, showItems, "true"
+    IniRead, showShrines, settings.ini, Units, showShrines, "true"
+    IniRead, showPortals, settings.ini, Units, showPortals, "true"
     
     ; colours
     IniRead, normalMobColor, settings.ini, Colors, normalMobColor, "FFFFFF"
@@ -43,6 +45,11 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, runeItemColor, settings.ini, Colors, runeItemColor, "FFa700"
     IniRead, uniqueItemColor, settings.ini, Colors, uniqueItemColor, "BBA45B"
     IniRead, setItemColor, settings.ini, Colors, setItemColor, "00FC00"
+
+    IniRead, portalColor, settings.ini, Colors, portalColor, "FFD700"
+    IniRead, redPortalColor, settings.ini, Colors, redPortalColor, "FF0000"
+    IniRead, shrineColor, settings.ini, Colors, shrineColor, "FFD700"
+    IniRead, shrineTextSize, settings.ini, Colors, shrineTextSize, "14"
 
     ; lines
     IniRead, showWaypointLine, settings.ini, Lines, showWaypointLine, "false"
@@ -90,6 +97,8 @@ readSettings(settingsFile, ByRef settings) {
     showImmunities := showImmunities = "true"
     showGameInfo := showGameInfo = "true"
     showItems := showItems = "true"
+    showShrines := showShrines = "true"
+    showPortals := showPortals = "true"
 
     ; AHK also doesn't let you declare an array a more sensible way
     settings := {}
@@ -109,6 +118,9 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("showDeadMobs", showDeadMobs)
     settings.Insert("showOtherPlayers", showOtherPlayers)
     settings.Insert("showItems", showItems)
+    settings.Insert("showShrines", showShrines)
+    settings.Insert("showPortals", showPortals)
+
     settings.Insert("normalMobColor", normalMobColor)
     settings.Insert("uniqueMobColor", uniqueMobColor)
     settings.Insert("bossColor", bossColor)
@@ -122,6 +134,11 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("runeItemColor", runeItemColor)
     settings.Insert("uniqueItemColor", uniqueItemColor)
     settings.Insert("setItemColor", setItemColor)
+    settings.Insert("redPortalColor", redPortalColor)
+    settings.Insert("portalColor", portalColor)
+    settings.Insert("shrineColor", shrineColor)
+    settings.Insert("shrineTextSize", shrineTextSize)
+
     settings.Insert("showImmunities", showImmunities)
     settings.Insert("showWaypointLine", showWaypointLine)
     settings.Insert("showNextExitLine", showNextExitLine)

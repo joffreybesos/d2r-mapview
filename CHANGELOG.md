@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.3] - 2021-12-13 - Shrines and portals
+
+- Shrine types will now show on the map
+- You have to be in range for it to show, they will not persist
+- Town portals will now show on the map as well
+- Red portals (such as cow level) should appear in red, normal portals in blue
+- Can be turned on/off with `showShrines` and `showPortals` in `settings.ini`
+- Can also configure `portalColor`, `redPortalColor`, `shrineColor` and `shrineTextSize`
+
 ## [2.3.2] - 2021-12-13 - Performance improvements
 
 - Major refactor of how mobs/player units are drawn, which gives better performance

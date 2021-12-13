@@ -13,11 +13,11 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
-#Include %A_ScriptDir%\ui\showPlayer.ahk
+#Include %A_ScriptDir%\ui\showUnits.ahk
 #Include %A_ScriptDir%\ui\showLastGame.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.3.2"
+expectedVersion := "2.3.3"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -157,7 +157,7 @@ While 1 {
             }
             ; update player layer on each loop
             uiData["ticktock"] := ticktock
-            ShowPlayer(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+            ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
             checkAutomapVisibility(d2rprocess, settings, gameMemoryData["levelNo"])
 
             lastlevel := gameMemoryData["levelNo"]
@@ -253,7 +253,7 @@ MapSizeIncrease:
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
         imageData["levelScale"] := levelScale
         ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-        ;ShowPlayer(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+        ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
         WriteLog("Increased level " levelNo " scale by 0.05 to " levelScale)
     }
     return
@@ -268,7 +268,7 @@ MapSizeDecrease:
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
         imageData["levelScale"] := levelScale
         ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-        ;ShowPlayer(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+        ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
         WriteLog("Decreased level " levelNo " scale by 0.05 to " levelScale)
     }
     return
@@ -285,7 +285,7 @@ MapSizeDecrease:
             IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
             imageData["levelxmargin"] := levelxmargin
             ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-            ;ShowPlayer(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+            ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
         }
         return
     }
@@ -299,7 +299,7 @@ MapSizeDecrease:
             IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
             imageData["levelxmargin"] := levelxmargin
             ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-            ;ShowPlayer(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+            ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
         }
         return
     }
@@ -313,7 +313,7 @@ MapSizeDecrease:
             IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
             imageData["levelymargin"] := levelymargin
             ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-            ;ShowPlayer(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+            ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
         }
         return
     }
@@ -327,7 +327,7 @@ MapSizeDecrease:
             IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
             imageData["levelymargin"] := levelymargin
             ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-            ;ShowPlayer(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+            ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
         }
         return
     }

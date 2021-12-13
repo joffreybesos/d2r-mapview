@@ -3,6 +3,7 @@
 #Include %A_ScriptDir%\memory\readOtherPlayers.ahk
 #Include %A_ScriptDir%\memory\readMobs.ahk
 #Include %A_ScriptDir%\memory\readItems.ahk
+#Include %A_ScriptDir%\memory\readObjects.ahk
 
 #Include %A_ScriptDir%\include\logging.ahk
 SetWorkingDir, %A_ScriptDir%
@@ -83,6 +84,12 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
         ReadItems(d2rprocess, startingOffset, items)
     }
 
+     ; get items
+    if (settings["showShrines"] or settings["showPortals"]) {
+        ReadObjects(d2rprocess, startingOffset, objects)
+    }
+
+
     ; player position
     pPath := playerUnit + 0x38
     pathAddress := d2rprocess.read(pPath, "Int64")
@@ -94,7 +101,7 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     if (!xPos) {
         WriteLog("Did not find player position at player offset " playerOffset) 
     }
-    gameMemoryData := {"gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "otherPlayers": otherPlayerData, "items": items, "playerName": playerName }
+    gameMemoryData := {"gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName }
     ElapsedTime := A_TickCount - StartTime
     ;ToolTip % "`n`n`n`n" ElapsedTime
 }

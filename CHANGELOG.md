@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.4] - 2021-12-13 - Offset pattern scanning
+
+- Static offsets are now automatically calculated based on patterns
+- This means when Blizzard updates D2R this MH will still work
+- Shout out to Map Assist for the patterns!
+
 ## [2.3.3] - 2021-12-13 - Shrines and portals
 
 - Shrine types will now show on the map

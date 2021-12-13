@@ -66,13 +66,8 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, moveMapUp, settings.ini, Hotkeys, moveMapUp, #Up
     IniRead, moveMapDown, settings.ini, Hotkeys, moveMapDown, #Down
 
-
-    ; memory
-    IniRead, playerOffset, settings.ini, Memory, playerOffset
-    IniRead, uiOffset, settings.ini, Memory, uiOffset
-    IniRead, gameNameOffset, settings.ini, Memory, gameNameOffset
-    IniRead, readInterval, settings.ini, Memory, readInterval, 10
-    IniRead, performanceMode, settings.ini, Memory, performanceMode, 0
+    ; other
+    IniRead, performanceMode, settings.ini, Other, performanceMode, 0
 
     ; multi session
     IniRead, enableD2ML, settings.ini, MultiLaunch, enableD2ML
@@ -151,11 +146,7 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("moveMapRight", moveMapRight)
     settings.Insert("moveMapUp", moveMapUp)
     settings.Insert("moveMapDown", moveMapDown)
-    settings.Insert("playerOffset", playerOffset)
-    settings.Insert("uiOffset", uiOffset)
-    settings.Insert("gameNameOffset", gameNameOffset)
-    settings.Insert("showGameInfo", showGameInfo)
-    settings.Insert("readInterval", readInterval)
+    settings.Insert("showGameInfo", showGameInfo)  
     settings.Insert("performanceMode", performanceMode)
     settings.Insert("enableD2ML", enableD2ML)
     settings.Insert("gameWindowId", gameWindowId)
@@ -173,8 +164,4 @@ readSettings(settingsFile, ByRef settings) {
     }
     WriteLog("Starting d2r-mapview...")
 
-    if (!playerOffset) {
-        WriteLog("ERROR: startingOffset not set, this is mandatory for this MH to function")
-        ExitApp
-    }
 }

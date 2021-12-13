@@ -3,29 +3,30 @@
 #Include %A_ScriptDir%\include\logging.ahk
 SetWorkingDir, %A_ScriptDir%
 
-scanOffset(d2rprocess, lastOffset, startingOffset, uiOffset) {
+scanForPlayer(d2rprocess, lastOffset, startingOffset, settings) {
     ; check the one that previously worked, it's likely not checkLastOffset()
-    playerOffset := checkLastOffset(d2rprocess, lastOffset, uiOffset)
+    
+    playerOffset := checkLastOffset(d2rprocess, lastOffset, settings)
     if (playerOffset) {
         ;WriteLogDebug("Using last offset " playerOffset " " lastOffset)
         return playerOffset
     }
     ; if the last offset doesn't seem valid anymore then you're in the menu or a new game
-    return scanForPlayerOffset(d2rprocess, startingOffset, uiOffset)
+    return scanForPlayerOffset(d2rprocess, startingOffset, settings)
 }
 
-checkLastOffset(d2rprocess, startingOffset, uiOffset) {
-    return getPlayerOffset(d2rprocess, startingOffset, 1, uiOffset)
+checkLastOffset(d2rprocess, startingOffset, settings) {
+    return getPlayerOffset(d2rprocess, startingOffset, 1, settings)
 }
 
-scanForPlayerOffset(d2rprocess, startingOffset, uiOffset) {
+scanForPlayerOffset(d2rprocess, startingOffset, settings) {
     WriteLogDebug("Scanning for new player offset address, starting default offset " startingOffset)
-    return getPlayerOffset(d2rprocess, startingOffset, 128, uiOffset)
+    return getPlayerOffset(d2rprocess, startingOffset, 128, settings)
 }
 
-getPlayerOffset(d2r, startingOffset, loops, uiOffset) {
-
-    expOffset := uiOffset + 0x13
+getPlayerOffset(d2r, startingOffset, loops, settings) {
+    uiOffset := settings["uiOffset"]
+    expOffset := settings["expOffset"]
 
     found := false
     loop, %loops%
@@ -70,7 +71,7 @@ getPlayerOffset(d2r, startingOffset, loops, uiOffset) {
                     }
                     if (xPos > 0 and yPos > 0 and StrLen(mapSeed) > 6) {
                         if (loops > 1) {
-                            WriteLog("SUCCESS: Found player offset: " newOffset ", at entry " attempts ", which gives map seed: " mapSeed)
+                            WriteLog("SUCCESS: Found current player offset: " newOffset ", at entry " attempts ", which gives map seed: " mapSeed)
                         }
                         SetFormat Integer, D
                         newOffset := newOffset + 0 ;convert to decimal

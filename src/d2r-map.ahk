@@ -4,10 +4,11 @@ SendMode Input
 SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\logging.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk
-#Include %A_ScriptDir%\memory\scanOffset.ahk
+#Include %A_ScriptDir%\memory\scanForPlayer.ahk
 #Include %A_ScriptDir%\memory\readGameMemory.ahk
 #Include %A_ScriptDir%\memory\isAutomapShown.ahk
 #Include %A_ScriptDir%\memory\readLastGameName.ahk
+#Include %A_ScriptDir%\memory\patternScan.ahk
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
 #Include %A_ScriptDir%\ui\showMap.ahk
@@ -17,7 +18,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showLastGame.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.3.3"
+expectedVersion := "2.3.4"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -41,11 +42,6 @@ WriteLog("This map hack may not work on Windows 11")
 ClearCache(A_Temp)
 readSettings(settings.ini, settings)
 
-
-playerOffset := settings["playerOffset"]
-startingOffset := settings["playerOffset"]
-readInterval := settings["readInterval"]
-uiOffset := settings["uiOffset"]
 lastlevel:=""
 lastSeed:=""
 lastGameStartTime:=0
@@ -89,6 +85,11 @@ Hotkey, %moveMapDownKey%, MoveMapDown
 
 ; initialise memory reading
 d2rprocess := initMemory(gameWindowId)
+patternScan(d2rprocess, settings)
+playerOffset := settings["playerOffset"]
+startingOffset := settings["playerOffset"]
+uiOffset := settings["uiOffset"]
+readInterval := settings["readInterval"]
 
 ; create GUI windows
 Gui, GameInfo: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
@@ -104,7 +105,7 @@ offsetAttempts := 6
 ticktock := 0
 While 1 {
     ; scan for the player offset
-    playerOffset := scanOffset(d2rprocess, playerOffset, startingOffset, uiOffset)
+    playerOffset := scanForPlayer(d2rprocess, playerOffset, startingOffset, settings)
 
     if (!playerOffset) {
         offsetAttempts += 1

@@ -54,90 +54,102 @@ ReadObjects(d2rprocess, startingOffset, ByRef gameObjects) {
 
 isShrine(txtFileNo) {
     switch (txtFileNo) {
-        case 2: return 1  ; Shrine
-        case 80: return 1  ; Obelisk
-        case 81: return 1  ; ForestAltar
-        case 82: return 1  ; BubblingPoolOfBlood
-        case 83: return 1  ; HornShrine
-        case 84: return 1  ; HealingWell
-        case 85: return 1  ; BullHealthShrine
-        case 86: return 1  ; SteleDesertMagicShrine
-        case 93: return 1  ; InnerHellManaShrine
-        case 96: return 1  ; InnerHellHealthShrine
-        case 97: return 1  ; InnerHellShrine
-        case 109: return 1  ; PalaceHealthShrine
-        case 116: return 1  ; SnakeWomanShrine
-        case 123: return 1  ; InnerHellShrine2
-        case 124: return 1  ; InnerHellShrine3
-        case 133: return 1  ; ArcaneSanctuaryShrine
-        case 134: return 1  ; DesertShrine2
-        case 135: return 1  ; DesertShrine3
-        case 136: return 1  ; DesertShrine1
-        case 150: return 1  ; DesertShrine5
-        case 151: return 1  ; DesertShrine4
-        case 172: return 1  ; DesertHealthShrine
-        case 184: return 1  ; JungleShrine2
-        case 190: return 1  ; JungleShrine3
-        case 191: return 1  ; JungleShrine4
-        case 197: return 1  ; JungleShrine5
-        case 199: return 1  ; MephistoShrine1
-        case 200: return 1  ; MephistoShrine2
-        case 201: return 1  ; MephistoShrine3
-        case 202: return 1  ; MephistoManaShrine
-        case 206: return 1  ; MafistoHealthShrine
-        case 226: return 1  ; OuterHellShrine
-        case 231: return 1  ; OuterHellShrine2
-        case 232: return 1  ; OuterHellShrine3
-        case 236: return 1  ; HellHealthShrine
-        case 249: return 1  ; HellManaShrine
-        case 260: return 1  ; Act1HolyShrine
-        case 262: return 1  ; Act1CathedralShrine
-        case 263: return 1  ; Act1JailShrine1
-        case 264: return 1  ; Act1JailShrine2
-        case 265: return 1  ; Act1JailShrine3
-        case 275: return 1  ; CavesHealthShrine
-        case 276: return 1  ; CavesManaShrine
-        case 277: return 1  ; CaveMagicShrine
-        case 278: return 1  ; Act3DungeonManaShrine
-        case 279: return 1  ; Act3SewersMagicShrine1
-        case 280: return 1  ; Act3SewersHealthWell
-        case 281: return 1  ; Act3SewersManaWell
-        case 282: return 1  ; Act3SewersMagicShrine2
-        case 299: return 1  ; Act2HaramMagicShrine1
-        case 300: return 1  ; Act2HaramMagicShrine2
-        case 301: return 1  ; MaggotHealthWell
-        case 302: return 1  ; MaggotManaWell
-        case 303: return 1  ; ArcaneSanctuaryMagicShrine
-        case 325: return 1  ; Act3SewerMagicShrine
-        case 361: return 1  ; Act3DungeonMagicShrine
-        case 414: return 1  ; ExpansionWildernessShrine1
-        case 415: return 1  ; ExpansionWildernessShrine2
-        case 421: return 1  ; ExpansionWildernessShrine3
-        case 422: return 1  ; ExpansionManaShrine
-        case 423: return 1  ; ExpansionHealthShrine
-        case 427: return 1  ; ExpansionWildernessShrine4
-        case 428: return 1  ; ExpansionWildernessShrine5
-        case 464: return 1  ; IceCaveHealthShrine
-        case 465: return 1  ; IceCaveManaShrine
-        case 472: return 1  ; IceCaveMagicShrine
-        case 479: return 1  ; IceCaveMagicShrine2
-        case 483: return 1  ; WorldstoneManaShrine
-        case 484: return 1  ; WorldstoneHealthShrine
-        case 488: return 1  ; WorldstoneMagicShrine
-        case 491: return 1  ; ExpansionSnowyManaShrine1
-        case 492: return 1  ; ExpansionSnowyHealthShrine
-        case 493: return 1  ; ExpansionSnowyWell
-        case 495: return 1  ; ExpansionSnowyMagicShrine2
-        case 496: return 1  ; ExpansionWildernessWaypoint
-        case 497: return 1  ; ExpansionSnowyMagicShrine3
-        case 498: return 1  ; WorldstoneWell
-        case 499: return 1  ; WorldstoneMagicShrine2
-        case 503: return 1  ; WorldstoneMagicShrine3
-        case 509: return 1  ; ExpansionTempleMagicShrine1
-        case 512: return 1  ; ExpansionTempleMagicShrine2
-        case 520: return 1  ; ExpansionTempleMagicShrine
-        case 521: return 1  ; ExpansionTempleHealthShrine
-        case 522: return 1  ; ExpansionTempleManaShrine
+        case 2: return 1 ;DeerShrine
+        case 77: return 1 ;ShrineAltar
+        case 81: return 1 ;ForestAltar
+        case 83: return 1 ;HornShrine
+        case 85: return 1 ;BullShrine
+        case 86: return 1 ;SteleShrine
+        case 93: return 1 ;InnerHellManaShrine1
+        case 96: return 1 ;InnerHellHealthShrine1
+        case 97: return 1 ;InnerHellMagicShrine1
+        case 109: return 1 ;PalaceShrine
+        case 116: return 1 ;SnakeWomanShrine
+        case 120: return 1 ;ShrineHealthDungeon
+        case 123: return 1 ;InnerHellMagicShrine2
+        case 124: return 1 ;InnerHellMagicShrine3
+        case 133: return 1 ;ShrineMagicArcaneSanctuary1
+        case 134: return 1 ;DesertShrine00
+        case 135: return 1 ;DesertShrine01
+        case 136: return 1 ;DesertShrine02
+        case 149: return 1 ;TaintedSunShrine
+        case 150: return 1 ;DesertShrine03
+        case 151: return 1 ;DesertShrine04
+        case 164: return 1 ;ManaWell1
+        case 165: return 1 ;ManaWell2
+        case 166: return 1 ;ManaWell3
+        case 167: return 1 ;ManaWell4
+        case 168: return 1 ;ManaWell5
+        case 172: return 1 ;ShrineHealth
+        case 173: return 1 ;ShrineMana
+        case 184: return 1 ;JungleShrine2
+        case 190: return 1 ;JungleShrine3
+        case 191: return 1 ;JungleShrine4
+        case 197: return 1 ;JungleShrine5
+        case 199: return 1 ;MephistoShrine1
+        case 200: return 1 ;MephistoShrine2
+        case 201: return 1 ;MephistoShrine3
+        case 202: return 1 ;MephistoShrine4
+        case 206: return 1 ;MephistoShrine5
+        case 226: return 1 ;HellShrine1
+        case 231: return 1 ;OuterShrineHell2
+        case 232: return 1 ;OuterShrineHell3
+        case 249: return 1 ;HellManaWell1
+        case 260: return 1 ;HolyShrineAct1
+        case 262: return 1 ;Act1CathedralShrine
+        case 263: return 1 ;Act1JailShrine
+        case 264: return 1 ;Act1JailHealthShrine
+        case 265: return 1 ;Act1JailManaShrine
+        case 275: return 1 ;HealthShrineCavesAct1
+        case 276: return 1 ;ManaShrineCavesAct1
+        case 277: return 1 ;MagicShrinesCavesAct1
+        case 278: return 1 ;ShrineManaDungeon
+        case 279: return 1 ;ShrineMagicSewer
+        case 280: return 1 ;ShrineHealthSewer
+        case 281: return 1 ;ShrineManaSewer
+        case 282: return 1 ;ShrineMagicSewer2
+        case 299: return 1 ;HaremShrine1
+        case 300: return 1 ;HaremShrine2
+        case 301: return 1 ;MaggotShrineHealth
+        case 302: return 1 ;MaggotShrineMana
+        case 303: return 1 ;ShrineMagicArcaneSanctuary2
+        case 319: return 1 ;ShrineArcaneHealth
+        case 320: return 1 ;ShrineArcaneMana
+        case 325: return 1 ;ShrineMagicSewer3
+        case 343: return 1 ;ShrineManaKurast
+        case 344: return 1 ;ShrineHealthKurast
+        case 361: return 1 ;DungeonShrineMagic
+        case 414: return 1 ;ShrineWildernessExp1
+        case 415: return 1 ;ShrineWildernessExp2
+        case 421: return 1 ;ShrineAltarExp
+        case 422: return 1 ;ShrineManaExp
+        case 423: return 1 ;ShrineHealthExp
+        case 427: return 1 ;ShrineWildernessExp3
+        case 428: return 1 ;ShrineWildernessExp4
+        case 464: return 1 ;ShrineHealthIceCave
+        case 465: return 1 ;ShrineManaIceCave
+        case 472: return 1 ;ShrineMagicIceCave
+        case 479: return 1 ;ShrineMagicIceCave2
+        case 483: return 1 ;ShrineBaal1
+        case 484: return 1 ;ShrineBaal2
+        case 488: return 1 ;ShrineBaalMagic
+        case 491: return 1 ;ShrineBaalMana
+        case 492: return 1 ;ShrineBaalHealth
+        case 495: return 1 ;ShrineMagicSnow1
+        case 497: return 1 ;ShrineMagicSnow2
+        case 499: return 1 ;ShrineBallMagic2
+        case 503: return 1 ;ShrineBaalMagic3
+        case 509: return 1 ;ShrineTempleMagic1
+        case 512: return 1 ;ShrineTempleMagic2
+        case 520: return 1 ;ShrineTempleMagic3
+        case 521: return 1 ;ShrineTempleHealth
+        case 522: return 1 ;ShrineTempleMana
+        case 574: return 1 ;DesertShrineArmor
+        case 575: return 1 ;DesertShrineCombat
+        case 576: return 1 ;DesertShrineResist
+        case 577: return 1 ;DesertShrineSkill
+        case 578: return 1 ;DesertShrineRecharge
+        case 579: return 1 ;DesertShrineStamina
    }
    return 0
 }

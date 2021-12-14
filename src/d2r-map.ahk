@@ -18,7 +18,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showLastGame.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.3.4"
+expectedVersion := "2.3.5"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -56,6 +56,8 @@ global isMapShowing:=1
 global debug := settings["debug"]
 global gameWindowId := settings["gameWindowId"]
 global gameStartTime:=0
+
+global diabloFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
 
 alwaysShowKey := settings["alwaysShowKey"]
 Hotkey, IfWinActive, ahk_exe D2R.exe

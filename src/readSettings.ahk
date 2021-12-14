@@ -4,6 +4,7 @@ SetWorkingDir, %A_ScriptDir%
 
 readSettings(settingsFile, ByRef settings) {
     FileInstall, mapconfig-default.ini, mapconfig.ini , 0
+    FileInstall, exocetblizzardot-medium.otf, exocetblizzardot-medium.otf , 1
 
     IniRead, baseUrl, settings.ini, MapHost, baseUrl, ""
 
@@ -31,25 +32,35 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, showPortals, settings.ini, Units, showPortals, "true"
     
     ; colours
-    IniRead, normalMobColor, settings.ini, Colors, normalMobColor, "FFFFFF"
-    IniRead, uniqueMobColor, settings.ini, Colors, uniqueMobColor, "D4AF37"
-    IniRead, bossColor, settings.ini, Colors, bossColor, "FF0000"
-    IniRead, deadColor, settings.ini, Colors, deadColor, "000000"
-    IniRead, physicalImmuneColor, settings.ini, Colors, physicalImmuneColor, "CD853f"
-    IniRead, magicImmuneColor, settings.ini, Colors, magicImmuneColor, "ff8800"
-    IniRead, fireImmuneColor, settings.ini, Colors, fireImmuneColor, "FF0000"
-    IniRead, lightImmuneColor, settings.ini, Colors, lightImmuneColor, "FFFF00"
-    IniRead, coldImmuneColor, settings.ini, Colors, coldImmuneColor, "0000FF"
-    IniRead, poisonImmuneColor, settings.ini, Colors, poisonImmuneColor, "32CD32"
-    
-    IniRead, runeItemColor, settings.ini, Colors, runeItemColor, "FFa700"
-    IniRead, uniqueItemColor, settings.ini, Colors, uniqueItemColor, "BBA45B"
-    IniRead, setItemColor, settings.ini, Colors, setItemColor, "00FC00"
+    IniRead, normalMobColor, settings.ini, Visuals, normalMobColor, "FFFFFF"
+    IniRead, uniqueMobColor, settings.ini, Visuals, uniqueMobColor, "D4AF37"
+    IniRead, bossColor, settings.ini, Visuals, bossColor, "FF0000"
+    IniRead, deadColor, settings.ini, Visuals, deadColor, "000000"
 
-    IniRead, portalColor, settings.ini, Colors, portalColor, "FFD700"
-    IniRead, redPortalColor, settings.ini, Colors, redPortalColor, "FF0000"
-    IniRead, shrineColor, settings.ini, Colors, shrineColor, "FFD700"
-    IniRead, shrineTextSize, settings.ini, Colors, shrineTextSize, "14"
+    IniRead, normalDotSize, settings.ini, Visuals, normalDotSize, 2.5
+    IniRead, normalImmunitySize, settings.ini, Visuals, normalImmunitySize, 4
+    IniRead, uniqueDotSize, settings.ini, Visuals, uniqueDotSize, 5
+    IniRead, uniqueImmunitySize, settings.ini, Visuals, uniqueImmunitySize, 11
+    IniRead, deadDotSize, settings.ini, Visuals, deadDotSize, 2
+    IniRead, bossDotSize, settings.ini, Visuals, bossDotSize, 5
+
+    ; immunities
+    IniRead, physicalImmuneColor, settings.ini, Visuals, physicalImmuneColor, "CD853f"
+    IniRead, magicImmuneColor, settings.ini, Visuals, magicImmuneColor, "ff8800"
+    IniRead, fireImmuneColor, settings.ini, Visuals, fireImmuneColor, "FF0000"
+    IniRead, lightImmuneColor, settings.ini, Visuals, lightImmuneColor, "FFFF00"
+    IniRead, coldImmuneColor, settings.ini, Visuals, coldImmuneColor, "0000FF"
+    IniRead, poisonImmuneColor, settings.ini, Visuals, poisonImmuneColor, "32CD32"
+    
+    ; items
+    IniRead, runeItemColor, settings.ini, Visuals, runeItemColor, "FFa700"
+    IniRead, uniqueItemColor, settings.ini, Visuals, uniqueItemColor, "BBA45B"
+    IniRead, setItemColor, settings.ini, Visuals, setItemColor, "00FC00"
+
+    IniRead, portalColor, settings.ini, Visuals, portalColor, "FFD700"
+    IniRead, redPortalColor, settings.ini, Visuals, redPortalColor, "FF0000"
+    IniRead, shrineColor, settings.ini, Visuals, shrineColor, "FFD700"
+    IniRead, shrineTextSize, settings.ini, Visuals, shrineTextSize, "14"
 
     ; lines
     IniRead, showWaypointLine, settings.ini, Lines, showWaypointLine, "false"
@@ -120,6 +131,14 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("uniqueMobColor", uniqueMobColor)
     settings.Insert("bossColor", bossColor)
     settings.Insert("deadColor", deadColor)
+
+    settings.Insert("normalDotSize", normalDotSize)
+    settings.Insert("normalImmunitySize", normalImmunitySize)
+    settings.Insert("uniqueDotSize", uniqueDotSize)
+    settings.Insert("uniqueImmunitySize", uniqueImmunitySize)
+    settings.Insert("deadDotSize", deadDotSize)
+    settings.Insert("bossDotSize", bossDotSize)
+
     settings.Insert("physicalImmuneColor", physicalImmuneColor)
     settings.Insert("magicImmuneColor", magicImmuneColor)
     settings.Insert("fireImmuneColor", fireImmuneColor)
@@ -156,7 +175,6 @@ readSettings(settingsFile, ByRef settings) {
     WriteLog("- baseUrl: " baseUrl)
     WriteLog("- Map: global scale: " scale ", global top margin: " topMargin ", global left margin: " leftMargin ", opacity: " opacity)
     WriteLog("- hideTown: " hideTown ", alwaysShowMap: " alwaysShowMap)
-    WriteLog("- playerOffset: " playerOffset)
     WriteLog("- gameWindowId: " gameWindowId)
     WriteLog("- debug logging: " debug)
     if FileExist(A_Scriptdir . "\mapconfig.ini") {

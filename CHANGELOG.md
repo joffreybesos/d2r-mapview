@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.5] - 2021-12-14 - New font
+
+- Added new Diablo font!
+- Shrines text now uses new font
+- Added name above bosses (in new font)
+- Can now configure monster unit size in `settings.ini`
+- Updated shrine types, should be more accurately marked on map
+- If you find any shrines don't appear on the map, please report the map in discord
+
 ## [2.3.4] - 2021-12-13 - Offset pattern scanning
 
 - Static offsets are now automatically calculated based on patterns

@@ -92,12 +92,19 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     coldImmuneColor := 0xff . settings["coldImmuneColor"] 
     poisonImmuneColor := 0xff . settings["poisonImmuneColor"] 
 
-    pPenPhysical := Gdip_CreatePen(physicalImmuneColor, 4)
-    pPenMagic := Gdip_CreatePen(magicImmuneColor, 4)
-    pPenFire := Gdip_CreatePen(fireImmuneColor, 4)
-    pPenLight := Gdip_CreatePen(lightImmuneColor, 4)
-    pPenCold := Gdip_CreatePen(coldImmuneColor, 4)
-    pPenPoison := Gdip_CreatePen(poisonImmuneColor, 4)
+    pPenPhysical := Gdip_CreatePen(physicalImmuneColor, 5)
+    pPenMagic := Gdip_CreatePen(magicImmuneColor, 5)
+    pPenFire := Gdip_CreatePen(fireImmuneColor, 5)
+    pPenLight := Gdip_CreatePen(lightImmuneColor, 5)
+    pPenCold := Gdip_CreatePen(coldImmuneColor, 5)
+    pPenPoison := Gdip_CreatePen(poisonImmuneColor, 5)
+
+    deadDotSize := settings["deadDotSize"] 
+    normalDotSize := settings["normalDotSize"] 
+    normalImmunitySize := settings["normalImmunitySize"] 
+    uniqueDotSize := settings["uniqueDotSize"] 
+    uniqueImmunitySize := settings["uniqueImmunitySize"] 
+    bossDotSize := settings["bossDotSize"] 
 
     if (settings["showDeadMobs"]) {
         for index, mob in mobs
@@ -108,7 +115,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
                 correctedPos := findNewPos(mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 mobx := correctedPos["x"]
                 moby := correctedPos["y"]
-                Gdip_DrawEllipse(G, pPenDead, mobx-1, moby-1, 2, 2/2)
+                Gdip_DrawEllipse(G, pPenDead, mobx-(deadDotSize/2), moby-(deadDotSize/2), deadDotSize, deadDotSize/2)
             }
         }
     }
@@ -130,35 +137,34 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
                         noImmunities := immunities["physical"] + immunities["magic"] + immunities["fire"] + immunities["light"] + immunities["cold"] + immunities["poison"]
                         sliceSize := 360 / noImmunities
                         angleDegrees := 90
-                        dotSize := 4
-                        dotAdjust := 1.2
+                        dotAdjust := normalImmunitySize/2
                         if (immunities["physical"]) {
-                            Gdip_DrawPie(G, pPenMagic, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenMagic, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["magic"]) {
-                            Gdip_DrawPie(G, pPenMagic, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenMagic, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["fire"]) {
-                            Gdip_DrawPie(G, pPenFire, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenFire, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["light"]) {
-                            Gdip_DrawPie(G, pPenLight, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenLight, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["cold"]) {
-                            Gdip_DrawPie(G, pPenCold, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenCold, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["poison"]) {
-                            Gdip_DrawPie(G, pPenPoison, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2,angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenPoison, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2,angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                     }
                     
-                    Gdip_DrawEllipse(G, pPenNormal, mobx-1, moby-1, 2.5, 2.5/2)
+                    Gdip_DrawEllipse(G, pPenNormal, mobx-(normalDotSize/2), moby-(normalDotSize/1.5), normalDotSize, normalDotSize/2)
 
                 }
                 
@@ -179,7 +185,12 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
             if (settings["showBosses"]) {
                 if (mob["mode"] != 0 and mob["mode"] != 12) {
                     ;WriteLog("Boss: " mob["textTitle"])
-                    Gdip_DrawEllipse(G, pPenBoss, mobx-3, moby-3, 6, 6/2)
+                    textx := mobx-(bossDotSize/2) - 75
+                    texty := moby-(bossDotSize/2) - 100
+                    bossTextColor := "ff" . settings["bossColor"] 
+                    Options = x%textx% y%texty% Center vBottom cffff0000 r8 s24
+                    Gdip_TextToGraphics(G, mob["textTitle"], Options, diabloFont, 160, 100)
+                    Gdip_DrawEllipse(G, pPenBoss, mobx-(bossDotSize/2), moby-(bossDotSize/2), bossDotSize, bossDotSize/2)
                 }
             }
         }
@@ -193,38 +204,36 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
                         noImmunities := immunities["physical"] + immunities["magic"] + immunities["fire"] + immunities["light"] + immunities["cold"] + immunities["poison"]
                         sliceSize := 360 / noImmunities
                         angleDegrees := 90
-                        dotSize := 11
-                        dotAdjust := 5
                         ;WriteLog(mob["txtFileNo"] " " immunities["fire"] immunities["light"] immunities["cold"] immunities["poison"])
-                        txtFileNo := mob["txtFileNo"]
+                        ;txtFileNo := mob["txtFileNo"]
                         ;WriteLog("noImmunities: " noImmunities ", txtFileNo: " txtFileNo ", " immunities["physical"] immunities["magic"] immunities["fire"] immunities["light"] immunities["cold"] immunities["poison"])
                         if (immunities["physical"]) {
                             
-                            Gdip_DrawPie(G, pPenPhysical, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenPhysical, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["magic"]) {
-                            Gdip_DrawPie(G, pPenMagic, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenMagic, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["fire"]) {
-                            Gdip_DrawPie(G, pPenFire, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenFire, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["light"]) {
-                            Gdip_DrawPie(G, pPenLight, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenLight, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["cold"]) {
-                            Gdip_DrawPie(G, pPenCold, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenCold, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                         if (immunities["poison"]) {
-                            Gdip_DrawPie(G, pPenPoison, mobx-dotAdjust, moby-dotAdjust, dotSize, dotSize/2, angleDegrees, sliceSize)
+                            Gdip_DrawPie(G, pPenPoison, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
                     }
-                    Gdip_DrawEllipse(G, pPenUnique, mobx-3, moby-3, 5, 5/2)
+                    Gdip_DrawEllipse(G, pPenUnique, mobx-(uniqueDotSize/2), moby-(uniqueDotSize/1.5), uniqueDotSize, uniqueDotSize/2)
                 }
             }
         }
@@ -395,12 +404,12 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
                 objectx := correctedPos["x"]
                 objecty := correctedPos["y"]
                 shrineType := object["shrineType"]
-                textx := objectx - 50
-                texty := objecty - 70
+                textx := objectx - 100
+                texty := objecty - 107
                 
-                Options = x%textx% y%texty% Center vCenter c%shrineColor% r8 s%shrineTextSize%
+                Options = x%textx% y%texty% Center vBottom c%shrineColor% r8 s%shrineTextSize%
                 ;WriteLog(objectx " " objecty " " object["isShrine"])
-                Gdip_TextToGraphics(G,shrineType, Options, "Arial", 100, 100)
+                Gdip_TextToGraphics(G,shrineType, Options, diabloFont, 200, 100)
                 ;Gdip_DrawString(G, text, hFont, hFormat, pBrush2, RectF)
                 Gdip_DrawRectangle(G, pPen, objectx-2, objecty-2, 2.5, 2)
             }

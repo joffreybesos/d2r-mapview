@@ -58,6 +58,7 @@ isShrine(txtFileNo) {
         case 77: return 1 ;ShrineAltar
         case 81: return 1 ;ForestAltar
         case 83: return 1 ;HornShrine
+        case 84: return 1 ;HealingWell
         case 85: return 1 ;BullShrine
         case 86: return 1 ;SteleShrine
         case 93: return 1 ;InnerHellManaShrine1

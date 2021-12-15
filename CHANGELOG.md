@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.6] - 2021-12-15 - Fix game name
+
+- Update only needed to fix game name
+- Updated pattern for game data
+- Pattern scanning worked for all except game name after game update
+
 ## [2.3.5] - 2021-12-14 - New font
 
 - Added new Diablo font!

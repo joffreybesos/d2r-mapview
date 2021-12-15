@@ -30,10 +30,10 @@ PatternScan(d2r, ByRef settings) {
     WriteLog("Scanned and found expansion offset: " expOffset)
 
     ; game data (IP and name)
-    pattern := d2r.hexStringToPattern("48 8D 0D ?? ?? ?? ?? 44 88 2D")
+    pattern := d2r.hexStringToPattern("E8 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 44 88 2D ?? ?? ?? ??")
     patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
-    offsetBuffer := d2r.read(patternAddress + 3, "Int")
-    gameDataOffset := ((patternAddress - d2r.BaseAddress) + 7 + 208 + offsetBuffer)
+    offsetBuffer := d2r.read(patternAddress + 8, "Int")
+    gameDataOffset := ((patternAddress - d2r.BaseAddress) + 7 - 256 + 5 + offsetBuffer)
     settings["gameDataOffset"] := gameDataOffset
     WriteLog("Scanned and found game data offset: " gameDataOffset)
 

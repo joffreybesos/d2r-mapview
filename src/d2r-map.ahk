@@ -18,7 +18,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showLastGame.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.3.5"
+expectedVersion := "2.3.6"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -176,7 +176,6 @@ While 1 {
         ExitApp
     }
     ticktock := not ticktock
-    Sleep, %readInterval% ; this is the pace of updates
 }
 
 checkAutomapVisibility(d2rprocess, settings, levelNo) {

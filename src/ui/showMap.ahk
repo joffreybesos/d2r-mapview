@@ -12,6 +12,7 @@ ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
     levelNo:= gameMemoryData["levelNo"]
     IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
     scale := levelScale * scale
+    scale := 1.36
     IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
     IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0
     leftMargin := leftMargin + levelxmargin
@@ -34,7 +35,7 @@ ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
     ; WriteLog(gameMemoryData["yPos"])
 
     StartTime := A_TickCount
-    serverScale := 2 
+    serverScale := 5
     Angle := 45
     padding := 150
     If !pToken := Gdip_Startup()
@@ -58,6 +59,15 @@ ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
     rotatedWidth := RWidth * scale
     rotatedHeight := RHeight * scale
 
+    ; get relative position of player in world
+    ; xpos is absolute world pos in game
+    ; each map has offset x and y which is absolute world position
+    xPosDot := ((gameMemoryData["xPos"] - mapData["mapOffsetX"]) * serverScale) + padding
+    yPosDot := ((gameMemoryData["yPos"] - mapData["mapOffsetY"]) * serverScale) + padding
+    correctedPos := findNewPos(xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+    xPosDot := correctedPos["x"]
+    yPosDot := correctedPos["y"]
+
     hbm := CreateDIBSection(rotatedWidth, rotatedHeight)
     hdc := CreateCompatibleDC()
     obm := SelectObject(hdc, hbm)
@@ -65,7 +75,17 @@ ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
     G := Gdip_GraphicsFromHDC(hdc)
     pBitmap := Gdip_RotateBitmapAtCenter(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
 
-    Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
+      ; draw player
+    pPen := Gdip_CreatePen(0xff00FFFF, 6)
+    Gdip_DrawRectangle(G, pPen, xPosDot-3, (yPosDot/2)-2 , 6, 6)
+    ; Gdip_DrawRectangle(G, pPen, 0, 0, scaledWidth, scaledHeight) ;outline for whole map used for troubleshooting
+    Gdip_DeletePen(pPen)
+
+    Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight) ;, 0, 0, RWidth, RHeight, opacity)
+
+    
+    leftMargin := (A_ScreenWidth/2) - xPosDot
+    topMargin := (A_ScreenHeight/2) - yPosDot - 10
     UpdateLayeredWindow(mapHwnd1, hdc, leftMargin, topMargin, scaledWidth, scaledHeight)
     SelectObject(hdc, obm)
     DeleteObject(hbm)

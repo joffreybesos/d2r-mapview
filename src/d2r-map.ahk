@@ -156,8 +156,9 @@ While 1 {
                     Gui, Map: Show, NA
                     Gui, Units: Show, NA
                 }
-                ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+                
             }
+            ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
             ; update player layer on each loop
             uiData["ticktock"] := ticktock
             ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)

@@ -16,6 +16,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showHelp.ahk
 #Include %A_ScriptDir%\ui\showUnits.ahk
 #Include %A_ScriptDir%\ui\showLastGame.ahk
+#Include %A_ScriptDir%\ui\movePlayerMap.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
 expectedVersion := "2.3.6"
@@ -156,9 +157,9 @@ While 1 {
                     Gui, Map: Show, NA
                     Gui, Units: Show, NA
                 }
-                
+                ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
             }
-            ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+            MovePlayerMap(settings, mapHwnd1, gameMemoryData, imageData, uiData)
             ; update player layer on each loop
             uiData["ticktock"] := ticktock
             ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)

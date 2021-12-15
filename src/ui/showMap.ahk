@@ -59,15 +59,6 @@ ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
     rotatedWidth := RWidth * scale
     rotatedHeight := RHeight * scale
 
-    ; get relative position of player in world
-    ; xpos is absolute world pos in game
-    ; each map has offset x and y which is absolute world position
-    xPosDot := ((gameMemoryData["xPos"] - mapData["mapOffsetX"]) * serverScale) + padding
-    yPosDot := ((gameMemoryData["yPos"] - mapData["mapOffsetY"]) * serverScale) + padding
-    correctedPos := findNewPos(xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-    xPosDot := correctedPos["x"]
-    yPosDot := correctedPos["y"]
-
     hbm := CreateDIBSection(rotatedWidth, rotatedHeight)
     hdc := CreateCompatibleDC()
     obm := SelectObject(hdc, hbm)
@@ -83,9 +74,6 @@ ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
 
     Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight) ;, 0, 0, RWidth, RHeight, opacity)
 
-    
-    leftMargin := (A_ScreenWidth/2) - xPosDot
-    topMargin := (A_ScreenHeight/2) - yPosDot - 10
     UpdateLayeredWindow(mapHwnd1, hdc, leftMargin, topMargin, scaledWidth, scaledHeight)
     SelectObject(hdc, obm)
     DeleteObject(hbm)

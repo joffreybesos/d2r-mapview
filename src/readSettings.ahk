@@ -78,11 +78,11 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, increaseMapSizeKey, settings.ini, Hotkeys, increaseMapSizeKey, NumpadAdd
     IniRead, decreaseMapSizeKey, settings.ini, Hotkeys, decreaseMapSizeKey, NumpadSub
     IniRead, alwaysShowKey, settings.ini, Hotkeys, alwaysShowKey, NumpadMult
-
     IniRead, moveMapLeft, settings.ini, Hotkeys, moveMapLeft, #Left
     IniRead, moveMapRight, settings.ini, Hotkeys, moveMapRight, #Right
     IniRead, moveMapUp, settings.ini, Hotkeys, moveMapUp, #Up
     IniRead, moveMapDown, settings.ini, Hotkeys, moveMapDown, #Down
+    IniRead, switchMapMode, settings.ini, Hotkeys, switchMapMode, /
 
     ; other
     IniRead, performanceMode, settings.ini, Other, performanceMode, 0
@@ -175,6 +175,7 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("increaseMapSizeKey", increaseMapSizeKey)
     settings.Insert("decreaseMapSizeKey", decreaseMapSizeKey)
     settings.Insert("alwaysShowKey", alwaysShowKey)
+    settings.Insert("switchMapMode", switchMapMode)
 
     settings.Insert("moveMapLeft", moveMapLeft)
     settings.Insert("moveMapRight", moveMapRight)

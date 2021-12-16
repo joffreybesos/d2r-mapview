@@ -88,6 +88,10 @@ Hotkey, %moveMapUpKey%, MoveMapUp
 Hotkey, IfWinActive, ahk_exe D2R.exe
 Hotkey, %moveMapDownKey%, MoveMapDown
 
+switchMapModeKey := settings["switchMapMode"]
+Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, %switchMapModeKey%, SwitchMapMode
+
 ; initialise memory reading
 d2rprocess := initMemory(gameWindowId)
 patternScan(d2rprocess, settings)
@@ -289,6 +293,15 @@ MapSizeDecrease:
 }
     
 #IfWinActive, ahk_exe D2R.exe
+    SwitchMapMode:
+    {
+        settings["centerMode"] := !settings["centerMode"]
+        lastlevel := "INVALIDATED"
+        ; if (settings["centerMode"]) {
+        ;     Gui, Units: Hide
+        ; }
+        return
+    }
     MoveMapLeft:
     {
         levelNo := gameMemoryData["levelNo"]

@@ -12,15 +12,19 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
         t := 1
     
     imageUrl := baseUrl . "/v1/map/" . gameMemoryData["mapSeed"] . "/" . gameMemoryData["difficulty"] . "/" . gameMemoryData["levelNo"] . "/image?flat=true&wallthickness=" . t
+    sFile := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . gameMemoryData["levelNo"]
+    sFileTxt := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . gameMemoryData["levelNo"]
+
     if (settings["edges"]) {
         imageUrl := imageUrl . "&edge=true"
     }
     if (settings["centerMode"]) {
         imageUrl := imageUrl . "&serverScale=" . settings["serverScale"]
+        sFile .= "_Center"
     }
-
-    sFile := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . gameMemoryData["levelNo"] . ".png"
-    sFileTxt := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . gameMemoryData["levelNo"] . ".txt"
+    
+    sFile .= ".png"
+    sFileTxt .= ".txt"
     
 
     levelNo := gameMemoryData["levelNo"]

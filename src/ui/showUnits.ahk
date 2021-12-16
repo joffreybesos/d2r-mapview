@@ -3,9 +3,7 @@ SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
 ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
-    StartTime := A_TickCount
-
-    mapGuiWidth:= settings["maxWidth"]
+    
     scale:= settings["scale"]
     leftMargin:= settings["leftMargin"]
     topMargin:= settings["topMargin"]
@@ -38,9 +36,9 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     ; WriteLog(mapData["mapwidth"])
     ; WriteLog(mapData["mapheight"])
 
-
+    StartTime := A_TickCount
     Angle := 45
-    opacity := 0.9
+    opacity := 1.0
     padding := 150
 
     If !pToken := Gdip_Startup()
@@ -56,7 +54,6 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     }
 
     Gdip_GetRotatedDimensions(Width, Height, Angle, RWidth, RHeight)
-    Gdip_GetRotatedTranslation(Width, Height, Angle, xTranslation, yTranslation)
 
     scaledWidth := (RWidth * scale)
     scaledHeight := (RHeight * 0.5) * scale
@@ -485,6 +482,8 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
         Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
         UpdateLayeredWindow(unitHwnd1, hdc, leftMargin, topMargin, rotatedWidth, rotatedHeight)
     }
+    Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
+    UpdateLayeredWindow(unitHwnd1, hdc, leftMargin, topMargin, rotatedWidth, rotatedHeight)
 
     ElapsedTime := A_TickCount - StartTime
     ;ToolTip % "`n`n`n`n" ElapsedTime

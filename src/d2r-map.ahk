@@ -167,8 +167,9 @@ While 1 {
             uiData["ticktock"] := ticktock
             
             if (settings["centerMode"]) {
-                
+                ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
                 MovePlayerMap(settings, mapHwnd1, unitHwnd1, gameMemoryData, imageData, uiData)
+                
             } else {
                 ; update player layer on each loop
                 ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)

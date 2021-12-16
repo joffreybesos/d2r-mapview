@@ -1,6 +1,7 @@
 #SingleInstance, Force
 #Persistent
 SendMode Input
+SetWinDelay, 0
 SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\logging.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk
@@ -12,6 +13,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
 #Include %A_ScriptDir%\ui\showMap.ahk
+#Include %A_ScriptDir%\ui\showCenteredMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
 #Include %A_ScriptDir%\ui\showUnits.ahk
@@ -157,12 +159,20 @@ While 1 {
                     Gui, Map: Show, NA
                     Gui, Units: Show, NA
                 }
-                ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+                if (settings["centerMode"]) {
+                    ShowCenteredMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+                } else {
+                    ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+                }
+                
             }
-            MovePlayerMap(settings, mapHwnd1, gameMemoryData, imageData, uiData)
-            ; update player layer on each loop
             uiData["ticktock"] := ticktock
-            ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+            if (settings["centerMode"]) {
+                MovePlayerMap(settings, mapHwnd1, unitHwnd1, gameMemoryData, imageData, uiData)
+            } else {
+                ; update player layer on each loop
+                ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+            }
             checkAutomapVisibility(d2rprocess, settings, gameMemoryData["levelNo"])
 
             lastlevel := gameMemoryData["levelNo"]

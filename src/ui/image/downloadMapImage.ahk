@@ -11,10 +11,12 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
     if (t < 1)
         t := 1
     
+    imageUrl := baseUrl . "/v1/map/" . gameMemoryData["mapSeed"] . "/" . gameMemoryData["difficulty"] . "/" . gameMemoryData["levelNo"] . "/image?flat=true&wallthickness=" . t
     if (settings["edges"]) {
-        imageUrl := baseUrl . "/v1/map/" . gameMemoryData["mapSeed"] . "/" . gameMemoryData["difficulty"] . "/" . gameMemoryData["levelNo"] . "/image?flat=true&serverScale=5&edge=true&wallthickness=" . t
-    } else {
-        imageUrl := baseUrl . "/v1/map/" . gameMemoryData["mapSeed"] . "/" . gameMemoryData["difficulty"] . "/" . gameMemoryData["levelNo"] . "/image?flat=true&serverScale=5"
+        imageUrl := imageUrl . "&edge=true"
+    }
+    if (settings["centerMode"]) {
+        imageUrl := imageUrl . "&serverScale=" . settings["serverScale"]
     }
 
     sFile := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . gameMemoryData["levelNo"] . ".png"
@@ -41,15 +43,6 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
             
             fileContents := whr.ResponseBody
             respHeaders := whr.GetAllResponseHeaders
-            ; leftTrimmed := whr.getResponseHeader("lefttrimmed")
-            ; topTrimmed := whr.getResponseHeader("toptrimmed")
-            ; mapOffsetX := whr.getResponseHeader("offsetx")
-            ; mapOffsety := whr.getResponseHeader("offsety")
-            ; mapwidth := whr.getResponseHeader("mapwidth")
-            ; mapheight := whr.getResponseHeader("mapheight") 
-            ; exits := whr.getResponseHeader("exits")
-            ; waypoint := whr.getResponseHeader("waypoint")
-            ; bosses := whr.getResponseHeader("bosses") 
             vStream := whr.ResponseStream
             
             if (ComObjType(vStream) = 0xD) {      ;VT_UNKNOWN = 0xD

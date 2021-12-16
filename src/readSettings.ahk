@@ -18,6 +18,13 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, edges, settings.ini, MapSettings, edges, "true"
     IniRead, wallThickness, settings.ini, MapSettings, wallThickness, 1
 
+    IniRead, centerMode, settings.ini, MapSettings, centerMode, "false"
+    IniRead, centerModeScale, settings.ini, MapSettings, centerModeScale, 3.5
+    IniRead, serverScale, settings.ini, MapSettings, serverScale, 5
+    IniRead, centerModeOpacity, settings.ini, MapSettings, centerModeOpacity, 0.3
+    IniRead, centerModeXoffset, settings.ini, MapSettings, centerModeXoffset, 0
+    IniRead, centerModeYoffset, settings.ini, MapSettings, centerModeYoffset, -10
+
     IniRead, showGameInfo, settings.ini, GameInfo, showGameInfo, "true"
 
     ; units
@@ -93,6 +100,7 @@ readSettings(settingsFile, ByRef settings) {
     hideTown := hideTown = "true" ; convert to bool
     alwaysShowMap := alwaysShowMap = "true" ; convert to bool
     edges := edges = "true" ; convert to bool
+    centerMode := centerMode = "true" ; convert to bool
     showNormalMobs := showNormalMobs = "true" ; convert to bool
     showUniqueMobs := showUniqueMobs = "true" ; convert to bool
     showOtherPlayers := showOtherPlayers = "true"
@@ -118,6 +126,13 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("hideTown", hideTown)
     settings.Insert("edges", edges)
     settings.Insert("wallThickness", wallThickness)
+    settings.Insert("centerMode", centerMode)
+    settings.Insert("centerModeScale", centerModeScale)
+    settings.Insert("serverScale", serverScale)
+    settings.Insert("centerModeOpacity", centerModeOpacity)
+    settings.Insert("centerModeXoffset", centerModeXoffset)
+    settings.Insert("centerModeYoffset", centerModeYoffset)
+
     settings.Insert("showNormalMobs", showNormalMobs)
     settings.Insert("showUniqueMobs", showUniqueMobs)
     settings.Insert("showBosses", showBosses)
@@ -174,6 +189,7 @@ readSettings(settingsFile, ByRef settings) {
     WriteLog("Using configuration:")
     WriteLog("- baseUrl: " baseUrl)
     WriteLog("- Map: global scale: " scale ", global top margin: " topMargin ", global left margin: " leftMargin ", opacity: " opacity)
+    WriteLog("- performanceMode: " performanceMode)
     WriteLog("- hideTown: " hideTown ", alwaysShowMap: " alwaysShowMap)
     WriteLog("- gameWindowId: " gameWindowId)
     WriteLog("- debug logging: " debug)

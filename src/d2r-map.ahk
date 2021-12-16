@@ -13,7 +13,6 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
 #Include %A_ScriptDir%\ui\showMap.ahk
-#Include %A_ScriptDir%\ui\showCenteredMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
 #Include %A_ScriptDir%\ui\showUnits.ahk
@@ -163,12 +162,7 @@ While 1 {
                     Gui, Map: Show, NA
                     Gui, Units: Show, NA
                 }
-                if (settings["centerMode"]) {
-                    ShowCenteredMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-                } else {
-                    ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-                }
-                
+                ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
             }
             uiData["ticktock"] := ticktock
             if (settings["centerMode"]) {
@@ -266,7 +260,7 @@ MapSizeIncrease:
 {
     levelNo := gameMemoryData["levelNo"]
     levelScale := imageData["levelScale"]
-    if (levelNo and levelScale) {
+    if (levelNo and levelScale and not settings["centerMode"]) {
         levelScale := levelScale + 0.05
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
         imageData["levelScale"] := levelScale
@@ -281,7 +275,7 @@ MapSizeDecrease:
 {
     levelNo := gameMemoryData["levelNo"]
     levelScale := imageData["levelScale"]
-    if (levelNo and levelScale) {
+    if (levelNo and levelScale and not settings["centerMode"]) {
         levelScale := levelScale - 0.05
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
         imageData["levelScale"] := levelScale
@@ -307,7 +301,7 @@ MapSizeDecrease:
         levelNo := gameMemoryData["levelNo"]
         levelxmargin := imageData["levelxmargin"]
         levelymargin := imageData["levelymargin"]
-        if (levelNo) {
+        if (levelNo and not settings["centerMode"]) {
             levelxmargin := levelxmargin - 25
             IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
             imageData["levelxmargin"] := levelxmargin
@@ -321,7 +315,7 @@ MapSizeDecrease:
         levelNo := gameMemoryData["levelNo"]
         levelxmargin := imageData["levelxmargin"]
         levelymargin := imageData["levelymargin"]
-        if (levelNo) {
+        if (levelNo and not settings["centerMode"]) {
             levelxmargin := levelxmargin + 25
             IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
             imageData["levelxmargin"] := levelxmargin
@@ -335,7 +329,7 @@ MapSizeDecrease:
         levelNo := gameMemoryData["levelNo"]
         levelxmargin := imageData["levelxmargin"]
         levelymargin := imageData["levelymargin"]
-        if (levelNo) {
+        if (levelNo and not settings["centerMode"]) {
             levelymargin := levelymargin - 25
             IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
             imageData["levelymargin"] := levelymargin
@@ -349,7 +343,7 @@ MapSizeDecrease:
         levelNo := gameMemoryData["levelNo"]
         levelxmargin := imageData["levelxmargin"]
         levelymargin := imageData["levelymargin"]
-        if (levelNo) {
+        if (levelNo and not settings["centerMode"]) {
             levelymargin := levelymargin + 25
             IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
             imageData["levelymargin"] := levelymargin

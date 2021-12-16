@@ -265,8 +265,15 @@ MapSizeIncrease:
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
         imageData["levelScale"] := levelScale
         ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-        ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
         WriteLog("Increased level " levelNo " scale by 0.05 to " levelScale)
+    }
+    if (levelNo and settings["centerMode"]) {
+        centerModeScale := settings["centerModeScale"]
+        centerModeScale := centerModeScale + 0.05
+        IniWrite, %centerModeScale%, settings.ini, %levelNo%, centerModeScale
+        settings["centerModeScale"] := centerModeScale
+        ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+        WriteLog("Increased centerModeScale global setting by 0.05 to " levelScale)
     }
     return
 }
@@ -282,6 +289,14 @@ MapSizeDecrease:
         ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
         ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
         WriteLog("Decreased level " levelNo " scale by 0.05 to " levelScale)
+    }
+    if (levelNo and settings["centerMode"]) {
+        centerModeScale := settings["centerModeScale"]
+        centerModeScale := centerModeScale - 0.05
+        IniWrite, %centerModeScale%, settings.ini, %levelNo%, centerModeScale
+        settings["centerModeScale"] := centerModeScale
+        ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+        WriteLog("Decreased centerModeScale global setting by 0.05 to " levelScale)
     }
     return
 }

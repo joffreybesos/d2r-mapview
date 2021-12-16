@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.0b] - 2021-12-16 - Centered map mode
+
+- BETA version of centering the map
+- Please only use this version if you are willing to report detailed issues in discord
+- Enabled by default, press `/` to toggle back to normal mode
+- Known bugs:
+  - Monsters and players missing from the map
+  - Switching between normal mode and centered mode can cause display artifacts
+  - Requires performance mode to be turned on which may cause weird behaviour
+- New settings: (ignores scale, opacity and position settings from normal mode)
+  - `centerMode=true` to toggle centered mode
+  - `centerModeScale=1.36` press Numpad+ and Numpad- to change as normal
+  - `serverScale` this is the size of the map image (larger = slower but more detailed)
+  - `centerModeOpacity` is the opacity that applies only to centered mode
+  - `centerModeXoffset` can force the centered map along the x axis if you have alignment issues
+  - `centerModeYoffset` can force the centered map along the y axis if you have alignment issues
+  - `switchMapMode` hot key used to toggle cneterd mode on/off
+
 ## [2.3.6] - 2021-12-15 - Fix game name
 
 - Update only needed to fix game name

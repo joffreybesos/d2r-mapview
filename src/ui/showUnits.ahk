@@ -18,6 +18,16 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0
     leftMargin := leftMargin + levelxmargin
     topMargin := topMargin + levelymargin
+
+
+    if (settings["centerMode"]) {
+        scale:= settings["centerModeScale"]
+        serverScale := settings["serverScale"]
+        opacity:= settings["centerModeOpacity"]
+    } else {
+        serverScale := 2 
+    }
+
     ; WriteLog("maxWidth := " maxWidth)
     ; WriteLog("leftMargin := " leftMargin)
     ; WriteLog("topMargin := " topMargin)
@@ -28,7 +38,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     ; WriteLog(mapData["mapwidth"])
     ; WriteLog(mapData["mapheight"])
 
-    serverScale := 2 
+
     Angle := 45
     opacity := 0.9
     padding := 150
@@ -462,8 +472,19 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     ; Gdip_DrawRectangle(G, pPen, 0, 0, scaledWidth, scaledHeight) ;outline for whole map used for troubleshooting
     Gdip_DeletePen(pPen)
 
-    Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
-    UpdateLayeredWindow(unitHwnd1, hdc, leftMargin, topMargin, rotatedWidth, rotatedHeight)
+    if (settings["centerMode"]) {
+
+        Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
+        
+        UpdateLayeredWindow(mapHwnd1, hdc, 0, 0, scaledWidth, scaledHeight)
+        leftMargin := (A_ScreenWidth/2) - xPosDot + settings["centerModeXoffset"]
+        topMargin := (A_ScreenHeight/2) - yPosDot + settings["centerModeYoffset"]
+        WinMove, ahk_id %mapHwnd1%,, leftMargin, topMargin
+        WinMove, ahk_id %unitHwnd1%,, leftMargin, topMargin
+    } else {
+        Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
+        UpdateLayeredWindow(unitHwnd1, hdc, leftMargin, topMargin, rotatedWidth, rotatedHeight)
+    }
 
     ElapsedTime := A_TickCount - StartTime
     ;ToolTip % "`n`n`n`n" ElapsedTime

@@ -165,7 +165,9 @@ While 1 {
                 ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
             }
             uiData["ticktock"] := ticktock
+            
             if (settings["centerMode"]) {
+                
                 MovePlayerMap(settings, mapHwnd1, unitHwnd1, gameMemoryData, imageData, uiData)
             } else {
                 ; update player layer on each loop
@@ -306,9 +308,13 @@ MapSizeDecrease:
     {
         settings["centerMode"] := !settings["centerMode"]
         lastlevel := "INVALIDATED"
-        ; if (settings["centerMode"]) {
-        ;     Gui, Units: Hide
-        ; }
+
+        imageData := {}
+        gameMemoryData  := {}
+        uiData := {}
+        Gui, Map: Hide
+        Gui, Units: Hide
+        
         return
     }
     MoveMapLeft:

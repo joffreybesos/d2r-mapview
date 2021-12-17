@@ -27,9 +27,16 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, showDeadMobs, settings.ini, Units, showDeadMobs, "true"
     IniRead, showImmunities, settings.ini, Units, showImmunities, "true"
     IniRead, showOtherPlayers, settings.ini, Units, showOtherPlayers, "true"
-    IniRead, showItems, settings.ini, Units, showItems, "true"
+    IniRead, showOtherPlayerNames, settings.ini, Units, showOtherPlayerNames, "true"
     IniRead, showShrines, settings.ini, Units, showShrines, "true"
     IniRead, showPortals, settings.ini, Units, showPortals, "true"
+
+    ; items
+    IniRead, showUniqueAlerts, settings.ini, Units, showUniqueAlerts, "true"
+    IniRead, showSetItemAlerts, settings.ini, Units, showSetItemAlerts, "true"
+    IniRead, showRuneAlerts, settings.ini, Units, showRuneAlerts, "true"
+    IniRead, showJewelAlerts, settings.ini, Units, showJewelAlerts, "true"
+    IniRead, showCharmAlerts, settings.ini, Units, showCharmAlerts, "true"
     
     ; colours
     IniRead, normalMobColor, settings.ini, Visuals, normalMobColor, "FFFFFF"
@@ -56,6 +63,8 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, runeItemColor, settings.ini, Visuals, runeItemColor, "FFa700"
     IniRead, uniqueItemColor, settings.ini, Visuals, uniqueItemColor, "BBA45B"
     IniRead, setItemColor, settings.ini, Visuals, setItemColor, "00FC00"
+    IniRead, charmItemColor, settings.ini, Visuals, charmItemColor, "FFa700"
+    IniRead, jewelItemColor, settings.ini, Visuals, jewelItemColor, "FFa700"
 
     IniRead, portalColor, settings.ini, Visuals, portalColor, "FFD700"
     IniRead, redPortalColor, settings.ini, Visuals, redPortalColor, "FF0000"
@@ -102,7 +111,13 @@ readSettings(settingsFile, ByRef settings) {
     showDeadMobs := showDeadMobs = "true"
     showImmunities := showImmunities = "true"
     showGameInfo := showGameInfo = "true"
-    showItems := showItems = "true"
+    showUniqueAlerts := showUniqueAlerts = "true"
+    showSetItemAlerts := showSetItemAlerts = "true"
+    showRuneAlerts := showRuneAlerts = "true"
+    showJewelAlerts := showJewelAlerts = "true"
+    showCharmAlerts := showCharmAlerts = "true"
+    showOtherPlayerNames := showOtherPlayerNames = "true"
+
     showShrines := showShrines = "true"
     showPortals := showPortals = "true"
 
@@ -123,9 +138,15 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("showBosses", showBosses)
     settings.Insert("showDeadMobs", showDeadMobs)
     settings.Insert("showOtherPlayers", showOtherPlayers)
-    settings.Insert("showItems", showItems)
+    settings.Insert("showOtherPlayerNames", showOtherPlayerNames)
     settings.Insert("showShrines", showShrines)
     settings.Insert("showPortals", showPortals)
+
+    settings.Insert("showUniqueAlerts", showUniqueAlerts)
+    settings.Insert("showSetItemAlerts", showSetItemAlerts)
+    settings.Insert("showRuneAlerts", showRuneAlerts)
+    settings.Insert("showJewelAlerts", showJewelAlerts)
+    settings.Insert("showCharmAlerts", showCharmAlerts)
 
     settings.Insert("normalMobColor", normalMobColor)
     settings.Insert("uniqueMobColor", uniqueMobColor)
@@ -148,6 +169,8 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("runeItemColor", runeItemColor)
     settings.Insert("uniqueItemColor", uniqueItemColor)
     settings.Insert("setItemColor", setItemColor)
+    settings.Insert("charmItemColor", charmItemColor)
+    settings.Insert("jewelItemColor", jewelItemColor)
     settings.Insert("redPortalColor", redPortalColor)
     settings.Insert("portalColor", portalColor)
     settings.Insert("shrineColor", shrineColor)

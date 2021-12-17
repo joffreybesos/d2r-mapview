@@ -26,15 +26,15 @@ ShowGameText(gameName, hwnd1, gameTime, gameWindowId) {
         
         if (gameName) {
             Options = x0 y0 Left vCenter cffffffff r4 s22
-            Gdip_TextToGraphics(G, "Previous game name", Options, "Arial", Width, 50)
+            Gdip_TextToGraphics(G, "Previous game name", Options, diabloFont, Width, 50)
 
             Options = x0 y40 Left vCenter cffFFD700 r4 s24  Bold
-            Gdip_TextToGraphics(G, gameName, Options, "Arial", Width, 50)
+            Gdip_TextToGraphics(G, gameName, Options, diabloFont, Width, 50)
 
             if (gameTime) {
                 gameTime := Round(gameTime, 1) . " sec"
                 Options = x270 y40 Left vCenter cffFFD700 r4 s24
-                Gdip_TextToGraphics(G, gameTime, Options, "Arial", Width/2, 50)
+                Gdip_TextToGraphics(G, gameTime, Options, diabloFont, Width/2, 50)
             }
             UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, Width, Height)
         }

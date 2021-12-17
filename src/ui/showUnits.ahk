@@ -73,6 +73,42 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     Gdip_SetSmoothingMode(G, 6)
 
 
+    ; draw portals
+    if (settings["showPortals"]) {
+        gameObjects := gameMemoryData["objects"]
+        portalColor := "ff" . settings["portalColor"]
+        portalColor := "ff" . settings["redPortalColor"]
+        pPen := Gdip_CreatePen("0xff" . settings["portalColor"], 3)
+        pPenRed := Gdip_CreatePen("0xff" . settings["redPortalColor"], 3)
+        for index, object in gameObjects
+        {
+            ;WriteLog(object["txtFileNo"] " " object["isRedPortal"])
+            if (object["isPortal"]) {
+                objectx := ((object["objectx"] - mapData["mapOffsetX"]) * serverScale) + padding
+                objecty := ((object["objecty"] - mapData["mapOffsetY"]) * serverScale) + padding
+                correctedPos := findNewPos(objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                objectx := correctedPos["x"]
+                objecty := correctedPos["y"]
+                
+                ;Gdip_DrawString(G, text, hFont, hFormat, pBrush2, RectF)
+                Gdip_DrawEllipse(G, pPen, objectx-8, objecty-12, 9, 16)
+            }
+            if (object["isRedPortal"]) {
+                objectx := ((object["objectx"] - mapData["mapOffsetX"]) * serverScale) + padding
+                objecty := ((object["objecty"] - mapData["mapOffsetY"]) * serverScale) + padding
+                correctedPos := findNewPos(objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                objectx := correctedPos["x"]
+                objecty := correctedPos["y"]
+                
+                
+                ;Gdip_DrawString(G, text, hFont, hFormat, pBrush2, RectF)
+                Gdip_DrawEllipse(G, pPenRed, objectx-6, objecty-14, 9, 16)
+            }
+        }
+        Gdip_DeletePen(pPen)    
+        Gdip_DeletePen(pPenRed)
+    }
+
     ; draw monsters
     mobs := gameMemoryData["mobs"]
     normalMobColor := 0xff . settings["normalMobColor"] 
@@ -326,26 +362,38 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
                 correctedPos := findNewPos(playerx, playery, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 playerx := correctedPos["x"]
                 playery := correctedPos["y"]
-
+                if (settings["showOtherPlayerNames"]) {
+                    textx := playerx-2 - 75
+                    texty := playery-2 - 100
+                    Options = x%textx% y%texty% Center vBottom cff00AA00 r8 s24
+                    Gdip_TextToGraphics(G, player["playerName"], Options, diabloFont, 160, 100)
+                }
                 Gdip_DrawRectangle(G, pPen, playerx-2, playery-2, 4, 4)
             }
         }
         Gdip_DeletePen(pPen)    
     }
 
-    ; draw items
-    ;runeColor := 0xff . settings["runeColor"] 
+    ; draw item alerts
+    
     runeColor := 0xcc . settings["runeItemColor"] 
     uniqueColor := 0xcc . settings["uniqueItemColor"] 
     setColor := 0xcc . settings["setItemColor"] 
+    charmItemColor := 0xcc . settings["charmItemColor"] 
+    jewelItemColor := 0xcc . settings["jewelItemColor"] 
     pPenRune := Gdip_CreatePen(runeColor, 12)
     pPenRune2 := Gdip_CreatePen(0xccffffff, 8)
     pPenUnique := Gdip_CreatePen(uniqueColor, 12)
     pPenUnique2 := Gdip_CreatePen(0xccffffff, 8)
     pPenSetItem := Gdip_CreatePen(setColor, 12)
     pPenSetItem2 := Gdip_CreatePen(0xccffffff, 8)
+    pPenCharm := Gdip_CreatePen(charmItemColor, 12)
+    pPenCharm2 := Gdip_CreatePen(0xccffffff, 8)
+    pPenJewel := Gdip_CreatePen(jewelItemColor, 12)
+    pPenJewel2 := Gdip_CreatePen(0xccffffff, 8)
     ; show items
-    if (settings["showItems"]) {
+    
+    if (settings["showUniqueAlerts"] or settings["showSetItemAlerts"] or settings["showRuneAlerts"] or settings["showJewelAlerts"] or settings["showCharmAlerts"]) {
         items := gameMemoryData["items"]
         for index, item in items
         {
@@ -354,30 +402,55 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
             correctedPos := findNewPos(itemx, itemy, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             itemx := correctedPos["x"]
             itemy := correctedPos["y"]
-            if (item["isRune"] == 1) { ; rune
-                ticktock := uiData["ticktock"]
-                if (ticktock) {
-                    Gdip_DrawEllipse(G, pPenRune, itemx-2, itemy-2, 12, 12)
-                } else {
-                    Gdip_DrawEllipse(G, pPenRune2, itemx, itemy, 8, 8)
+            if (settings["showRuneAlerts"]) {
+                if (item["isRune"] == 1) { ; rune
+                    ticktock := uiData["ticktock"]
+                    if (ticktock) {
+                        Gdip_DrawEllipse(G, pPenRune, itemx-2, itemy-2, 12, 12)
+                    } else {
+                        Gdip_DrawEllipse(G, pPenRune2, itemx, itemy, 8, 8)
+                    }
                 }
             }
-
-            if (item["itemQuality"] == 7) { ; unique
-                ticktock := uiData["ticktock"]
-                if (ticktock) {
-                    Gdip_DrawEllipse(G, pPenUnique, itemx-2, itemy-2, 12, 12)
-                } else {
-                    Gdip_DrawEllipse(G, pPenUnique2, itemx, itemy, 8, 8)
+            if (settings["showUniqueAlerts"]) {
+                if (item["itemQuality"] == 7) { ; unique
+                    ticktock := uiData["ticktock"]
+                    if (ticktock) {
+                        Gdip_DrawEllipse(G, pPenUnique, itemx-2, itemy-2, 12, 12)
+                    } else {
+                        Gdip_DrawEllipse(G, pPenUnique2, itemx, itemy, 8, 8)
+                    }
                 }
             }
-
-            if (item["itemQuality"] == 5) { ; set
-                ticktock := uiData["ticktock"]
-                if (ticktock) {
-                    Gdip_DrawEllipse(G, pPenSetItem, itemx-2, itemy-2, 12, 12)
-                } else {
-                    Gdip_DrawEllipse(G, pPenSetItem2, itemx, itemy, 8, 8)
+            if (settings["showSetItemAlerts"]) {
+                if (item["itemQuality"] == 5) { ; set
+                    ticktock := uiData["ticktock"]
+                    if (ticktock) {
+                        Gdip_DrawEllipse(G, pPenSetItem, itemx-2, itemy-2, 12, 12)
+                    } else {
+                        Gdip_DrawEllipse(G, pPenSetItem2, itemx, itemy, 8, 8)
+                    }
+                }
+            }
+            if (settings["showCharmAlerts"]) {
+                
+                if (item["txtFileNo"] == 603 or item["txtFileNo"] == 604 or item["txtFileNo"] == 605) { ; charm
+                    ticktock := uiData["ticktock"]
+                    if (ticktock) {
+                        Gdip_DrawEllipse(G, pPenCharm, itemx-2, itemy-2, 12, 12)
+                    } else {
+                        Gdip_DrawEllipse(G, pPenCharm2, itemx, itemy, 8, 8)
+                    }
+                }
+            }
+            if (settings["showJewelAlerts"]) {
+                if (item["txtFileNo"] == 643) { ; jewel
+                    ticktock := uiData["ticktock"]
+                    if (ticktock) {
+                        Gdip_DrawEllipse(G, pPenJewel, itemx-2, itemy-2, 12, 12)
+                    } else {
+                        Gdip_DrawEllipse(G, pPenJewel2, itemx, itemy, 8, 8)
+                    }
                 }
             }
         }
@@ -417,41 +490,6 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
         Gdip_DeletePen(pPen)    
     }
 
-    ; draw portals
-    if (settings["showPortals"]) {
-        gameObjects := gameMemoryData["objects"]
-        portalColor := "ff" . settings["portalColor"]
-        portalColor := "ff" . settings["redPortalColor"]
-        pPen := Gdip_CreatePen("0xff" . settings["portalColor"], 3)
-        pPenRed := Gdip_CreatePen("0xff" . settings["redPortalColor"], 3)
-        for index, object in gameObjects
-        {
-            ;WriteLog(object["txtFileNo"] " " object["isRedPortal"])
-            if (object["isPortal"]) {
-                objectx := ((object["objectx"] - mapData["mapOffsetX"]) * serverScale) + padding
-                objecty := ((object["objecty"] - mapData["mapOffsetY"]) * serverScale) + padding
-                correctedPos := findNewPos(objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-                objectx := correctedPos["x"]
-                objecty := correctedPos["y"]
-                
-                ;Gdip_DrawString(G, text, hFont, hFormat, pBrush2, RectF)
-                Gdip_DrawEllipse(G, pPen, objectx-8, objecty-12, 9, 16)
-            }
-            if (object["isRedPortal"]) {
-                objectx := ((object["objectx"] - mapData["mapOffsetX"]) * serverScale) + padding
-                objecty := ((object["objecty"] - mapData["mapOffsetY"]) * serverScale) + padding
-                correctedPos := findNewPos(objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-                objectx := correctedPos["x"]
-                objecty := correctedPos["y"]
-                
-                
-                ;Gdip_DrawString(G, text, hFont, hFormat, pBrush2, RectF)
-                Gdip_DrawEllipse(G, pPenRed, objectx-6, objecty-14, 9, 16)
-            }
-        }
-        Gdip_DeletePen(pPen)    
-        Gdip_DeletePen(pPenRed)
-    }
 
 
     ; draw player

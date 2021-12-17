@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.7] - 2021-12-17 - Charms and jewels
+
+- Charms and jewels are now detected on the ground
+- The alert colours can also be configured
+  - `charmItemColor=6D6DFF`
+  - `jewelItemColor=6D6DFF`
+- Can now toggle each item alert on/off by type
+  - `showUniqueAlerts=true`
+  - `showSetItemAlerts=true`
+  - `showRuneAlerts=true`
+  - `showJewelAlerts=true`
+  - `showCharmAlerts=true`
+- Previous game name text in menu now uses Diablo font
+- Other players can now show their name above their respective dot
+- Other player names are turned _off_ by default
+- Can be toggled in settings with `showOtherPlayerNames`
+- Fixed a bug where occasionally the player unit wasn't detected
+
 ## [2.3.6] - 2021-12-15 - Fix game name
 
 - Update only needed to fix game name

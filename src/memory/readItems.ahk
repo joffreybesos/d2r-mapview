@@ -14,15 +14,15 @@ ReadItems(d2rprocess, startingOffset, ByRef items) {
         itemUnit := d2rprocess.read(itemAddress, "Int64")
         
         while (itemUnit > 0) { ; keep following the next pointer
-            itemType := d2rprocess.read(itemUnit + 0x00, "UInt") ; item is 4
+            itemType := d2rprocess.read(itemUnit + 0x00, "UInt")
             
-            if (itemType == 4) {
+            if (itemType == 4) { ; item is 4
                 txtFileNo := d2rprocess.read(itemUnit + 0x04, "UInt")
                 
                 ;itemLoc - 0 in inventory, 1 equipped, 2 in belt, 3 on ground, 4 cursor, 5 dropping, 6 socketed
                 itemLoc := d2rprocess.read(itemUnit + 0x0C, "UInt")
                 ;WriteLog(txtFileNo " " itemLoc " " itemType)
-                if (itemLoc == 3 or itemLoc == 5) {
+                if (itemLoc == 3 or itemLoc == 5) { ; on ground or dropping
                     pUnitData := d2rprocess.read(itemUnit + 0x10, "Int64")
 
                     ; itemQuality - 5 is set, 7 is unique (6 rare, 4, magic)

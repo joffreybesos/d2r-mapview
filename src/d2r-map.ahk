@@ -18,7 +18,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showLastGame.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.3.6"
+expectedVersion := "2.3.7"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file

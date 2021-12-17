@@ -69,7 +69,7 @@ getPlayerOffset(d2r, startingOffset, loops, settings) {
                     {
                         name := name . Chr(d2r.read(playerNameAddress + (A_Index -1), "UChar"))
                     }
-                    WriteLog(name " " xPos " " yPos " " mapSeed)
+                    ;WriteLog(name " " xPos " " yPos " " mapSeed)
                     if (xPos > 0 and yPos > 0 and StrLen(mapSeed) > 6) {
                         if (loops > 1) {
                             WriteLog("SUCCESS: Found current player offset: " newOffset ", at entry " attempts ", which gives map seed: " mapSeed)

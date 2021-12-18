@@ -2,6 +2,7 @@
 
 #Include %A_ScriptDir%\memory\readOtherPlayers.ahk
 #Include %A_ScriptDir%\memory\readMobs.ahk
+#Include %A_ScriptDir%\memory\readUnits.ahk
 #Include %A_ScriptDir%\memory\readItems.ahk
 #Include %A_ScriptDir%\memory\readObjects.ahk
 
@@ -79,6 +80,19 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
         ReadMobs(d2rprocess, startingOffset, mobs)
     }
 
+    ; missiles
+    missiles:=[]
+    ; PlayerMissiles
+    if (settings["showPlayerMissiles"]){
+        PlayerMissiles:=ReadUnits(d2rprocess, "0x21EA4F0", "Playermissiles")
+        missiles.push(PlayerMissiles)
+    }
+    ; EnemyMissiles
+    if (settings["showEnemyMissiles"]){
+        EnemyMissiles:=ReadUnits(d2rprocess, startingOffset, "EnemyMissiles")
+        missiles.push(EnemyMissiles)
+    }
+
     ; get items
     if (settings["showUniqueAlerts"] or settings["showSetItemAlerts"] or settings["showRuneAlerts"] or settings["showJewelAlerts"] or settings["showCharmAlerts"]) {
         ReadItems(d2rprocess, startingOffset, items)
@@ -101,7 +115,7 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     if (!xPos) {
         WriteLog("Did not find player position at player offset " playerOffset) 
     }
-    gameMemoryData := {"gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName }
+    gameMemoryData := {"gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "PlayerMissiles": PlayerMissiles, "EnemyMissiles": EnemyMissiles, "missiles": missiles, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName }
     ElapsedTime := A_TickCount - StartTime
     ;ToolTip % "`n`n`n`n" ElapsedTime
 }

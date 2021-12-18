@@ -78,8 +78,8 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
         gameObjects := gameMemoryData["objects"]
         portalColor := "ff" . settings["portalColor"]
         portalColor := "ff" . settings["redPortalColor"]
-        pPen := Gdip_CreatePen("0xff" . settings["portalColor"], 3)
-        pPenRed := Gdip_CreatePen("0xff" . settings["redPortalColor"], 3)
+        pPen := Gdip_CreatePen("0xff" . settings["portalColor"], 2)
+        pPenRed := Gdip_CreatePen("0xff" . settings["redPortalColor"], 2)
         for index, object in gameObjects
         {
             ;WriteLog(object["txtFileNo"] " " object["isRedPortal"])
@@ -114,12 +114,46 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     normalMobColor := 0xff . settings["normalMobColor"] 
     uniqueMobColor := 0xff . settings["uniqueMobColor"] 
     bossColor := 0xff . settings["bossColor"] 
-    deadColor := 0xff . settings["deadColor"] 
+    deadColor := 0xff . settings["deadColor"]
+    mercColor := 0xff . settings["mercColor"] 
+    missileColor := 0xff . settings["missileColor"]  
+    PhysicalMajorColor := 0xff . settings["PhysicalMajorColor"]
+    PhysicalMinorColor := 0xff . settings["PhysicalMinorColor"]
+    FireMajorColor := 0xff . settings["FireMajorColor"]
+    FireMinorColor := 0xff . settings["FireMinorColor"]
+    IceMajorColor := 0xff . settings["IceMajorColor"]
+    IceMinorColor := 0xff . settings["IceMinorColor"]
+    LightMajorColor := 0xff . settings["LightMajorColor"]
+    LightMinorColor := 0xff . settings["LightMajorColor"]
+    PoisonMajorColor := 0xff . settings["PoisonMajorColor"]
+    PoisonMinorColor := 0xff . settings["PoisonMajorColor"]
+    MagicMajorColor := 0xff . settings["MagicMajorColor"]
+    MagicMinorColor := 0xff . settings["MagicMajorColor"]
+    OtherMissilesColor := 0xff . settings["otherMissilesColor"]
+    unknownMissilesColor := 0xff . settings["unknownMissilesColor"]
 
     pPenNormal := Gdip_CreatePen(normalMobColor, 3)
     pPenUnique := Gdip_CreatePen(uniqueMobColor, 5)
     pPenBoss := Gdip_CreatePen(bossColor, 6)
     pPenDead := Gdip_CreatePen(deadColor, 2)
+
+    pPenMerc := Gdip_CreatePen(mercColor, 2)
+    pPenPhysicalMajor := Gdip_CreatePen(PhysicalMajorColor, 1)
+    pPenPhysicalMinor := Gdip_CreatePen(PhysicalMinorColor, 1)
+    pPenFireMajor := Gdip_CreatePen(FireMajorColor, 1)
+    pPenFireMinor := Gdip_CreatePen(FireMajorColor, 1)
+    pPenIceMajor := Gdip_CreatePen(IceMajorColor, 1)
+    pPenIceMinor := Gdip_CreatePen(IceMinorColor, 1)
+    pPenLightMajor := Gdip_CreatePen(LightMajorColor, 1)
+    pPenLightMinor := Gdip_CreatePen(LightMinorColor, 1)
+    pPenPoisonMajor := Gdip_CreatePen(PoisonMajorColor, 1)
+    pPenPoisonMinor := Gdip_CreatePen(PoisonMinorColor, 1)
+    pPenMagicMajor := Gdip_CreatePen(MagicMajorColor, 1)
+    pPenMagicMinor := Gdip_CreatePen(MagicMinorColor, 1)
+    pPenOtherMissiles := Gdip_CreatePen(OtherMissilesColor, 1)
+    pPenunknownMissiles := Gdip_CreatePen(unknownMissilesColor, 1)
+    
+
 
     physicalImmuneColor := 0xff . settings["physicalImmuneColor"] 
     magicImmuneColor := 0xff . settings["magicImmuneColor"] 
@@ -200,7 +234,11 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
                         }
                     }
                     
-                    Gdip_DrawEllipse(G, pPenNormal, mobx-(normalDotSize/2), moby-(normalDotSize/1.5), normalDotSize, normalDotSize/2)
+                    if (!mob["isMerc"]){
+                        Gdip_DrawEllipse(G, pPenNormal, mobx-(normalDotSize/2), moby-(normalDotSize/1.5), normalDotSize, normalDotSize/2)
+                    } else if (settings["showMercs"]) {
+                        Gdip_DrawEllipse(G, pPenMerc, mobx-(normalDotSize/2), moby-(normalDotSize/1.5), normalDotSize, normalDotSize/2)        
+                        }
 
                 }
                 
@@ -208,6 +246,50 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
         }
     }
 
+    ;show and color missles
+    if (settings["showPlayerMissiles"] | settings["showEnemyMissiles"]) {
+        static oldMissilex
+        static oldMissiley
+        for index,  missilearray in gameMemoryData["missiles"]
+        {
+            for each, missile in missilearray
+            {   
+                missilex := ((missile["x"] - mapData["mapOffsetX"]) * serverScale) + padding
+                missiley := ((missile["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+                correctedPos := findNewPos(missilex, missiley, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                missilex := correctedPos["x"]
+                missiley := correctedPos["y"]
+                if (oldMissilex = missilex && oldMissiley = missiley){
+
+                    } else {
+                        ;Global settings
+                        ;MajorSize:=6
+                        ;MinorSize:=3
+                        MajorSize:=settings["MissileMajor"]
+                        MinorSize:=settings["MissileMinor"]
+                        switch (missile["UnitType"]){
+                            case "PhysicalMajor": Gdip_DrawEllipse(G, pPenPhysicalMajor, missilex-3, missiley-3, MajorSize, MajorSize/2)
+                            case "PhysicalMinor": Gdip_DrawEllipse(G, pPenPhysicalMinor, missilex-3, missiley-3, MinorSize, MinorSize/2)
+                            case "FireMajor": Gdip_DrawEllipse(G, pPenFireMajor, missilex-3, missiley-3, MajorSize, MajorSize/2)
+                            case "FireMinor": Gdip_DrawEllipse(G, pPenFireMinor, missilex-3, missiley-3, MinorSize, MinorSize/2)
+                            case "IceMajor": Gdip_DrawEllipse(G, pPenIceMajor, missilex-3, missiley-3, MajorSize, MajorSize/2)
+                            case "IceMinor": Gdip_DrawEllipse(G, pPenIceMinor, missilex-3, missiley-3, MinorSize, MinorSize/2)
+                            case "LightMajor": Gdip_DrawEllipse(G, pPenLightMajor, missilex-3, missiley-3, MajorSize, MajorSize/2)
+                            case "LightMinor": Gdip_DrawEllipse(G, pPenLightMinor, missilex-3, missiley-3, MinorSize, MinorSize/2)
+                            case "PoisonMajor": Gdip_DrawEllipse(G, pPenPoisonMajor, missilex-3, missiley-3, MajorSize, MajorSize/2)
+                            case "PoisonMinor": Gdip_DrawEllipse(G, pPenPoisonMinor, missilex-3, missiley-3, MinorSize, MinorSize/2)
+                            case "MagicMajor": Gdip_DrawEllipse(G, pPenMagicMajor, missilex-3, missiley-3, MajorSize, MajorSize/2)
+                            case "MagicMinor": Gdip_DrawEllipse(G, pPenMagicMinor, missilex-3, missiley-3, MinorSize, MinorSize/2)
+                            case "otherMissiles": Gdip_DrawEllipse(G, pPenOtherMissiles, missilex-3, missiley-3, MajorSize, MajorSize/2)
+                            case "unknown": Gdip_DrawEllipse(G, pPenunknownMissiles, missilex-3, missiley-3, MajorSize, MajorSize/2)
+                            ;default: Gdip_DrawEllipse(G, Gdip_CreatePen(settings["defaultMissleColor"], 1), missilex-3, missiley-3, MajorSize, MajorSize/2)
+                            }
+                    }
+                oldMissilex:=missilex
+                oldMissiley:=missiley
+            }
+         }   
+    } 
     ; having this in a separate loop forces it to be drawn on top
     for index, mob in mobs
     {
@@ -269,6 +351,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
                             angleDegrees := angleDegrees + sliceSize
                         }
                     }
+
                     Gdip_DrawEllipse(G, pPenUnique, mobx-(uniqueDotSize/2), moby-(uniqueDotSize/1.5), uniqueDotSize, uniqueDotSize/2)
                 }
             }
@@ -279,6 +362,24 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     Gdip_DeletePen(pPenNormal)
     Gdip_DeletePen(pPenUnique)
     Gdip_DeletePen(pPenDead)
+    
+    Gdip_DeletePen(pPenMerc) ;does this free up memory?
+    Gdip_DeletePen(pPenPhysicalMajor)
+    Gdip_DeletePen(pPenPhysicalMinor)
+    Gdip_DeletePen(pPenFireMajor)
+    Gdip_DeletePen(pPenFireMinor)
+    Gdip_DeletePen(pPenIceMajor)
+    Gdip_DeletePen(pPenIceMinor)
+    Gdip_DeletePen(pPenLightMajor)
+    Gdip_DeletePen(pPenLightMinor)
+    Gdip_DeletePen(pPenPoisonMajor)
+    Gdip_DeletePen(pPenPoisonMinor)
+    Gdip_DeletePen(pPenMagicMajor)
+    Gdip_DeletePen(pPenMagicMinor)
+    Gdip_DeletePen(pPenOtherMissiles)
+    Gdip_DeletePen(pPenunknownMissiles)
+
+
     
     Gdip_DeletePen(pPenPhysical)
     Gdip_DeletePen(pPenMagic)

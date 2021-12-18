@@ -357,5 +357,6 @@ MapSizeDecrease:
         Gui, HelpText: Hide
         helpToggle := 1
     }
+    ~F13 & End::reload
 return
 

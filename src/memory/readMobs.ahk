@@ -29,7 +29,11 @@ ReadMobs(d2rprocess, startingOffset, ByRef mobs) {
                 if (textTitle) {
                     isBoss:= 1
                 }
-
+                isMerc:= getMerc(txtFileNo)
+                if (isMerc) {
+                    isMerc:= 1
+                }
+                
                 ;get immunities
                 pStatsListEx := d2rprocess.read(mobUnit + 0x88, "Int64")
                 ownerType := d2rprocess.read(pStatsListEx + 0x08, "UInt")
@@ -57,7 +61,7 @@ ReadMobs(d2rprocess, startingOffset, ByRef mobs) {
                         }
                     }
                 }
-                mob := {"txtFileNo": txtFileNo, "mode": mode, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "textTitle": textTitle, "immunities": immunities }
+                mob := {"txtFileNo": txtFileNo, "mode": mode, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "isMerc": isMerc, "textTitle": textTitle, "immunities": immunities}
                 mobs.push(mob)
             }
             
@@ -91,7 +95,16 @@ getBossName(txtFileNo) {
     }
     return ""
 }
-
+getMerc(txtFileNo){
+    switch (txtFileNo) {
+            case "271": return "roguehire"
+            case "338": return "act2hire"
+            case "359": return "act3hire"
+            case "560": return "act5hire1"
+            case "561": return "act5hire2"
+        }
+        return ""
+}
 getSuperUniqueName(txtFileNo) {
     switch (txtFileNo) {
         case "0": return "Bonebreak"
@@ -158,60 +171,60 @@ getSuperUniqueName(txtFileNo) {
 ; certain NPCs we don't want to see such as mercs
 HideNPC(txtFileNo) {
     switch (txtFileNo) {
-        case 149: return 1
-        case 151: return 1
-        case 152: return 1
-        case 153: return 1
-        case 157: return 1
-        case 158: return 1
-        case 159: return 1
-        case 195: return 1
-        case 196: return 1
-        case 197: return 1
-        case 179: return 1
-        case 185: return 1
-        case 203: return 1
-        case 204: return 1
-        case 205: return 1
-        case 268: return 1
-        case 269: return 1
-        case 271: return 1
-        case 272: return 1
-        case 293: return 1
-        case 294: return 1
-        case 289: return 1
-        case 290: return 1
-        case 291: return 1
-        case 292: return 1
-        case 296: return 1
-        case 318: return 1
-        case 319: return 1
-        case 320: return 1
-        case 321: return 1
-        case 322: return 1
-        case 323: return 1
-        case 324: return 1
-        case 325: return 1
-        case 332: return 1
-        case 338: return 1
-        case 339: return 1
-        case 344: return 1
-        case 355: return 1
-        case 359: return 1
-        case 363: return 1
-        case 364: return 1
-        case 370: return 1
-        case 377: return 1
-        case 378: return 1
-        case 392: return 1
-        case 393: return 1
-        case 401: return 1
-        case 411: return 1
-        case 412: return 1
-        case 414: return 1
-        case 415: return 1
-        case 416: return 1
-        case 711: return 1
+        case 149: return 1 ; chicken
+        case 151: return 1 ; rat
+        case 152: return 1 ; rogue1
+        case 153: return 1 ; hellmeteor
+        case 157: return 1 ; bird1
+        case 158: return 1 ; bird2
+        case 159: return 1 ; bat
+        case 195: return 1 ; act2male
+        case 196: return 1 ; act2female
+        case 197: return 1 ; act2child
+        case 179: return 1 ; cow
+        case 185: return 1 ; camel
+        case 203: return 1 ; act2guard1
+        case 204: return 1 ; act2vendor1
+        case 205: return 1 ; act2vendor2
+        case 268: return 1 ; bug
+        case 269: return 1 ; scorpion
+        ;case 271: return 1 ; roguehire
+        case 272: return 1 ; rogue3
+        case 293: return 1 ; familiar
+        case 294: return 1 ; firegolem
+        case 289: return 1 ; maggotqueen4
+        case 290: return 1 ; maggotqueen5
+        case 291: return 1 ; claygolem
+        case 292: return 1 ; bloodgolem
+        case 296: return 1 ; familiar
+        case 318: return 1 ; snake
+        case 319: return 1 ; parrot
+        case 320: return 1 ; fish
+        case 321: return 1 ; evilhole1
+        case 322: return 1 ; evilhole2
+        case 323: return 1 ; evilhole3
+        case 324: return 1 ; evilhole4
+        case 325: return 1 ; evilhole5
+        case 332: return 1 ; invisospawner
+        ;case 338: return 1 ; act2hire
+        case 339: return 1 ; minispider
+        case 344: return 1 ; bonewall
+        case 355: return 1 ; seventombs
+        case 359: return 1 ; valkyrie
+        case 363: return 1 ; megademon2
+        case 364: return 1 ; megademon3
+        case 370: return 1 ; spiritmummy
+        case 377: return 1 ; slinger3
+        case 378: return 1 ; slinger4
+        case 392: return 1 ; window1
+        case 393: return 1 ; window2
+        case 401: return 1 ; mephistospirit
+        case 411: return 1 ; chargeboltsentry
+        case 412: return 1 ; lightningsentry
+        case 414: return 1 ; invisopet
+        case 415: return 1 ; infernosentry
+        case 416: return 1 ; deathsentry
+        case 711: return 1 ; demonhole
     }
     return 0
 }

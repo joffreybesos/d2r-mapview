@@ -30,7 +30,12 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, showOtherPlayerNames, settings.ini, Units, showOtherPlayerNames, "true"
     IniRead, showShrines, settings.ini, Units, showShrines, "true"
     IniRead, showPortals, settings.ini, Units, showPortals, "true"
-
+    IniRead, showMercs, settings.ini, Units, showMercs, "true"
+    IniRead, showPlayerMissiles, settings.ini, Units, showPlayerMissiles, "false"
+    IniRead, showEnemyMissiles, settings.ini, Units, showEnemyMissiles, "false"
+    IniRead, ShowOtherMissileDebug, settings.ini, Units, ShowOtherMissileDebug, "false"
+    IniRead, ShowKnownMissileDebug, settings.ini, Units, ShowKnownMissileDebug, "false"
+    
     ; items
     IniRead, showUniqueAlerts, settings.ini, Units, showUniqueAlerts, "true"
     IniRead, showSetItemAlerts, settings.ini, Units, showSetItemAlerts, "true"
@@ -44,12 +49,31 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, bossColor, settings.ini, Visuals, bossColor, "FF0000"
     IniRead, deadColor, settings.ini, Visuals, deadColor, "000000"
 
+    IniRead, mercColor, settings.ini, Visuals, mercColor, "00FFFF"
+    IniRead, PhysicalMajorColor, settings.ini, Visuals, PhysicalMajorColor, "FFC2C2"
+    IniRead, PhysicalMinorColor, settings.ini, Visuals, PhysicalMinorColor, "C99D9D"
+    IniRead, FireMajorColor, settings.ini, Visuals, FireMajorColor, "FF0000"
+    IniRead, FireMinorColor, settings.ini, Visuals, FireMinorColor, "C20000"
+    IniRead, IceMajorColor, settings.ini, Visuals, IceMajorColor, "00D0FF"
+    IniRead, IceMinorColor, settings.ini, Visuals, IceMinorColor, "0098BA"
+    IniRead, LightMajorColor, settings.ini, Visuals, LightMajorColor, "FFFF00"
+    IniRead, LightMinorColor, settings.ini, Visuals, LightMinorColor, "A3A300"
+    IniRead, PoisonMajorColor, settings.ini, Visuals, PoisonMajorColor, "00FF00"
+    IniRead, PoisonMinorColor, settings.ini, Visuals, PoisonMinorColor, "009C00"
+    IniRead, MagicMajorColor, settings.ini, Visuals, MagicMajorColor, "FF7300"
+    IniRead, MagicMinorColor, settings.ini, Visuals, MagicMinorColor, "B35000"
+    IniRead, otherMissilesColor, settings.ini, Visuals, otherMissilesColor, "9500FF"
+    IniRead, unknownMissilesColor, settings.ini, Visuals, unknownMissilesColor, "FF00FF"
+    IniRead, defaultMissleColor, settings.ini, Visuals, defaultMissleColor, "FF00FF"
+
     IniRead, normalDotSize, settings.ini, Visuals, normalDotSize, 2.5
     IniRead, normalImmunitySize, settings.ini, Visuals, normalImmunitySize, 4
     IniRead, uniqueDotSize, settings.ini, Visuals, uniqueDotSize, 5
     IniRead, uniqueImmunitySize, settings.ini, Visuals, uniqueImmunitySize, 11
     IniRead, deadDotSize, settings.ini, Visuals, deadDotSize, 2
     IniRead, bossDotSize, settings.ini, Visuals, bossDotSize, 5
+    IniRead, MissileMajor, settings.ini, Visuals, MissileMajor, 6
+    IniRead, MissileMinor, settings.ini, Visuals, MissileMinor, 3
 
     ; immunities
     IniRead, physicalImmuneColor, settings.ini, Visuals, physicalImmuneColor, "CD853f"
@@ -121,6 +145,12 @@ readSettings(settingsFile, ByRef settings) {
     showShrines := showShrines = "true"
     showPortals := showPortals = "true"
 
+    showMercs := showMercs = "true"
+    showPlayerMissiles := showPlayerMissiles = "true"
+    showEnemyMissiles := showEnemyMissiles = "true"
+    ShowOtherMissileDebug := ShowOtherMissileDebug = "true"
+    ShowKnownMissileDebug := ShowKnownMissileDebug = "true"
+
     ; AHK also doesn't let you declare an array a more sensible way
     settings := {}
     settings.Insert("baseUrl", baseUrl)
@@ -142,6 +172,13 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("showShrines", showShrines)
     settings.Insert("showPortals", showPortals)
 
+    settings.Insert("showMercs", showMercs)
+    settings.Insert("showMissiles", showMissiles)
+    settings.Insert("showPlayerMissiles", showPlayerMissiles)
+    settings.Insert("showEnemyMissiles", showEnemyMissiles)
+    settings.Insert("ShowOtherMissileDebug", ShowOtherMissileDebug)
+    settings.Insert("ShowKnownMissileDebug", ShowKnownMissileDebug)
+
     settings.Insert("showUniqueAlerts", showUniqueAlerts)
     settings.Insert("showSetItemAlerts", showSetItemAlerts)
     settings.Insert("showRuneAlerts", showRuneAlerts)
@@ -153,12 +190,31 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("bossColor", bossColor)
     settings.Insert("deadColor", deadColor)
 
+    settings.Insert("mercColor", mercColor)
+    settings.Insert("PhysicalMajorColor", PhysicalMajorColor)
+    settings.Insert("PhysicalMinorColor", PhysicalMinorColor)
+    settings.Insert("FireMajorColor", FireMajorColor)
+    settings.Insert("FireMinorColor", FireMinorColor)
+    settings.Insert("IceMajorColor", IceMajorColor)
+    settings.Insert("IceMinorColor", IceMinorColor)
+    settings.Insert("LightMajorColor", LightMajorColor)
+    settings.Insert("LightMinorColor", LightMinorColor)
+    settings.Insert("PoisonMajorColor", PoisonMajorColor)
+    settings.Insert("PoisonMinorColor", PoisonMinorColor)
+    settings.Insert("MagicMajorColor", MagicMajorColor)
+    settings.Insert("MagicMinorColor", MagicMinorColor)
+    settings.Insert("otherMissilesColor", otherMissilesColor)
+    settings.Insert("unknownMissileColor", unknownMissileColor)
+    settings.Insert("defaultMissleColor", defaultMissleColor)
+
     settings.Insert("normalDotSize", normalDotSize)
     settings.Insert("normalImmunitySize", normalImmunitySize)
     settings.Insert("uniqueDotSize", uniqueDotSize)
     settings.Insert("uniqueImmunitySize", uniqueImmunitySize)
     settings.Insert("deadDotSize", deadDotSize)
     settings.Insert("bossDotSize", bossDotSize)
+    settings.Insert("MissileMajor", MissileMajor)
+    settings.Insert("MissileMinor", MissileMinor)
 
     settings.Insert("physicalImmuneColor", physicalImmuneColor)
     settings.Insert("magicImmuneColor", magicImmuneColor)

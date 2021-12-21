@@ -127,8 +127,8 @@ buildUnitList(catagory){
     %catagory%Array:=[]
     loop, parse, %catagory%,`n`r,%A_Space% %A_Tab%
     {
-        UnitName:=RegExReplace(a_loopfield, "^(\w.*)=(\d{0,3}).*$" , "$1",,-1,1)
-        UnitID:=RegExReplace(a_loopfield, "^(\w.*)=(.*)$" , "$2",,-1,1)
+        UnitName:=RegExReplace(a_loopfield, "^(\w.*)=\d{0,3}.*$" , "$1",,-1,1)
+        UnitID:=RegExReplace(a_loopfield, "^\w.*=(\d{0,3}).*$" , "$1",,-1,1)
         unitIDNAME:={"ID": UnitID, "name": UnitName}
         %catagory%Array.push(unitIDNAME)
     }

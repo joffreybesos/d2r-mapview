@@ -1,14 +1,21 @@
-#SingleInstance, Force
+;#SingleInstance, Force
 #Persistent
+if not A_IsAdmin {
+    run *RunAs "%A_ScriptFullPath%"
+    ExitApp
+}
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
+#Include <automap>
+
 #Include %A_ScriptDir%\include\logging.ahk
+#Include %A_ScriptDir%\memory\readSettings.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk
+#Include %A_ScriptDir%\memory\patternScan.ahk
 #Include %A_ScriptDir%\memory\scanForPlayer.ahk
 #Include %A_ScriptDir%\memory\readGameMemory.ahk
 #Include %A_ScriptDir%\memory\isAutomapShown.ahk
 #Include %A_ScriptDir%\memory\readLastGameName.ahk
-#Include %A_ScriptDir%\memory\patternScan.ahk
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
 #Include %A_ScriptDir%\ui\showMap.ahk
@@ -16,7 +23,6 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showHelp.ahk
 #Include %A_ScriptDir%\ui\showUnits.ahk
 #Include %A_ScriptDir%\ui\showLastGame.ahk
-#Include %A_ScriptDir%\readSettings.ahk
 
 expectedVersion := "2.3.7"
 
@@ -57,6 +63,10 @@ global isMapShowing:=1
 global debug := settings["debug"]
 global gameWindowId := settings["gameWindowId"]
 global gameStartTime:=0
+WinGetPos, DX, DY
+global levelxmargin:=DX
+global levelymargin:=DY
+
 
 global diabloFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
 
@@ -107,6 +117,9 @@ unitHwnd1 := WinExist()
 offsetAttempts := 6
 ticktock := 0
 While 1 {
+    WinGetPos, leftMargin, topMargin, winWidth, winHeight, % settings["gameWindowId"]
+    settings["leftMargin"]:=leftMargin
+    settings["topMargin"]:=topMargin
     ; scan for the player offset
     playerOffset := scanForPlayer(d2rprocess, playerOffset, startingOffset, settings)
 
@@ -158,11 +171,13 @@ While 1 {
                     Gui, Units: Show, NA
                 }
                 ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+            } else if ( OLDleftMargin=!leftMargin |  OLDtopMargin=!topMargin ){
+                ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
             }
             ; update player layer on each loop
             uiData["ticktock"] := ticktock
             ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
-            checkAutomapVisibility(d2rprocess, settings, gameMemoryData["levelNo"])
+            ;checkAutomapVisibility(d2rprocess, settings, gameMemoryData["levelNo"])
 
             lastlevel := gameMemoryData["levelNo"]
         } else {
@@ -177,56 +192,17 @@ While 1 {
         ExitApp
     }
     ticktock := not ticktock
+    OLDleftMargin:=leftMargin
+    OLDtopMargin:=topMargin
+    WinGetPos, leftMargin, topMargin, winWidth, winHeight, % settings["gameWindowId"]
+
 }
-
-checkAutomapVisibility(d2rprocess, settings, levelNo) {
-    uiOffset:= settings["uiOffset"]
-    alwaysShowMap:= settings["alwaysShowMap"]
-    hideTown:= settings["hideTown"]
-    ;WriteLogDebug("Checking visibility, hideTown: " hideTown " alwaysShowMap: " alwaysShowMap)
-    if ((levelNo == 1 or levelNo == 40 or levelNo == 75 or levelNo == 103 or levelNo == 109) and hideTown) {
-        if (isMapShowing) {
-            WriteLogDebug("Hiding town " levelNo " since hideTown is set to true")
-        }
-        hideMap(false)
-    } else if not WinActive(gameWindowId) {
-        if (isMapShowing) {
-            WriteLogDebug("D2R is not active window, hiding map")
-        }
-        hideMap(false)
-    } else if (!isAutomapShown(d2rprocess, uiOffset) and !alwaysShowMap) {
-        ; hidemap
-        hideMap(alwaysShowMap)
-    } else {
-        unHideMap()
-    } 
-    return
-}
-
-hideMap(alwaysShowMap) {
-    if (alwaysShowMap == false) {
-        Gui, Map: Hide
-        Gui, Units: Hide
-        if (isMapShowing) {
-            WriteLogDebug("Map hidden")
-        }
-        isMapShowing:= 0
-    }
-}
-
-unHideMap() {
-    ;showmap
-    if (!isMapShowing) {
-        WriteLogDebug("Map shown")
-    }
-    isMapShowing:= 1
-    Gui, Map: Show, NA
-    Gui, Units: Show, NA
-}
+;END OF MAIN
 
 
-+F10::
-{
+
+;+F10::
+closeApp(){
     WriteLog("Pressed Shift+F10, exiting...")
     WriteTimedLog()
     ExitApp
@@ -277,7 +253,7 @@ MapSizeDecrease:
     return
 }
     
-#IfWinActive, ahk_exe D2R.exe
+;#IfWinActive, ahk_exe D2R.exe
     MoveMapLeft:
     {
         levelNo := gameMemoryData["levelNo"]

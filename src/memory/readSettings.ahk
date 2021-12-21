@@ -10,8 +10,12 @@ readSettings(settingsFile, ByRef settings) {
 
     IniRead, maxWidth, settings.ini, MapSettings, maxWidth, 2000
     IniRead, scale, settings.ini, MapSettings, scale, 1.0
-    IniRead, topMargin, settings.ini, MapSettings, topMargin, 50
-    IniRead, leftMargin, settings.ini, MapSettings, leftMargin, 50
+    ;IniRead, topMargin, settings.ini, MapSettings, topMargin, 50
+    ;IniRead, leftMargin, settings.ini, MapSettings, leftMargin, 50
+    ;WinGetPos, Xmargin, Ymargin, winWidth, winHeight, % settings["gameWindowId"]
+    ;leftMargin:=Xmargin
+    ;topMargin:= Ymargin
+
     IniRead, opacity, settings.ini, MapSettings, opacity, 0.5
     IniRead, alwaysShowMap, settings.ini, MapSettings, alwaysShowMap, "false"
     IniRead, hideTown, settings.ini, MapSettings, hideTown, "false"

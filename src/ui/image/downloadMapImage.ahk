@@ -105,6 +105,7 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
             ;WriteLogDebug("Response Header: " A_LoopField)
             
             field := StrSplit(A_LoopField, ":")
+            ;listitall := ((listitall)?(listitall . A_LoopField . "`n"):(A_LoopField . "`n"))
             switch (field[1]) {
                 case "lefttrimmed": leftTrimmed := Trim(field[2]), foundFields++
                 case "toptrimmed": topTrimmed := Trim(field[2]), foundFields++
@@ -117,6 +118,7 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
                 case "bosses": bosses := Trim(field[2]), foundFields++
             }
         }
+        ;clipboard := listitall
         if (foundFields < 9) {
             WriteLog("ERROR: Did not find all expected response headers, turn on debug mode to view. Unexpected behaviour may occur")
         }

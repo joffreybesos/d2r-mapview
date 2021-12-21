@@ -75,6 +75,7 @@ izual_control=379
 izual_mist_loop=380
 izual_mist_fade=381
 tower_death=424
+pain_worm_appear=545
 world_stone_chip_1=570
 world_stone_chip_2=571
 world_stone_chip_3=572

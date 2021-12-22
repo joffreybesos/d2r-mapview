@@ -147,8 +147,10 @@ ShowHelpText(settings, leftMargin, topMargin) {
         drawHelpDot(bmp, pPenNormal, mobx+(dotSize/2), moby + (rowHeight * (4 + A_Index)+(dotSize/2)), dotSize)
     }
     bmp.SetToControl(HelpText1)
-    leftMargin := A_ScreenWidth / 4
-    gui, HelpText: Show, x%leftMargin% y%topMargin% NA
+    WinGetPos, helpX, helpY, helpWidth, helpHeight, % settings["gameWindowId"]
+    helpX:=( helpX + (helpWidth/5) )
+    helpY:=( helpY + (helpHeight/5) )
+    gui, HelpText: Show, x%helpX% y%helpY% NA ;need to scale?
     Return
 }
 

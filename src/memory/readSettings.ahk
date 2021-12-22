@@ -2,129 +2,133 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-readSettings(settingsFile, ByRef settings) {
-    FileInstall, mapconfig-default.ini, mapconfig.ini , 0
-    FileInstall, exocetblizzardot-medium.otf, exocetblizzardot-medium.otf , 1
-
-    IniRead, baseUrl, settings.ini, MapHost, baseUrl, ""
-
-    IniRead, maxWidth, settings.ini, MapSettings, maxWidth, 2000
-    IniRead, scale, settings.ini, MapSettings, scale, 1.0
-    ;IniRead, topMargin, settings.ini, MapSettings, topMargin, 50
-    ;IniRead, leftMargin, settings.ini, MapSettings, leftMargin, 50
-    ;WinGetPos, Xmargin, Ymargin, winWidth, winHeight, % settings["gameWindowId"]
-    ;leftMargin:=Xmargin
-    ;topMargin:= Ymargin
-
-    IniRead, opacity, settings.ini, MapSettings, opacity, 0.5
-    IniRead, alwaysShowMap, settings.ini, MapSettings, alwaysShowMap, "false"
-    IniRead, hideTown, settings.ini, MapSettings, hideTown, "false"
-    IniRead, edges, settings.ini, MapSettings, edges, "true"
-    IniRead, wallThickness, settings.ini, MapSettings, wallThickness, 1
-
-    IniRead, showGameInfo, settings.ini, GameInfo, showGameInfo, "true"
-
-    ; units
-    IniRead, showNormalMobs, settings.ini, Units, showNormalMobs, "true"
-    IniRead, showUniqueMobs, settings.ini, Units, showUniqueMobs, "true"
-    IniRead, showBosses, settings.ini, Units, showBosses, "true"
-    IniRead, showDeadMobs, settings.ini, Units, showDeadMobs, "true"
-    IniRead, showImmunities, settings.ini, Units, showImmunities, "true"
-    IniRead, showOtherPlayers, settings.ini, Units, showOtherPlayers, "true"
-    IniRead, showOtherPlayerNames, settings.ini, Units, showOtherPlayerNames, "true"
-    IniRead, showShrines, settings.ini, Units, showShrines, "true"
-    IniRead, showPortals, settings.ini, Units, showPortals, "true"
-    IniRead, showMercs, settings.ini, Units, showMercs, "true"
-    IniRead, showPlayerMissiles, settings.ini, Units, showPlayerMissiles, "false"
-    IniRead, showEnemyMissiles, settings.ini, Units, showEnemyMissiles, "false"
-    IniRead, ShowOtherMissileDebug, settings.ini, Units, ShowOtherMissileDebug, "false"
-    IniRead, ShowKnownMissileDebug, settings.ini, Units, ShowKnownMissileDebug, "false"
-    
-    ; items
-    IniRead, showUniqueAlerts, settings.ini, Units, showUniqueAlerts, "true"
-    IniRead, showSetItemAlerts, settings.ini, Units, showSetItemAlerts, "true"
-    IniRead, showRuneAlerts, settings.ini, Units, showRuneAlerts, "true"
-    IniRead, showJewelAlerts, settings.ini, Units, showJewelAlerts, "true"
-    IniRead, showCharmAlerts, settings.ini, Units, showCharmAlerts, "true"
-    
-    ; colours
-    IniRead, normalMobColor, settings.ini, Visuals, normalMobColor, "FFFFFF"
-    IniRead, uniqueMobColor, settings.ini, Visuals, uniqueMobColor, "D4AF37"
-    IniRead, bossColor, settings.ini, Visuals, bossColor, "FF0000"
-    IniRead, deadColor, settings.ini, Visuals, deadColor, "000000"
-
-    IniRead, mercColor, settings.ini, Visuals, mercColor, "00FFFF"
-    IniRead, PhysicalMajorColor, settings.ini, Visuals, PhysicalMajorColor, "FFC2C2"
-    IniRead, PhysicalMinorColor, settings.ini, Visuals, PhysicalMinorColor, "C99D9D"
-    IniRead, FireMajorColor, settings.ini, Visuals, FireMajorColor, "FF0000"
-    IniRead, FireMinorColor, settings.ini, Visuals, FireMinorColor, "C20000"
-    IniRead, IceMajorColor, settings.ini, Visuals, IceMajorColor, "00D0FF"
-    IniRead, IceMinorColor, settings.ini, Visuals, IceMinorColor, "0098BA"
-    IniRead, LightMajorColor, settings.ini, Visuals, LightMajorColor, "FFFF00"
-    IniRead, LightMinorColor, settings.ini, Visuals, LightMinorColor, "A3A300"
-    IniRead, PoisonMajorColor, settings.ini, Visuals, PoisonMajorColor, "00FF00"
-    IniRead, PoisonMinorColor, settings.ini, Visuals, PoisonMinorColor, "009C00"
-    IniRead, MagicMajorColor, settings.ini, Visuals, MagicMajorColor, "FF7300"
-    IniRead, MagicMinorColor, settings.ini, Visuals, MagicMinorColor, "B35000"
-    IniRead, otherMissilesColor, settings.ini, Visuals, otherMissilesColor, "9500FF"
-    IniRead, unknownMissilesColor, settings.ini, Visuals, unknownMissilesColor, "FF00FF"
-    IniRead, defaultMissleColor, settings.ini, Visuals, defaultMissleColor, "FF00FF"
-
-    IniRead, normalDotSize, settings.ini, Visuals, normalDotSize, 2.5
-    IniRead, normalImmunitySize, settings.ini, Visuals, normalImmunitySize, 4
-    IniRead, uniqueDotSize, settings.ini, Visuals, uniqueDotSize, 5
-    IniRead, uniqueImmunitySize, settings.ini, Visuals, uniqueImmunitySize, 11
-    IniRead, deadDotSize, settings.ini, Visuals, deadDotSize, 2
-    IniRead, bossDotSize, settings.ini, Visuals, bossDotSize, 5
-    IniRead, MissileMajor, settings.ini, Visuals, MissileMajor, 6
-    IniRead, MissileMinor, settings.ini, Visuals, MissileMinor, 3
-
-    ; immunities
-    IniRead, physicalImmuneColor, settings.ini, Visuals, physicalImmuneColor, "CD853f"
-    IniRead, magicImmuneColor, settings.ini, Visuals, magicImmuneColor, "ff8800"
-    IniRead, fireImmuneColor, settings.ini, Visuals, fireImmuneColor, "FF0000"
-    IniRead, lightImmuneColor, settings.ini, Visuals, lightImmuneColor, "FFFF00"
-    IniRead, coldImmuneColor, settings.ini, Visuals, coldImmuneColor, "0000FF"
-    IniRead, poisonImmuneColor, settings.ini, Visuals, poisonImmuneColor, "32CD32"
-    
-    ; items
-    IniRead, runeItemColor, settings.ini, Visuals, runeItemColor, "FFa700"
-    IniRead, uniqueItemColor, settings.ini, Visuals, uniqueItemColor, "BBA45B"
-    IniRead, setItemColor, settings.ini, Visuals, setItemColor, "00FC00"
-    IniRead, charmItemColor, settings.ini, Visuals, charmItemColor, "FFa700"
-    IniRead, jewelItemColor, settings.ini, Visuals, jewelItemColor, "FFa700"
-
-    IniRead, portalColor, settings.ini, Visuals, portalColor, "FFD700"
-    IniRead, redPortalColor, settings.ini, Visuals, redPortalColor, "FF0000"
-    IniRead, shrineColor, settings.ini, Visuals, shrineColor, "FFD700"
-    IniRead, shrineTextSize, settings.ini, Visuals, shrineTextSize, "14"
-
-    ; lines
-    IniRead, showWaypointLine, settings.ini, Lines, showWaypointLine, "false"
-    IniRead, showNextExitLine, settings.ini, Lines, showNextExitLine, "true"
-    IniRead, showBossLine, settings.ini, Lines, showBossLine, "true"
-
-    ; hot keys
-    IniRead, increaseMapSizeKey, settings.ini, Hotkeys, increaseMapSizeKey, NumpadAdd
-    IniRead, decreaseMapSizeKey, settings.ini, Hotkeys, decreaseMapSizeKey, NumpadSub
-    IniRead, alwaysShowKey, settings.ini, Hotkeys, alwaysShowKey, NumpadMult
-
-    IniRead, moveMapLeft, settings.ini, Hotkeys, moveMapLeft, #Left
-    IniRead, moveMapRight, settings.ini, Hotkeys, moveMapRight, #Right
-    IniRead, moveMapUp, settings.ini, Hotkeys, moveMapUp, #Up
-    IniRead, moveMapDown, settings.ini, Hotkeys, moveMapDown, #Down
-
-    ; other
-    IniRead, performanceMode, settings.ini, Other, performanceMode, 0
+readSettings(settingsFile, ByRef SettingsArray) {
+    SettingsArray := {}
 
     ; multi session
-    IniRead, enableD2ML, settings.ini, MultiLaunch, enableD2ML
+    IniRead, enableD2ML,% settingsFile, MultiLaunch, enableD2ML
+    SettingsArray.Insert("enableD2ML", enableD2ML)
     if (enableD2ML == "true") {
-        IniRead, gameWindowId, settings.ini, MultiLaunch, windowTitle
+        IniRead, gameWindowId,% settingsFile, MultiLaunch, windowTitle
     } else {
         gameWindowId := "ahk_exe D2R.exe"  ;default to normal window id
     }
-    IniRead, debug, settings.ini, Logging, debug, "false"
+    SettingsArray.Insert("gameWindowId", gameWindowId)
+
+    FileInstall, mapconfig-default.ini, mapconfig.ini , 0
+    FileInstall, exocetblizzardot-medium.otf, exocetblizzardot-medium.otf , 1
+    FileInstall, missiles-default.ini, missiles.ini , 0
+
+    IniRead, baseUrl,% settingsFile, MapHost, baseUrl, ""
+
+    IniRead, maxWidth,% settingsFile, MapSettings, maxWidth, 2000
+    IniRead, scale,% settingsFile, MapSettings, scale, 1.0
+    IniRead, topMargin,% settingsFile, MapSettings, topMargin, 50
+    IniRead, leftMargin,% settingsFile, MapSettings, leftMargin, 50
+    
+    IniRead, opacity,% settingsFile, MapSettings, opacity, 0.5
+    IniRead, alwaysShowMap,% settingsFile, MapSettings, alwaysShowMap, "false"
+    IniRead, hideTown,% settingsFile, MapSettings, hideTown, "false"
+    IniRead, edges,% settingsFile, MapSettings, edges, "true"
+    IniRead, wallThickness,% settingsFile, MapSettings, wallThickness, 1
+
+    IniRead, showGameInfo,% settingsFile, GameInfo, showGameInfo, "true"
+
+    ; units
+    IniRead, showNormalMobs,% settingsFile, Units, showNormalMobs, "true"
+    IniRead, showUniqueMobs,% settingsFile, Units, showUniqueMobs, "true"
+    IniRead, showBosses,% settingsFile, Units, showBosses, "true"
+    IniRead, showDeadMobs,% settingsFile, Units, showDeadMobs, "true"
+    IniRead, showImmunities,% settingsFile, Units, showImmunities, "true"
+    IniRead, showOtherPlayers,% settingsFile, Units, showOtherPlayers, "true"
+    IniRead, showOtherPlayerNames,% settingsFile, Units, showOtherPlayerNames, "true"
+    IniRead, showShrines,% settingsFile, Units, showShrines, "true"
+    IniRead, showPortals,% settingsFile, Units, showPortals, "true"
+    IniRead, showMercs,% settingsFile, Units, showMercs, "true"
+    IniRead, showPlayerMissiles,% settingsFile, Units, showPlayerMissiles, "false"
+    IniRead, showEnemyMissiles,% settingsFile, Units, showEnemyMissiles, "false"
+    IniRead, ShowOtherMissileDebug,% settingsFile, Units, ShowOtherMissileDebug, "false"
+    IniRead, ShowKnownMissileDebug,% settingsFile, Units, ShowKnownMissileDebug, "false"
+    
+    ; items
+    IniRead, showUniqueAlerts,% settingsFile, Units, showUniqueAlerts, "true"
+    IniRead, showSetItemAlerts,% settingsFile, Units, showSetItemAlerts, "true"
+    IniRead, showRuneAlerts,% settingsFile, Units, showRuneAlerts, "true"
+    IniRead, showJewelAlerts,% settingsFile, Units, showJewelAlerts, "true"
+    IniRead, showCharmAlerts,% settingsFile, Units, showCharmAlerts, "true"
+    
+    ; colours
+    IniRead, normalMobColor,% settingsFile, Visuals, normalMobColor, "FFFFFF"
+    IniRead, uniqueMobColor,% settingsFile, Visuals, uniqueMobColor, "D4AF37"
+    IniRead, bossColor,% settingsFile, Visuals, bossColor, "FF0000"
+    IniRead, deadColor,% settingsFile, Visuals, deadColor, "000000"
+
+    IniRead, mercColor,% settingsFile, Visuals, mercColor, "00FFFF"
+    IniRead, PhysicalMajorColor,% settingsFile, Visuals, PhysicalMajorColor, "FFC2C2"
+    IniRead, PhysicalMinorColor,% settingsFile, Visuals, PhysicalMinorColor, "C99D9D"
+    IniRead, FireMajorColor,% settingsFile, Visuals, FireMajorColor, "FF0000"
+    IniRead, FireMinorColor,% settingsFile, Visuals, FireMinorColor, "C20000"
+    IniRead, IceMajorColor,% settingsFile, Visuals, IceMajorColor, "00D0FF"
+    IniRead, IceMinorColor,% settingsFile, Visuals, IceMinorColor, "0098BA"
+    IniRead, LightMajorColor,% settingsFile, Visuals, LightMajorColor, "FFFF00"
+    IniRead, LightMinorColor,% settingsFile, Visuals, LightMinorColor, "A3A300"
+    IniRead, PoisonMajorColor,% settingsFile, Visuals, PoisonMajorColor, "00FF00"
+    IniRead, PoisonMinorColor,% settingsFile, Visuals, PoisonMinorColor, "009C00"
+    IniRead, MagicMajorColor,% settingsFile, Visuals, MagicMajorColor, "FF7300"
+    IniRead, MagicMinorColor,% settingsFile, Visuals, MagicMinorColor, "B35000"
+    IniRead, otherMissilesColor,% settingsFile, Visuals, otherMissilesColor, "9500FF"
+    IniRead, unknownMissilesColor,% settingsFile, Visuals, unknownMissilesColor, "FF00FF"
+    IniRead, defaultMissleColor,% settingsFile, Visuals, defaultMissleColor, "FF00FF"
+
+    IniRead, normalDotSize,% settingsFile, Visuals, normalDotSize, 2.5
+    IniRead, normalImmunitySize,% settingsFile, Visuals, normalImmunitySize, 4
+    IniRead, uniqueDotSize,% settingsFile, Visuals, uniqueDotSize, 5
+    IniRead, uniqueImmunitySize,% settingsFile, Visuals, uniqueImmunitySize, 11
+    IniRead, deadDotSize,% settingsFile, Visuals, deadDotSize, 2
+    IniRead, bossDotSize,% settingsFile, Visuals, bossDotSize, 5
+    IniRead, MissileMajor,% settingsFile, Visuals, MissileMajor, 6
+    IniRead, MissileMinor,% settingsFile, Visuals, MissileMinor, 3
+
+    ; immunities
+    IniRead, physicalImmuneColor,% settingsFile, Visuals, physicalImmuneColor, "CD853f"
+    IniRead, magicImmuneColor,% settingsFile, Visuals, magicImmuneColor, "ff8800"
+    IniRead, fireImmuneColor,% settingsFile, Visuals, fireImmuneColor, "FF0000"
+    IniRead, lightImmuneColor,% settingsFile, Visuals, lightImmuneColor, "FFFF00"
+    IniRead, coldImmuneColor,% settingsFile, Visuals, coldImmuneColor, "0000FF"
+    IniRead, poisonImmuneColor,% settingsFile, Visuals, poisonImmuneColor, "32CD32"
+    
+    ; items
+    IniRead, runeItemColor,% settingsFile, Visuals, runeItemColor, "FFa700"
+    IniRead, uniqueItemColor,% settingsFile, Visuals, uniqueItemColor, "BBA45B"
+    IniRead, setItemColor,% settingsFile, Visuals, setItemColor, "00FC00"
+    IniRead, charmItemColor,% settingsFile, Visuals, charmItemColor, "FFa700"
+    IniRead, jewelItemColor,% settingsFile, Visuals, jewelItemColor, "FFa700"
+
+    IniRead, portalColor,% settingsFile, Visuals, portalColor, "FFD700"
+    IniRead, redPortalColor,% settingsFile, Visuals, redPortalColor, "FF0000"
+    IniRead, shrineColor,% settingsFile, Visuals, shrineColor, "FFD700"
+    IniRead, shrineTextSize,% settingsFile, Visuals, shrineTextSize, "14"
+
+    ; lines
+    IniRead, showWaypointLine,% settingsFile, Lines, showWaypointLine, "false"
+    IniRead, showNextExitLine,% settingsFile, Lines, showNextExitLine, "true"
+    IniRead, showBossLine,% settingsFile, Lines, showBossLine, "true"
+
+    ; hot keys
+    IniRead, increaseMapSizeKey,% settingsFile, Hotkeys, increaseMapSizeKey, NumpadAdd
+    IniRead, decreaseMapSizeKey,% settingsFile, Hotkeys, decreaseMapSizeKey, NumpadSub
+    IniRead, alwaysShowKey,% settingsFile, Hotkeys, alwaysShowKey, NumpadMult
+
+    IniRead, moveMapLeft,% settingsFile, Hotkeys, moveMapLeft, #Left
+    IniRead, moveMapRight,% settingsFile, Hotkeys, moveMapRight, #Right
+    IniRead, moveMapUp,% settingsFile, Hotkeys, moveMapUp, #Up
+    IniRead, moveMapDown,% settingsFile, Hotkeys, moveMapDown, #Down
+
+    ; other
+    IniRead, performanceMode,% settingsFile, Other, performanceMode, 0
+
+    
+    IniRead, debug,% settingsFile, Logging, debug, "false"
 
     ; Here is a good example of why AHK sucks
     hideTown := hideTown = "true" ; convert to bool
@@ -155,104 +159,105 @@ readSettings(settingsFile, ByRef settings) {
     ShowOtherMissileDebug := ShowOtherMissileDebug = "true"
     ShowKnownMissileDebug := ShowKnownMissileDebug = "true"
 
-    ; AHK also doesn't let you declare an array a more sensible way
-    settings := {}
-    settings.Insert("baseUrl", baseUrl)
-    settings.Insert("maxWidth", maxWidth)
-    settings.Insert("scale", scale)
-    settings.Insert("leftMargin", leftMargin)
-    settings.Insert("topMargin", topMargin)
-    settings.Insert("opacity", opacity)
-    settings.Insert("alwaysShowMap", alwaysShowMap)
-    settings.Insert("hideTown", hideTown)
-    settings.Insert("edges", edges)
-    settings.Insert("wallThickness", wallThickness)
-    settings.Insert("showNormalMobs", showNormalMobs)
-    settings.Insert("showUniqueMobs", showUniqueMobs)
-    settings.Insert("showBosses", showBosses)
-    settings.Insert("showDeadMobs", showDeadMobs)
-    settings.Insert("showOtherPlayers", showOtherPlayers)
-    settings.Insert("showOtherPlayerNames", showOtherPlayerNames)
-    settings.Insert("showShrines", showShrines)
-    settings.Insert("showPortals", showPortals)
+    ; AHK also doesn't let you declare an SettingsArray a more sensible way
+    
+    SettingsArray.Insert("baseUrl", baseUrl)
+    SettingsArray.Insert("maxWidth", maxWidth)
+    SettingsArray.Insert("scale", scale)
+    SettingsArray.Insert("leftMarginControl", leftMargin)
+    SettingsArray.Insert("topMarginControl", topMargin)
+    SettingsArray.Insert("leftMargin", leftMargin)
+    SettingsArray.Insert("topMargin", topMargin)
+    SettingsArray.Insert("opacity", opacity)
+    SettingsArray.Insert("alwaysShowMap", alwaysShowMap)
+    SettingsArray.Insert("hideTown", hideTown)
+    SettingsArray.Insert("edges", edges)
+    SettingsArray.Insert("wallThickness", wallThickness)
+    SettingsArray.Insert("showNormalMobs", showNormalMobs)
+    SettingsArray.Insert("showUniqueMobs", showUniqueMobs)
+    SettingsArray.Insert("showBosses", showBosses)
+    SettingsArray.Insert("showDeadMobs", showDeadMobs)
+    SettingsArray.Insert("showOtherPlayers", showOtherPlayers)
+    SettingsArray.Insert("showOtherPlayerNames", showOtherPlayerNames)
+    SettingsArray.Insert("showShrines", showShrines)
+    SettingsArray.Insert("showPortals", showPortals)
 
-    settings.Insert("showMercs", showMercs)
-    settings.Insert("showMissiles", showMissiles)
-    settings.Insert("showPlayerMissiles", showPlayerMissiles)
-    settings.Insert("showEnemyMissiles", showEnemyMissiles)
-    settings.Insert("ShowOtherMissileDebug", ShowOtherMissileDebug)
-    settings.Insert("ShowKnownMissileDebug", ShowKnownMissileDebug)
+    SettingsArray.Insert("showMercs", showMercs)
+    SettingsArray.Insert("showMissiles", showMissiles)
+    SettingsArray.Insert("showPlayerMissiles", showPlayerMissiles)
+    SettingsArray.Insert("showEnemyMissiles", showEnemyMissiles)
+    SettingsArray.Insert("ShowOtherMissileDebug", ShowOtherMissileDebug)
+    SettingsArray.Insert("ShowKnownMissileDebug", ShowKnownMissileDebug)
 
-    settings.Insert("showUniqueAlerts", showUniqueAlerts)
-    settings.Insert("showSetItemAlerts", showSetItemAlerts)
-    settings.Insert("showRuneAlerts", showRuneAlerts)
-    settings.Insert("showJewelAlerts", showJewelAlerts)
-    settings.Insert("showCharmAlerts", showCharmAlerts)
+    SettingsArray.Insert("showUniqueAlerts", showUniqueAlerts)
+    SettingsArray.Insert("showSetItemAlerts", showSetItemAlerts)
+    SettingsArray.Insert("showRuneAlerts", showRuneAlerts)
+    SettingsArray.Insert("showJewelAlerts", showJewelAlerts)
+    SettingsArray.Insert("showCharmAlerts", showCharmAlerts)
 
-    settings.Insert("normalMobColor", normalMobColor)
-    settings.Insert("uniqueMobColor", uniqueMobColor)
-    settings.Insert("bossColor", bossColor)
-    settings.Insert("deadColor", deadColor)
+    SettingsArray.Insert("normalMobColor", normalMobColor)
+    SettingsArray.Insert("uniqueMobColor", uniqueMobColor)
+    SettingsArray.Insert("bossColor", bossColor)
+    SettingsArray.Insert("deadColor", deadColor)
 
-    settings.Insert("mercColor", mercColor)
-    settings.Insert("PhysicalMajorColor", PhysicalMajorColor)
-    settings.Insert("PhysicalMinorColor", PhysicalMinorColor)
-    settings.Insert("FireMajorColor", FireMajorColor)
-    settings.Insert("FireMinorColor", FireMinorColor)
-    settings.Insert("IceMajorColor", IceMajorColor)
-    settings.Insert("IceMinorColor", IceMinorColor)
-    settings.Insert("LightMajorColor", LightMajorColor)
-    settings.Insert("LightMinorColor", LightMinorColor)
-    settings.Insert("PoisonMajorColor", PoisonMajorColor)
-    settings.Insert("PoisonMinorColor", PoisonMinorColor)
-    settings.Insert("MagicMajorColor", MagicMajorColor)
-    settings.Insert("MagicMinorColor", MagicMinorColor)
-    settings.Insert("otherMissilesColor", otherMissilesColor)
-    settings.Insert("unknownMissileColor", unknownMissileColor)
-    settings.Insert("defaultMissleColor", defaultMissleColor)
+    SettingsArray.Insert("mercColor", mercColor)
+    SettingsArray.Insert("PhysicalMajorColor", PhysicalMajorColor)
+    SettingsArray.Insert("PhysicalMinorColor", PhysicalMinorColor)
+    SettingsArray.Insert("FireMajorColor", FireMajorColor)
+    SettingsArray.Insert("FireMinorColor", FireMinorColor)
+    SettingsArray.Insert("IceMajorColor", IceMajorColor)
+    SettingsArray.Insert("IceMinorColor", IceMinorColor)
+    SettingsArray.Insert("LightMajorColor", LightMajorColor)
+    SettingsArray.Insert("LightMinorColor", LightMinorColor)
+    SettingsArray.Insert("PoisonMajorColor", PoisonMajorColor)
+    SettingsArray.Insert("PoisonMinorColor", PoisonMinorColor)
+    SettingsArray.Insert("MagicMajorColor", MagicMajorColor)
+    SettingsArray.Insert("MagicMinorColor", MagicMinorColor)
+    SettingsArray.Insert("otherMissilesColor", otherMissilesColor)
+    SettingsArray.Insert("unknownMissileColor", unknownMissileColor)
+    SettingsArray.Insert("defaultMissleColor", defaultMissleColor)
 
-    settings.Insert("normalDotSize", normalDotSize)
-    settings.Insert("normalImmunitySize", normalImmunitySize)
-    settings.Insert("uniqueDotSize", uniqueDotSize)
-    settings.Insert("uniqueImmunitySize", uniqueImmunitySize)
-    settings.Insert("deadDotSize", deadDotSize)
-    settings.Insert("bossDotSize", bossDotSize)
-    settings.Insert("MissileMajor", MissileMajor)
-    settings.Insert("MissileMinor", MissileMinor)
+    SettingsArray.Insert("normalDotSize", normalDotSize)
+    SettingsArray.Insert("normalImmunitySize", normalImmunitySize)
+    SettingsArray.Insert("uniqueDotSize", uniqueDotSize)
+    SettingsArray.Insert("uniqueImmunitySize", uniqueImmunitySize)
+    SettingsArray.Insert("deadDotSize", deadDotSize)
+    SettingsArray.Insert("bossDotSize", bossDotSize)
+    SettingsArray.Insert("MissileMajor", MissileMajor)
+    SettingsArray.Insert("MissileMinor", MissileMinor)
 
-    settings.Insert("physicalImmuneColor", physicalImmuneColor)
-    settings.Insert("magicImmuneColor", magicImmuneColor)
-    settings.Insert("fireImmuneColor", fireImmuneColor)
-    settings.Insert("lightImmuneColor", lightImmuneColor)
-    settings.Insert("coldImmuneColor", coldImmuneColor)
-    settings.Insert("poisonImmuneColor", poisonImmuneColor)
-    settings.Insert("runeItemColor", runeItemColor)
-    settings.Insert("uniqueItemColor", uniqueItemColor)
-    settings.Insert("setItemColor", setItemColor)
-    settings.Insert("charmItemColor", charmItemColor)
-    settings.Insert("jewelItemColor", jewelItemColor)
-    settings.Insert("redPortalColor", redPortalColor)
-    settings.Insert("portalColor", portalColor)
-    settings.Insert("shrineColor", shrineColor)
-    settings.Insert("shrineTextSize", shrineTextSize)
+    SettingsArray.Insert("physicalImmuneColor", physicalImmuneColor)
+    SettingsArray.Insert("magicImmuneColor", magicImmuneColor)
+    SettingsArray.Insert("fireImmuneColor", fireImmuneColor)
+    SettingsArray.Insert("lightImmuneColor", lightImmuneColor)
+    SettingsArray.Insert("coldImmuneColor", coldImmuneColor)
+    SettingsArray.Insert("poisonImmuneColor", poisonImmuneColor)
+    SettingsArray.Insert("runeItemColor", runeItemColor)
+    SettingsArray.Insert("uniqueItemColor", uniqueItemColor)
+    SettingsArray.Insert("setItemColor", setItemColor)
+    SettingsArray.Insert("charmItemColor", charmItemColor)
+    SettingsArray.Insert("jewelItemColor", jewelItemColor)
+    SettingsArray.Insert("redPortalColor", redPortalColor)
+    SettingsArray.Insert("portalColor", portalColor)
+    SettingsArray.Insert("shrineColor", shrineColor)
+    SettingsArray.Insert("shrineTextSize", shrineTextSize)
 
-    settings.Insert("showImmunities", showImmunities)
-    settings.Insert("showWaypointLine", showWaypointLine)
-    settings.Insert("showNextExitLine", showNextExitLine)
-    settings.Insert("showBossLine", showBossLine)
-    settings.Insert("increaseMapSizeKey", increaseMapSizeKey)
-    settings.Insert("decreaseMapSizeKey", decreaseMapSizeKey)
-    settings.Insert("alwaysShowKey", alwaysShowKey)
+    SettingsArray.Insert("showImmunities", showImmunities)
+    SettingsArray.Insert("showWaypointLine", showWaypointLine)
+    SettingsArray.Insert("showNextExitLine", showNextExitLine)
+    SettingsArray.Insert("showBossLine", showBossLine)
+    SettingsArray.Insert("increaseMapSizeKey", increaseMapSizeKey)
+    SettingsArray.Insert("decreaseMapSizeKey", decreaseMapSizeKey)
+    SettingsArray.Insert("alwaysShowKey", alwaysShowKey)
 
-    settings.Insert("moveMapLeft", moveMapLeft)
-    settings.Insert("moveMapRight", moveMapRight)
-    settings.Insert("moveMapUp", moveMapUp)
-    settings.Insert("moveMapDown", moveMapDown)
-    settings.Insert("showGameInfo", showGameInfo)  
-    settings.Insert("performanceMode", performanceMode)
-    settings.Insert("enableD2ML", enableD2ML)
-    settings.Insert("gameWindowId", gameWindowId)
-    settings.Insert("debug", debug)
+    SettingsArray.Insert("moveMapLeft", moveMapLeft)
+    SettingsArray.Insert("moveMapRight", moveMapRight)
+    SettingsArray.Insert("moveMapUp", moveMapUp)
+    SettingsArray.Insert("moveMapDown", moveMapDown)
+    SettingsArray.Insert("showGameInfo", showGameInfo)  
+    SettingsArray.Insert("performanceMode", performanceMode)
+    
+    SettingsArray.Insert("debug", debug)
 
     WriteLog("Using configuration:")
     WriteLog("- baseUrl: " baseUrl)

@@ -1,9 +1,9 @@
 ;#SingleInstance, Force
 #Persistent
-if not A_IsAdmin {
-    run *RunAs "%A_ScriptFullPath%"
-    ExitApp
-}
+;if not A_IsAdmin {
+;    run *RunAs "%A_ScriptFullPath%"
+;    ExitApp
+;}
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 #Include <automap>
@@ -47,7 +47,8 @@ WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyV
 WriteLog("This map hack may not work on Windows 11")
 
 ClearCache(A_Temp)
-readSettings(settings.ini, settings)
+global settings ;available no matter what
+readSettings("settings.ini", settings)
 
 lastlevel:=""
 lastSeed:=""
@@ -63,9 +64,8 @@ global isMapShowing:=1
 global debug := settings["debug"]
 global gameWindowId := settings["gameWindowId"]
 global gameStartTime:=0
-WinGetPos, DX, DY
-global levelxmargin:=DX
-global levelymargin:=DY
+global levelxmargin
+global levelymargin
 
 
 global diabloFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
@@ -118,8 +118,8 @@ offsetAttempts := 6
 ticktock := 0
 While 1 {
     WinGetPos, leftMargin, topMargin, winWidth, winHeight, % settings["gameWindowId"]
-    settings["leftMargin"]:=leftMargin
-    settings["topMargin"]:=topMargin
+    settings["leftMargin"]:=settings["leftMarginControl"]+leftMargin-300
+    settings["topMargin"]:=settings["topMarginControl"] + topMargin+75
     ; scan for the player offset
     playerOffset := scanForPlayer(d2rprocess, playerOffset, startingOffset, settings)
 
@@ -197,65 +197,67 @@ While 1 {
     WinGetPos, leftMargin, topMargin, winWidth, winHeight, % settings["gameWindowId"]
 
 }
-;END OF MAIN
+return ;
+;END_OF_AHK_AE
 
 
-
-;+F10::
-closeApp(){
-    WriteLog("Pressed Shift+F10, exiting...")
-    WriteTimedLog()
-    ExitApp
++F10::
+if WinActive(settings["gameWindowId"]){ 
+    closeApp(){
+        WriteLog("Pressed Shift+F10, exiting...")
+        WriteTimedLog()
+        ExitApp
+    }
 }
+return
 
 
 MapAlwaysShow:
-{
-    settings["alwaysShowMap"] := !settings["alwaysShowMap"]
-    checkAutomapVisibility(d2rprocess, settings, gameMemoryData["levelNo"])
-    if (settings["alwaysShowMap"]) {
-        unHideMap()
-        IniWrite, true, settings.ini, MapSettings, alwaysShowMap
-    } else {
-        IniWrite, false, settings.ini, MapSettings, alwaysShowMap
+    if WinActive(settings["gameWindowId"]){ 
+        settings["alwaysShowMap"] := !settings["alwaysShowMap"]
+        checkAutomapVisibility(d2rprocess, settings, gameMemoryData["levelNo"])
+        if (settings["alwaysShowMap"]) {
+            unHideMap()
+            IniWrite, true, settings.ini, MapSettings, alwaysShowMap
+        } else {
+            IniWrite, false, settings.ini, MapSettings, alwaysShowMap
+        }
+        WriteLog("alwaysShowMap set to " settings["alwaysShowMap"])
     }
-    WriteLog("alwaysShowMap set to " settings["alwaysShowMap"])
     return
-}
 
 MapSizeIncrease:
-{
-    levelNo := gameMemoryData["levelNo"]
-    levelScale := imageData["levelScale"]
-    if (levelNo and levelScale) {
-        levelScale := levelScale + 0.05
-        IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
-        imageData["levelScale"] := levelScale
-        ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-        ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
-        WriteLog("Increased level " levelNo " scale by 0.05 to " levelScale)
+    if WinActive(settings["gameWindowId"]){ 
+        levelNo := gameMemoryData["levelNo"]
+        levelScale := imageData["levelScale"]
+        if (levelNo and levelScale) {
+            levelScale := levelScale + 0.05
+            IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
+            imageData["levelScale"] := levelScale
+            ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+            ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+            WriteLog("Increased level " levelNo " scale by 0.05 to " levelScale)
+        }
     }
     return
-}
+
 
 MapSizeDecrease:
-{
-    levelNo := gameMemoryData["levelNo"]
-    levelScale := imageData["levelScale"]
-    if (levelNo and levelScale) {
-        levelScale := levelScale - 0.05
-        IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
-        imageData["levelScale"] := levelScale
-        ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-        ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
-        WriteLog("Decreased level " levelNo " scale by 0.05 to " levelScale)
+    if WinActive(settings["gameWindowId"]){ 
+        levelNo := gameMemoryData["levelNo"]
+        levelScale := imageData["levelScale"]
+        if (levelNo and levelScale) {
+            levelScale := levelScale - 0.05
+            IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
+            imageData["levelScale"] := levelScale
+            ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+            ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+            WriteLog("Decreased level " levelNo " scale by 0.05 to " levelScale)
+        }
     }
     return
-}
-    
-;#IfWinActive, ahk_exe D2R.exe
-    MoveMapLeft:
-    {
+MoveMapLeft:
+      if WinActive(settings["gameWindowId"]){ 
         levelNo := gameMemoryData["levelNo"]
         levelxmargin := imageData["levelxmargin"]
         levelymargin := imageData["levelymargin"]
@@ -265,11 +267,11 @@ MapSizeDecrease:
             imageData["levelxmargin"] := levelxmargin
             ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
             ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+            }
         }
         return
-    }
-    MoveMapRight:
-    {
+MoveMapRight:
+    if WinActive(settings["gameWindowId"]){
         levelNo := gameMemoryData["levelNo"]
         levelxmargin := imageData["levelxmargin"]
         levelymargin := imageData["levelymargin"]
@@ -280,10 +282,10 @@ MapSizeDecrease:
             ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
             ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
         }
-        return
     }
-    MoveMapUp:
-    {
+        return
+MoveMapUp:
+    if WinActive(settings["gameWindowId"]){
         levelNo := gameMemoryData["levelNo"]
         levelxmargin := imageData["levelxmargin"]
         levelymargin := imageData["levelymargin"]
@@ -294,10 +296,10 @@ MapSizeDecrease:
             ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
             ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
         }
-        return
     }
-    MoveMapDown:
-    {
+        return
+MoveMapDown:
+    if WinActive(settings["gameWindowId"]){
         levelNo := gameMemoryData["levelNo"]
         levelxmargin := imageData["levelxmargin"]
         levelymargin := imageData["levelymargin"]
@@ -308,31 +310,51 @@ MapSizeDecrease:
             ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
             ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
         }
-        return
     }
-    ^H::
-    {
-        if (helpToggle) {
-            ShowHelpText(settings, 400, 200)
-            WriteLogDebug("Show Help")
-        } else {
-            Gui, HelpText: Hide
-            WriteLogDebug("Hide Help")
-        }
-        helpToggle := !helpToggle
         return
+    
+^H:: ;fix this more
+    if WinActive(settings["gameWindowId"]){ 
+    helpToggle := !helpToggle
+        if (helpToggle = 1) {
+        ShowHelpText(settings, 400, 200)
+        WriteLogDebug("Show Help")
+    } else {
+        Gui, HelpText: Hide
+        WriteLogDebug("Hide Help")
     }
-    ~TAB::
-    ~Space::
-    {
+    return
+    }
+    return
+~TAB::
+~Space::
+    if WinActive(settings["gameWindowId"]){
         checkAutomapVisibility(d2rprocess, settings, gameMemoryData["levelNo"])
-        return
     }
-    ~Esc::
-    {
+    return
+
+~Esc::
+    if WinActive(settings["gameWindowId"]){
         Gui, HelpText: Hide
         helpToggle := 1
     }
-    ~F13 & End::reload
-return
+    return
+
+~F13 & PrintScreen::
+    if WinActive(settings["gameWindowId"]){
+        maptoggle:=!maptoggle
+        if(maptoggle=1){
+                ;hideMap()
+                Gui, Map: Hide
+                Gui, Units: Hide
+            } else {
+                ;unHideMap()
+                Gui, Map: Show, NA
+                Gui, Units: Show, NA
+            }
+    }
+    return
+
+~F13 & End::reload
+    return
 

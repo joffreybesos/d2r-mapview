@@ -47,6 +47,7 @@ lastlevel:=""
 lastSeed:=""
 session := -1
 uidata:={}
+sessionList := []
 performanceMode := settings["performanceMode"]
 if (performanceMode != 0) {
     SetBatchLines, %performanceMode%
@@ -115,6 +116,7 @@ While 1 {
             if (session) {
                 session.setEndTime(A_TickCount)
                 session.saveEntry()
+                sessionList.push(session)
             } else { ; no previous session, just show last game name
                 if (settings["showGameInfo"]) {
                     lastGameName := readLastGameName(d2rprocess, gameWindowId, settings)

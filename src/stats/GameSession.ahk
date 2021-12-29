@@ -22,12 +22,18 @@ class GameSession {
         }
     }
 
-    saveEntry() {
+    getEntry() {
+        duration := this.getDuration()
+        entry := this.playerName "," this.gameName "," duration
+        return entry
+    }
+
+    saveEntryToFile() {
         if (!this.isLogged) { ; only log it once
-            duration := this.getDuration()
-            entry := this.playerName "," this.gameName "," duration
+            entry := this.getEntry()
             FileAppend, %entry%`n, gameSessionLog.csv
             this.isLogged := true
         }
     }
+
 }

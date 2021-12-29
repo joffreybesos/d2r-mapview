@@ -13,8 +13,6 @@ ShowGameText(gameName, hwnd1, gameTime, gameWindowId) {
     if (WinExist(gameWindowId)) {
         
         pToken := Gdip_Startup()
-
-         
         DetectHiddenWindows, On
         hbm := CreateDIBSection(Width, Height)
         hdc := CreateCompatibleDC()

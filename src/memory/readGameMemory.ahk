@@ -71,9 +71,20 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     
     pStatsListEx := d2rprocess.read(playerUnit + 0x88, "Int64")
     statPtr := d2rprocess.read(pStatsListEx + 0x30, "Int64")
-    
-    playerLevel := d2rprocess.read(statPtr + 0x4 + (11 * 8), "UInt")
-    experience := d2rprocess.read(statPtr + 0x4 + (12 * 8), "UInt")
+    statCount := d2rprocess.read(pStatsListEx + 0x38, "Int64")
+
+    ; get level and experience
+    Loop, %statCount%
+    {
+        statOffset := (A_Index-1) * 8
+        statEnum := d2rprocess.read(statPtr + 0x2 + statOffset, "UShort")
+        if (statEnum == 12) {
+            playerLevel := d2rprocess.read(statPtr + 0x4 + statOffset, "UInt")
+        }
+        if (statEnum == 13) {
+            experience := d2rprocess.read(statPtr + 0x4 + statOffset, "UInt")
+        }
+    }
 
     ; get other players
     if (settings["showOtherPlayers"]) {

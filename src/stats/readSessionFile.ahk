@@ -4,9 +4,13 @@
 
 readSessionFile(historyFile) {
     sessionList := []
+    Loop, Read, %historyFile%
+    {
+        total_lines = %A_Index%
+    }
     Loop, read, %historyFile%
     {
-        if (A_Index > 1) {
+        if (A_Index > 1 and A_Index > (total_lines-50)) { ; only the last 50 lines
             Loop, parse, A_LoopReadLine, CSV
             {
                 switch (A_Index) {
@@ -18,8 +22,6 @@ readSessionFile(historyFile) {
                   case 7: startingExperience := A_LoopField
                   case 8: endingExperience := A_LoopField
                 }
-
-                
             }
             session := new GameSession(gameName, A_TickCount, playerName)
             session.duration := duration
@@ -29,8 +31,6 @@ readSessionFile(historyFile) {
             session.endingExperience := endingExperience
             sessionList.push(session)
         }
-        if (A_Index > 50)
-            break
     }
     return sessionList
 }

@@ -20,7 +20,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.3.9"
+expectedVersion := "2.4.0"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -125,13 +125,13 @@ While 1 {
                 session.endingPlayerLevel := lastPlayerLevel
                 session.endingExperience := lastPlayerExperience
                 if (!session.isLogged) {
+                    SetFormat Integer, D
                     session.saveEntryToFile()
                 }
             }
             if (settings["showGameInfo"]) {
                 SetFormat Integer, D
                 if (!sessionList.MaxIndex()) {
-                    WriteLog("Reading session game data")
                     sessionList := readSessionFile("GameSessionLog.csv")
                 }
                 ShowHistoryText(gamenameHwnd1, gameWindowId, sessionList, settings["textAlignment"], settings["textSectionWidth"], settings["textSize"])

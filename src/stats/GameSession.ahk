@@ -1,3 +1,5 @@
+SetWorkingDir, %A_ScriptDir%
+
 class GameSession {
     gameName := ""
     playerName := ""
@@ -15,6 +17,7 @@ class GameSession {
     }
 
     getDuration() {
+        SetFormat Integer, D
         if (this.endTime == 0) {
             return Round((A_TickCount - this.startTime) / 1000.0, 2)
         } else {
@@ -35,5 +38,4 @@ class GameSession {
             this.isLogged := true
         }
     }
-
 }

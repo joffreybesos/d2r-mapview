@@ -2,14 +2,19 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-ShowGameText(gameName, hwnd1, gameTime, gameWindowId) {
+ShowGameText(gameName, hwnd1, gameWindowId, position = "RIGHT", textBoxWidth = 800, fontSize = 26) {
     WinGetPos, , , Width, Height, %gameWindowId%
-    
-    Height := 400
-    leftMargin := Width - 420
+    if (position == "RIGHT") {
+        leftMargin := Width - textBoxWidth
+        textAlign := "Left"
+    } else if (position = "LEFT") {
+        leftMargin := 20
+        textAlign := "Left"
+    } else {
+        leftMargin := Width - textBoxWidth
+        textAlign := "Left"
+    }
     topMargin := 20
-    
-    Width := 400
     if (WinExist(gameWindowId)) {
         
         pToken := Gdip_Startup()
@@ -19,14 +24,12 @@ ShowGameText(gameName, hwnd1, gameTime, gameWindowId) {
         obm := SelectObject(hdc, hbm)
         G := Gdip_GraphicsFromHDC(hdc)
         Gdip_SetSmoothingMode(G, 4)
-        pBrush := Gdip_BrushCreateSolid(0xAA000000)
-        Gdip_DeleteBrush(pBrush)
         
         if (gameName) {
-            Options = x0 y0 Left vCenter cffffffff r4 s22
+            Options = x0 y0 %textAlign% vCenter cffffffff r4 s%fontSize%
             Gdip_TextToGraphics(G, "Previous game name", Options, diabloFont, Width, 50)
 
-            Options = x0 y40 Left vCenter cffFFD700 r4 s24  Bold
+            Options = x0 y40 %textAlign% vCenter cffFFD700 r4 s%fontSize%
             Gdip_TextToGraphics(G, gameName, Options, diabloFont, Width, 50)
             UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, Width, Height)
         }
@@ -44,5 +47,4 @@ ShowGameText(gameName, hwnd1, gameTime, gameWindowId) {
     } else {
         gui, GameInfo: Hide
     }
-    Return
 }

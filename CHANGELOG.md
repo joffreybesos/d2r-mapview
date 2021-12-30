@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.8] - 2021-12-30 - Game history
+
+- Game history now shows in game menu
+- This will show all the games played since you last exited the MH
+- All game sessions are appended to a file `GameSessions.csv`
+- Turn off with `showGameHistory=true/false` in settings
+- When you first open the MH, the last game you played (if any) will show
+- But any subsequent completed runs will show on a table that will grow as you play additional games
+- The table shows 'Game Name, Character Name, Duration'
+
 ## [2.3.7] - 2021-12-17 - Charms and jewels
 
 - Charms and jewels are now detected on the ground

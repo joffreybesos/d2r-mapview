@@ -15,7 +15,6 @@ initMemory(gameWindowId) {
     if !isObject(d2rprocess) 
     {
         WriteLog(gameWindowId " not found, please make sure game is running")
-        WriteTimedLog()
         ExitApp
     }
     return d2rprocess

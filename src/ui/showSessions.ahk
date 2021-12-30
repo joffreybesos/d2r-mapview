@@ -1,20 +1,17 @@
 #SingleInstance, Force
 
-; #Include ..\include\Gdip_All.ahk
-#Include ..\..\src\stats\GameSession.ahk
+SetWorkingDir, %A_ScriptDir%
+#Include %A_ScriptDir%\include\Gdip_All.ahk
+#Include %A_ScriptDir%\stats\GameSession.ahk
 
 ShowHistoryText(hwnd1, gameWindowId, sessionList, position = "RIGHT", textBoxWidth = 800, fontSize = 26) {
-    
-    ; WinGetPos, , , Width, Height, %gameWindowId%
-    Width := A_ScreenWidth
-    Height := A_ScreenHeight
-    
+    WinGetPos, , , Width, Height, %gameWindowId%
     if (position == "RIGHT") {
         leftMargin := Width - textBoxWidth
     } else if (position = "LEFT") {
         leftMargin := 20
     } else {
-        leftMargin := 20
+        leftMargin := Width - textBoxWidth
     }
     topMargin := 20
     if (WinExist(gameWindowId)) {
@@ -26,42 +23,48 @@ ShowHistoryText(hwnd1, gameWindowId, sessionList, position = "RIGHT", textBoxWid
         obm := SelectObject(hdc, hbm)
         G := Gdip_GraphicsFromHDC(hdc)
         Gdip_SetSmoothingMode(G, 4)
-        pBrush := Gdip_BrushCreateSolid(0xAA000000)
-        Gdip_DeleteBrush(pBrush)
 
         col1 := 0
         col2 := textBoxWidth * 0.4
-        col3 := textBoxWidth * 0.78
-
+        col3 := textBoxWidth * 0.75
         Options = x%col1% y0 Left vCenter cffffffff r4 s%fontSize% Bold
-        Gdip_TextToGraphics(G, "Game Name", Options, diabloFont, Width, 50)
-        Options = x%col2% y0 Left vCenter cffffffff r4 s%fontSize% Bold
         Gdip_TextToGraphics(G, "Character", Options, diabloFont, Width, 50)
+        Options = x%col2% y0 Left vCenter cffffffff r4 s%fontSize% Bold
+        Gdip_TextToGraphics(G, "Game Name", Options, diabloFont, Width, 50)
         Options = x%col3% y0 Left vCenter cffffffff r4 s%fontSize% Bold
         Gdip_TextToGraphics(G, "Duration", Options, diabloFont, Width, 50)
 
-        y := 40
         ; lists is in reverse order
         max := sessionList.length()
+        playerNameList :=
         Loop %max%
         {
             session := sessionList[(max-A_Index+1)]
-            gameName := session.gameName
-            playerName := session.playerName
-            gameTime := session.getDuration()
-
-            Options = x%col1% y%y% Left vCenter cffFFD700 r4 s%fontSize%
-            Gdip_TextToGraphics(G, gameName, Options, diabloFont, Width, 50)
-
-            Options = x%col2% y%y% Left vCenter cffFFD700 r4 s%fontSize%
-            Gdip_TextToGraphics(G, playerName, Options, diabloFont, Width, 50)
-
-            gameTime := Round(gameTime, 1) . " sec"
-            Options = x%col3% y%y% Left vCenter cffFFD700 r4 s%fontSize%
-            Gdip_TextToGraphics(G, gameTime, Options, diabloFont, Width/2, 50)
-            y += 40
-            
+            playerNameList := playerNameList . session.playerName . "`n"
         }
+        gameNameList :=
+        Loop %max%
+        {
+            session := sessionList[(max-A_Index+1)]
+            gameNameList := gameNameList . session.gameName . "`n"
+        }
+        gameTimeList :=
+        Loop %max%
+        {
+            session := sessionList[(max-A_Index+1)]
+            gameTime := session.getDuration()
+            gameTime := Round(gameTime, 1) . " sec"
+            gameTimeList := gameTimeList . gameTime . "`n"
+        }
+        
+        Options = x%col1% y40 Left vTop cffFFD700 r4 s%fontSize%
+        Gdip_TextToGraphics(G, playerNameList, Options, diabloFont, Width, Height)
+        Options = x%col2% y40 Left vTop cffFFD700 r4 s%fontSize%
+        Gdip_TextToGraphics(G, gameNameList, Options, diabloFont, Width, Height)
+        Options = x%col3% y40 Left vTop cffFFD700 r4 s%fontSize%
+        Gdip_TextToGraphics(G, gameTimeList, Options, diabloFont, Width/2, Height)
+
+        
         UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, Width, Height)
         SelectObject(hdc, obm)
         DeleteObject(hbm)
@@ -76,7 +79,5 @@ ShowHistoryText(hwnd1, gameWindowId, sessionList, position = "RIGHT", textBoxWid
     } else {
         gui, GameInfo: Hide
     }
-    Return
 }
 
-Return

@@ -5,6 +5,7 @@ class GameSession {
     playerName := ""
     startTime := 0
     endTime := 0
+    duration := ""
 
     startingPlayerLevel :=
     endingPlayerLevel :=
@@ -20,23 +21,21 @@ class GameSession {
 
     setEndTime(endTime) {
         this.endTime := endTime
+        if (this.startTime == 0) {
+            this.duration := ""
+        } else if (this.endTime == 0) {
+            this.duration :=  Round((A_TickCount - this.startTime) / 1000.0, 2)
+        } else {
+            this.duration :=  Round((this.endTime - this.startTime) / 1000.0, 2)
+        }
     }
 
     getExperienceGained() {
         return this.endingExperience - this.startingExperience
     }
 
-    getDuration() {
-        SetFormat Integer, D
-        if (this.endTime == 0) {
-            return Round((A_TickCount - this.startTime) / 1000.0, 2)
-        } else {
-            return Round((this.endTime - this.startTime) / 1000.0, 2)
-        }
-    }
-
     getEntry() {
-        duration := this.getDuration()
+        duration := this.duration
         expgained := this.getExperienceGained()
         FormatTime, vDate,, yyyy-MM-dd HH-mm-ss ;24-hour
         entry := vDate "," this.playerName "," this.gameName "," duration "," this.startingPlayerLevel "," this.endingPlayerLevel "," this.startingExperience "," this.endingExperience "," expgained

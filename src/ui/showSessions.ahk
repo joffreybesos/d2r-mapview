@@ -55,10 +55,8 @@ ShowHistoryText(hwnd1, gameWindowId, sessionList, position = "RIGHT", textBoxWid
             playerNameList := playerNameList . session.playerName . "`n"
             gameNameList := gameNameList . session.gameName . "`n"
             xpgainedList := xpgainedList . session.getExperienceGained() . "`n"
-            gameTime := session.getDuration()
-            gameTime := Round(gameTime, 1) . " sec"
+            gameTime := session.duration . "s"
             gameTimeList := gameTimeList . gameTime . "`n"
-            
         }
         
         Options = x%col1% y40 Left vTop cffFFD700 r4 s%fontSize%

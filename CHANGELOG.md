@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.9] - 2021-12-30 - Better game history
+
+- Game history now includes player level and experience gained
+- It will also load data from the `GameSessionLog.csv` to view previous sessions
+- Only the last 50 game runs will display
+- `GameSessionLog.csv` now includes additional fields:
+  - Timestamp
+  - Player starting level, player finishing level
+  - Player starting experience, player finishing experience
+  - Experience gained
+- __NOTE__: The `GameSessionLog.csv` from the previous version is not compatible, I recommend simply deleting this file.
+
 ## [2.3.8] - 2021-12-30 - Game history
 
 - Game history now shows in game menu rather than simply the previous game

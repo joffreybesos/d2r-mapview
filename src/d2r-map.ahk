@@ -15,12 +15,12 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
 #Include %A_ScriptDir%\ui\showUnits.ahk
-#Include %A_ScriptDir%\ui\showLastGame.ahk
 #Include %A_ScriptDir%\ui\showSessions.ahk
 #Include %A_ScriptDir%\stats\GameSession.ahk
+#Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.3.8"
+expectedVersion := "2.3.9"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -51,7 +51,6 @@ session :=
 lastPlayerLevel:=
 lastPlayerExperience:=
 uidata:={}
-sessionList := []
 performanceMode := settings["performanceMode"]
 if (performanceMode != 0) {
     SetBatchLines, %performanceMode%
@@ -106,6 +105,7 @@ mapHwnd1 := WinExist()
 Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
 unitHwnd1 := WinExist()
 
+sessionList := []
 offsetAttempts := 6
 ticktock := 0
 While 1 {
@@ -125,20 +125,16 @@ While 1 {
                 session.endingPlayerLevel := lastPlayerLevel
                 session.endingExperience := lastPlayerExperience
                 if (!session.isLogged) {
-                    sessionList.push(session)
                     session.saveEntryToFile()
                 }
-                if (settings["showGameInfo"]) {
-                    SetFormat Integer, D
-                    ShowHistoryText(gamenameHwnd1, gameWindowId, sessionList, settings["textAlignment"], settings["textSectionWidth"], settings["textSize"])
+            }
+            if (settings["showGameInfo"]) {
+                SetFormat Integer, D
+                if (!sessionList.MaxIndex()) {
+                    WriteLog("Reading session game data")
+                    sessionList := readSessionFile("GameSessionLog.csv")
                 }
-                
-            } else { ; no previous session, just show last game name
-                if (settings["showGameInfo"]) {
-                    SetFormat Integer, D
-                    lastGameName := readLastGameName(d2rprocess, gameWindowId, settings, session)
-                    ShowGameText(lastGameName, gamenameHwnd1, gameWindowId, settings["textAlignment"], settings["textSectionWidth"], settings["textSize"])
-                }
+                ShowHistoryText(gamenameHwnd1, gameWindowId, sessionList, settings["textAlignment"], settings["textSectionWidth"], settings["textSize"])
             }
             offsetAttempts := 6
         }
@@ -159,6 +155,7 @@ While 1 {
                 session.startingPlayerLevel := gameMemoryData["playerLevel"]
                 session.startingExperience := gameMemoryData["experience"]
                 lastSeed := gameMemoryData["mapSeed"]
+                sessionList := []
             }
             ; if there's a level num then the player is in a map
             if (gameMemoryData["levelNo"] != lastlevel) { ; only redraw map when it changes

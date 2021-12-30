@@ -73,7 +73,7 @@ ShowHistoryText(hwnd1, gameWindowId, sessionList, position = "RIGHT", textBoxWid
             session := sessionList[(max-A_Index+1)]
             gameName := session.gameName
             playerName := session.playerName
-            gameTime := session.getDuration()
+            gameTime := session.duration
 
             Options = x%col1% y%y% Left vCenter cffFFD700 r4 s%fontSize%
             Gdip_TextToGraphics(G, gameName, Options, diabloFont, Width, 50)

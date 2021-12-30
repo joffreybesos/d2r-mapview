@@ -1,32 +1,7 @@
 #SingleInstance, Force
 
-#Include ..\include\Gdip_All.ahk
+; #Include ..\include\Gdip_All.ahk
 #Include ..\..\src\stats\GameSession.ahk
-; global diabloFont = "Arial"
-global diabloFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
-
-sessionList := []
-session1 := new GameSession("GameName1", A_TickCount, "PlayerName1")
-session2 := new GameSession("GameName2", A_TickCount, "PlayerName2")
-session3 := new GameSession("GameName3", A_TickCount, "PlayerName3")
-session4 := new GameSession("GameName4", A_TickCount, "PlayerName4")
-session5 := new GameSession("GameName5", A_TickCount, "PlayerName5")
-sleep 10
-session1.setEndTime(A_TickCount)
-session2.setEndTime(A_TickCount)
-session3.setEndTime(A_TickCount)
-session4.setEndTime(A_TickCount)
-session5.setEndTime(A_TickCount)
-sessionList.push(session1)
-sessionList.push(session2)
-sessionList.push(session3)
-sessionList.push(session4)
-sessionList.push(session5)
-Gui, GameInfo: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-Gui, GameInfo: Show, NA
-gamenameHwnd1 := WinExist()
-
-ShowHistoryText(gamenameHwnd1, gameWindowId, sessionList, "RIGHT", 800, 30)
 
 ShowHistoryText(hwnd1, gameWindowId, sessionList, position = "RIGHT", textBoxWidth = 800, fontSize = 26) {
     
@@ -42,7 +17,7 @@ ShowHistoryText(hwnd1, gameWindowId, sessionList, position = "RIGHT", textBoxWid
         leftMargin := 20
     }
     topMargin := 20
-    ; if (WinExist(gameWindowId)) {
+    if (WinExist(gameWindowId)) {
         
         pToken := Gdip_Startup()
         DetectHiddenWindows, On
@@ -93,19 +68,15 @@ ShowHistoryText(hwnd1, gameWindowId, sessionList, position = "RIGHT", textBoxWid
         DeleteDC(hdc)
         Gdip_DeleteGraphics(G)
         
-        ; if WinActive(gameWindowId) {
+        if WinActive(gameWindowId) {
             Gui, GameInfo: Show, NA
-        ; } else {
-        ;     gui, GameInfo: Hide
-        ; }
-    ; } else {
-    ;     gui, GameInfo: Hide
-    ; }
+        } else {
+            gui, GameInfo: Hide
+        }
+    } else {
+        gui, GameInfo: Hide
+    }
     Return
 }
 
 Return
-
-Esc::
-ExitApp
-return

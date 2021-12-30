@@ -16,6 +16,8 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showHelp.ahk
 #Include %A_ScriptDir%\ui\showUnits.ahk
 #Include %A_ScriptDir%\ui\showLastGame.ahk
+#Include %A_ScriptDir%\ui\showSessions.ahk
+#Include %A_ScriptDir%\stats\GameSession.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
 expectedVersion := "2.3.7"
@@ -109,14 +111,20 @@ While 1 {
     playerOffset := scanForPlayer(d2rprocess, playerOffset, startingOffset, settings)
 
     if (!playerOffset) {
+        if (offsetAttempts == 1) {
+            gameEndTime := A_TickCount
+        }
         offsetAttempts += 1
         if (offsetAttempts > 5) {
             hideMap(false)
             lastlevel:=
             if (session) {
-                session.setEndTime(A_TickCount)
+                session.setEndTime(gameEndTime)
                 session.saveEntry()
-                sessionList.push(session)
+                if (!session.isLogged) {
+                    sessionList.push(session)
+                }
+                ShowHistoryText(gamenameHwnd1, gameWindowId, sessionList, "RIGHT", 800, 30)
             } else { ; no previous session, just show last game name
                 if (settings["showGameInfo"]) {
                     lastGameName := readLastGameName(d2rprocess, gameWindowId, settings)

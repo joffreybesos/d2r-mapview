@@ -19,6 +19,9 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, wallThickness, settings.ini, MapSettings, wallThickness, 1
 
     IniRead, showGameInfo, settings.ini, GameInfo, showGameInfo, "true"
+    IniRead, textSectionWidth, settings.ini, GameInfo, textSectionWidth, 700
+    IniRead, textSize, settings.ini, GameInfo, textSize, 26
+    IniRead, textAlignment, settings.ini, GameInfo, textAlignment, "RIGHT"
 
     ; units
     IniRead, showNormalMobs, settings.ini, Units, showNormalMobs, "true"
@@ -189,6 +192,9 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("moveMapUp", moveMapUp)
     settings.Insert("moveMapDown", moveMapDown)
     settings.Insert("showGameInfo", showGameInfo)  
+    settings.Insert("textSize", textSize)  
+    settings.Insert("textAlignment", textAlignment)  
+    settings.Insert("textSectionWidth", textSectionWidth)  
     settings.Insert("performanceMode", performanceMode)
     settings.Insert("enableD2ML", enableD2ML)
     settings.Insert("gameWindowId", gameWindowId)

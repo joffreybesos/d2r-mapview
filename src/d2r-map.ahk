@@ -16,9 +16,11 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showHelp.ahk
 #Include %A_ScriptDir%\ui\showUnits.ahk
 #Include %A_ScriptDir%\ui\showLastGame.ahk
+#Include %A_ScriptDir%\ui\showSessions.ahk
+#Include %A_ScriptDir%\stats\GameSession.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.3.7"
+expectedVersion := "2.3.8"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -45,19 +47,18 @@ readSettings(settings.ini, settings)
 
 lastlevel:=""
 lastSeed:=""
-lastGameStartTime:=0
+session :=
 uidata:={}
+sessionList := []
 performanceMode := settings["performanceMode"]
 if (performanceMode != 0) {
     SetBatchLines, %performanceMode%
-    readInterval := 0
 }
 
 global isMapShowing:=1
 global debug := settings["debug"]
 global gameWindowId := settings["gameWindowId"]
 global gameStartTime:=0
-
 global diabloFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
 
 alwaysShowKey := settings["alwaysShowKey"]
@@ -92,7 +93,6 @@ patternScan(d2rprocess, settings)
 playerOffset := settings["playerOffset"]
 startingOffset := settings["playerOffset"]
 uiOffset := settings["uiOffset"]
-readInterval := settings["readInterval"]
 
 ; create GUI windows
 Gui, GameInfo: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
@@ -111,25 +111,34 @@ While 1 {
     playerOffset := scanForPlayer(d2rprocess, playerOffset, startingOffset, settings)
 
     if (!playerOffset) {
+        if (offsetAttempts == 1) {
+            gameEndTime := A_TickCount
+        }
         offsetAttempts += 1
         if (offsetAttempts > 5) {
             hideMap(false)
             lastlevel:=
-            
-            if (gameStartTime > 0) {
-                SetFormat Integer, D
-                gameStartTime += 0
-                lastGameDuration := (A_TickCount - gameStartTime)/1000.0
-                WriteTimedLog()
-                gameStartTime := 0
-            }
-            if (settings["showGameInfo"]) {
-                lastGameName := readLastGameName(d2rprocess, gameWindowId, settings)
-                ShowGameText(lastGameName, gamenameHwnd1, lastGameDuration, gameWindowId)
+            if (session) {
+                session.setEndTime(gameEndTime)
+                if (!session.isLogged) {
+                    sessionList.push(session)
+                    session.saveEntryToFile()
+                }
+                if (settings["showGameInfo"]) {
+                    SetFormat Integer, D
+                    ShowHistoryText(gamenameHwnd1, gameWindowId, sessionList, settings["textAlignment"], settings["textSectionWidth"], settings["textSize"])
+                }
+                
+            } else { ; no previous session, just show last game name
+                if (settings["showGameInfo"]) {
+                    SetFormat Integer, D
+                    lastGameName := readLastGameName(d2rprocess, gameWindowId, settings, session)
+                    ShowGameText(lastGameName, gamenameHwnd1, gameWindowId, settings["textAlignment"], settings["textSectionWidth"], settings["textSize"])
+                }
             }
             offsetAttempts := 6
         }
-        Sleep, 500 ; sleep longer when no offset found, you're likely in menu
+        Sleep, 500 ; sleep when no offset found, you're likely in menu
     } else {
         offsetAttempts := 0
         Gui, GameInfo: Hide  ; hide the last game info
@@ -138,7 +147,8 @@ While 1 {
         if ((gameMemoryData["difficulty"] > 0 & gameMemoryData["difficulty"] < 3) and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
             if (gameMemoryData["mapSeed"] != lastSeed) {
                 gameStartTime := A_TickCount    
-                WriteLog("Start time: " gameStartTime)
+                currentGameName := readLastGameName(d2rprocess, gameWindowId, settings, session)
+                session := new GameSession(currentGameName, A_TickCount, gameMemoryData["playerName"])
                 lastSeed := gameMemoryData["mapSeed"]
             }
             ; if there's a level num then the player is in a map
@@ -173,7 +183,7 @@ While 1 {
     }
     if (not WinExist(gameWindowId)) {
         WriteLog(gameWindowId " not found, please make sure game is running")
-        WriteTimedLog()
+        session.saveEntry()
         ExitApp
     }
     ticktock := not ticktock
@@ -228,7 +238,7 @@ unHideMap() {
 +F10::
 {
     WriteLog("Pressed Shift+F10, exiting...")
-    WriteTimedLog()
+    session.saveEntry()
     ExitApp
 }
 

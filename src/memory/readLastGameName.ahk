@@ -3,10 +3,12 @@ SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
 
-readLastGameName(d2rprocess, gameWindowId, settings) {
+readLastGameName(d2rprocess, gameWindowId, settings, session) {
     if (not WinExist(gameWindowId)) {
         WriteLog(gameWindowId " not found, please make sure game is running")
-        WriteTimedLog()
+        if (session) {
+            session.saveEntry()
+        }
         ExitApp
     }
     gameNameOffset := settings["gameDataOffset"] + 0x48

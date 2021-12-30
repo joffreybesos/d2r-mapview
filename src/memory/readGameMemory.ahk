@@ -68,6 +68,12 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     pUnitData := playerUnit + 0x10
     playerNameAddress := d2rprocess.read(pUnitData, "Int64")
     playerName := d2rprocess.readString(playerNameAddress, length := 0)
+    
+    pStatsListEx := d2rprocess.read(playerUnit + 0x88, "Int64")
+    statPtr := d2rprocess.read(pStatsListEx + 0x30, "Int64")
+    
+    playerLevel := d2rprocess.read(statPtr + 0x4 + (11 * 8), "UInt")
+    experience := d2rprocess.read(statPtr + 0x4 + (12 * 8), "UInt")
 
     ; get other players
     if (settings["showOtherPlayers"]) {
@@ -101,7 +107,7 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     if (!xPos) {
         WriteLog("Did not find player position at player offset " playerOffset) 
     }
-    gameMemoryData := {"gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName }
+    gameMemoryData := {"gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName, "experience": experience, "playerLevel": playerLevel }
     ElapsedTime := A_TickCount - StartTime
     ;ToolTip % "`n`n`n`n" ElapsedTime
 }

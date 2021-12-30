@@ -48,6 +48,8 @@ readSettings(settings.ini, settings)
 lastlevel:=""
 lastSeed:=""
 session :=
+lastPlayerLevel:=
+lastPlayerExperience:=
 uidata:={}
 sessionList := []
 performanceMode := settings["performanceMode"]
@@ -120,6 +122,8 @@ While 1 {
             lastlevel:=
             if (session) {
                 session.setEndTime(gameEndTime)
+                session.endingPlayerLevel := lastPlayerLevel
+                session.endingExperience := lastPlayerExperience
                 if (!session.isLogged) {
                     sessionList.push(session)
                     session.saveEntryToFile()
@@ -143,12 +147,17 @@ While 1 {
         offsetAttempts := 0
         Gui, GameInfo: Hide  ; hide the last game info
         readGameMemory(d2rprocess, settings, playerOffset, gameMemoryData)
+        lastPlayerLevel:= gameMemoryData["playerLevel"]
+        lastPlayerExperience:=gameMemoryData["experience"]
 
         if ((gameMemoryData["difficulty"] > 0 & gameMemoryData["difficulty"] < 3) and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
             if (gameMemoryData["mapSeed"] != lastSeed) {
                 gameStartTime := A_TickCount    
                 currentGameName := readLastGameName(d2rprocess, gameWindowId, settings, session)
+                
                 session := new GameSession(currentGameName, A_TickCount, gameMemoryData["playerName"])
+                session.startingPlayerLevel := gameMemoryData["playerLevel"]
+                session.startingExperience := gameMemoryData["experience"]
                 lastSeed := gameMemoryData["mapSeed"]
             }
             ; if there's a level num then the player is in a map

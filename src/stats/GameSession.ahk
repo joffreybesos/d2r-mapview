@@ -34,7 +34,7 @@ class GameSession {
     saveEntryToFile() {
         if (!this.isLogged) { ; only log it once
             entry := this.getEntry()
-            FileAppend, %entry%`n, gameSessionLog.csv
+            FileAppend, %entry%`n, GameSessionLog.csv
             this.isLogged := true
         }
     }

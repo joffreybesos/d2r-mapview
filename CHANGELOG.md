@@ -4,13 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## [2.3.8] - 2021-12-30 - Game history
 
-- Game history now shows in game menu
-- This will show all the games played since you last exited the MH
-- All game sessions are appended to a file `GameSessions.csv`
+- Game history now shows in game menu rather than simply the previous game
+- This will show all the games started and exited _while running the MH_
+- All game sessions are appended to a file `GameSessionLog.csv`
 - Turn off with `showGameHistory=true/false` in settings
-- When you first open the MH, the last game you played (if any) will show
-- But any subsequent completed runs will show on a table that will grow as you play additional games
-- The table shows 'Game Name, Character Name, Duration'
+- When you first open the MH, the last game name you played (if any) will show
+- But any subsequent runs will append to the table as you do additional runs
+- The table shows 'Character Name, Game Name, Duration'
+- You can cahnge the following settings:
+  - `textSectionWidth` this is the width in pixels made available for the table, increase if your screen isn't big enough
+  - `textSize` this is the font size in pts
+  - `textAlignment` can be either `Right` or `Left` of screen (case insensitive)
 
 ## [2.3.7] - 2021-12-17 - Charms and jewels
 

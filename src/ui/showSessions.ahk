@@ -6,6 +6,7 @@ SetWorkingDir, %A_ScriptDir%
 
 ShowHistoryText(hwnd1, gameWindowId, sessionList, position = "RIGHT", textBoxWidth = 800, fontSize = 26) {
     WinGetPos, , , Width, Height, %gameWindowId%
+    StringLower, position, %position%
     if (position == "RIGHT") {
         leftMargin := Width - textBoxWidth
     } else if (position = "LEFT") {

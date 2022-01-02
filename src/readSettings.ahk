@@ -22,6 +22,9 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, textSectionWidth, settings.ini, GameInfo, textSectionWidth, 700
     IniRead, textSize, settings.ini, GameInfo, textSize, 26
     IniRead, textAlignment, settings.ini, GameInfo, textAlignment, "RIGHT"
+    IniRead, showIPtext, settings.ini, GameInfo, showIPtext, "true"
+    IniRead, textIPfontSize, settings.ini, GameInfo, textIPfontSize, 18
+    IniRead, textIPalignment, settings.ini, GameInfo, textIPalignment, "LEFT"
 
     ; units
     IniRead, showNormalMobs, settings.ini, Units, showNormalMobs, "true"
@@ -114,6 +117,7 @@ readSettings(settingsFile, ByRef settings) {
     showDeadMobs := showDeadMobs = "true"
     showImmunities := showImmunities = "true"
     showGameInfo := showGameInfo = "true"
+    showIPtext := showIPtext = "true"
     showUniqueAlerts := showUniqueAlerts = "true"
     showSetItemAlerts := showSetItemAlerts = "true"
     showRuneAlerts := showRuneAlerts = "true"
@@ -192,6 +196,9 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("moveMapUp", moveMapUp)
     settings.Insert("moveMapDown", moveMapDown)
     settings.Insert("showGameInfo", showGameInfo)  
+    settings.Insert("showIPtext", showIPtext)  
+    settings.Insert("textIPfontSize", textIPfontSize)  
+    settings.Insert("textIPalignment", textIPalignment)  
     settings.Insert("textSize", textSize)  
     settings.Insert("textAlignment", textAlignment)  
     settings.Insert("textSectionWidth", textSectionWidth)  

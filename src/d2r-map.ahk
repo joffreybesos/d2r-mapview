@@ -8,19 +8,21 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\memory\readGameMemory.ahk
 #Include %A_ScriptDir%\memory\isAutomapShown.ahk
 #Include %A_ScriptDir%\memory\readLastGameName.ahk
+#Include %A_ScriptDir%\memory\readIPAddress.ahk
 #Include %A_ScriptDir%\memory\patternScan.ahk
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
 #Include %A_ScriptDir%\ui\showMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
+#Include %A_ScriptDir%\ui\showIP.ahk
 #Include %A_ScriptDir%\ui\showUnits.ahk
 #Include %A_ScriptDir%\ui\showSessions.ahk
 #Include %A_ScriptDir%\stats\GameSession.ahk
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.4.0"
+expectedVersion := "2.4.1"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -96,6 +98,8 @@ startingOffset := settings["playerOffset"]
 uiOffset := settings["uiOffset"]
 
 ; create GUI windows
+Gui, IPaddress: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs +HwndipHwnd1
+
 Gui, GameInfo: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
 gamenameHwnd1 := WinExist()
 
@@ -143,8 +147,10 @@ While 1 {
         offsetAttempts := 0
         Gui, GameInfo: Hide  ; hide the last game info
         readGameMemory(d2rprocess, settings, playerOffset, gameMemoryData)
-        lastPlayerLevel:= gameMemoryData["playerLevel"]
-        lastPlayerExperience:=gameMemoryData["experience"]
+        if (gameMemoryData["experience"]) {
+            lastPlayerLevel:= gameMemoryData["playerLevel"]
+            lastPlayerExperience:=gameMemoryData["experience"]
+        }
 
         if ((gameMemoryData["difficulty"] > 0 & gameMemoryData["difficulty"] < 3) and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
             if (gameMemoryData["mapSeed"] != lastSeed) {
@@ -156,7 +162,12 @@ While 1 {
                 session.startingExperience := gameMemoryData["experience"]
                 lastSeed := gameMemoryData["mapSeed"]
                 sessionList := []
+                if (settings["showIPtext"]) {
+                    ipAddress := readIPAddress(d2rprocess, gameWindowId, settings, session)
+                    ShowIPText(ipHwnd1, gameWindowId, ipAddress, settings["textIPalignment"], settings["textIPfontSize"])
+                }
             }
+
             ; if there's a level num then the player is in a map
             if (gameMemoryData["levelNo"] != lastlevel) { ; only redraw map when it changes
                 
@@ -223,6 +234,7 @@ hideMap(alwaysShowMap) {
     if (alwaysShowMap == false) {
         Gui, Map: Hide
         Gui, Units: Hide
+        Gui, IPaddress: Hide
         if (isMapShowing) {
             WriteLogDebug("Map hidden")
         }
@@ -238,6 +250,7 @@ unHideMap() {
     isMapShowing:= 1
     Gui, Map: Show, NA
     Gui, Units: Show, NA
+    Gui, IPaddress: Show, NA
 }
 
 

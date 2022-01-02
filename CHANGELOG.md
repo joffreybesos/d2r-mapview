@@ -2,11 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.1] - 2021-01-02 - Server IP address shows in corner of screen
+
+- Now the server IP address will show in the corner of the screen
+  - Can turn off with `showIPtext` in `settings.ini`
+  - Can change font size with `textIPfontSize`
+  - Can change screen position `textIPalignment` to `Left` or `Right`
+- Fixed bug where occasionally player experience wasn't recorded
+- Fixed bug where Glacial Caves purple line pointed to wrong exit
+- Fixed bug where setting 'game history' to left side of the screen didn't work
+
 ## [2.4.0] - 2021-12-30 - Fixed game history bugs
 
 - Fixed an issue with level and exp values not being logged correctly
 - Fixed issue with extra large GameSession files
 - Fixed issue with logging gained xp in hex instead of decimal
+- If you encountered these, bugs you may need to edit your `GameSession.csv` file
 
 ## [2.3.9] - 2021-12-30 - Better game history
 

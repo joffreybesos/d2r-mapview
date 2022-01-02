@@ -1,6 +1,7 @@
 #SingleInstance, Force
 #Persistent
 SendMode Input
+SetWinDelay, 0
 SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\logging.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk
@@ -18,6 +19,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showIP.ahk
 #Include %A_ScriptDir%\ui\showUnits.ahk
 #Include %A_ScriptDir%\ui\showSessions.ahk
+#Include %A_ScriptDir%\ui\movePlayerMap.ahk
 #Include %A_ScriptDir%\stats\GameSession.ahk
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\readSettings.ahk
@@ -63,6 +65,10 @@ global debug := settings["debug"]
 global gameWindowId := settings["gameWindowId"]
 global gameStartTime:=0
 global diabloFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
+
+switchMapModeKey := settings["switchMapMode"]
+Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, %switchMapModeKey%, SwitchMapMode
 
 alwaysShowKey := settings["alwaysShowKey"]
 Hotkey, IfWinActive, ahk_exe D2R.exe
@@ -188,7 +194,15 @@ While 1 {
             }
             ; update player layer on each loop
             uiData["ticktock"] := ticktock
-            ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+            ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+            if (settings["centerMode"]) {
+                ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+                MovePlayerMap(settings, mapHwnd1, unitHwnd1, gameMemoryData, imageData, uiData)
+
+            } else {
+                ; update player layer on each loop
+                ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+            }
             checkAutomapVisibility(d2rprocess, settings, gameMemoryData["levelNo"])
 
             lastlevel := gameMemoryData["levelNo"]
@@ -280,13 +294,20 @@ MapSizeIncrease:
 {
     levelNo := gameMemoryData["levelNo"]
     levelScale := imageData["levelScale"]
-    if (levelNo and levelScale) {
+    if (levelNo and levelScale and not settings["centerMode"]) {
         levelScale := levelScale + 0.05
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
         imageData["levelScale"] := levelScale
         ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-        ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
         WriteLog("Increased level " levelNo " scale by 0.05 to " levelScale)
+    }
+    if (levelNo and settings["centerMode"]) {
+        centerModeScale := settings["centerModeScale"]
+        centerModeScale := centerModeScale + 0.05
+        IniWrite, %centerModeScale%, settings.ini, %levelNo%, centerModeScale
+        settings["centerModeScale"] := centerModeScale
+        ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+        WriteLog("Increased centerModeScale global setting by 0.05 to " levelScale)
     }
     return
 }
@@ -295,24 +316,45 @@ MapSizeDecrease:
 {
     levelNo := gameMemoryData["levelNo"]
     levelScale := imageData["levelScale"]
-    if (levelNo and levelScale) {
+    if (levelNo and levelScale and not settings["centerMode"]) {
         levelScale := levelScale - 0.05
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
         imageData["levelScale"] := levelScale
         ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-        ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+        
         WriteLog("Decreased level " levelNo " scale by 0.05 to " levelScale)
+    }
+    if (levelNo and settings["centerMode"]) {
+        centerModeScale := settings["centerModeScale"]
+        centerModeScale := centerModeScale - 0.05
+        IniWrite, %centerModeScale%, settings.ini, %levelNo%, centerModeScale
+        settings["centerModeScale"] := centerModeScale
+        ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+        WriteLog("Decreased centerModeScale global setting by 0.05 to " levelScale)
     }
     return
 }
     
 #IfWinActive, ahk_exe D2R.exe
+    SwitchMapMode:
+    {
+        settings["centerMode"] := !settings["centerMode"]
+        lastlevel := "INVALIDATED"
+
+        imageData := {}
+        gameMemoryData  := {}
+        uiData := {}
+        Gui, Map: Hide
+        Gui, Units: Hide
+
+        return
+    }
     MoveMapLeft:
     {
         levelNo := gameMemoryData["levelNo"]
         levelxmargin := imageData["levelxmargin"]
         levelymargin := imageData["levelymargin"]
-        if (levelNo) {
+        if (levelNo and not settings["centerMode"]) {
             levelxmargin := levelxmargin - 25
             IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
             imageData["levelxmargin"] := levelxmargin
@@ -326,7 +368,7 @@ MapSizeDecrease:
         levelNo := gameMemoryData["levelNo"]
         levelxmargin := imageData["levelxmargin"]
         levelymargin := imageData["levelymargin"]
-        if (levelNo) {
+        if (levelNo and not settings["centerMode"]) {
             levelxmargin := levelxmargin + 25
             IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
             imageData["levelxmargin"] := levelxmargin
@@ -340,7 +382,7 @@ MapSizeDecrease:
         levelNo := gameMemoryData["levelNo"]
         levelxmargin := imageData["levelxmargin"]
         levelymargin := imageData["levelymargin"]
-        if (levelNo) {
+        if (levelNo and not settings["centerMode"]) {
             levelymargin := levelymargin - 25
             IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
             imageData["levelymargin"] := levelymargin
@@ -354,7 +396,7 @@ MapSizeDecrease:
         levelNo := gameMemoryData["levelNo"]
         levelxmargin := imageData["levelxmargin"]
         levelymargin := imageData["levelymargin"]
-        if (levelNo) {
+        if (levelNo and not settings["centerMode"]) {
             levelymargin := levelymargin + 25
             IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
             imageData["levelymargin"] := levelymargin

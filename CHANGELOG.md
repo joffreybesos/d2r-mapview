@@ -208,7 +208,7 @@ Other changes:
 
 ## [2.2.3] - 2021-12-02 - Show other players
 
-https://github.com/joffreybesos/d2r-mapview/releases/tag/v2.2.3
+<https://github.com/joffreybesos/d2r-mapview/releases/tag/v2.2.3>
 
 - Other nearby players now show as green squares
 - Fixed bug where sometimes certain monsters didn't show
@@ -305,7 +305,7 @@ https://github.com/joffreybesos/d2r-mapview/releases/tag/v2.2.3
 - You can show/hide unique monters with `showUniqueMobs` in `settings.ini`
 - You can change the colour of normal mobs with `normalMobColor` in `settings.ini`
 - You can change the colour of unique mobs with `uniqueMobColor` in `settings.ini`
-- Note: champion and unique monsters will appear the same, this will likely change later    
+- Note: champion and unique monsters will appear the same, this will likely change later
 
 Please monitor this release for excess CPU/memory usage. Report any bugs in discord.
 

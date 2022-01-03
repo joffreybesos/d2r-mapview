@@ -301,7 +301,7 @@ MapSizeIncrease:
     if (levelNo and settings["centerMode"]) {
         centerModeScale := settings["centerModeScale"]
         centerModeScale := centerModeScale + 0.05
-        IniWrite, %centerModeScale%, settings.ini, %levelNo%, centerModeScale
+        IniWrite, %centerModeScale%, settings.ini, MapSettings, centerModeScale
         settings["centerModeScale"] := centerModeScale
         ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
         WriteLog("Increased centerModeScale global setting by 0.05 to " levelScale)
@@ -324,7 +324,7 @@ MapSizeDecrease:
     if (levelNo and settings["centerMode"]) {
         centerModeScale := settings["centerModeScale"]
         centerModeScale := centerModeScale - 0.05
-        IniWrite, %centerModeScale%, settings.ini, %levelNo%, centerModeScale
+        IniWrite, %centerModeScale%, settings.ini, MapSettings, centerModeScale
         settings["centerModeScale"] := centerModeScale
         ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
         WriteLog("Decreased centerModeScale global setting by 0.05 to " levelScale)
@@ -356,7 +356,7 @@ MapSizeDecrease:
             IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
             imageData["levelxmargin"] := levelxmargin
             ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-            ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+            
         }
         return
     }
@@ -370,7 +370,6 @@ MapSizeDecrease:
             IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
             imageData["levelxmargin"] := levelxmargin
             ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-            ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
         }
         return
     }
@@ -384,7 +383,6 @@ MapSizeDecrease:
             IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
             imageData["levelymargin"] := levelymargin
             ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-            ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
         }
         return
     }

@@ -2,23 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.4.2] - 2021-01-02 - Centred map on screen
+## [2.4.2] - 2021-01-04 - Centre map on screen (BETA)
 
-- BETA version of centering the map
-- Please only use this version if you are willing to report detailed issues in discord
-- Enabled by default, press `/` to toggle back to normal mode
-- Known bugs:
-  - Monsters and players missing from the map
-  - Switching between normal mode and centered mode can cause display artifacts
-  - Requires performance mode to be turned on which may cause weird behaviour
+- You can now centre the map to work like the normal automap
+- This mode is still in __BETA__, but has been improved since the last beta
+- Disabled by default, press `/` to toggle between centred mode and classic/normal mode
+- Known bugs with centered mode:
+  - Movement is 'jagged/jittery' this is due to how Diablo 2 uses integer tiles for location
+  - Some performance issues still remain on large maps
+  - For extra large maps, the image will spill over onto a 2nd monitor if you have one
+- Fixed from previous beta:
+  - Monsters/players/shrines etc shown on centered map correctly now
+  - Switching between normal and centre mode should no longer cause display artifacts
+  - With perf improvements shouldn't need experimental performance mode turned on
 - New settings: (ignores scale, opacity and position settings from normal mode)
-  - `centerMode=true` to toggle centered mode
-  - `centerModeScale=1.36` press Numpad+ and Numpad- to change as normal
-  - `serverScale` this is the size of the map image (larger = slower but more detailed)
+  - `centerMode=true` to toggle centered mode (can be toggled with hotkey)
+  - `centerModeScale=1.7` press Numpad+ and Numpad- to change as normal
+  - `serverScale` this is the size of the map image (larger = slower)
   - `centerModeOpacity` is the opacity that applies only to centered mode
   - `centerModeXoffset` can force the centered map along the x axis if you have alignment issues
   - `centerModeYoffset` can force the centered map along the y axis if you have alignment issues
-  - `switchMapMode` hot key used to toggle cneterd mode on/off
+  - `switchMapMode=/` hot key used to toggle centered mode on/off (default= `/`)
+- There are also a lot of performance improvements for normal map mode
 
 ## [2.4.1] - 2021-01-02 - Server IP address shows in corner of screen
 

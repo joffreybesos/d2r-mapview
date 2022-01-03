@@ -43,12 +43,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
         MsgBox "Gdiplus failed to start. Please ensure you have gdiplus on your system"
         ExitApp
     }
-    pBitmap := Gdip_CreateBitmap(Width, Height)
-    If !pBitmap
-    {
-        WriteLog("ERROR: Could not create bitmap to show players/mobs")
-        ExitApp
-    }
+
 
     Gdip_GetRotatedDimensions(Width, Height, Angle, RWidth, RHeight)
 
@@ -73,8 +68,8 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     ;G := Gdip_GraphicsFromImage(pBitmap)
     
     G := Gdip_GraphicsFromHDC(hdc)
-    Gdip_SetInterpolationMode(G, 7)
-    Gdip_SetSmoothingMode(G, 6)
+    ; Gdip_SetInterpolationMode(G, 7)
+    ; Gdip_SetSmoothingMode(G, 6)
 
 
     ; draw portals
@@ -508,7 +503,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
 
         ;Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
 
-        UpdateLayeredWindow(unitHwnd1, hdc, 0, 0, scaledWidth, scaledHeight)
+        UpdateLayeredWindow(unitHwnd1, hdc, , , scaledWidth, scaledHeight)
         ; leftMargin := (A_ScreenWidth/2) - xPosDot + settings["centerModeXoffset"]
         ; topMargin := (A_ScreenHeight/2) - yPosDot + settings["centerModeYoffset"]
         ; WinMove, ahk_id %mapHwnd1%,, leftMargin, topMargin
@@ -526,7 +521,6 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     DeleteDC(hdc)
     Gdip_DeleteGraphics(G)
     Gdip_DeleteGraphics(G2)
-    Gdip_DisposeImage(pBitmap)
 }
 
 isNextExit(currentLvl) {

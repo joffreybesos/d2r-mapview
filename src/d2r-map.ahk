@@ -191,29 +191,14 @@ While 1 {
                     Gui, Units: Show, NA
                 }
                 ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-                FileAppend, % "mapData[""mapOffsetX""] := " imageData["mapOffsetX"] "`n", log.txt
-                FileAppend, % "mapData[""mapOffsetY""] := " imageData["mapOffsetY"] "`n", log.txt
-                FileAppend, % "uiData[""scaledWidth""] := " uiData["scaledWidth"] "`n", log.txt
-                FileAppend, % "uiData[""scaledHeight""] := " uiData["scaledHeight"] "`n", log.txt
-                FileAppend, % "uiData[""sizeWidth""] := " uiData["sizeWidth"] "`n", log.txt
-                FileAppend, % "uiData[""sizeHeight""] := " uiData["sizeHeight"] "`n", log.txt
-                FileAppend, % "mapHwnd1 := " mapHwnd1 "`n", log.txt
-                FileAppend, % "unitHwnd1 := " unitHwnd1 "`n", log.txt
-
-                
-                
-
             }
             ; update player layer on each loop
             uiData["ticktock"] := ticktock
+            ; update player layer on each loop
+            ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
             ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
             if (settings["centerMode"]) {
-                ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
-                ; MovePlayerMap(settings, mapHwnd1, unitHwnd1, gameMemoryData, imageData, uiData)
-
-            } else {
-                ; update player layer on each loop
-                ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+                MovePlayerMap(settings, mapHwnd1, unitHwnd1, gameMemoryData, imageData, uiData)
             }
             checkAutomapVisibility(d2rprocess, settings, gameMemoryData["levelNo"])
 

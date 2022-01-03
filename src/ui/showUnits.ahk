@@ -2,7 +2,7 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
+ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
     scale:= settings["scale"]
     leftMargin:= settings["leftMargin"]
     topMargin:= settings["topMargin"]
@@ -23,15 +23,6 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     } else {
         serverScale := 2 
     }
-    ; WriteLog("maxWidth := " maxWidth)
-    ; WriteLog("leftMargin := " leftMargin)
-    ; WriteLog("topMargin := " topMargin)
-    ; WriteLog(mapData["leftTrimmed"])
-    ; WriteLog(mapData["topTrimmed"])
-    ; WriteLog(mapData["mapOffsetX"])
-    ; WriteLog(mapData["mapOffsety"])
-    ; WriteLog(mapData["mapwidth"])
-    ; WriteLog(mapData["mapheight"])
 
     StartTime := A_TickCount
     Angle := 45
@@ -43,7 +34,6 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
         MsgBox "Gdiplus failed to start. Please ensure you have gdiplus on your system"
         ExitApp
     }
-
 
     Gdip_GetRotatedDimensions(Width, Height, Angle, RWidth, RHeight)
 
@@ -61,11 +51,9 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     xPosDot := correctedPos["x"]
     yPosDot := correctedPos["y"]
 
-
     hbm := CreateDIBSection(rotatedWidth, rotatedHeight)
     hdc := CreateCompatibleDC()
     obm := SelectObject(hdc, hbm)
-    ;G := Gdip_GraphicsFromImage(pBitmap)
     
     G := Gdip_GraphicsFromHDC(hdc)
     ; Gdip_SetInterpolationMode(G, 7)
@@ -341,12 +329,37 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
             bossX := correctedPos["x"]
             bossY := correctedPos["y"]
 
-            ; only draw the line if it's a 'next' exit
             pPen := Gdip_CreatePen(0x55FF0000, 3)
             Gdip_DrawLine(G, pPen, xPosDot, yPosDot, bossX, bossY)
             Gdip_DeletePen(pPen)
         }
     }
+
+
+
+    ; ;draw quest lines
+    if (settings["showQuestLine"]) {
+        
+        questsHeader := mapData["quests"]
+        
+        if (questsHeader) {
+            Loop, parse, questsHeader, `|
+            {
+                questsArray := StrSplit(A_LoopField, ",")
+                ;questsArray[1] ; name of quest
+                questX := (questsArray[2] * serverScale) + padding
+                questY := (questsArray[3] * serverScale) + padding
+                correctedPos := findNewPos(questX, questY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                questX := correctedPos["x"]
+                questY := correctedPos["y"]
+
+                pPen := Gdip_CreatePen(0x5500FF00, 3)
+                Gdip_DrawLine(G, pPen, xPosDot, yPosDot, questX, questY)
+                Gdip_DeletePen(pPen)
+            }
+        }
+    }
+
     ; draw other players
     if (settings["showOtherPlayers"]) {
         otherPlayers := gameMemoryData["otherPlayers"]
@@ -374,7 +387,6 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
     }
 
     ; draw item alerts
-    
     runeColor := 0xcc . settings["runeItemColor"] 
     uniqueColor := 0xcc . settings["uniqueItemColor"] 
     setColor := 0xcc . settings["setItemColor"] 
@@ -470,44 +482,46 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
         for index, object in gameObjects
         {
             if (object["isShrine"]) {
-                objectx := ((object["objectx"] - mapData["mapOffsetX"]) * serverScale) + padding
-                objecty := ((object["objecty"] - mapData["mapOffsetY"]) * serverScale) + padding
-                correctedPos := findNewPos(objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-                objectx := correctedPos["x"]
-                objecty := correctedPos["y"]
-                shrineType := object["shrineType"]
-                textx := objectx - 100
-                texty := objecty - 107
-                
-                Options = x%textx% y%texty% Center vBottom c%shrineColor% r8 s%shrineTextSize%
-                ;WriteLog(objectx " " objecty " " object["isShrine"])
-                Gdip_TextToGraphics(G,shrineType, Options, diabloFont, 200, 100)
-                ;Gdip_DrawString(G, text, hFont, hFormat, pBrush2, RectF)
-                Gdip_DrawRectangle(G, pPen, objectx-2, objecty-2, 2.5, 2)
+                isShrineAlreadySeen := 0
+                for index, oldShrine in shrines
+                {
+                    if (oldShrine["objectx"] == object["objectx"] and oldShrine["objecty"] == object["objecty"] and oldShrine["levelNo"] == object["levelNo"]) {
+                        ; already seen
+                        isShrineAlreadySeen := 1
+                    }
+                }
+                if (!isShrineAlreadySeen) {
+                    shrines.push(object)
+                }
             }
+        }
+        for index, object in shrines
+        {
+            objectx := ((object["objectx"] - mapData["mapOffsetX"]) * serverScale) + padding
+            objecty := ((object["objecty"] - mapData["mapOffsetY"]) * serverScale) + padding
+            correctedPos := findNewPos(objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+            objectx := correctedPos["x"]
+            objecty := correctedPos["y"]
+            shrineType := object["shrineType"]
+            textx := objectx - 100
+            texty := objecty - 107
+            
+            Options = x%textx% y%texty% Center vBottom c%shrineColor% r8 s%shrineTextSize%
+            Gdip_TextToGraphics(G,shrineType, Options, diabloFont, 200, 100)
+            Gdip_DrawRectangle(G, pPen, objectx-2, objecty-2, 2.5, 2)
         }
         Gdip_DeletePen(pPen)    
     }
 
-
-
     ; draw player
     pPen := Gdip_CreatePen(0xff00FF00, 6)
-    ;correctedPos := findNewPos(xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
     ;WriteLog(xPosDot " " yPosDot " " midW " " midH " " scaledWidth " " scaledHeight " " scale " " newPos["x"] " " newPos["y"])
     Gdip_DrawRectangle(G, pPen, xPosDot-3, (yPosDot)-2 , 6, 6)
     ; Gdip_DrawRectangle(G, pPen, 0, 0, scaledWidth, scaledHeight) ;outline for whole map used for troubleshooting
     Gdip_DeletePen(pPen)
 
     if (settings["centerMode"]) {
-
-        ;Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
-
         UpdateLayeredWindow(unitHwnd1, hdc, , , scaledWidth, scaledHeight)
-        ; leftMargin := (A_ScreenWidth/2) - xPosDot + settings["centerModeXoffset"]
-        ; topMargin := (A_ScreenHeight/2) - yPosDot + settings["centerModeYoffset"]
-        ; WinMove, ahk_id %mapHwnd1%,, leftMargin, topMargin
-        ; WinMove, ahk_id %unitHwnd1%,, leftMargin, topMargin
     } else {
         UpdateLayeredWindow(unitHwnd1, hdc, leftMargin, topMargin, rotatedWidth, rotatedHeight)
     }

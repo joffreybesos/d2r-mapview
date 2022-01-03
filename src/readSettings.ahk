@@ -88,6 +88,7 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, showWaypointLine, settings.ini, Lines, showWaypointLine, "false"
     IniRead, showNextExitLine, settings.ini, Lines, showNextExitLine, "true"
     IniRead, showBossLine, settings.ini, Lines, showBossLine, "true"
+    IniRead, showQuestLine, settings.ini, Lines, showQuestLine, "true"
 
     ; hot keys
     IniRead, increaseMapSizeKey, settings.ini, Hotkeys, increaseMapSizeKey, NumpadAdd
@@ -123,6 +124,7 @@ readSettings(settingsFile, ByRef settings) {
     showWaypointLine := showWaypointLine = "true" ; convert to bool
     showNextExitLine := showNextExitLine = "true" ; convert to bool
     showBossLine := showBossLine = "true" ; convert to bool
+    showQuestLine := showQuestLine = "true" ; convert to bool
     showDeadMobs := showDeadMobs = "true"
     showImmunities := showImmunities = "true"
     showGameInfo := showGameInfo = "true"
@@ -203,6 +205,7 @@ readSettings(settingsFile, ByRef settings) {
     settings.Insert("showWaypointLine", showWaypointLine)
     settings.Insert("showNextExitLine", showNextExitLine)
     settings.Insert("showBossLine", showBossLine)
+    settings.Insert("showQuestLine", showQuestLine)
     settings.Insert("increaseMapSizeKey", increaseMapSizeKey)
     settings.Insert("decreaseMapSizeKey", decreaseMapSizeKey)
     settings.Insert("alwaysShowKey", alwaysShowKey)

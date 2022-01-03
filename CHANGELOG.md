@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.3] - 2021-01-04 - Shrines stay on map
+
+- After you first 'see' a shrine, it will stay on the map
+- It will also stay if leaving then returning to the same map
+
 ## [2.4.2] - 2021-01-04 - Centre map on screen (BETA)
 
 - You can now centre the map to work like the normal automap

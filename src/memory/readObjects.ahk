@@ -2,7 +2,7 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-ReadObjects(d2rprocess, startingOffset, ByRef gameObjects) {
+ReadObjects(d2rprocess, startingOffset, levelNo, ByRef gameObjects) {
     ; items
     gameObjects := []
     objectOffset := startingOffset + (2 * 1024)
@@ -39,7 +39,7 @@ ReadObjects(d2rprocess, startingOffset, ByRef gameObjects) {
                         shrineType := shrineType(interactType)
                     }
 
-                    gameObject := {"txtFileNo": txtFileNo, "name": name, "isPortal": isPortal, "isRedPortal": isRedPortal, "isShrine": isShrine, "shrineType": shrineType, "objectx": objectx, "objecty": objecty }
+                    gameObject := {"txtFileNo": txtFileNo, "name": name, "isPortal": isPortal, "isRedPortal": isRedPortal, "isShrine": isShrine, "shrineType": shrineType, "objectx": objectx, "objecty": objecty, "levelNo": levelNo }
                     ;WriteLog("txtFileNo: " txtFileNo ", name: " name ", isPortal: " isPortal ", isShrine: " isShrine ", objectx: " objectx ", objecty: " objecty)
                     gameObjects.push(gameObject)
                 }

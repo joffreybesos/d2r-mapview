@@ -24,7 +24,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.4.2"
+expectedVersion := "2.4.3"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -172,6 +172,7 @@ While 1 {
                     ipAddress := readIPAddress(d2rprocess, gameWindowId, settings, session)
                     ShowIPText(ipHwnd1, gameWindowId, ipAddress, settings["textIPalignment"], settings["textIPfontSize"])
                 }
+                shrines := []
             }
 
             ; if there's a level num then the player is in a map
@@ -190,13 +191,13 @@ While 1 {
                     Gui, Map: Show, NA
                     Gui, Units: Show, NA
                 }
+                
                 ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
             }
             ; update player layer on each loop
             uiData["ticktock"] := ticktock
             ; update player layer on each loop
-            ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
-            ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
+            ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, shrines, uiData)
             if (settings["centerMode"]) {
                 MovePlayerMap(settings, mapHwnd1, unitHwnd1, gameMemoryData, imageData, uiData)
             }
@@ -396,7 +397,6 @@ MapSizeDecrease:
             IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
             imageData["levelymargin"] := levelymargin
             ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-            ;ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, uiData)
         }
         return
     }

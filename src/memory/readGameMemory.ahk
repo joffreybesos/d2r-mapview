@@ -103,7 +103,7 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
 
      ; get items
     if (settings["showShrines"] or settings["showPortals"]) {
-        ReadObjects(d2rprocess, startingOffset, objects)
+        ReadObjects(d2rprocess, startingOffset, levelNo, objects)
     }
 
 

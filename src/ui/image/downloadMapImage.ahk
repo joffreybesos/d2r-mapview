@@ -11,15 +11,20 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
     if (t < 1)
         t := 1
     
-    if (settings["edges"]) {
-        imageUrl := baseUrl . "/v1/map/" . gameMemoryData["mapSeed"] . "/" . gameMemoryData["difficulty"] . "/" . gameMemoryData["levelNo"] . "/image?flat=true&edge=true&wallthickness=" . t
-    } else {
-        imageUrl := baseUrl . "/v1/map/" . gameMemoryData["mapSeed"] . "/" . gameMemoryData["difficulty"] . "/" . gameMemoryData["levelNo"] . "/image?flat=true"
-    }
+    imageUrl := baseUrl . "/v1/map/" . gameMemoryData["mapSeed"] . "/" . gameMemoryData["difficulty"] . "/" . gameMemoryData["levelNo"] . "/image?wallthickness=" . t
+    sFile := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . gameMemoryData["levelNo"]
+    sFileTxt := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . gameMemoryData["levelNo"]
 
-    sFile := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . gameMemoryData["levelNo"] . ".png"
-    sFileTxt := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . gameMemoryData["levelNo"] . ".txt"
+    if (settings["edges"]) {
+        imageUrl := imageUrl . "&edge=true"
+    }
+    if (settings["centerMode"]) {
+        imageUrl := imageUrl . "&serverScale=" . settings["serverScale"]
+        sFile .= "_Center"
+    }
     
+    sFile .= ".png"
+    sFileTxt .= ".txt"
 
     levelNo := gameMemoryData["levelNo"]
     IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
@@ -41,15 +46,6 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
             
             fileContents := whr.ResponseBody
             respHeaders := whr.GetAllResponseHeaders
-            ; leftTrimmed := whr.getResponseHeader("lefttrimmed")
-            ; topTrimmed := whr.getResponseHeader("toptrimmed")
-            ; mapOffsetX := whr.getResponseHeader("offsetx")
-            ; mapOffsety := whr.getResponseHeader("offsety")
-            ; mapwidth := whr.getResponseHeader("mapwidth")
-            ; mapheight := whr.getResponseHeader("mapheight") 
-            ; exits := whr.getResponseHeader("exits")
-            ; waypoint := whr.getResponseHeader("waypoint")
-            ; bosses := whr.getResponseHeader("bosses") 
             vStream := whr.ResponseStream
             
             if (ComObjType(vStream) = 0xD) {      ;VT_UNKNOWN = 0xD

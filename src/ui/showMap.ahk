@@ -3,7 +3,7 @@ SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
 ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
-    mapGuiWidth:= settings["maxWidth"]
+    
     scale:= settings["scale"]
     leftMargin:= settings["leftMargin"]
     topMargin:= settings["topMargin"]
@@ -16,6 +16,14 @@ ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
     IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0
     leftMargin := leftMargin + levelxmargin
     topMargin := topMargin + levelymargin
+
+    if (settings["centerMode"]) {
+        scale:= settings["centerModeScale"]
+        serverScale := settings["serverScale"]
+        opacity:= settings["centerModeOpacity"]
+    } else {
+        serverScale := 2 
+    }
 
     ; WriteLog("maxGuiWidth := " maxGuiWidth)
     ; WriteLog("scale := " scale)
@@ -34,7 +42,6 @@ ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
     ; WriteLog(gameMemoryData["yPos"])
 
     StartTime := A_TickCount
-    serverScale := 2 
     Angle := 45
     padding := 150
     If !pToken := Gdip_Startup()
@@ -64,9 +71,28 @@ ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
     Gdip_SetSmoothingMode(G, 4) 
     G := Gdip_GraphicsFromHDC(hdc)
     pBitmap := Gdip_RotateBitmapAtCenter(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
+    if (settings["centerMode"]) {
+        ; get relative position of player in world
+        ; xpos is absolute world pos in game
+        ; each map has offset x and y which is absolute world position
+        xPosDot := ((gameMemoryData["xPos"] - mapData["mapOffsetX"]) * serverScale) + padding
+        yPosDot := ((gameMemoryData["yPos"] - mapData["mapOffsetY"]) * serverScale) + padding
 
-    Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
-    UpdateLayeredWindow(mapHwnd1, hdc, leftMargin, topMargin, scaledWidth, scaledHeight)
+        correctedPos := findNewPos(xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+        xPosDot := correctedPos["x"]
+        yPosDot := correctedPos["y"]
+
+        Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
+
+        UpdateLayeredWindow(mapHwnd1, hdc, 0, 0, scaledWidth, scaledHeight)
+        leftMargin := (A_ScreenWidth/2) - xPosDot + settings["centerModeXoffset"]
+        topMargin := (A_ScreenHeight/2) - yPosDot + settings["centerModeYoffset"]
+        WinMove, ahk_id %mapHwnd1%,, leftMargin, topMargin
+        WinMove, ahk_id %unitHwnd1%,, leftMargin, topMargin
+    } else {
+        Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
+        UpdateLayeredWindow(mapHwnd1, hdc, leftMargin, topMargin, scaledWidth, scaledHeight)
+    }
     SelectObject(hdc, obm)
     DeleteObject(hbm)
     DeleteDC(hdc)

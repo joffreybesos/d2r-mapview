@@ -23,7 +23,7 @@ All notable changes to this project will be documented in this file.
   - `centerModeXoffset` can force the centered map along the x axis if you have alignment issues
   - `centerModeYoffset` can force the centered map along the y axis if you have alignment issues
   - `switchMapMode=/` hot key used to toggle centered mode on/off (default= `/`)
-- There are also a lot of performance improvements for normal map mode
+- There are also a lot of performance improvements in general for normal map mode
 
 ## [2.4.1] - 2021-01-02 - Server IP address shows in corner of screen
 

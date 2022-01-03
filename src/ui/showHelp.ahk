@@ -12,6 +12,7 @@ ShowHelpText(settings, leftMargin, topMargin) {
     moveMapRight:= formatHotkeyString(settings["moveMapRight"])
     moveMapUp:= formatHotkeyString(settings["moveMapUp"])
     moveMapDown:= formatHotkeyString(settings["moveMapDown"])
+    switchMapMode:= formatHotkeyString(settings["switchMapMode"])
 
     OGdip.Startup()  ; This function initializes GDI+ and must be called first.
     Width := 1800
@@ -47,11 +48,12 @@ ShowHelpText(settings, leftMargin, topMargin) {
 
     s .= "`n"
     s .= "`n"
-    s .= "This MH does not replace the normal automap.`n"
-    s .= "It is intended to appear in the top left to assist you.`n"
+    s .= "If you paid for this program you have been scammed.`n"
+    s .= "Please consider running your own map server.`n"
     s .= "`n"
     s .= "- CTRL+H to show/hide this help`n"
     s .= "- TAB to show/hide map view`n"
+    s .= "- " switchMapMode " to toggle centred map mode (BETA)`n"
     s .= "- " alwaysShowKey " key to permanently show map`n"
     s .= "- " increaseMapSizeKey " key to increase map size`n"
     s .= "- " decreaseMapSizeKey " key to decrease map size`n"
@@ -71,7 +73,7 @@ ShowHelpText(settings, leftMargin, topMargin) {
     bmp.G.DrawString(s, whiteTextFont, 20, 20, 0, 0, textFormat)
 
     whiteTextFont := new OGdip.Font("Arial", 36)
-    bmp.G.DrawString("Press CTRL+H to hide", whiteTextFont, 15, 600, 0, 0, textFormat)
+    bmp.G.DrawString("Press CTRL+H to hide", whiteTextFont, 15, 610, 0, 0, textFormat)
 
     ; add map legend        
     WhiteBrush:= new OGdip.Brush(0xFFFFFFFF)

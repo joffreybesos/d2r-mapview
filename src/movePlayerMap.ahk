@@ -29,15 +29,14 @@ playerOffset := scanForPlayer(d2rprocess, playerOffset, startingOffset, settings
 mapData := []
 uiData := []
 
-mapData["mapOffsetX"] := 3480
-mapData["mapOffsetY"] := 4360
-uiData["scaledWidth"] := 5851.730333
-uiData["scaledHeight"] := 2925.867712
-uiData["sizeWidth"] := 1905
-uiData["sizeHeight"] := 4180
-mapHwnd1 := 0x210c9c
-unitHwnd1 := 0x4f0ac4
-
+mapData["mapOffsetX"] := 25000
+mapData["mapOffsetY"] := 5000
+uiData["scaledWidth"] := 9152.167981
+uiData["scaledHeight"] := 4576.083931
+uiData["sizeWidth"] := 4785
+uiData["sizeHeight"] := 4732
+mapHwnd1 := 0x10054e
+unitHwnd1 := 0x320744
 
 While 1 {
     readGameMemory(d2rprocess, settings, playerOffset, gameMemoryData)
@@ -80,7 +79,7 @@ MovePlayerMap(settings, mapHwnd1, unitHwnd1, gameMemoryData, mapData, uiData) {
     ; leftMargin := leftMargin + leftMarginDiff
     ; topMargin := topMargin + topMarginDiff
     WinMove, ahk_id %mapHwnd1%,, leftMargin, topMargin
-    ;WinMove, ahk_id %unitHwnd1%,, leftMargin, topMargin
+    WinMove, ahk_id %unitHwnd1%,, leftMargin, topMargin
 } 
 
 

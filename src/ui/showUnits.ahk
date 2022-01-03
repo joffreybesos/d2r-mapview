@@ -506,15 +506,14 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, uiData) {
 
     if (settings["centerMode"]) {
 
-        Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
+        ;Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
 
-        ; UpdateLayeredWindow(unitHwnd1, hdc, 0, 0, scaledWidth, scaledHeight)
+        UpdateLayeredWindow(unitHwnd1, hdc, 0, 0, scaledWidth, scaledHeight)
         ; leftMargin := (A_ScreenWidth/2) - xPosDot + settings["centerModeXoffset"]
         ; topMargin := (A_ScreenHeight/2) - yPosDot + settings["centerModeYoffset"]
         ; WinMove, ahk_id %mapHwnd1%,, leftMargin, topMargin
         ; WinMove, ahk_id %unitHwnd1%,, leftMargin, topMargin
     } else {
-        Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
         UpdateLayeredWindow(unitHwnd1, hdc, leftMargin, topMargin, rotatedWidth, rotatedHeight)
     }
 

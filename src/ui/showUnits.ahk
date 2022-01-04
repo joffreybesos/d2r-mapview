@@ -65,8 +65,13 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
         gameObjects := gameMemoryData["objects"]
         portalColor := "ff" . settings["portalColor"]
         portalColor := "ff" . settings["redPortalColor"]
-        pPen := Gdip_CreatePen("0xff" . settings["portalColor"], 3)
-        pPenRed := Gdip_CreatePen("0xff" . settings["redPortalColor"], 3)
+        if (settings["centerMode"]) {
+            pPen := Gdip_CreatePen("0xff" . settings["portalColor"], 6)
+            pPenRed := Gdip_CreatePen("0xff" . settings["redPortalColor"], 6)
+        } else {
+            pPen := Gdip_CreatePen("0xff" . settings["portalColor"], 3)
+            pPenRed := Gdip_CreatePen("0xff" . settings["redPortalColor"], 3)
+        }
         for index, object in gameObjects
         {
             ;WriteLog(object["txtFileNo"] " " object["isRedPortal"])
@@ -78,7 +83,11 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
                 objecty := correctedPos["y"]
                 
                 ;Gdip_DrawString(G, text, hFont, hFormat, pBrush2, RectF)
-                Gdip_DrawEllipse(G, pPen, objectx-8, objecty-12, 9, 16)
+                if (settings["centerMode"]) {
+                    Gdip_DrawEllipse(G, pPen, objectx-6, objecty-25, 16, 32)
+                } else {
+                    Gdip_DrawEllipse(G, pPen, objectx-6, objecty-14, 9, 16)
+                }
             }
             if (object["isRedPortal"]) {
                 objectx := ((object["objectx"] - mapData["mapOffsetX"]) * serverScale) + padding
@@ -86,10 +95,12 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
                 correctedPos := findNewPos(objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 objectx := correctedPos["x"]
                 objecty := correctedPos["y"]
-                
-                
-                ;Gdip_DrawString(G, text, hFont, hFormat, pBrush2, RectF)
-                Gdip_DrawEllipse(G, pPenRed, objectx-6, objecty-14, 9, 16)
+                if (settings["centerMode"]) {
+                    ;Gdip_DrawString(G, text, hFont, hFormat, pBrush2, RectF)
+                    Gdip_DrawEllipse(G, pPenRed, objectx-6, objecty-25, 16, 32)
+                } else {
+                    Gdip_DrawEllipse(G, pPenRed, objectx-6, objecty-14, 9, 16)
+                }
             }
         }
         Gdip_DeletePen(pPen)    

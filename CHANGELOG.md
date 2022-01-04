@@ -11,7 +11,8 @@ All notable changes to this project will be documented in this file.
 - Game history list now only shows games from that session
 - Can force showing of all history with `showAllHistory=true` (default is false)
 - Game history now defaults to the left side of screen
-- Game shitory can be moved back to the right with `textAlignment=RIGHT`
+- Game hitory can be moved back to the right with `textAlignment=RIGHT`
+- Fixed town portal icon size when running in centered mode
 
 ## [2.4.2] - 2021-01-04 - Centre map on screen (BETA)
 

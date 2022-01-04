@@ -18,9 +18,9 @@ https://www.youtube.com/watch?v=-tezpjrZwEI
 
 ## Map examples
 
-| Arcane Sanctuary |     Lower Kurast     |    Canyon of the Magi    |
+| Dark Wood |     Halls of Pain     |    Travincal    |
 | :--------------: | :------------------: | :----------------------: |
-| ![](arcane.png)  | ![](lowerkurast.png) | ![](canyonofthemagi.png) |
+| ![](darkwood.png)  | ![](hallsofpain.png) | ![](canyonofthemagi.png) |
 
 ## Installation
 
@@ -66,17 +66,18 @@ This server is getting hammered lately so it would be appreciated if you support
     - Super chests marked (Lower Kurast chests)
     - Shrines and their type
     - Portals
-    - All doors, waypoints marked
+    - All doors and waypoints marked
     - A purple line drawn to the next level exit
     - A yellow line drawn to the waypoint
     - A red line drawn to the nearest boss (Nihlithak, summoner etc)
     - All quest items, marked in green (Stones, Hellforge, Altars etc)
+- Can have map in corner of the screen or in the center like the normal automap
+- Saves game session history including game names, xp gained, duration into a CSV
+- Shows server IP in the corner of the window
+- Displays game history in game menu:
+![Game History](prevgame.png)
 - Highly configurable, size, color, position, opacity etc
 - Can change map size and position with key shortcuts while in game
-- Shows last game name and game time while in menu
-![Last Game Name](prevgame.png)
-
-If you want D2R server IP to show, look at my extra standalone tool for that <https://github.com/joffreybesos/DcloneIPview>
 
 **Other notes**
 
@@ -114,21 +115,45 @@ In `settings.ini` you should see some options to make configuration changes.
 | alwaysShowMap | false | This setting will force the map to always show, ignoring the TAB key |
 | hideTown | false | This will hide town maps so they will never show |
 | edges | true | This makes map images appear as walls instead of walkable area |
-| wallThickness | 1.2 | Thickness of walls in when `edges` is turned on |
-| showGameInfo | true | Shows previous game name and game time in menus |
+| wallThickness | 0.5 | Thickness of walls in when `edges` is turned on |
+| centerMode | false | (BETA) centerMode will replace the normal automap, the map will be scaled really large and track the player position |
+| centerModeScale | 1.7 | scale of the image, change this if the scale in centered mode doesn't line up |
+| serverScale | 4 | the larger the scale, the more detailed the map, decrease this to help performance |
+| centerModeOpacity | 0.7 | opacity of the map |
+| centerModeXoffset | 0 | Change this if the map doesn't line up with the normal automap |
+| centerModeYoffset | -12 | Change this if the map doesn't line up with the normal automap |
+| showGameInfo | true | Show/hide game history in menus |
+| textSectionWidth | 700 | How many pixels of width to allow to show game history, make smaller to take up less space |
+| textSize | 20 | Text size of game history |
+| textAlignment | LEFT | can also set RIGHT to move game history to other side of the screen |
+| showAllHistory | false | show ALL game history even in previous gaming sessions in game shitory list |
+| showIPtext | true | Show game server IP address in corner of game window |
+| textIPfontSize | 18 | IP address font size |
+| textIPalignment | RIGHT | can also set to LEFT to move IP address to left side of screen |
 | showNormalMobs | true | Set to false to hide normal non-unique monsters on the map |
 | showUniqueMobs | true | Set to false to hide unique monsters on the map |
 | showBosses | true | Show bosses with a red dot, such as Diablo, Summoner etc |
 | showDeadMobs | true | Show dead mobs as a black square (useful to know which areas are clear) |
 | showImmunities | true | Show immunties of normal and unique monsters |
 | showOtherPlayers | true | Show other players as squares |
-| showItems | true | Show items on ground (unique, set, runes) |
+| showOtherPlayerNames | false | Show names above player dots, off by default |
 | showShrines | true | Show shrines |
 | showPortals | true | Show portals including red portals |
+| showUniqueAlerts | true | Show an alert when a unique item is on the ground |
+| showSetItemAlerts | true | Show an alert when a set item is on the ground |
+| showRuneAlerts | true | Show an alert when a rune is on the ground |
+| showJewelAlerts | true | Show an alert when a jewel is on the ground |
+| showCharmAlerts | true | Show an alert when a charm is on the ground |
 | normalMobColor | FFFFF | Colour of the dot of normal monsters |
 | uniqueMobColor | D4AF37 | Colour of the dot of unique monsters |
 | bossColor | FF0000 | Colour of boss dots on the map |
 | deadColor | 000000 | Color of dead mobs on the map |
+| normalDotSize | 2.5 | Dot size of a normal mob |
+| normalImmunitySize | 4 | Size of the larger immunity circle that surrounds a normal mob dot |
+| uniqueDotSize | 5 | Dot size of a unique mob |
+| uniqueImmunitySize | 11 | Size of the larger immunity circle that surrounds a unique mob dot |
+| deadDotSize | 2 | Size of dead mob |
+| bossDotSize | 5 | Size of boss dot |
 | physicalImmuneColor | CD853f | How physical immunity will display |
 | magicImmuneColor | ff8800 | How magic immunity will display |
 | fireImmuneColor | FF0000 | How fire immunity will display |
@@ -138,6 +163,8 @@ In `settings.ini` you should see some options to make configuration changes.
 | runeItemColor | FFa700 | Rune alert colour when a rune is on the ground |
 | uniqueItemColor | BBA45B | Unique alert color when a unique is on the ground |
 | setItemColor | 00FC00 | Set item alert colour when a set item is on the ground |
+| charmItemColor | 6D6DFF | Charm alert colour when a set item is on the ground |
+| jewelItemColor | 6D6DFF | Jewel alert colour when a set item is on the ground |
 | portalColor | 00AAFF | Town portal color |
 | redPortalColor | FF0000 | Red portal color (cow level) |
 | shrineColor | FFD700 | Shrine and shrine type text colour |
@@ -145,6 +172,7 @@ In `settings.ini` you should see some options to make configuration changes.
 | showWaypointLine | false | Draws a yellow line to the nearest waypoint, turned off by default |
 | showNextExitLine | true | Draws a purple line to the next relevant exit |
 | showBossLine | true | Draws a red line to the boss in that level (Nihlithak, Summoner etc) |
+| showQuestLine | true | Draws a green line to the relevant quest item in that level |
 | increaseMapSizeKey | NumpadAdd | Key to increase the size of the map |
 | decreaseMapSizeKey | NumpadSub | Key to decrease the size of the map |
 | alwaysShowKey | NumpadMult | Key to toggle `alwaysShowMap` setting |
@@ -152,6 +180,7 @@ In `settings.ini` you should see some options to make configuration changes.
 | moveMapRight | #Right | Shortcut to move map right (Win + Right) |
 | moveMapUp | #Up | Shortcut to move map up (Win + Up) |
 | moveMapDown | #Down | Shortcut to move map down (Win + Down) |
+| switchMapMode | / | Shortcut to toggle centered map mode |
 | performanceMode | 0 | Experimental, set to -1 to max out performance. This may use too much CPU and cause strange behaviour. Please report any issues in Discord as I wish to make this permanent |
 | enableD2ML | false | Only enable if you use multiple D2R sessions, not tested well |
 | windowTitle | D2R:main | This is ignored unless `enableD2ML` is turned on. It is the window title of one D2R session for multi sesion |

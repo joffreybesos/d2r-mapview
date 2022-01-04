@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
 - Green line can be turned off with `showQuestLine=true/false`
 - Game history list now only shows games from that session
 - Can force showing of all history with `showAllHistory=true` (default is false)
-- Game history now defaults to the left side, can be changed to the right with `textAlignment=RIGHT`
+- Game history now defaults to the left side of screen
+- Game shitory can be moved back to the right with `textAlignment=RIGHT`
 
 ## [2.4.2] - 2021-01-04 - Centre map on screen (BETA)
 

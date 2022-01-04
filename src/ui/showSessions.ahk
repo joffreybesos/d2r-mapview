@@ -4,7 +4,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\Gdip_All.ahk
 #Include %A_ScriptDir%\stats\GameSession.ahk
 
-ShowHistoryText(hwnd1, gameWindowId, sessionList, position = "RIGHT", textBoxWidth = 800, fontSize = 26) {
+ShowHistoryText(hwnd1, gameWindowId, sessionList, historyToggle, position = "RIGHT", textBoxWidth = 800, fontSize = 26) {
     WinGetPos, , , Width, Height, %gameWindowId%
     StringLower, position, position
     if (position == "right") {
@@ -15,7 +15,7 @@ ShowHistoryText(hwnd1, gameWindowId, sessionList, position = "RIGHT", textBoxWid
         leftMargin := Width - textBoxWidth
     }
     topMargin := 20
-    if (WinExist(gameWindowId)) {
+    if (WinExist(gameWindowId) and historyToggle) {
         
         pToken := Gdip_Startup()
         DetectHiddenWindows, On

@@ -24,28 +24,22 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.4.3"
+expectedVersion := "2.4.4"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
     ExitApp
 }
 
-IniRead, version, settings.ini, VersionControl, version, ""
-if (version != expectedVersion) {
-    MsgBox, , Mismatched settings version, Your settings.ini is not the expected version %expectedVersion%`nIn future please update executable AND settings.ini`nPress OK to continue anyway   
-}
-
 lastMap := ""
 exitArray := []
 helpToggle:= true
+historyToggle := true
 WriteLog("*******************************************************************")
 WriteLog("* Map overlay started https://github.com/joffreybesos/d2r-mapview *")
 WriteLog("*******************************************************************")
 WriteLog("Version: " expectedVersion)
 WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyVW3uj")
-WriteLog("This map hack may not work on Windows 11")
-
 ClearCache(A_Temp)
 readSettings(settings.ini, settings)
 
@@ -69,6 +63,10 @@ global diabloFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
 switchMapModeKey := settings["switchMapMode"]
 Hotkey, IfWinActive, ahk_exe D2R.exe
 Hotkey, %switchMapModeKey%, SwitchMapMode
+
+historyToggleKey := settings["historyToggleKey"]
+Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, %historyToggleKey%, HistoryToggle
 
 alwaysShowKey := settings["alwaysShowKey"]
 Hotkey, IfWinActive, ahk_exe D2R.exe
@@ -127,7 +125,7 @@ While 1 {
             gameEndTime := A_TickCount
         }
         offsetAttempts += 1
-        if (offsetAttempts > 5) {
+        if (offsetAttempts > 25) {
             hideMap(false)
             lastlevel:=
             if (session) {
@@ -147,11 +145,11 @@ While 1 {
                         sessionList := readSessionFile("GameSessionLog.csv")
                     }
                 }
-                ShowHistoryText(gamenameHwnd1, gameWindowId, sessionList, settings["textAlignment"], settings["textSectionWidth"], settings["textSize"])
+                ShowHistoryText(gamenameHwnd1, gameWindowId, sessionList, historyToggle, settings["textAlignment"], settings["textSectionWidth"], settings["textSize"])
             }
-            offsetAttempts := 6
+            offsetAttempts := 26
         }
-        Sleep, 500 ; sleep when no offset found, you're likely in menu
+        Sleep, 100 ; sleep when no offset found, you're likely in menu
     } else {
         offsetAttempts := 0
         Gui, GameInfo: Hide  ; hide the last game info
@@ -170,7 +168,6 @@ While 1 {
                 session.startingPlayerLevel := gameMemoryData["playerLevel"]
                 session.startingExperience := gameMemoryData["experience"]
                 lastSeed := gameMemoryData["mapSeed"]
-                sessionList := []
                 if (settings["showIPtext"]) {
                     ipAddress := readIPAddress(d2rprocess, gameWindowId, settings, session)
                     ShowIPText(ipHwnd1, gameWindowId, ipAddress, settings["textIPalignment"], settings["textIPfontSize"])
@@ -401,6 +398,11 @@ MapSizeDecrease:
             imageData["levelymargin"] := levelymargin
             ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
         }
+        return
+    }
+    HistoryToggle:
+    {
+        historyToggle := !historyToggle
         return
     }
     ^H::

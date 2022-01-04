@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.4] - 2021-01-04 - Settings refactor
+
+- You don't have to update your settings.ini for each new version
+- Instead, all settings will have a built-in default setting
+- You only need to specify a setting in `settings.ini` if you want to override the default
+- You still need a `settings.ini` file, but you will no longer need to update it between versions
+- Pressing `Ctrl+G` will show/hide the game history in the game menu
+- This new shortcut can be changed with `historyToggleKey`
+- Fixed bug where only the previous game would be listed in game history when more should show
+
 ## [2.4.3] - 2021-01-04 - Shrines stay on map
 
 - After you first 'see' a shrine, it will stay on the map

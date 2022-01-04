@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 ## [2.4.3] - 2021-01-04 - Shrines stay on map
 
 - After you first 'see' a shrine, it will stay on the map
-- It will also stay if leaving then returning to the same map
+- Shrines will also stay if you leave and return to a map
+- Green line will now be drawn from the player to any quest items on the map (stones, caged barbs)
+- Green line can be turned off with `showQuestLine=true/false`
+- Game history list now only shows games from that session
+- Can force showing of all history with `showAllHistory=true` (default is false)
+- Game history now defaults to the left side, can be changed to the right with `textAlignment=RIGHT`
 
 ## [2.4.2] - 2021-01-04 - Centre map on screen (BETA)
 

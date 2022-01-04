@@ -137,12 +137,15 @@ While 1 {
                 if (!session.isLogged) {
                     SetFormat Integer, D
                     session.saveEntryToFile()
+                    sessionList.push(session)
                 }
             }
             if (settings["showGameInfo"]) {
                 SetFormat Integer, D
-                if (!sessionList.MaxIndex()) {
-                    sessionList := readSessionFile("GameSessionLog.csv")
+                if (settings["showAllHistory"]) {
+                    if (!sessionList.MaxIndex()) {
+                        sessionList := readSessionFile("GameSessionLog.csv")
+                    }
                 }
                 ShowHistoryText(gamenameHwnd1, gameWindowId, sessionList, settings["textAlignment"], settings["textSectionWidth"], settings["textSize"])
             }

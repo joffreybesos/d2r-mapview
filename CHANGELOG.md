@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.5] - 2021-01-04 - Centered mode improvements
+
+- Centered map image will no longer spill onto other monitors
+- IP address text now defaults to the left side of the screen
+
 ## [2.4.4] - 2021-01-04 - Settings refactor
 
 - You don't have to update your settings.ini for each new version

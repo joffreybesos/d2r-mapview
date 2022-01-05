@@ -12,6 +12,7 @@ ShowIPText(hwnd1, gameWindowId, ipaddress, position = "LEFT", fontSize = 26) {
     if (position == "RIGHT") {
         leftMargin := Width - textBoxWidth - 20
         align = "Right"
+        topMargin := 130
     } else if (position == "LEFT") {
         leftMargin := 20
         align = "Left"

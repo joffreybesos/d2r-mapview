@@ -25,6 +25,23 @@ MovePlayerMap(settings, mapHwnd1, unitHwnd1, gameMemoryData, mapData, uiData) {
     leftMargin := (A_ScreenWidth/2) - xPosDot + settings["centerModeXoffset"]
     topMargin := (A_ScreenHeight/2) - yPosDot + settings["centerModeYoffset"]
     ;WriteLog(xPosDot " " yPosDot " " leftMargin " " topMargin " " scaledWidth " " scaledHeight)
+    
+    regionWidth := A_ScreenWidth
+    regionHeight := A_ScreenHeight
+    regionX := 0 - leftMargin
+    regionY := 0 - topMargin
+    if (leftMargin > 0) {
+        regionX := 0
+        regionWidth := A_ScreenWidth - leftMargin
+    }
+    if (topMargin > 0) {
+        regionY := 0
+        regionHeight := A_ScreenHeight - topMargin
+    }
     WinMove, ahk_id %mapHwnd1%,, leftMargin, topMargin
     WinMove, ahk_id %unitHwnd1%,, leftMargin, topMargin
+    
+    ; ToolTip % "`n`n`n" leftMargin " " topMargin " " regionWidth " " regionHeight
+    WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapHwnd1%
+    
 } 

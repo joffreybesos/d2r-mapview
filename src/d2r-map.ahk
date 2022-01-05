@@ -24,7 +24,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.4.4"
+expectedVersion := "2.4.5"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -105,13 +105,21 @@ uiOffset := settings["uiOffset"]
 Gui, IPaddress: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs +HwndipHwnd1
 
 Gui, GameInfo: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-gamenameHwnd1 := WinExist()
+global gamenameHwnd1 := WinExist()
 
 Gui, Map: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-mapHwnd1 := WinExist()
+global mapHwnd1 := WinExist()
 
 Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
-unitHwnd1 := WinExist()
+global unitHwnd1 := WinExist()
+
+; ; #2: Disable DWM rendering of the window's frame.
+; DllCall("dwmapi\DwmSetWindowAttribute", "ptr", mapHwnd1
+;   , "uint", DWMWA_NCRENDERING_POLICY := 2, "int*", DWMNCRP_DISABLED := 1, "uint", 4)
+
+; ; #2: Disable DWM rendering of the window's frame.
+; DllCall("dwmapi\DwmSetWindowAttribute", "ptr", unitHwnd1
+;   , "uint", DWMWA_NCRENDERING_POLICY := 2, "int*", DWMNCRP_DISABLED := 1, "uint", 4)
 
 sessionList := []
 offsetAttempts := 6
@@ -191,7 +199,6 @@ While 1 {
                     Gui, Map: Show, NA
                     Gui, Units: Show, NA
                 }
-                
                 ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
             }
             ; update player layer on each loop
@@ -342,6 +349,7 @@ MapSizeDecrease:
         imageData := {}
         gameMemoryData  := {}
         uiData := {}
+        WinSet, Region, 0-0 W%A_ScreenWidth% H%A_ScreenHeight%, ahk_id %mapHwnd1%
         Gui, Map: Hide
         Gui, Units: Hide
 

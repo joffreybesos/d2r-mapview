@@ -29,7 +29,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["showAllHistory"] := 0
     settings["showIPtext"] := 1
     settings["textIPfontSize"] := "18"
-    settings["textIPalignment"] := "RIGHT"
+    settings["textIPalignment"] := "LEFT"
     settings["showNormalMobs"] := 1
     settings["showUniqueMobs"] := 1
     settings["showBosses"] := 1
@@ -48,10 +48,10 @@ readSettings(settingsFile, ByRef settings) {
     settings["uniqueMobColor"] := "D4AF37"
     settings["bossColor"] := "FF0000"
     settings["deadColor"] := "000000"
-    settings["normalDotSize"] := "2.5"
-    settings["normalImmunitySize"] := "4"
-    settings["uniqueDotSize"] := "5"
-    settings["uniqueImmunitySize"] := "11"
+    settings["normalDotSize"] := "5"
+    settings["normalImmunitySize"] := "8"
+    settings["uniqueDotSize"] := "8"
+    settings["uniqueImmunitySize"] := "14"
     settings["deadDotSize"] := "2"
     settings["bossDotSize"] := "5"
     settings["physicalImmuneColor"] := "CD853f"

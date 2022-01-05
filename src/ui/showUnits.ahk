@@ -47,7 +47,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
     ; each map has offset x and y which is absolute world position
     xPosDot := ((gameMemoryData["xPos"] - mapData["mapOffsetX"]) * serverScale) + padding
     yPosDot := ((gameMemoryData["yPos"] - mapData["mapOffsetY"]) * serverScale) + padding
-    correctedPos := findNewPos(xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+    correctedPos := correctPos(settings, xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
     xPosDot := correctedPos["x"]
     yPosDot := correctedPos["y"]
 
@@ -78,7 +78,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
             if (object["isPortal"]) {
                 objectx := ((object["objectx"] - mapData["mapOffsetX"]) * serverScale) + padding
                 objecty := ((object["objecty"] - mapData["mapOffsetY"]) * serverScale) + padding
-                correctedPos := findNewPos(objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 objectx := correctedPos["x"]
                 objecty := correctedPos["y"]
                 
@@ -92,7 +92,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
             if (object["isRedPortal"]) {
                 objectx := ((object["objectx"] - mapData["mapOffsetX"]) * serverScale) + padding
                 objecty := ((object["objecty"] - mapData["mapOffsetY"]) * serverScale) + padding
-                correctedPos := findNewPos(objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 objectx := correctedPos["x"]
                 objecty := correctedPos["y"]
                 if (settings["centerMode"]) {
@@ -146,7 +146,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
             if (mob["mode"] == 0 or mob["mode"] == 12) { ; dead
                 mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
                 moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
-                correctedPos := findNewPos(mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                correctedPos := correctPos(settings, mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 mobx := correctedPos["x"]
                 moby := correctedPos["y"]
                 Gdip_DrawEllipse(G, pPenDead, mobx-(deadDotSize/2), moby-(deadDotSize/2), deadDotSize, deadDotSize/2)
@@ -159,7 +159,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
         {
             mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
             moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
-            correctedPos := findNewPos(mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+            correctedPos := correctPos(settings, mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             mobx := correctedPos["x"]
             moby := correctedPos["y"]
 
@@ -212,7 +212,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
         
         mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
         moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
-        correctedPos := findNewPos(mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+        correctedPos := correctPos(settings, mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
         mobx := correctedPos["x"]
         moby := correctedPos["y"]
         if (mob["isBoss"]) {
@@ -294,7 +294,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
             wparray := StrSplit(waypointHeader, ",")
             waypointX := (wparray[1] * serverScale) + padding
             wayPointY := (wparray[2] * serverScale) + padding
-            correctedPos := findNewPos(waypointX, wayPointY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+            correctedPos := correctPos(settings, waypointX, wayPointY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             waypointX := correctedPos["x"]
             wayPointY := correctedPos["y"]
             pPen := Gdip_CreatePen(0x55ffFF00, 3)
@@ -314,7 +314,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
                 ;exitArray[2] ; name of exit
                 exitX := (exitArray[3] * serverScale) + padding
                 exitY := (exitArray[4] * serverScale) + padding
-                correctedPos := findNewPos(exitX, exitY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                correctedPos := correctPos(settings, exitX, exitY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 exitX := correctedPos["x"]
                 exitY := correctedPos["y"]
 
@@ -336,7 +336,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
             ;bossArray[1] ; name of boss
             bossX := (bossArray[2] * serverScale) + padding
             bossY := (bossArray[3] * serverScale) + padding
-            correctedPos := findNewPos(bossX, bossY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+            correctedPos := correctPos(settings, bossX, bossY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             bossX := correctedPos["x"]
             bossY := correctedPos["y"]
 
@@ -360,7 +360,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
                 ;questsArray[1] ; name of quest
                 questX := (questsArray[2] * serverScale) + padding
                 questY := (questsArray[3] * serverScale) + padding
-                correctedPos := findNewPos(questX, questY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                correctedPos := correctPos(settings, questX, questY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 questX := correctedPos["x"]
                 questY := correctedPos["y"]
 
@@ -382,7 +382,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
                 ;WriteLog(gameMemoryData["playerName"] " " player["playerName"])
                 playerx := ((player["x"] - mapData["mapOffsetX"]) * serverScale) + padding
                 playery := ((player["y"] - mapData["mapOffsetY"]) * serverScale) + padding
-                correctedPos := findNewPos(playerx, playery, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                correctedPos := correctPos(settings, playerx, playery, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 playerx := correctedPos["x"]
                 playery := correctedPos["y"]
                 if (settings["showOtherPlayerNames"]) {
@@ -421,7 +421,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
         {
             itemx := ((item["itemx"] - mapData["mapOffsetX"]) * serverScale) + padding
             itemy := ((item["itemy"] - mapData["mapOffsetY"]) * serverScale) + padding
-            correctedPos := findNewPos(itemx, itemy, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+            correctedPos := correctPos(settings, itemx, itemy, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             itemx := correctedPos["x"]
             itemy := correctedPos["y"]
             if (settings["showRuneAlerts"]) {
@@ -510,7 +510,7 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
         {
             objectx := ((object["objectx"] - mapData["mapOffsetX"]) * serverScale) + padding
             objecty := ((object["objecty"] - mapData["mapOffsetY"]) * serverScale) + padding
-            correctedPos := findNewPos(objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+            correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             objectx := correctedPos["x"]
             objecty := correctedPos["y"]
             shrineType := object["shrineType"]
@@ -625,6 +625,15 @@ isNextExit(currentLvl) {
     return
 }
 
+
+correctPos(settings, xPosDot, yPosDot, centerX, centerY, RWidth, RHeight, scale) {
+    correctedPos := findNewPos(xPosDot, yPosDot, centerX, centerY, RWidth, RHeight, scale)
+    if (settings["centerMode"]) {
+        correctedPos["x"] := correctedPos["x"] - (settings["centerModeXoffset"] / 2)
+        correctedPos["y"] := correctedPos["y"] - (settings["centerModeYoffset"] / 2)
+    }
+    return correctedPos
+}
 
 ; converting to cartesian to polar and back again sucks
 ; I wish my matrix transformations worked

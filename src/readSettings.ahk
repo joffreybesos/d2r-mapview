@@ -19,9 +19,9 @@ readSettings(settingsFile, ByRef settings) {
     settings["centerMode"] := 0
     settings["centerModeScale"] := "1.7"
     settings["serverScale"] := "4"
-    settings["centerModeOpacity"] := "0.4"
+    settings["centerModeOpacity"] := "0.7"
     settings["centerModeXoffset"] := "0"
-    settings["centerModeYoffset"] := "-12"
+    settings["centerModeYoffset"] := "-28"
     settings["showGameInfo"] := 1
     settings["textSectionWidth"] := "700"
     settings["textSize"] := "20"

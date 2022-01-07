@@ -532,6 +532,8 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
     Gdip_DeletePen(pPen)
 
     if (settings["centerMode"]) {
+        leftMargin := (A_ScreenWidth/2) - xPosDot + (settings["centerModeXoffset"] /2)
+        topMargin := (A_ScreenHeight/2) - yPosDot + (settings["centerModeYoffset"] /2)
         regionWidth := A_ScreenWidth
         regionHeight := A_ScreenHeight
         regionX := 0 - leftMargin
@@ -545,7 +547,11 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
             regionHeight := A_ScreenHeight - topMargin
         }
         ; ToolTip % "`n`n`n" leftMargin " " topMargin " " regionWidth " " regionHeight
-        WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %unitHwnd1%
+
+        ;WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %unitHwnd1%
+        
+        WinMove, ahk_id %unitHwnd1%,, leftMargin, topMargin
+        WinMove, ahk_id %mapHwnd1%,, leftMargin, topMargin
         UpdateLayeredWindow(unitHwnd1, hdc, , , scaledWidth, scaledHeight)
     } else {
         UpdateLayeredWindow(unitHwnd1, hdc, leftMargin, topMargin, rotatedWidth, rotatedHeight)

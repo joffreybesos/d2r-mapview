@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 - Centered map image will no longer spill onto other monitors
 - IP address text now defaults to the left side of the screen
+- IP text when on right side of screen has been lowered to not overwrite other text
 
 ## [2.4.4] - 2021-01-04 - Settings refactor
 

@@ -4,10 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [2.4.5] - 2021-01-04 - Centered mode improvements
 
-- Centered map image will now be cropped at the game window boundaries
+- Centered map image will now be cropped at the screen boundaries
 - IP address text now defaults to the left side of the screen
 - IP text when on right side of screen has been lowered to not overwrite other text
 - Default monster dot size is now larger
+- Slight performance improvements (but more to come)
+- Simplified default `settings.ini` file
 
 ## [2.4.4] - 2021-01-04 - Settings refactor
 

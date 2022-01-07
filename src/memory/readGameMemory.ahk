@@ -87,6 +87,7 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
         if (statEnum == 6) {
             hp := d2rprocess.read(statPtr + 0x4 + statOffset, "UInt")
             hp := hp >> 8
+            ; 'hp' will now have correct value
         }
         if (statEnum == 7) {
             maxhp := d2rprocess.read(statPtr + 0x4 + statOffset, "UInt")

@@ -204,8 +204,10 @@ While 1 {
             ; update player layer on each loop
             uiData["ticktock"] := ticktock
             ; update player layer on each loop
-            ShowUnits(settings, unitHwnd1, imageData, gameMemoryData, shrines, uiData)
-            
+            ShowUnits(settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
+            ; if (settings["centerMode"]) {
+            ;     MovePlayerMap(settings, mapHwnd1, unitHwnd1, gameMemoryData, imageData, uiData)
+            ; }
             checkAutomapVisibility(d2rprocess, settings, gameMemoryData["levelNo"])
 
             lastlevel := gameMemoryData["levelNo"]
@@ -347,7 +349,7 @@ MapSizeDecrease:
         imageData := {}
         gameMemoryData  := {}
         uiData := {}
-        ;WinSet, Region, 0-0 W%A_ScreenWidth% H%A_ScreenHeight%, ahk_id %mapHwnd1%
+        WinSet, Region, , ahk_id %mapHwnd1%
         Gui, Map: Hide
         Gui, Units: Hide
 

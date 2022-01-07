@@ -2,7 +2,7 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
+ShowUnits(settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrines, uiData) {
     scale:= settings["scale"]
     leftMargin:= settings["leftMargin"]
     topMargin:= settings["topMargin"]
@@ -546,10 +546,9 @@ ShowUnits(settings, unitHwnd1, mapData, gameMemoryData, shrines, uiData) {
             regionY := 0
             regionHeight := A_ScreenHeight - topMargin
         }
-        ; ToolTip % "`n`n`n" leftMargin " " topMargin " " regionWidth " " regionHeight
+        ;ToolTip % "`n`n`n`n" regionX " " regionY " " regionWidth " " regionHeight
+        WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapHwnd1%
 
-        ;WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %unitHwnd1%
-        
         WinMove, ahk_id %unitHwnd1%,, leftMargin, topMargin
         WinMove, ahk_id %mapHwnd1%,, leftMargin, topMargin
         UpdateLayeredWindow(unitHwnd1, hdc, , , scaledWidth, scaledHeight)

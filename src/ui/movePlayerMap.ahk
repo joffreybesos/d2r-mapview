@@ -42,6 +42,6 @@ MovePlayerMap(settings, mapHwnd1, unitHwnd1, gameMemoryData, mapData, uiData) {
     WinMove, ahk_id %unitHwnd1%,, leftMargin, topMargin
     
     ; ToolTip % "`n`n`n" leftMargin " " topMargin " " regionWidth " " regionHeight
-    WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapHwnd1%
+    ;WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapHwnd1%
     
 } 

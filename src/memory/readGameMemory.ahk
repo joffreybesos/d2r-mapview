@@ -84,6 +84,15 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
         if (statEnum == 13) {
             experience := d2rprocess.read(statPtr + 0x4 + statOffset, "UInt")
         }
+        if (statEnum == 6) {
+            hp := d2rprocess.read(statPtr + 0x4 + statOffset, "UInt")
+            hp := hp >> 8
+        }
+        if (statEnum == 7) {
+            maxhp := d2rprocess.read(statPtr + 0x4 + statOffset, "UInt")
+            maxhp := maxhp >> 8
+            ; maxhp is the max hp WITHOUT any item/charm/skill boosts applied!
+        }
     }
 
     ; get other players

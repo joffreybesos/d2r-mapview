@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - IP address text now defaults to the left side of the screen
 - IP text when on right side of screen has been lowered to not overwrite other text
 - Default monster dot size is now larger
+- Fixed bug where shrines from a previous act would appear on the next act
 - Slight performance improvements (but more to come)
 - Simplified default `settings.ini` file
 

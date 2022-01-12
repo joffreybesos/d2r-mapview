@@ -185,7 +185,9 @@ While 1 {
 
             ; if there's a level num then the player is in a map
             if (gameMemoryData["levelNo"] != lastlevel) { ; only redraw map when it changes
-                
+                if (getAct(gameMemoryData["levelNo"]) != getAct(lastLevel)) { ;changed act
+                    shrines := []
+                }
                 ; Show loading text
                 ;Gui, Map: Show, NA
                 Gui, Map: Hide ; hide map
@@ -205,9 +207,6 @@ While 1 {
             uiData["ticktock"] := ticktock
             ; update player layer on each loop
             ShowUnits(settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
-            ; if (settings["centerMode"]) {
-            ;     MovePlayerMap(settings, mapHwnd1, unitHwnd1, gameMemoryData, imageData, uiData)
-            ; }
             checkAutomapVisibility(d2rprocess, settings, gameMemoryData["levelNo"])
 
             lastlevel := gameMemoryData["levelNo"]
@@ -438,3 +437,10 @@ MapSizeDecrease:
     }
 return
 
+getAct(levelNo) {
+    if (levelNo < 40) return 1
+    if (levelNo < 75) return 2
+    If (levelNo < 103) return 3
+    if (levelNo < 109) return 4
+    return 5
+}

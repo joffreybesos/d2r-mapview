@@ -13,27 +13,26 @@ readUI(d2rprocess, gameWindowId, settings, session) {
     }
 
     ; UI offset 0x21F89AA
-    ; show automap 0x00
-    ; item text +0x2
-    ; quit menu -0x01
-    ; quests -0x05
-    ; skill tree -0x0a
-    ; show char -0x0c
-    ; show inv -0x0d
-    ; merc loadout +0x10
-    ; party +0x07
     offset := settings["uiOffset"]
     base := d2rprocess.BaseAddress + offset
 
-    quitMenu := d2rprocess.read(base - 0x2, "UShort")
-    questsMenu := d2rprocess.read(base + 0x4, "UShort")
-    skillMenu := d2rprocess.read(base - 0x6, "UShort")
-    charMenu := d2rprocess.read(base - 0x8, "UShort")
-    invMenu := d2rprocess.read(base - 0x9, "UShort")
-    mercMenu := d2rprocess.read(base + 0x14, "UShort")
-    partyMenu := d2rprocess.read(base + 0xb, "UShort")
-    ; waypointMenu := d2rprocess.read(base + 0x9, "UShort")
+    d2rprocess.readRaw(base - 0x1, buffer, 1)
+    quitMenu := NumGet(&buffer , 0, Type := "UInt")
+    d2rprocess.readRaw(base + 0x4, buffer, 1)
+    questsMenu := NumGet(&buffer , 0, Type := "UInt")
+    d2rprocess.readRaw(base - 0x6, buffer, 1)
+    skillMenu := NumGet(&buffer , 0, Type := "UInt")
+    d2rprocess.readRaw(base - 0x8, buffer, 1)
+    charMenu := NumGet(&buffer , 0, Type := "UInt")
+    d2rprocess.readRaw(base - 0x9, buffer, 1)
+    invMenu := NumGet(&buffer , 0, Type := "UInt")
+    d2rprocess.readRaw(base + 0x14, buffer, 1)
+    mercMenu := NumGet(&buffer , 0, Type := "UInt")
+    d2rprocess.readRaw(base + 0xb, buffer, 1)
+    partyMenu := NumGet(&buffer , 0, Type := "UInt")
+    d2rprocess.readRaw(base + 0x9, buffer, 1)
+    waypointMenu := NumGet(&buffer , 0, Type := "UInt")
 
-    ; WriteLog("ESC" quitMenu " Q" questsMenu " S" skillMenu " C" charMenu " I" invMenu " O" mercMenu " P" partyMenu)
+    ;WriteLog("ESC" quitMenu " Q" questsMenu " T" skillMenu " C" charMenu " I" invMenu " O" mercMenu " P" partyMenu " W" waypointMenu)
     return (quitMenu or questsMenu or skillMenu or charMenu or invMenu or mercMenu or partyMenu or waypointMenu)
 }

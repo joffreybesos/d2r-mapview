@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 - Map will now be hidden when looking at menus such as inventory, quests etc
 - Fixed bug where if you pressed TAB while map was loading it would show previously loaded map
 - Fixed bug where shrines from a previous act would appear on the next act
+- Fixed bug where the difficulty wasn't checked correctly allowing for invalid map server requests
+- Map server connectivity errors will now show a popup error message instead of exiting silently
 - IP address text now defaults to the left side of the screen
 - IP text when on right side of screen has been lowered to not overwrite other text
 - Default monster dot size is now larger

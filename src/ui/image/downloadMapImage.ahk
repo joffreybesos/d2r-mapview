@@ -69,6 +69,7 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
             if (Instr(errMsg, "The operation timed out")) {
                 WriteLog("ERROR: Timeout downloading image from " imageUrl)
                 WriteLog("You can try opening the above URL in your browser to test connectivity")
+                Msgbox, 48, d2r-mapview, Timed out reading map from map server`nCheck baseUrl in settings.ini`n`nExiting....
             } else if (Instr(errMsg, "The requested header was not found")) {
                 Loop, Parse, respHeaders, `n
                 {
@@ -76,6 +77,7 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
                 }
                 WriteLog("ERROR: Did not find an expected header " imageUrl)
                 WriteLog("If it didn't find the correct headers, you likely need to update your server docker image")
+                Msgbox, 48, d2r-mapview, Error downloading map image.`nEnsure you are using latest version of map server`n`nExiting....
             } else {
                 WriteLog(errMsg)
                 Loop, Parse, respHeaders, `n
@@ -86,6 +88,7 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
                 if (FileExist(sFile)) {
                     WriteLog("Downloaded image to file, but something else went wrong " sFile)
                 }
+                Msgbox, 48, d2r-mapview, Error downloading map image.`nCheck map server baseUrl in settings.ini or errors in log.txt`n`nExiting....
             }
         }
         FileAppend, %respHeaders%, %sFileTxt%

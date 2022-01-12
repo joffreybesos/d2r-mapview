@@ -169,7 +169,7 @@ While 1 {
             lastPlayerExperience:=gameMemoryData["experience"]
         }
 
-        if ((gameMemoryData["difficulty"] > 0 & gameMemoryData["difficulty"] < 3) and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
+        if ((gameMemoryData["difficulty"] == "0" or gameMemoryData["difficulty"] == "1" or gameMemoryData["difficulty"] == "2") and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
             if (gameMemoryData["mapSeed"] != lastSeed) {
                 gameStartTime := A_TickCount    
                 currentGameName := readLastGameName(d2rprocess, gameWindowId, settings, session)

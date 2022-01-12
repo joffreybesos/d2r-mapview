@@ -4,6 +4,7 @@
 #Include %A_ScriptDir%\memory\readMobs.ahk
 #Include %A_ScriptDir%\memory\readItems.ahk
 #Include %A_ScriptDir%\memory\readObjects.ahk
+#Include %A_ScriptDir%\memory\readUI.ahk
 
 #Include %A_ScriptDir%\include\logging.ahk
 SetWorkingDir, %A_ScriptDir%
@@ -116,6 +117,7 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
         ReadObjects(d2rprocess, startingOffset, levelNo, objects)
     }
 
+    menuShown := readUI(d2rprocess, gameWindowId, settings, session)
 
     ; player position
     pPath := playerUnit + 0x38
@@ -128,7 +130,7 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     if (!xPos) {
         WriteLog("Did not find player position at player offset " playerOffset) 
     }
-    gameMemoryData := {"gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName, "experience": experience, "playerLevel": playerLevel }
+    gameMemoryData := {"gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName, "experience": experience, "playerLevel": playerLevel, "menuShown": menuShown }
     ElapsedTime := A_TickCount - StartTime
     ;ToolTip % "`n`n`n`n" ElapsedTime
 }

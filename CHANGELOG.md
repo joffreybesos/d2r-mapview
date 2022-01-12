@@ -2,15 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.4.5] - 2021-01-04 - Centered mode improvements
+## [2.4.5] - 2021-01-12 - Bug fixes
 
 - Centered map image will now be cropped at the screen boundaries
+- Map will now be hidden when looking at menus such as inventory, quests etc
+- Fixed bug where if you pressed TAB while map was loading it would show previously loaded map
+- Fixed bug where shrines from a previous act would appear on the next act
 - IP address text now defaults to the left side of the screen
 - IP text when on right side of screen has been lowered to not overwrite other text
 - Default monster dot size is now larger
-- Fixed bug where shrines from a previous act would appear on the next act
-- Slight performance improvements (but more to come)
-- Simplified default `settings.ini` file
+- Minor performance tweaks
+- Improved map image caching
+- Simplified default `settings.ini` file to address some confusion
 
 ## [2.4.4] - 2021-01-04 - Settings refactor
 

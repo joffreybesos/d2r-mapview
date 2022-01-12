@@ -59,6 +59,7 @@ global debug := settings["debug"]
 global gameWindowId := settings["gameWindowId"]
 global gameStartTime:=0
 global diabloFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
+global mapLoading := 0
 
 switchMapModeKey := settings["switchMapMode"]
 Hotkey, IfWinActive, ahk_exe D2R.exe
@@ -123,6 +124,7 @@ global unitHwnd1 := WinExist()
 
 sessionList := []
 offsetAttempts := 6
+
 ticktock := 0
 While 1 {
     ; scan for the player offset
@@ -190,24 +192,27 @@ While 1 {
                 }
                 ; Show loading text
                 ;Gui, Map: Show, NA
+                mapLoading := 1
                 Gui, Map: Hide ; hide map
                 Gui, Units: Hide ; hide player dot
                 ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help", "44") ; 22 is opacity
                 ; Download map
                 downloadMapImage(settings, gameMemoryData, imageData)
-                Gui, LoadingText: Destroy ; remove loading text
+                
                 ; Show Map
                 if (lastlevel == "") {
                     Gui, Map: Show, NA
                     Gui, Units: Show, NA
                 }
+                mapLoading := 0
                 ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+                Gui, LoadingText: Destroy ; remove loading text
             }
             ; update player layer on each loop
             uiData["ticktock"] := ticktock
             ; update player layer on each loop
             ShowUnits(settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
-            checkAutomapVisibility(d2rprocess, settings, gameMemoryData["levelNo"])
+            checkAutomapVisibility(d2rprocess, settings, gameMemoryData)
 
             lastlevel := gameMemoryData["levelNo"]
         } else {
@@ -224,16 +229,23 @@ While 1 {
     ticktock := not ticktock
 }
 
-checkAutomapVisibility(d2rprocess, settings, levelNo) {
+checkAutomapVisibility(d2rprocess, settings, gameMemoryData) {
     uiOffset:= settings["uiOffset"]
     alwaysShowMap:= settings["alwaysShowMap"]
     hideTown:= settings["hideTown"]
+    levelNo:= gameMemoryData["levelNo"]
+    isMenuShown:= gameMemoryData["menuShown"]
     ;WriteLogDebug("Checking visibility, hideTown: " hideTown " alwaysShowMap: " alwaysShowMap)
     if ((levelNo == 1 or levelNo == 40 or levelNo == 75 or levelNo == 103 or levelNo == 109) and hideTown) {
         if (isMapShowing) {
             WriteLogDebug("Hiding town " levelNo " since hideTown is set to true")
         }
         hideMap(false)
+    } else if gameMemoryData["menuShown"] {
+        if (isMapShowing) {
+            WriteLogDebug("Hiding since UI menu is shown")
+        }
+        hideMap(false, 1)
     } else if not WinActive(gameWindowId) {
         if (isMapShowing) {
             WriteLogDebug("D2R is not active window, hiding map")
@@ -248,8 +260,8 @@ checkAutomapVisibility(d2rprocess, settings, levelNo) {
     return
 }
 
-hideMap(alwaysShowMap) {
-    if (alwaysShowMap == false) {
+hideMap(alwaysShowMap, menuShown := 0) {
+    if ((alwaysShowMap == false) or menuShown) {
         Gui, Map: Hide
         Gui, Units: Hide
         Gui, IPaddress: Hide
@@ -266,9 +278,11 @@ unHideMap() {
         WriteLogDebug("Map shown")
     }
     isMapShowing:= 1
-    Gui, Map: Show, NA
-    Gui, Units: Show, NA
-    Gui, IPaddress: Show, NA
+    if (!mapLoading) {
+        Gui, Map: Show, NA
+        Gui, Units: Show, NA
+        Gui, IPaddress: Show, NA
+    }
 }
 
 
@@ -283,7 +297,7 @@ unHideMap() {
 MapAlwaysShow:
 {
     settings["alwaysShowMap"] := !settings["alwaysShowMap"]
-    checkAutomapVisibility(d2rprocess, settings, gameMemoryData["levelNo"])
+    checkAutomapVisibility(d2rprocess, settings, gameMemoryData)
     if (settings["alwaysShowMap"]) {
         unHideMap()
         IniWrite, true, settings.ini, MapSettings, alwaysShowMap
@@ -351,6 +365,7 @@ MapSizeDecrease:
         WinSet, Region, , ahk_id %mapHwnd1%
         Gui, Map: Hide
         Gui, Units: Hide
+        mapShowing := 0
 
         return
     }
@@ -427,7 +442,7 @@ MapSizeDecrease:
     ~TAB::
     ~Space::
     {
-        checkAutomapVisibility(d2rprocess, settings, gameMemoryData["levelNo"])
+        checkAutomapVisibility(d2rprocess, settings, gameMemoryData)
         return
     }
     ~Esc::

@@ -16,9 +16,9 @@ readSettings(settingsFile, ByRef settings) {
     settings["hideTown"] := 0
     settings["edges"] := 1
     settings["wallThickness"] := "0.5"
-    settings["centerMode"] := 0
-    settings["centerModeScale"] := "1.7"
-    settings["serverScale"] := "4"
+    settings["centerMode"] := 1
+    settings["centerModeScale"] := "2.262"
+    settings["serverScale"] := "3"
     settings["centerModeOpacity"] := "0.7"
     settings["centerModeXoffset"] := "0"
     settings["centerModeYoffset"] := "-28"

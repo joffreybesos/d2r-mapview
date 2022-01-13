@@ -381,6 +381,7 @@ MapSizeDecrease:
         gameMemoryData  := {}
         uiData := {}
         WinSet, Region, , ahk_id %mapHwnd1%
+        WinSet, Region, , ahk_id %unitHwnd1%
         Gui, Map: Hide
         Gui, Units: Hide
         mapShowing := 0

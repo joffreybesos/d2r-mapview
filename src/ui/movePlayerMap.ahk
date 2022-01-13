@@ -37,26 +37,23 @@ MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData
     xPosDot := correctedPos["x"] 
     yPosDot := correctedPos["y"] 
 
-    leftMargin := (A_ScreenWidth/2) - xPosDot + settings["centerModeXoffset"]
-    topMargin := (A_ScreenHeight/2) - yPosDot + settings["centerModeYoffset"]
-    ; WriteLog(xPosDot " " yPosDot " " leftMargin " " topMargin " " scaledWidth " " scaledHeight)
-    
-    regionWidth := A_ScreenWidth
-    regionHeight := A_ScreenHeight
+    WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
+    leftMargin := (gameWidth/2) - xPosDot + (settings["centerModeXoffset"] /2) + windowLeftMargin
+    topMargin := (gameHeight/2) - yPosDot + (settings["centerModeYoffset"] /2) + windowTopMargin
+    regionWidth := gameWidth
+    regionHeight := gameHeight
     regionX := 0 - leftMargin
     regionY := 0 - topMargin
     if (leftMargin > 0) {
-        regionX := 0
-        regionWidth := A_ScreenWidth - leftMargin
+        regionX := windowLeftMargin
+        regionWidth := gameWidth - leftMargin
     }
     if (topMargin > 0) {
-        regionY := 0
-        regionHeight := A_ScreenHeight - topMargin
+        regionY := windowTopMargin
+        regionHeight := gameHeight - topMargin
     }
+
     WinMove, ahk_id %mapHwnd1%,, leftMargin, topMargin
     WinMove, ahk_id %unitHwnd1%,, leftMargin, topMargin
-    
-    ; ToolTip % "`n`n`n" leftMargin " " topMargin " " regionWidth " " regionHeight
-    ;WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapHwnd1%
-    
+
 } 

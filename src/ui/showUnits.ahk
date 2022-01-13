@@ -34,17 +34,6 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     rotatedWidth := uiData["rotatedWidth"]
     rotatedHeight := uiData["rotatedHeight"]
 
-
-    ; hbm := CreateDIBSection(rotatedWidth, rotatedHeight)
-    ; hdc := CreateCompatibleDC()
-    ; obm := SelectObject(hdc, hbm)
-    
-    ; G := Gdip_GraphicsFromHDC(hdc)
-    ; Gdip_SetInterpolationMode(G, 7)
-    ; Gdip_SetSmoothingMode(G, 6)
-
-
-
     ; get relative position of player in world
     ; xpos is absolute world pos in game
     ; each map has offset x and y which is absolute world position
@@ -53,13 +42,6 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     correctedPos := correctPos(settings, xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
     xPosDot := correctedPos["x"]
     yPosDot := correctedPos["y"]
-
-    ; if (settings["centerMode"]) {
-    ;     leftMargin := (A_ScreenWidth/2) - xPosDot + (settings["centerModeXoffset"] /2)
-    ;     topMargin := (A_ScreenHeight/2) - yPosDot + (settings["centerModeYoffset"] /2)
-    ;     WinMove, ahk_id %unitHwnd1%,, leftMargin, topMargin
-    ;     WinMove, ahk_id %mapHwnd1%,, leftMargin, topMargin
-    ; }
 
     ; draw portals
     if (settings["showPortals"]) {
@@ -535,27 +517,32 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     }
 
     if (settings["centerMode"]) {
-        leftMargin := (A_ScreenWidth/2) - xPosDot + (settings["centerModeXoffset"] /2)
-        topMargin := (A_ScreenHeight/2) - yPosDot + (settings["centerModeYoffset"] /2)
-        regionWidth := A_ScreenWidth
-        regionHeight := A_ScreenHeight
+        WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
+        leftMargin := (gameWidth/2) - xPosDot + (settings["centerModeXoffset"] /2)
+        topMargin := (gameHeight/2) - yPosDot + (settings["centerModeYoffset"] /2)
+        regionWidth := gameWidth
+        regionHeight := gameHeight
         regionX := 0 - leftMargin
         regionY := 0 - topMargin
         if (leftMargin > 0) {
-            regionX := 0
-            regionWidth := A_ScreenWidth - leftMargin
+            regionX := windowLeftMargin
+            regionWidth := gameWidth - leftMargin + windowLeftMargin
         }
         if (topMargin > 0) {
-            regionY := 0
-            regionHeight := A_ScreenHeight - topMargin
+            regionY := windowTopMargin
+            regionHeight := gameHeight - topMargin + windowTopMargin
         }
         ;ToolTip % "`n`n`n`n" regionX " " regionY " " regionWidth " " regionHeight
         WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapHwnd1%
+        WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %unitHwnd1%
         UpdateLayeredWindow(unitHwnd1, hdc, , , scaledWidth, scaledHeight)
         Gdip_GraphicsClear( G )
     } else {
+        WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
+        WinMove, ahk_id %mapHwnd1%,, windowLeftMargin+leftMargin, windowTopMargin+topMargin
+        WinMove, ahk_id %unitHwnd1%,, windowLeftMargin+leftMargin, windowTopMargin+topMargin
         
-        UpdateLayeredWindow(unitHwnd1, hdc, leftMargin, topMargin, rotatedWidth, rotatedHeight)
+        UpdateLayeredWindow(unitHwnd1, hdc, , , rotatedWidth, rotatedHeight)
         Gdip_GraphicsClear( G )
     }
 

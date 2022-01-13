@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.6] - 2021-01-13 - Bug fixes
+
+- Improved performance for map center mode
+- If you want maximum performance set `performanceMode=-1` in `settings.ini`
+- If that slows your PC too much, try `performanceMode=50ms`
+- Multi launch settings no longer needs [MultiLaunch] section header in `settings.ini` (thanks @arkx)
+
 ## [2.4.5] - 2021-01-12 - Bug fixes
 
 - Centered map image will now be cropped at the screen boundaries

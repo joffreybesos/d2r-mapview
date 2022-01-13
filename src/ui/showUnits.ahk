@@ -2,7 +2,7 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-ShowUnits(settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrines, uiData) {
+ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrines, uiData) {
     scale:= settings["scale"]
     leftMargin:= settings["leftMargin"]
     topMargin:= settings["topMargin"]
@@ -29,18 +29,21 @@ ShowUnits(settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrines, uiDat
     opacity := 1.0
     padding := 150
 
-    If !pToken := Gdip_Startup()
-    {
-        MsgBox "Gdiplus failed to start. Please ensure you have gdiplus on your system"
-        ExitApp
-    }
+    scaledWidth := uiData["scaledWidth"]
+    scaledHeight := uiData["scaledHeight"]
+    rotatedWidth := uiData["rotatedWidth"]
+    rotatedHeight := uiData["rotatedHeight"]
 
-    Gdip_GetRotatedDimensions(Width, Height, Angle, RWidth, RHeight)
 
-    scaledWidth := (RWidth * scale)
-    scaledHeight := (RHeight * 0.5) * scale
-    rotatedWidth := RWidth * scale
-    rotatedHeight := RHeight * scale
+    ; hbm := CreateDIBSection(rotatedWidth, rotatedHeight)
+    ; hdc := CreateCompatibleDC()
+    ; obm := SelectObject(hdc, hbm)
+    
+    ; G := Gdip_GraphicsFromHDC(hdc)
+    ; Gdip_SetInterpolationMode(G, 7)
+    ; Gdip_SetSmoothingMode(G, 6)
+
+
 
     ; get relative position of player in world
     ; xpos is absolute world pos in game
@@ -51,14 +54,12 @@ ShowUnits(settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrines, uiDat
     xPosDot := correctedPos["x"]
     yPosDot := correctedPos["y"]
 
-    hbm := CreateDIBSection(rotatedWidth, rotatedHeight)
-    hdc := CreateCompatibleDC()
-    obm := SelectObject(hdc, hbm)
-    
-    G := Gdip_GraphicsFromHDC(hdc)
-    ; Gdip_SetInterpolationMode(G, 7)
-    ; Gdip_SetSmoothingMode(G, 6)
-
+    ; if (settings["centerMode"]) {
+    ;     leftMargin := (A_ScreenWidth/2) - xPosDot + (settings["centerModeXoffset"] /2)
+    ;     topMargin := (A_ScreenHeight/2) - yPosDot + (settings["centerModeYoffset"] /2)
+    ;     WinMove, ahk_id %unitHwnd1%,, leftMargin, topMargin
+    ;     WinMove, ahk_id %mapHwnd1%,, leftMargin, topMargin
+    ; }
 
     ; draw portals
     if (settings["showPortals"]) {
@@ -524,12 +525,14 @@ ShowUnits(settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrines, uiDat
         Gdip_DeletePen(pPen)    
     }
 
-    ; draw player
-    pPen := Gdip_CreatePen(0xff00FF00, 6)
-    ;WriteLog(xPosDot " " yPosDot " " midW " " midH " " scaledWidth " " scaledHeight " " scale " " newPos["x"] " " newPos["y"])
-    Gdip_DrawRectangle(G, pPen, xPosDot-3, (yPosDot)-2 , 6, 6)
-    ; Gdip_DrawRectangle(G, pPen, 0, 0, scaledWidth, scaledHeight) ;outline for whole map used for troubleshooting
-    Gdip_DeletePen(pPen)
+    if (!settings["centerMode"]) {
+        ; draw player
+        pPen := Gdip_CreatePen(0xff00FF00, 6)
+        ;WriteLog(xPosDot " " yPosDot " " midW " " midH " " scaledWidth " " scaledHeight " " scale " " newPos["x"] " " newPos["y"])
+        Gdip_DrawRectangle(G, pPen, xPosDot-3, (yPosDot)-2 , 6, 6)
+        ; Gdip_DrawRectangle(G, pPen, 0, 0, scaledWidth, scaledHeight) ;outline for whole map used for troubleshooting
+        Gdip_DeletePen(pPen)
+    }
 
     if (settings["centerMode"]) {
         leftMargin := (A_ScreenWidth/2) - xPosDot + (settings["centerModeXoffset"] /2)
@@ -548,23 +551,23 @@ ShowUnits(settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrines, uiDat
         }
         ;ToolTip % "`n`n`n`n" regionX " " regionY " " regionWidth " " regionHeight
         WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapHwnd1%
-
-        WinMove, ahk_id %unitHwnd1%,, leftMargin, topMargin
-        WinMove, ahk_id %mapHwnd1%,, leftMargin, topMargin
         UpdateLayeredWindow(unitHwnd1, hdc, , , scaledWidth, scaledHeight)
+        Gdip_GraphicsClear( G )
     } else {
+        
         UpdateLayeredWindow(unitHwnd1, hdc, leftMargin, topMargin, rotatedWidth, rotatedHeight)
+        Gdip_GraphicsClear( G )
     }
 
     ElapsedTime := A_TickCount - StartTime
     ;ToolTip % "`n`n`n`n" ElapsedTime
     ;WriteLog("Draw players " ElapsedTime " ms taken")
     
-    SelectObject(hdc, obm)
-    DeleteObject(hbm)
-    DeleteDC(hdc)
-    Gdip_DeleteGraphics(G)
-    Gdip_DeleteGraphics(G2)
+    ; SelectObject(hdc, obm)
+    ; DeleteObject(hbm)
+    ; DeleteDC(hdc)
+    ; Gdip_DeleteGraphics(G)
+    
 }
 
 isNextExit(currentLvl) {

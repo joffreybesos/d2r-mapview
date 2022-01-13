@@ -207,11 +207,29 @@ While 1 {
                 mapLoading := 0
                 ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
                 Gui, LoadingText: Destroy ; remove loading text
+
+                rotatedWidth := uiData["rotatedWidth"]
+                rotatedHeight := uiData["rotatedHeight"]
+                    
+                SelectObject(hdc, obm)
+                DeleteObject(hbm)
+                DeleteDC(hdc)
+                Gdip_DeleteGraphics(G)
+        
+                pToken := Gdip_Startup()
+                hbm := CreateDIBSection(rotatedWidth, rotatedHeight)
+                hdc := CreateCompatibleDC()
+                obm := SelectObject(hdc, hbm)
+                
+                G := Gdip_GraphicsFromHDC(hdc)
             }
             ; update player layer on each loop
             uiData["ticktock"] := ticktock
             ; update player layer on each loop
-            ShowUnits(settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
+            ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
+            if (settings["centerMode"]) {
+                MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData, uiData)
+            }
             checkAutomapVisibility(d2rprocess, settings, gameMemoryData)
 
             lastlevel := gameMemoryData["levelNo"]

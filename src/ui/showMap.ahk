@@ -100,5 +100,5 @@ ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
     Gdip_DisposeImage(pBitmap)
     ElapsedTime := A_TickCount - StartTime
     ; WriteLogDebug("Drew map " ElapsedTime " ms taken")
-    uiData := { "scaledWidth": scaledWidth, "scaledHeight": scaledHeight, "sizeWidth": Width, "sizeHeight": Height }
+    uiData := { "scaledWidth": scaledWidth, "scaledHeight": scaledHeight, "sizeWidth": Width, "sizeHeight": Height, "rotatedWidth": rotatedWidth, "rotatedHeight": rotatedHeight }
 }

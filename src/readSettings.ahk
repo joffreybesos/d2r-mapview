@@ -108,7 +108,7 @@ readSettings(settingsFile, ByRef settings) {
         }
     }
     if (settings["enableD2ML"]) {
-        IniRead, gameWindowId, settings.ini, MultiLaunch, windowTitle
+        gameWindowId := settings["windowTitle"]
     } else {
         gameWindowId := "ahk_exe D2R.exe"  ;default to normal window id
     }

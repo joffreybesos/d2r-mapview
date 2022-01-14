@@ -240,7 +240,7 @@ While 1 {
         }
     }
     if (not WinExist(gameWindowId)) {
-        WriteLog(gameWindowId " not found, please make sure game is running")
+        WriteLog(gameWindowId " not found, please make sure game is running, try running in admin if still having issues")
         session.saveEntry()
         ExitApp
     }

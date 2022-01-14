@@ -2,11 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.4.6] - 2021-01-13 - Bug fixes
+## [2.4.6] - 2021-01-13 - Minor improvements
 
 - Improved performance for map center mode
 - If you want maximum performance set `performanceMode=-1` in `settings.ini`
 - If that slows your PC too much, try `performanceMode=50ms`
+
+Multi session improvements:
+
+- Better windowed mode support, map will now attach and follow the game window
+- Centered mode map will now crop at the window edge properly, especially in windowed mode
 - Multi launch settings no longer needs [MultiLaunch] section header in `settings.ini` (thanks @arkx)
 
 ## [2.4.5] - 2021-01-12 - Bug fixes

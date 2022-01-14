@@ -541,7 +541,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
         WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
         WinMove, ahk_id %mapHwnd1%,, windowLeftMargin+leftMargin, windowTopMargin+topMargin
         WinMove, ahk_id %unitHwnd1%,, windowLeftMargin+leftMargin, windowTopMargin+topMargin
-        
+        WinSet, Region, , ahk_id %mapHwnd1%
+        WinSet, Region, , ahk_id %unitHwnd1%
         UpdateLayeredWindow(unitHwnd1, hdc, , , rotatedWidth, rotatedHeight)
         Gdip_GraphicsClear( G )
     }

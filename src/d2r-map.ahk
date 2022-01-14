@@ -95,12 +95,20 @@ Hotkey, %moveMapUpKey%, MoveMapUp
 Hotkey, IfWinActive, ahk_exe D2R.exe
 Hotkey, %moveMapDownKey%, MoveMapDown
 
+if (not WinExist(gameWindowId)) {
+    WriteLog(gameWindowId " not found, please make sure game is running, try running in admin if still having issues")
+    Msgbox, 48, d2r-mapview, Did not find D2R game window`nGame must be started before running this program`n`nOtherwise check for errors in log.txt`nAlso try running both D2R and this program as admin`n`nExiting....
+    ExitApp
+}
+
 ; initialise memory reading
 d2rprocess := initMemory(gameWindowId)
 patternScan(d2rprocess, settings)
 playerOffset := settings["playerOffset"]
 startingOffset := settings["playerOffset"]
 uiOffset := settings["uiOffset"]
+
+
 
 ; create GUI windows
 Gui, IPaddress: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs +HwndipHwnd1

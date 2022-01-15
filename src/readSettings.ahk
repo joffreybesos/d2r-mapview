@@ -49,8 +49,8 @@ readSettings(settingsFile, ByRef settingsArray) {
     settingsArray["bossColor"] := "FF0000"
     settingsArray["deadColor"] := "000000"
     settingsArray["showMercs"] := 1
-    settingsArray["showPlayerMissiles"] := 1
-    settingsArray["showEnemyMissiles"] := 1
+    settingsArray["showPlayerMissiles"] := 0
+    settingsArray["showEnemyMissiles"] := 0
     settingsArray["normalDotSize"] := "5"
     settingsArray["normalImmunitySize"] := "8"
     settingsArray["uniqueDotSize"] := "8"
@@ -109,12 +109,12 @@ readSettings(settingsFile, ByRef settingsArray) {
     settingsArray["MissileMinor"] := "3"
 
     ; read from the ini file and overwrite any of the above values
-    IniRead, sectionNames, settings.ini
+    IniRead, sectionNames, %settingsFile%
     Loop, Parse, sectionNames , `n
     {
         
         thisSection := A_LoopField
-        IniRead, OutputVarSection, settings.ini, %thisSection%
+        IniRead, OutputVarSection, %settingsFile%, %thisSection%
         Loop, Parse, OutputVarSection , `n
         {
             valArr := StrSplit(A_LoopField,"=")

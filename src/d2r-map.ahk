@@ -41,7 +41,8 @@ WriteLog("*******************************************************************")
 WriteLog("Version: " expectedVersion)
 WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyVW3uj")
 ClearCache(A_Temp)
-readSettings(settings.ini, settings)
+global settings := []
+readSettings("settings.ini", settings)
 
 lastlevel:=""
 lastSeed:=""
@@ -310,7 +311,14 @@ unHideMap() {
         Gui, IPaddress: Show, NA
     }
 }
-
+getAct(levelNo) {
+    if (levelNo < 40) return 1
+    if (levelNo < 75) return 2
+    If (levelNo < 103) return 3
+    if (levelNo < 109) return 4
+    return 5
+}
+return
 
 +F10::
 {
@@ -318,7 +326,7 @@ unHideMap() {
     session.saveEntry()
     ExitApp
 }
-
+return
 
 MapAlwaysShow:
 {
@@ -477,12 +485,7 @@ MapSizeDecrease:
         Gui, HelpText: Hide
         helpToggle := 1
     }
-return
+        return
 
-getAct(levelNo) {
-    if (levelNo < 40) return 1
-    if (levelNo < 75) return 2
-    If (levelNo < 103) return 3
-    if (levelNo < 109) return 4
-    return 5
-}
+~F13 & del::reload
+~F13 & c::clipboard:=readLastGameName(d2rprocess, gameWindowId, settings, session)

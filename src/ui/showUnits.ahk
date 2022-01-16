@@ -96,13 +96,13 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     uniqueMobColor := 0xff . settings["uniqueMobColor"] 
     bossColor := 0xff . settings["bossColor"] 
     deadColor := 0xff . settings["deadColor"] 
-    mercColor := 0xff . settings["mercColor"]
-
+    mercColor := 0xcc . settings["mercColor"]
 
     pPenNormal := Gdip_CreatePen(normalMobColor, 3)
     pPenUnique := Gdip_CreatePen(uniqueMobColor, 5)
     pPenBoss := Gdip_CreatePen(bossColor, 6)
     pPenDead := Gdip_CreatePen(deadColor, 2)
+    pPenMerc := Gdip_CreatePen(mercColor, 3)
 
     physicalImmuneColor := 0xff . settings["physicalImmuneColor"] 
     magicImmuneColor := 0xff . settings["magicImmuneColor"] 
@@ -183,7 +183,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
                         }
                     }
                     
-                    if (!mob["isMerc"]){
+                    if (!mob["isMerc"]) {
                         Gdip_DrawEllipse(G, pPenNormal, mobx-(normalDotSize/2), moby-(normalDotSize/1.5), normalDotSize, normalDotSize/2)
                     } else if (settings["showMercs"]) {
                         Gdip_DrawEllipse(G, pPenMerc, mobx-(normalDotSize/2), moby-(normalDotSize/1.5), normalDotSize, normalDotSize/2)
@@ -261,10 +261,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
         }
     }
 
-
-
     ;Missiles
-
     missileColor := 0xff . settings["missileColor"]
     PhysicalMajorColor := 0xff . settings["physicalMajorColor"]
     PhysicalMinorColor := 0xff . settings["physicalMinorColor"]
@@ -284,7 +281,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     psize1:=1.5
     psize2:=2
     psize3:=3
-    pPenMerc := Gdip_CreatePen(mercColor, 2)
+    
     pPenPhysicalMajor := Gdip_CreatePen(PhysicalMajorColor, psize1)
     pPenPhysicalMinor := Gdip_CreatePen(PhysicalMinorColor, psize1)
     pPenFireMajor := Gdip_CreatePen(FireMajorColor, psize1)
@@ -353,7 +350,22 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     Gdip_DeletePen(pPenCold)
     Gdip_DeletePen(pPenPoison)
 
-    
+    Gdip_DeletePen(pPenMerc)
+    Gdip_DeletePen(pPenPhysicalMajor)
+    Gdip_DeletePen(pPenPhysicalMinor)
+    Gdip_DeletePen(pPenFireMajor)
+    Gdip_DeletePen(pPenFireMinor)
+    Gdip_DeletePen(pPenIceMajor)
+    Gdip_DeletePen(pPenIceMinor)
+    Gdip_DeletePen(pPenLightMajor)
+    Gdip_DeletePen(pPenLightMinor)
+    Gdip_DeletePen(pPenPoisonMajor)
+    Gdip_DeletePen(pPenPoisonMinor)
+    Gdip_DeletePen(pPenMagicMajor)
+    Gdip_DeletePen(pPenMagicMinor)
+    Gdip_DeletePen(pPenOtherMissiles)
+    Gdip_DeletePen(pPenunknownMissiles)
+
     ; draw way point line
     if (settings["showWaypointLine"]) {
         ;WriteLog(settings["showWaypointLine"])

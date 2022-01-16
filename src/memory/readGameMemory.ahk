@@ -4,7 +4,7 @@
 #Include %A_ScriptDir%\memory\readMobs.ahk
 #Include %A_ScriptDir%\memory\readItems.ahk
 #Include %A_ScriptDir%\memory\readObjects.ahk
-#Include %A_ScriptDir%\memory\readUnits.ahk
+#Include %A_ScriptDir%\memory\readMissiles.ahk
 #Include %A_ScriptDir%\memory\readUI.ahk
 
 #Include %A_ScriptDir%\include\logging.ahk
@@ -112,13 +112,13 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     missiles:=[]
     ; PlayerMissiles
     if (settings["showPlayerMissiles"]){
-        PlayerMissiles:=readUnits(d2rprocess, "0x21EA4F0", "Playermissiles")
-        missiles.push(PlayerMissiles)
+        playerMissiles := readMissiles(d2rprocess, startingOffset)
+        missiles.push(playerMissiles)
     }
     ; EnemyMissiles
     if (settings["showEnemyMissiles"]){
-        EnemyMissiles:=readUnits(d2rprocess, startingOffset, "EnemyMissiles")
-        missiles.push(EnemyMissiles)
+        enemyMissiles := readMissiles(d2rprocess, startingOffset)
+        missiles.push(enemyMissiles)
     }
 
     ; get items

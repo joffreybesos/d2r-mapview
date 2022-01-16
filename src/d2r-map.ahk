@@ -41,7 +41,6 @@ WriteLog("*******************************************************************")
 WriteLog("Version: " expectedVersion)
 WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyVW3uj")
 ClearCache(A_Temp)
-global settings := []
 readSettings("settings.ini", settings)
 
 lastlevel:=""

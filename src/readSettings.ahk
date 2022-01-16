@@ -69,7 +69,6 @@ readSettings(settingsFile, ByRef settings) {
     settings["setItemColor"] := "00FC00"
     settings["charmItemColor"] := "6D6DFF"
     settings["jewelItemColor"] := "6D6DFF"
-    settings["showGems"] := 0
     settings["portalColor"] := "00AAFF"
     settings["redPortalColor"] := "FF0000"
     settings["shrineColor"] := "FFD700"

@@ -47,8 +47,9 @@ readSettings(settingsFile, ByRef settingsArray) {
     settingsArray["normalMobColor"] := "FFFFFF"
     settingsArray["uniqueMobColor"] := "D4AF37"
     settingsArray["bossColor"] := "FF0000"
+    settingsArray["mercColor"] := "00FFFF"
     settingsArray["deadColor"] := "000000"
-    settingsArray["showMercs"] := 1
+    settingsArray["showMercs"] := 0
     settingsArray["showPlayerMissiles"] := 0
     settingsArray["showEnemyMissiles"] := 0
     settingsArray["normalDotSize"] := "5"

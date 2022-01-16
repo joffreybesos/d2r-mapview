@@ -29,7 +29,10 @@ ReadMobs(d2rprocess, startingOffset, ByRef mobs) {
                 if (textTitle) {
                     isBoss:= 1
                 }
-
+                isMerc:= getMerc(txtFileNo)
+                if (isMerc) {
+                    isMerc:= 1
+                }
                 ;get immunities
                 pStatsListEx := d2rprocess.read(mobUnit + 0x88, "Int64")
                 ownerType := d2rprocess.read(pStatsListEx + 0x08, "UInt")
@@ -41,6 +44,9 @@ ReadMobs(d2rprocess, startingOffset, ByRef mobs) {
                 immunities := { physical: 0, magic: 0, fire: 0, light: 0, cold: 0, poison: 0 }
                 Loop, %statCount%
                 {
+                    if (isMerc){
+                        break
+                    }
                     offset := (A_Index -1) * 8
                     ;statParam := d2rprocess.read(statPtr + offset, "UShort")
                     statEnum := d2rprocess.read(statPtr + 0x2 + offset, "UShort")
@@ -57,7 +63,7 @@ ReadMobs(d2rprocess, startingOffset, ByRef mobs) {
                         }
                     }
                 }
-                mob := {"txtFileNo": txtFileNo, "mode": mode, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "textTitle": textTitle, "immunities": immunities }
+                mob := {"txtFileNo": txtFileNo, "mode": mode, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "isMerc": isMerc, "textTitle": textTitle, "immunities": immunities }
                 mobs.push(mob)
             }
             
@@ -91,7 +97,16 @@ getBossName(txtFileNo) {
     }
     return ""
 }
-
+getMerc(txtFileNo){
+    switch (txtFileNo) {
+            case "271": return "roguehire"
+            case "338": return "act2hire"
+            case "359": return "act3hire"
+            case "560": return "act5hire1"
+            case "561": return "act5hire2"
+        }
+        return ""
+}
 getSuperUniqueName(txtFileNo) {
     switch (txtFileNo) {
         case "0": return "Bonebreak"
@@ -175,7 +190,7 @@ HideNPC(txtFileNo) {
         case 205: return 1
         case 268: return 1
         case 269: return 1
-        case 271: return 1
+        ;case 271: return 1
         case 272: return 1
         case 293: return 1
         case 294: return 1
@@ -193,11 +208,11 @@ HideNPC(txtFileNo) {
         case 324: return 1
         case 325: return 1
         case 332: return 1
-        case 338: return 1
+        ;case 338: return 1
         case 339: return 1
         case 344: return 1
         case 355: return 1
-        case 359: return 1
+        ;case 359: return 1
         case 363: return 1
         case 364: return 1
         case 370: return 1

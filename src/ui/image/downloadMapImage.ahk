@@ -21,6 +21,7 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
     if (settings["centerMode"]) {
         imageUrl := imageUrl . "&serverScale=" . settings["serverScale"]
         sFile .= "_Center"
+        sFileTxt .= "_Center"
     }
     
     sFile .= ".png"

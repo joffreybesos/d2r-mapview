@@ -96,7 +96,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     uniqueMobColor := 0xff . settings["uniqueMobColor"] 
     bossColor := 0xff . settings["bossColor"] 
     deadColor := 0xff . settings["deadColor"] 
-    mercColor := 0xff . settings["mercColor"] 
+    mercColor := 0xff . settings["mercColor"]
 
 
     pPenNormal := Gdip_CreatePen(normalMobColor, 3)
@@ -186,10 +186,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
                     if (!mob["isMerc"]){
                         Gdip_DrawEllipse(G, pPenNormal, mobx-(normalDotSize/2), moby-(normalDotSize/1.5), normalDotSize, normalDotSize/2)
                     } else if (settings["showMercs"]) {
-                        Gdip_DrawEllipse(G, pPenMerc, mobx-(normalDotSize/2), moby-(normalDotSize/1.5), normalDotSize, normalDotSize/2)        
-                        }
-
-
+                        Gdip_DrawEllipse(G, pPenMerc, mobx-(normalDotSize/2), moby-(normalDotSize/1.5), normalDotSize, normalDotSize/2)
+                    }
                 }
                 
             }
@@ -267,7 +265,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
 
     ;Missiles
 
-    missileColor := 0xff . settings["missileColor"]  
+    missileColor := 0xff . settings["missileColor"]
     PhysicalMajorColor := 0xff . settings["physicalMajorColor"]
     PhysicalMinorColor := 0xff . settings["physicalMinorColor"]
     FireMajorColor := 0xff . settings["fireMajorColor"]
@@ -308,7 +306,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
         for index,  missilearray in gameMemoryData["missiles"]
         {
             for each, missile in missilearray
-            {   
+            {
                 missilex := ((missile["x"] - mapData["mapOffsetX"]) * serverScale) + padding
                 missiley := ((missile["y"] - mapData["mapOffsetY"]) * serverScale) + padding
                 correctedPos := findNewPos(missilex, missiley, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
@@ -316,7 +314,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
                 missiley := correctedPos["y"]
                 if (oldMissilex = missilex && oldMissiley = missiley){
                 } else {
-                    
+
                     majorDotSize :=settings["missileMajorDotSize"]
                     minorDotSize :=settings["missileMinorDotSize"]
                     ; WriteLog(majorDotSize " " minorDotSize " " missilex " " missiley " " missile["UnitType"])
@@ -341,8 +339,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
                 oldMissilex:=missilex
                 oldMissiley:=missiley
             }
-         }   
-    } 
+         }
+    }
     Gdip_DeletePen(pPenBoss)
     Gdip_DeletePen(pPenNormal)
     Gdip_DeletePen(pPenUnique)
@@ -473,7 +471,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     setColor := 0xcc . settings["setItemColor"] 
     charmItemColor := 0xcc . settings["charmItemColor"] 
     jewelItemColor := 0xcc . settings["jewelItemColor"]
-
+    baseItemColor := 0xcc . settings["baseItemColor"]
     pPenRune := Gdip_CreatePen(runeColor, 12)
     pPenRune2 := Gdip_CreatePen(0xccffffff, 8)
     pPenUnique := Gdip_CreatePen(uniqueColor, 12)
@@ -484,8 +482,10 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     pPenCharm2 := Gdip_CreatePen(0xccffffff, 8)
     pPenJewel := Gdip_CreatePen(jewelItemColor, 12)
     pPenJewel2 := Gdip_CreatePen(0xccffffff, 8)
-
+    pPenBaseItem := Gdip_CreatePen(baseItemColor, 12)
+    pPenBaseItem2 := Gdip_CreatePen(0xccffffff, 8)
     ; show items
+    
     if (settings["showUniqueAlerts"] or settings["showSetItemAlerts"] or settings["showRuneAlerts"] or settings["showJewelAlerts"] or settings["showCharmAlerts"]) {
         items := gameMemoryData["items"]
         for index, item in items
@@ -546,10 +546,19 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
                     }
                 }
             }
+            if (settings["baseItemColor"]) {
+                if (item["isBaseItem"]) { ; baseitem
+                    ticktock := uiData["ticktock"]
+                    if (ticktock) {
+                        Gdip_DrawEllipse(G, pPenBaseItem, itemx-2, itemy-2, 12, 12)
+                    } else {
+                        Gdip_DrawEllipse(G, pPenBaseItem2, itemx, itemy, 8, 8)
+                    }
+                }
+            }
         }
     }
     Gdip_DeletePen(pPenRune)
-    Gdip_DeletePen(pPenGem)
     Gdip_DeletePen(pPenRune2)
     Gdip_DeletePen(pPenUnique)
     Gdip_DeletePen(pPenUnique2)

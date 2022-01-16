@@ -27,14 +27,14 @@ ReadItems(d2rprocess, startingOffset, ByRef items) {
 
                     ; itemQuality - 5 is set, 7 is unique (6 rare, 4, magic)
                     itemQuality := d2rprocess.read(pUnitData, "UInt")
-                    
+
                     ;isRune := false
                     isGem := false
                     if ((txtFileNo >= 557 and txtFileNo <= 586) or (txtFileNo >= 597 and txtFileNo <= 601)) {
                         isGem:= true
                     }
                     isRune := false
-                    if (txtFileNo >= 610 and txtFileNo <= 642) {
+                    if (txtFileNo >= 629 and txtFileNo <= 642) {
                         isRune:= true
                     }
 
@@ -42,8 +42,24 @@ ReadItems(d2rprocess, startingOffset, ByRef items) {
                     itemx := d2rprocess.read(pPath + 0x10, "UShort")
                     itemy := d2rprocess.read(pPath + 0x14, "UShort")
 
+                    pStatsListEx := d2rprocess.read(itemUnit + 0x88, "Int64")
+                    statPtr := d2rprocess.read(pStatsListEx + 0x30, "Int64")
+                    statCount := d2rprocess.read(pStatsListEx + 0x38, "Int64")
+
+                    numSockets := 0
+                    Loop, %statCount%
+                    {
+                        statOffset := (A_Index-1) * 8
+                        statEnum := d2rprocess.read(statPtr + 0x2 + statOffset, "UShort")
+                        if (statEnum == 194) {
+                            numSockets := d2rprocess.read(statPtr + 0x4 + statOffset, "UInt")
+                            break
+                        }
+                    }
+
                     name := getItemName(txtFileNo)
-                    item := {"txtFileNo": txtFileNo, "name": name, "itemLoc": itemLoc, "itemQuality": itemQuality, "isGem": isGem, "isRune": isRune, "itemx": itemx, "itemy": itemy }
+                    isBaseItem := isBaseItem(name, numSockets, itemQuality)
+                    item := {"txtFileNo": txtFileNo, "name": name, "itemLoc": itemLoc, "itemQuality": itemQuality, "isGem": isGem, "isRune": isRune, "itemx": itemx, "itemy": itemy, "numSockets": numSockets, "isBaseItem": isBaseItem }
                     ;WriteLog("txtFileNo: " txtFileNo ", name: " name ", itemLoc: " itemLoc ", itemQuality: " itemQuality ", isRune: " isRune ", itemx: " itemx ", itemy: " itemy)
                     items.push(item)
                 }
@@ -54,6 +70,48 @@ ReadItems(d2rprocess, startingOffset, ByRef items) {
     SetFormat Integer, D
 }
 
+isBaseItem(itemName, numSockets, itemQuality) {
+    if (itemQuality == 2 or itemQuality == 3) { ; normal or superior
+        switch (numSockets " " itemName) {
+            ;armour
+            case "4 Archon Plate": return 1
+            case "3 Mage Plate": return 1
+            case "4 Dusk Shroud": return 1
+            case "3 Wyrmhide": return 1
+            case "4 Wyrmhide": return 1
+            ;weapons
+            case "3 Phase Blade": return 1
+            case "4 Phase Blade": return 1
+            case "5 Phase Blade": return 1
+            case "3 Crystal Sword": return 1
+            case "4 Crystal Sword": return 1
+            case "5 Crystal Sword": return 1
+            case "4 Flail": return 1
+            case "5 Flail": return 1
+            case "4 Long Sword": return 1
+            ; helms
+            case "3 Bone Visage": return 1
+            case "3 Circlet": return 1
+            case "3 Diadem": return 1
+            case "3 Coronet": return 1
+            ;shields
+            case "4 Monarch": return 1
+            case "3 Akaran Targe": return 1
+            case "3 Akaran Rondache": return 1
+            case "3 Sacred Targe": return 1
+            case "3 Sacred Rondache": return 1
+            case "3 Targe": return 1
+            case "3 Rondache": return 1
+            case "3 Heraldic Shield": return 1
+            case "3 Aerin Shield": return 1
+            ; merc bases
+            case "4 Giant Thresher": return 1
+            case "4 Thresher": return 1
+            case "4 Colossus Voulge": return 1
+        }
+    }
+    return 0
+}
 
 getItemName(txtFileNo) {
     switch (txtFileNo) {

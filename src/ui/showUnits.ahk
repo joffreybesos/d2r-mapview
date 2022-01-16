@@ -386,6 +386,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     setColor := 0xcc . settings["setItemColor"] 
     charmItemColor := 0xcc . settings["charmItemColor"] 
     jewelItemColor := 0xcc . settings["jewelItemColor"] 
+    baseItemColor := 0xcc . settings["baseItemColor"] 
     pPenRune := Gdip_CreatePen(runeColor, 12)
     pPenRune2 := Gdip_CreatePen(0xccffffff, 8)
     pPenUnique := Gdip_CreatePen(uniqueColor, 12)
@@ -396,6 +397,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     pPenCharm2 := Gdip_CreatePen(0xccffffff, 8)
     pPenJewel := Gdip_CreatePen(jewelItemColor, 12)
     pPenJewel2 := Gdip_CreatePen(0xccffffff, 8)
+    pPenBaseItem := Gdip_CreatePen(baseItemColor, 12)
+    pPenBaseItem2 := Gdip_CreatePen(0xccffffff, 8)
     ; show items
     
     if (settings["showUniqueAlerts"] or settings["showSetItemAlerts"] or settings["showRuneAlerts"] or settings["showJewelAlerts"] or settings["showCharmAlerts"]) {
@@ -455,6 +458,16 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
                         Gdip_DrawEllipse(G, pPenJewel, itemx-2, itemy-2, 12, 12)
                     } else {
                         Gdip_DrawEllipse(G, pPenJewel2, itemx, itemy, 8, 8)
+                    }
+                }
+            }
+            if (settings["baseItemColor"]) {
+                if (item["isBaseItem"]) { ; baseitem
+                    ticktock := uiData["ticktock"]
+                    if (ticktock) {
+                        Gdip_DrawEllipse(G, pPenBaseItem, itemx-2, itemy-2, 12, 12)
+                    } else {
+                        Gdip_DrawEllipse(G, pPenBaseItem2, itemx, itemy, 8, 8)
                     }
                 }
             }

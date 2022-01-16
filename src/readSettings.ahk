@@ -44,6 +44,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["showRuneAlerts"] := 1
     settings["showJewelAlerts"] := 1
     settings["showCharmAlerts"] := 1
+    settings["showBaseItems"] := 1
     settings["normalMobColor"] := "FFFFFF"
     settings["uniqueMobColor"] := "D4AF37"
     settings["bossColor"] := "FF0000"
@@ -68,6 +69,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["portalColor"] := "00AAFF"
     settings["redPortalColor"] := "FF0000"
     settings["shrineColor"] := "FFD700"
+    settings["baseItemColor"] := "AAAAAA"
     settings["shrineTextSize"] := "20"
     settings["showWaypointLine"] := 0
     settings["showNextExitLine"] := 1

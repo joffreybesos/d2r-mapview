@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.7] - 2021-01-16 - Base Items alerts on ground
+
+- Good base items now get a flashing visual alert while on the ground
+- You can turn this off by adding `showBaseItems=false` in `settings.ini`
+- You can also change the colour of the alert with `baseItemColor=<hex color>`
+- This list isn't configurable, that will likely come in a later release
+- Full list of base items:
+  - 4os Archon Plate
+  - 3os Mage Plate
+  - 4os Dusk Shroud
+  - 3os Wyrmhide
+  - 4os Wyrmhide
+  - 3os Phase Blade
+  - 4os Phase Blade
+  - 5os Phase Blade
+  - 3os Crystal Sword
+  - 4os Crystal Sword
+  - 5os Crystal Sword
+  - 4os Flail
+  - 5os Flail
+  - 3os Bone Visage
+  - 3os Circlet
+  - 3os Diadem
+  - 3os Coronet
+  - 4os Monarch
+  - 3os Akaran Targe
+  - 3os Akaran Rondache
+  - 3os Sacred Targe
+  - 3os Sacred Rondache
+  - 3os Targe
+  - 3os Rondache
+  - 3os Heraldic Shield
+  - 3os Aerin Shield
+  - 4os Giant Thresher
+  - 4os Thresher
+  - 4os Colossus Voulge
+- Map cache files will now be deleted properly on startup
+
 ## [2.4.6] - 2021-01-13 - Minor improvements
 
 - Improved performance for map center mode

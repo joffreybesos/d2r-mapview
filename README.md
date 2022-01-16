@@ -191,11 +191,13 @@ In `settings.ini` you can declare any of the below settings to override the buil
 | showRuneAlerts | true | Show an alert when a rune is on the ground |
 | showJewelAlerts | true | Show an alert when a jewel is on the ground |
 | showCharmAlerts | true | Show an alert when a charm is on the ground |
+| showBaseItems | true | Show an alert when a base item is on the ground |
 | runeItemColor | FFa700 | Rune alert colour when a rune is on the ground |
 | uniqueItemColor | BBA45B | Unique alert color when a unique is on the ground |
 | setItemColor | 00FC00 | Set item alert colour when a set item is on the ground |
 | charmItemColor | 6D6DFF | Charm alert colour when a charm is on the ground |
 | jewelItemColor | 6D6DFF | Jewel alert colour when a jewel is on the ground |
+| baseItemColor | AAAAAA | Base item alert colour when a base item is on the ground |
 
 #### Guide lines
 

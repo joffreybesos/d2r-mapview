@@ -319,7 +319,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
                     
                     majorDotSize :=settings["missileMajorDotSize"]
                     minorDotSize :=settings["missileMinorDotSize"]
-                    
+                    ; WriteLog(majorDotSize " " minorDotSize " " missilex " " missiley " " missile["UnitType"])
                     switch (missile["UnitType"]){
                         case "PhysicalMajor": Gdip_DrawEllipse(G, pPenPhysicalMajor, missilex-3, missiley-3, majorDotSize, majorDotSize/2)
                         case "PhysicalMinor": Gdip_DrawEllipse(G, pPenPhysicalMinor, missilex-3, missiley-3, minorDotSize, minorDotSize/2)

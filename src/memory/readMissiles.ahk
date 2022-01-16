@@ -20,7 +20,6 @@ readMissiles(someProcess, startingOffset) {
                 unity := someProcess.read(pPath + 0x06, "UShort")
                 unit := {"txtFileNo": txtFileNo, "x": unitx, "y": unity, "mode": mode, "UnitType": missleCategory}
                 array.push(unit)
-
            }   
            arrayUnit := someProcess.read(arrayUnit + 0x150, "Int64")  ; get next unit
         }

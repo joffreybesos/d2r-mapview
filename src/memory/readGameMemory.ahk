@@ -112,7 +112,7 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     missiles:=[]
     ; PlayerMissiles
     if (settings["showPlayerMissiles"]){
-        playerMissiles := readMissiles(d2rprocess, startingOffset)
+        playerMissiles := readMissiles(d2rprocess, startingOffset + (6 * 1024))
         missiles.push(playerMissiles)
     }
     ; EnemyMissiles

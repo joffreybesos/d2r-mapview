@@ -462,7 +462,26 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     uniqueColor := 0xcc . settings["uniqueItemColor"] 
     setColor := 0xcc . settings["setItemColor"] 
     charmItemColor := 0xcc . settings["charmItemColor"] 
-    jewelItemColor := 0xcc . settings["jewelItemColor"] 
+    jewelItemColor := 0xcc . settings["jewelItemColor"]
+    ;GemRubyColor := 0xcc . settings["GemItemColor"]  
+    ;GemSaphColor := 0xcc . settings["GemItemColor"]  
+    ;GemTopaColor := 0xcc . settings["GemItemColor"]  
+    ;GemEmerColor := 0xcc . settings["GemItemColor"]  
+    ;GemDiamColor := 0xcc . settings["GemItemColor"]  
+    ;GemAmneColor := 0xcc . settings["GemItemColor"]  
+    ;GemSkulColor := 0xcc . settings["GemItemColor"]
+    GemBase:= 0xFF
+    GemBase2:= 0xcc
+    GemRubyColor := GemBase . "e0115f"  
+    GemSaphColor := GemBase . "0F52BA"  
+    GemTopaColor := GemBase . "ffc87c"  
+    GemEmerColor := GemBase . "50c878"  
+    GemDiamColor := GemBase . "ffffff" 
+    GemAmneColor := GemBase . "9063CD"
+    GemSkulColor := GemBase . "ffffff"
+    GemSecondColor := GemBase2 . "ffffff"
+
+
     pPenRune := Gdip_CreatePen(runeColor, 12)
     pPenRune2 := Gdip_CreatePen(0xccffffff, 8)
     pPenUnique := Gdip_CreatePen(uniqueColor, 12)
@@ -473,6 +492,15 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     pPenCharm2 := Gdip_CreatePen(0xccffffff, 8)
     pPenJewel := Gdip_CreatePen(jewelItemColor, 12)
     pPenJewel2 := Gdip_CreatePen(0xccffffff, 8)
+    pPenGemRuby := Gdip_CreatePen(GemRubyColor, 2)
+    pPenGemSaph := Gdip_CreatePen(GemSaphColor, 2)
+    pPenGemTopa := Gdip_CreatePen(GemTopaColor, 2)
+    pPenGemEmer := Gdip_CreatePen(GemEmerColor, 2)
+    pPenGemDiam := Gdip_CreatePen(GemDiamColor, 2)
+    pPenGemAmne := Gdip_CreatePen(GemAmneColor, 2)
+    pPenGemSkul := Gdip_CreatePen(GemSkulColor, 2)
+    pPenGemSec := Gdip_CreatePen(GemSecondColor, 2)
+
     ; show items
     
     if (settings["showUniqueAlerts"] or settings["showSetItemAlerts"] or settings["showRuneAlerts"] or settings["showJewelAlerts"] or settings["showCharmAlerts"]) {
@@ -535,16 +563,46 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
                     }
                 }
             }
+
+            if (settings["showGems"]) {
+                if (item["isGem"]) { ; Gem
+                    ticktock := uiData["ticktock"]
+                    if (ticktock) {
+                        switch item["txtFileNo"]
+                        {
+                            case 557,558,559,560,561: Gdip_DrawEllipse(G, pPenGemAmne, itemx-2, itemy-2, 3, 3)
+                            case 562,563,564,565,566: Gdip_DrawEllipse(G, pPenGemTopa, itemx-2, itemy-2, 3, 3)
+                            case 567,568,569,570,571:Gdip_DrawEllipse(G, pPenGemSaph, itemx-2, itemy-2, 3, 3)
+                            case 572,573,574,575,576:Gdip_DrawEllipse(G, pPenGemEmer, itemx-2, itemy-2, 3, 3)
+                            case 577,578,579,580,581:Gdip_DrawEllipse(G, pPenGemRuby, itemx-2, itemy-2, 3, 3)
+                            case 582,583,584,585,586:Gdip_DrawEllipse(G, pPenGemDiam, itemx-2, itemy-2, 3, 3)
+                            case 597,598,599,600,601:Gdip_DrawEllipse(G, pPenGemSkul, itemx-2, itemy-2, 3, 3)
+                        }
+                    } else {
+                       switch item["txtFileNo"]
+                        {
+                            case 557,558,559,560,561: Gdip_DrawEllipse(G, pPenGemAmne, itemx-2, itemy-2, 1.5, 1.5)
+                            case 562,563,564,565,566: Gdip_DrawEllipse(G, pPenGemTopa, itemx-2, itemy-2, 1.5, 1.5)
+                            case 567,568,569,570,571:Gdip_DrawEllipse(G, pPenGemSaph, itemx-2, itemy-2, 1.5, 1.5)
+                            case 572,573,574,575,576:Gdip_DrawEllipse(G, pPenGemEmer, itemx-2, itemy-2, 1.5, 1.5)
+                            case 577,578,579,580,581:Gdip_DrawEllipse(G, pPenGemRuby, itemx-2, itemy-2, 1.5, 1.5)
+                            case 582,583,584,585,586:Gdip_DrawEllipse(G, pPenGemDiam, itemx-2, itemy-2, 1.5, 1.5)
+                            case 597,598,599,600,601:Gdip_DrawEllipse(G, pPenGemSkul, itemx-2, itemy-2, 1.5, 1.5)
+                        }
+                    }
+                }
+            }
         }
     }
     Gdip_DeletePen(pPenRune)
+    Gdip_DeletePen(pPenGem)
     Gdip_DeletePen(pPenRune2)
     Gdip_DeletePen(pPenUnique)
     Gdip_DeletePen(pPenUnique2)
     Gdip_DeletePen(pPenSetItem)
     Gdip_DeletePen(pPenSetItem2)
 
-    ; draw other players
+    ; draw Shrines
     if (settings["showShrines"]) {
         gameObjects := gameMemoryData["objects"]
         shrineColor := "ff" . settings["shrineColor"]

@@ -520,11 +520,11 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
         Gdip_DeletePen(pPen)    
     }
 
-    if (!settings["centerMode"]) {
+    if (!settings["centerMode"] or settings["showPlayerDotCenter"]) {
         ; draw player
         pPen := Gdip_CreatePen(0xff00FF00, 6)
         ;WriteLog(xPosDot " " yPosDot " " midW " " midH " " scaledWidth " " scaledHeight " " scale " " newPos["x"] " " newPos["y"])
-        Gdip_DrawRectangle(G, pPen, xPosDot-3, (yPosDot)-2 , 6, 6)
+        Gdip_DrawRectangle(G, pPen, xPosDot-3, (yPosDot)-3 , 6, 6)
         ; Gdip_DrawRectangle(G, pPen, 0, 0, scaledWidth, scaledHeight) ;outline for whole map used for troubleshooting
         Gdip_DeletePen(pPen)
     }
@@ -638,8 +638,8 @@ isNextExit(currentLvl) {
 correctPos(settings, xPosDot, yPosDot, centerX, centerY, RWidth, RHeight, scale) {
     correctedPos := findNewPos(xPosDot, yPosDot, centerX, centerY, RWidth, RHeight, scale)
     if (settings["centerMode"]) {
-        correctedPos["x"] := correctedPos["x"] - (settings["centerModeXoffset"] / 2)
-        correctedPos["y"] := correctedPos["y"] - (settings["centerModeYoffset"] / 2)
+        correctedPos["x"] := correctedPos["x"] + settings["centerModeXUnitoffset"]
+        correctedPos["y"] := correctedPos["y"] + settings["centerModeYUnitoffset"]
     }
     return correctedPos
 }

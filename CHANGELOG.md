@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.4.7] - 2021-01-16 - Base Items alerts on ground
+## [2.4.7] - 2021-01-18 - Base Items alerts on ground
 
 - Good base items now get a flashing visual alert while on the ground
 - You can turn this off by adding `showBaseItems=false` in `settings.ini`
@@ -34,11 +34,18 @@ All notable changes to this project will be documented in this file.
   - 3os Targe
   - 3os Rondache
   - 3os Heraldic Shield
+  - 4os Heraldic Shield
   - 3os Aerin Shield
   - 4os Giant Thresher
   - 4os Thresher
   - 4os Colossus Voulge
 - Map cache files will now be deleted properly on startup
+- Pressing `/` to make map centered will now work in chat
+- New setting `showPlayerDotCenter` set to true to show play dot in center mode
+- Centered mode: Units (i.e. players, mobs etc) now have their own position offset in pixels
+  `centerModeXUnitoffset` and `centerModeYUnitoffset`
+  This works in conjunction with `centerModeXoffset` and `centerModeYoffset`
+  Adjust those 4 values to get the map and the units to align in centered mode.
 
 ## [2.4.6] - 2021-01-13 - Minor improvements
 

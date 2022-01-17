@@ -97,6 +97,7 @@ isBaseItem(itemName, numSockets, itemQuality) {
             case "3 Targe": return 1
             case "3 Rondache": return 1
             case "3 Heraldic Shield": return 1
+            case "4 Heraldic Shield": return 1
             case "3 Aerin Shield": return 1
             ; merc bases
             case "4 Giant Thresher": return 1

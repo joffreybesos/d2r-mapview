@@ -21,7 +21,9 @@ readSettings(settingsFile, ByRef settings) {
     settings["serverScale"] := "3"
     settings["centerModeOpacity"] := "0.7"
     settings["centerModeXoffset"] := "0"
-    settings["centerModeYoffset"] := "-28"
+    settings["centerModeYoffset"] := "-56"
+    settings["centerModeXUnitoffset"] := "1"
+    settings["centerModeYUnitoffset"] := "16"
     settings["showGameInfo"] := 1
     settings["textSectionWidth"] := "700"
     settings["textSize"] := "20"
@@ -35,6 +37,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["showBosses"] := 1
     settings["showDeadMobs"] := 1
     settings["showImmunities"] := 1
+    settings["showPlayerDotCenter"] := 0
     settings["showOtherPlayers"] := 1
     settings["showOtherPlayerNames"] := 0
     settings["showShrines"] := 1
@@ -82,7 +85,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["moveMapRight"] := "#Right"
     settings["moveMapUp"] := "#Up"
     settings["moveMapDown"] := "#Down"
-    settings["switchMapMode"] := "/"
+    settings["switchMapMode"] := "~/"
     settings["historyToggleKey"] := "^g"
     settings["performanceMode"] := "0"
     settings["enableD2ML"] := 0

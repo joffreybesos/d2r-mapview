@@ -108,7 +108,7 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     }
 
     ; get items
-    if (settings["showUniqueAlerts"] or settings["showSetItemAlerts"] or settings["showRuneAlerts"] or settings["showJewelAlerts"] or settings["showCharmAlerts"]) {
+    if (settings["showUniqueAlerts"] or settings["showSetItemAlerts"] or settings["showRuneAlerts"] or settings["showJewelAlerts"] or settings["showCharmAlerts"] or settings["showBaseItems"]) {
         ReadItems(d2rprocess, startingOffset, items)
     }
 

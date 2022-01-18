@@ -505,7 +505,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
         for index, object in shrines
         {
             if (object["levelNo"] == gameMemoryData["levelNo"]) {
-                WriteLog(object["levelNo"] " " gameMemoryData["levelNo"])
+                
                 objectx := ((object["objectx"] - mapData["mapOffsetX"]) * serverScale) + padding
                 objecty := ((object["objecty"] - mapData["mapOffsetY"]) * serverScale) + padding
                 correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)

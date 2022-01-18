@@ -504,18 +504,20 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
         }
         for index, object in shrines
         {
-            objectx := ((object["objectx"] - mapData["mapOffsetX"]) * serverScale) + padding
-            objecty := ((object["objecty"] - mapData["mapOffsetY"]) * serverScale) + padding
-            correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-            objectx := correctedPos["x"]
-            objecty := correctedPos["y"]
-            shrineType := object["shrineType"]
-            textx := objectx - 100
-            texty := objecty - 107
-            
-            Options = x%textx% y%texty% Center vBottom c%shrineColor% r8 s%shrineTextSize%
-            Gdip_TextToGraphics(G,shrineType, Options, diabloFont, 200, 100)
-            Gdip_DrawRectangle(G, pPen, objectx-2, objecty-2, 2.5, 2)
+            if (object["levelNo"] == gameMemoryData["levelNo"]) {
+                WriteLog(object["levelNo"] " " gameMemoryData["levelNo"])
+                objectx := ((object["objectx"] - mapData["mapOffsetX"]) * serverScale) + padding
+                objecty := ((object["objecty"] - mapData["mapOffsetY"]) * serverScale) + padding
+                correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                objectx := correctedPos["x"]
+                objecty := correctedPos["y"]
+                shrineType := object["shrineType"]
+                textx := objectx - 100
+                texty := objecty - 107
+                Options = x%textx% y%texty% Center vBottom c%shrineColor% r8 s%shrineTextSize%
+                Gdip_TextToGraphics(G,shrineType, Options, diabloFont, 200, 100)
+                Gdip_DrawRectangle(G, pPen, objectx-2, objecty-2, 2.5, 2)
+            }
         }
         Gdip_DeletePen(pPen)    
     }

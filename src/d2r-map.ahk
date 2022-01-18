@@ -24,7 +24,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.4.5"
+expectedVersion := "2.4.8"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -195,9 +195,6 @@ While 1 {
 
             ; if there's a level num then the player is in a map
             if (gameMemoryData["levelNo"] != lastlevel) { ; only redraw map when it changes
-                if (getAct(gameMemoryData["levelNo"]) != getAct(lastLevel)) { ;changed act
-                    shrines := []
-                }
                 ; Show loading text
                 ;Gui, Map: Show, NA
                 mapLoading := 1
@@ -486,11 +483,3 @@ MapSizeDecrease:
         debug := !debug
     }
 return
-
-getAct(levelNo) {
-    if (levelNo < 40) return 1
-    if (levelNo < 75) return 2
-    If (levelNo < 103) return 3
-    if (levelNo < 109) return 4
-    return 5
-}

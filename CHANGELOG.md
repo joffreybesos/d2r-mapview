@@ -4,8 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [2.4.8] - 2021-01-18 - Bug fixes
 
-- Bug where map would flash up on startup should be fixed
-- Bug where debug logging wouldn't work now fixed
+- Bug where the map would flash on startup _should_ be fixed
+- Bug where debug logging wouldn't work is now fixed
 - Pressing Shift+F9 will toggle debug mode, this can help with bug finding
 - Other minor tweaks
 

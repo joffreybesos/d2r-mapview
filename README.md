@@ -24,9 +24,9 @@ This tool is licenced under GPLv3.
 | :--------------: | :------------------: | :----------------------: |
 | ![](darkwood.png)  | ![](hallsofpain.png) | ![](canyonofthemagi.png) |
 
-## Installation
 
-### Executable
+
+## Setup
 
 1. Download the latest `d2rmap-vx.x.x.exe` and `settings.ini` files (found on the [releases page](https://github.com/joffreybesos/d2r-mapview/releases))
 2. Launch D2R.
@@ -55,7 +55,7 @@ This server is getting hammered lately so it would be appreciated if you support
 ***Bitcoin donation: `18hSn32hChp1CmBYnRdQFyzkz5drpijRa2`***  
 ***D2JSP forum gold: <https://forums.d2jsp.org/user.php?i=1294529>***  
 
-### Features
+## Features
 
 - The map will show positions of:
   - Players
@@ -93,7 +93,6 @@ This server is getting hammered lately so it would be appreciated if you support
 ## Discord
 
 Join the discord server <https://discord.gg/qEgqyVW3uj>
-
 Please report any scams or attempts to resell this maphack on discord.
 
 ## Donations
@@ -106,7 +105,12 @@ D2JSP forum gold: <https://forums.d2jsp.org/user.php?i=1294529>
 
 ### Configure
 
-In `settings.ini` you can declare any of the below settings to override the built-in default setting.
+In `settings.ini` you can declare any of the below settings to override the built-in default setting.  
+
+e.g. to turn off immunities add the following line in `settings.ini`:  
+```
+showImmunities=false
+```
 
 #### General settings
 
@@ -178,7 +182,7 @@ In `settings.ini` you can declare any of the below settings to override the buil
 
 | Setting |     Default     |    Description    |
 | :-------------- | :------------------ | :---------------------- |
-| showPlayerDotCenter | false | Center mode only, shows current play green dot |
+| showPlayerDotCenter | false | Center mode only, shows current player green dot |
 | showOtherPlayers | true | Show other players as squares |
 | showOtherPlayerNames | false | Show names above player dots, disabled by default |
 | showShrines | true | Show shrines |
@@ -216,6 +220,8 @@ In `settings.ini` you can declare any of the below settings to override the buil
 
 #### Shortcut keys
 
+It's a good idea to add `~` in front of the hotkey. This is to make the key still send the normal keystroke as well as trigger the MH function.
+
 | Setting |     Default     |    Description    |
 | :-------------- | :------------------ | :---------------------- |
 | increaseMapSizeKey | NumpadAdd | Key to increase the size of the map |
@@ -225,7 +231,7 @@ In `settings.ini` you can declare any of the below settings to override the buil
 | moveMapRight | #Right | Shortcut to move map right (Win + Right) |
 | moveMapUp | #Up | Shortcut to move map up (Win + Up) |
 | moveMapDown | #Down | Shortcut to move map down (Win + Down) |
-| switchMapMode | ~/ | Shortcut to toggle centered map mode |
+| switchMapMode | / | Shortcut to toggle centered map mode |
 | historyToggleKey | ^g | Shortcut key to hide game history in menu (Ctrl+G) |
 
 To better understand the keyboard shortcut format, refer to <https://www.autohotkey.com/docs/KeyList.htm#modifier>

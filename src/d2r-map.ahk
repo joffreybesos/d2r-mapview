@@ -308,6 +308,8 @@ unHideMap() {
         Gui, Map: Show, NA
         Gui, Units: Show, NA
         Gui, IPaddress: Show, NA
+    } else {
+        WriteLogDebug("Tried to show map while map loading, ignoring...")
     }
 }
 
@@ -469,6 +471,7 @@ MapSizeDecrease:
     ~TAB::
     ~Space::
     {
+        WriteLogDebug("TAB or Space pressed")
         checkAutomapVisibility(d2rprocess, settings, gameMemoryData)
         return
     }
@@ -476,6 +479,11 @@ MapSizeDecrease:
     {
         Gui, HelpText: Hide
         helpToggle := 1
+    }
+    ~+F9::
+    {
+        WriteLog("Debug mode set to " debug)
+        debug := !debug
     }
 return
 

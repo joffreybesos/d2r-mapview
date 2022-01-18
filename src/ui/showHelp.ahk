@@ -161,6 +161,8 @@ drawHelpDot(bmp, pen, x, y, dotsize) {
 formatHotkeyString(keyString) {
     ; make hotkey look more logical
     firstChar := SubStr(keyString, 1, 1)
+    if (firstChar == "~")
+        keyString := StrReplace(keyString, "~", "")
     if (firstChar == "#")
         keyString := StrReplace(keyString, "#", "Win+")
     if (firstChar == "+")

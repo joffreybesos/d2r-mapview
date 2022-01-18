@@ -206,7 +206,7 @@ Multi session improvements:
 
 - Static offsets are now automatically calculated based on patterns
 - This means when Blizzard updates D2R this MH will still work
-- Shout out to Map Assist for the patterns!
+- Shout out to @OneXDeveloper's project MapAssist for the patterns!
 
 ## [2.3.3] - 2021-12-13 - Shrines and portals
 

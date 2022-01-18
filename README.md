@@ -4,20 +4,19 @@ Noob friendly FREE map reveal tool for Diablo 2 Resurrected.
 Use at your own risk, there is no warranty or responsibility taken for being penalised for using this.
 
 This map hack is as simple as running an executable. It relies on a backend server that is offered for free but runs on donations.  
-The backend does _not_ use d2mapapi, but instead uses a modified version of this project [blacha/diablo2](https://github.com/blacha/diablo2/tree/master/packages/map).
 
 **Please not this public server will be shutting down in the coming weeks**
 It is highly recommended your run your own server, refer to [this guide](https://github.com/joffreybesos/d2-mapserver/blob/master/INSTALLATION.md)
 
 This tool is licenced under GPLv3.
 
-Join the discord server <https://discord.gg/qEgqyVW3uj>
+## Join the discord server <https://discord.gg/qEgqyVW3uj>
 
 ![Durance of Hate Level 2](duranceofhate2.png)
 
 ## Demonstration
 
-https://www.youtube.com/watch?v=-tezpjrZwEI
+<https://www.youtube.com/watch?v=-tezpjrZwEI>
 
 ## Map examples
 
@@ -59,21 +58,21 @@ This server is getting hammered lately so it would be appreciated if you support
 ### Features
 
 - The map will show positions of:
-    - Players
-    - Monsters as a white dot
-    - Unique/champion/superunique monsters as a larger gold dot
-    - Monster immunities
-    - Unique items on ground (flashing alert)
-    - Set items on ground (flashing alert)
-    - High runes on ground (Lem and above) (flashing alert)
-    - Super chests marked (Lower Kurast chests)
-    - Shrines and their type
-    - Portals
-    - All doors and waypoints marked
-    - A purple line drawn to the next level exit
-    - A yellow line drawn to the waypoint
-    - A red line drawn to the nearest boss (Nihlithak, summoner etc)
-    - All quest items, marked in green (Stones, Hellforge, Altars etc)
+  - Players
+  - Monsters as a white dot
+  - Unique/champion/superunique monsters as a larger gold dot
+  - Monster immunities
+  - Unique items on ground (flashing alert)
+  - Set items on ground (flashing alert)
+  - High runes on ground (Lem and above) (flashing alert)
+  - Super chests marked (Lower Kurast chests)
+  - Shrines and their type
+  - Portals
+  - All doors and waypoints marked
+  - A purple line drawn to the next level exit
+  - A yellow line drawn to the waypoint
+  - A red line drawn to the nearest boss (Nihlithak, summoner etc)
+  - All quest items, marked in green (Stones, Hellforge, Altars etc)
 - Can have map in corner of the screen or in the center like the normal automap
 - Saves game session history including game names, xp gained, duration into a CSV
 - Shows server IP in the corner of the window
@@ -102,17 +101,18 @@ Please report any scams or attempts to resell this maphack on discord.
 Please consider donating either some BTC or D2JSP to support this project.
 
 Bitcoin donation `18hSn32hChp1CmBYnRdQFyzkz5drpijRa2`  
+BEP20 BUSD address `0xb77638fec7fb7ac2064f5fc754980404835fe9a3`  
 D2JSP forum gold: <https://forums.d2jsp.org/user.php?i=1294529>
 
 ### Configure
 
 In `settings.ini` you can declare any of the below settings to override the built-in default setting.
 
-
 #### General settings
+
 | Setting |     Default     |    Description    |
 | :-------------- | :------------------ | :---------------------- |
-| baseUrl | http://localhost:3002 | URL of the map server, set to public server by default, but you can use localhost if you [run your own server](SERVER.md)  |
+| baseUrl | <http://localhost:3002> | URL of the map server, set to public server by default, but you can use localhost if you [run your own server](https://github.com/joffreybesos/d2-mapserver/blob/master/INSTALLATION.md)  |
 | scale | 1 | The global scale setting applied to all map images, press NumpadPlus and NumpadSubtract to adjust in game |
 | leftMargin | 20 | The left margin of all map images, set this to wider than your primary monitor to push it onto your secondary monitor. |
 | topMargin | 20 | Top margin of map image |
@@ -125,8 +125,10 @@ In `settings.ini` you can declare any of the below settings to override the buil
 | centerModeScale | 1.7 | scale of the image, change this if the scale in centered mode doesn't line up |
 | serverScale | 4 | The larger the scale, the more detailed the map, but slower to load |
 | centerModeOpacity | 0.7 | Opacity of the centered map |
-| centerModeXoffset | 0 | Change this if the map doesn't line up with the normal automap |
-| centerModeYoffset | -12 | Change this if the map doesn't line up with the normal automap |
+| centerModeXoffset | 0 | Change this if the map doesn't line up with the normal automap horizontally |
+| centerModeYoffset | -56 | Change this if the map doesn't line up with the normal automap vertically |
+| centerModeXoffset | 1 | Change this if the units (players, monsters etc) doesn't line up horizontally with the normal automap |
+| centerModeYoffset | 16 | Change this if the units (players, monsters etc) doesn't line up vertically with the normal automap |
 
 #### Game History/info
 
@@ -176,6 +178,7 @@ In `settings.ini` you can declare any of the below settings to override the buil
 
 | Setting |     Default     |    Description    |
 | :-------------- | :------------------ | :---------------------- |
+| showPlayerDotCenter | false | Center mode only, shows current play green dot |
 | showOtherPlayers | true | Show other players as squares |
 | showOtherPlayerNames | false | Show names above player dots, disabled by default |
 | showShrines | true | Show shrines |
@@ -211,7 +214,6 @@ In `settings.ini` you can declare any of the below settings to override the buil
 | showBossLine | true | Draws a red line to the boss in that level (Nihlithak, Summoner etc) |
 | showQuestLine | true | Draws a green line to the relevant quest item in that level |
 
-
 #### Shortcut keys
 
 | Setting |     Default     |    Description    |
@@ -223,7 +225,8 @@ In `settings.ini` you can declare any of the below settings to override the buil
 | moveMapRight | #Right | Shortcut to move map right (Win + Right) |
 | moveMapUp | #Up | Shortcut to move map up (Win + Up) |
 | moveMapDown | #Down | Shortcut to move map down (Win + Down) |
-| switchMapMode | / | Shortcut to toggle centered map mode |
+| switchMapMode | ~/ | Shortcut to toggle centered map mode |
+| historyToggleKey | ^g | Shortcut key to hide game history in menu (Ctrl+G) |
 
 To better understand the keyboard shortcut format, refer to <https://www.autohotkey.com/docs/KeyList.htm#modifier>
 
@@ -288,8 +291,8 @@ This repo is licenced under GPLv3
 
 Violations of the licence may make you liable for DMCA takedowns.
 
-## TODO
+## Kudos
 
-- Map replaces automap (centered in screen and follows player)
-
-If you have ideas for more features, feel free to share them on discord
+- @blacha and his [Diablo 2 map package](https://github.com/blacha/diablo2/tree/master/packages/map)
+- @OneXDeveloper and others at [MapAssist](https://github.com/OneXDeveloper/MapAssist)
+- @noah- and [d2bs project](https://github.com/noah-/d2bs/blob/master/D2Structs.h)

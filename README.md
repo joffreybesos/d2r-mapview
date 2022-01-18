@@ -24,8 +24,6 @@ This tool is licenced under GPLv3.
 | :--------------: | :------------------: | :----------------------: |
 | ![](darkwood.png)  | ![](hallsofpain.png) | ![](canyonofthemagi.png) |
 
-
-
 ## Setup
 
 1. Download the latest `d2rmap-vx.x.x.exe` and `settings.ini` files (found on the [releases page](https://github.com/joffreybesos/d2r-mapview/releases))
@@ -35,8 +33,8 @@ This tool is licenced under GPLv3.
 5. Make sure you press TAB to show the minimap, this map will only display when your minmap is displayed.
 6. Press Ctrl+H in game for a help menu
 
-The executable does not require administrator privileges unless you are running the game as administrator
-
+The executable does _not_ require administrator privileges unless you are running the game as administrator. Refer to troubleshooting below if you have issues.  
+Sometimes windows defender can intercept the download, try a different browser if this happens.
 ### Virustotal gave me an alert
 
 The compiled executable will get false positives in virus scans. This is because the tool is written in Autohotkey.
@@ -48,12 +46,6 @@ Then you can run `src/d2r-map.ahk` directly from source.
 This way you can be fully aware of what code you're executing and you don't have to trust an opaque executable.
 
 Do not accept executables for this from any other source!
-
-**Please note that running this map utility this way uses my freely hosted map server.
-This server is getting hammered lately so it would be appreciated if you supported this project**.
-
-***Bitcoin donation: `18hSn32hChp1CmBYnRdQFyzkz5drpijRa2`***  
-***D2JSP forum gold: <https://forums.d2jsp.org/user.php?i=1294529>***  
 
 ## Features
 
@@ -87,7 +79,6 @@ This server is getting hammered lately so it would be appreciated if you support
 - You can exit the maphack with Shift+F10
 - You can also right click the icon in the system tray.
 - This MH will automatically exit when you exit D2R.
-- Map download might be slow, just give it a second.
 - Please ignore the message at the top, it's to alert anyone who may have been scammed.
 
 ## Discord
@@ -240,27 +231,24 @@ To better understand the keyboard shortcut format, refer to <https://www.autohot
 
 | Setting |     Default     |    Description    |
 | :-------------- | :------------------ | :---------------------- |
-| performanceMode | 0 | Experimental, set to -1 to max out performance. This may use too much CPU and cause strange behaviour. Please report any issues in Discord as I wish to make this permanent |
-| enableD2ML | false | Only enable if you use multiple D2R sessions, not tested well |
+| performanceMode | 0 | Experimental, set to `-1` to max out performance. This may use too much CPU and cause strange behaviour. Try setting to `50ms` if `-1` uses too much CPU. Refer to this [doc](https://www.autohotkey.com/docs/commands/SetBatchLines.htm) to understand what it's doing |
+| enableD2ML | false | Only enable if you use multiple D2R sessions |
 | windowTitle | D2R:main | This is ignored unless `enableD2ML` is turned on. It is the window title of one D2R session for multi sesion |
 
 #### Debugging
 
 | Setting |     Default     |    Description    |
 | :-------------- | :------------------ | :---------------------- |
-| debug | false | Turn this one to increase the level of the logging, note this will create huge log.txt files |
+| debug | false | Turn this one to increase the level of the logging, note this will create huge log.txt files. Can be toggled in-game with Shift+F9 |
 
 ## Map Server
 
 ### Use the hosted free map server
 
-I offer a free to use map server on the internet.  
-If you use this server please consider donating to help with server costs.  
-
-Bitcoin donation `18hSn32hChp1CmBYnRdQFyzkz5drpijRa2`  
-D2JSP forum gold: <https://forums.d2jsp.org/user.php?i=1294529>
-
+I offer a free to use map server. If you use this server please consider donating to help with server costs. 
 This free server comes preconfigured, simply use the default configuration in `settings.ini`
+
+**NOTE**: I'll be taking this server offline in the coming weeks, please get your own map server running to avoid disappointment.
 
 ### Run your own map server
 
@@ -276,12 +264,10 @@ No one can say for sure. Blizzard do have Warden anti-cheat that will scan your 
 - A log file `log.txt` is generated in the same folder as the executable.
 - You can also set debug logging to `true` in `settings.ini` for verbose logging.
 - Go to the discord server if you need further help <https://discord.gg/qEgqyVW3uj>
-- Tested and working on Diablo 2 Resurrected `1.0.67358`
+- Tested and working on Diablo 2 Resurrected `1.0.67554`
 
-**Warning: The keyboard and/or mouse hook could not be activated; some parts of the script will not function**:
+Error message `Warning: The keyboard and/or mouse hook could not be activated; some parts of the script will not function`:
 This happens with certain antivirus where it will block hotkeys, you may need to 'allow' the script for hotkeys to work.
-
-If you are having trouble with the map server, refer to troubleshooting steps at [SERVER.md](SERVER.md)
 
 ## Licence
 

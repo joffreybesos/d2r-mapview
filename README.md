@@ -6,6 +6,9 @@ Use at your own risk, there is no warranty or responsibility taken for being pen
 This map hack is as simple as running an executable. It relies on a backend server that is offered for free but runs on donations.  
 The backend does _not_ use d2mapapi, but instead uses a modified version of this project [blacha/diablo2](https://github.com/blacha/diablo2/tree/master/packages/map).
 
+**Please not this public server will be shutting down in the coming weeks**
+It is highly recommended your run your own server, refer to [this guide](https://github.com/joffreybesos/d2-mapserver/blob/master/INSTALLATION.md)
+
 This tool is licenced under GPLv3.
 
 Join the discord server <https://discord.gg/qEgqyVW3uj>
@@ -252,8 +255,8 @@ This free server comes preconfigured, simply use the default configuration in `s
 
 ### Run your own map server
 
-Alternatively you can host your own map server which I've also shared for free.  
-Please refer to [SERVER.md](SERVER.md) for a full guide.
+There have been a lot of changes and it's now very easy to setup your own map server.
+Please refer to [INSTALLATION.md](https://github.com/joffreybesos/d2-mapserver/blob/master/INSTALLATION.md) for a full guide.
 
 ## Is it safe?
 

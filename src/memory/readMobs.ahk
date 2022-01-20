@@ -24,6 +24,13 @@ ReadMobs(d2rprocess, startingOffset, ByRef mobs) {
                 isUnique := d2rprocess.read(pUnitData + 0x18, "UShort")
                 monx := d2rprocess.read(pPath + 0x02, "UShort")
                 mony := d2rprocess.read(pPath + 0x06, "UShort")
+                xPosOffset := d2rprocess.read(pPath + 0x00, "UShort") 
+                yPosOffset := d2rprocess.read(pPath + 0x04, "UShort")
+                xPosOffset := xPosOffset / 65536   ; get percentage
+                yPosOffset := yPosOffset / 65536   ; get percentage
+                monx := monx + xPosOffset
+                mony := mony + yPosOffset
+
                 isBoss := 0
                 textTitle := getBossName(txtFileNo)
                 if (textTitle) {

@@ -35,6 +35,12 @@ ReadOtherPlayers(d2rprocess, startingOffset, ByRef otherPlayers) {
                     pathAddress := d2rprocess.read(pPath, "Int64")
                     xPos := d2rprocess.read(pathAddress + 0x02, "UShort")
                     yPos := d2rprocess.read(pathAddress + 0x06, "UShort")
+                    xPosOffset := d2rprocess.read(pathAddress + 0x00, "UShort") 
+                    yPosOffset := d2rprocess.read(pathAddress + 0x04, "UShort")
+                    xPosOffset := xPosOffset / 65536   ; get percentage
+                    yPosOffset := yPosOffset / 65536   ; get percentage
+                    xPos := xPos + xPosOffset
+                    yPos := yPos + yPosOffset
 
                     pUnitData := playerUnit + 0x10
                     playerNameAddress := d2rprocess.read(pUnitData, "Int64")

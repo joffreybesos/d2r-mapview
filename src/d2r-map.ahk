@@ -166,6 +166,7 @@ While 1 {
                 ShowHistoryText(gamenameHwnd1, gameWindowId, sessionList, historyToggle, settings["textAlignment"], settings["textSectionWidth"], settings["textSize"])
             }
             offsetAttempts := 26
+            WriteLogDebug("Offset attempts " offsetAttempts)
         }
         Sleep, 100 ; sleep when no offset found, you're likely in menu
     } else {
@@ -231,7 +232,9 @@ While 1 {
             ; update player layer on each loop
             uiData["ticktock"] := ticktock
             ; update player layer on each loop
-            ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
+            if (!ticktock) {
+                ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
+            }
             if (settings["centerMode"]) {
                 MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData, uiData)
             }

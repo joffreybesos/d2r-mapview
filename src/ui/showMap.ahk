@@ -10,10 +10,10 @@ ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
     opacity:= settings["opacity"]
     sFile := mapData["sFile"] ; downloaded map image
     levelNo:= gameMemoryData["levelNo"]
-    IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
+    levelScale := mapData["levelScale"]
+    levelxmargin := mapData["levelxmargin"]
+    levelymargin := mapData["levelymargin"]
     scale := levelScale * scale
-    IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
-    IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0
     leftMargin := leftMargin + levelxmargin
     topMargin := topMargin + levelymargin
 

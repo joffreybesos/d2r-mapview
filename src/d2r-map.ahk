@@ -108,7 +108,7 @@ playerOffset := settings["playerOffset"]
 startingOffset := settings["playerOffset"]
 uiOffset := settings["uiOffset"]
 
-
+pToken := Gdip_Startup()
 
 ; create GUI windows
 Gui, IPaddress: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs +HwndipHwnd1
@@ -204,7 +204,13 @@ While 1 {
                 ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help", "44") ; 22 is opacity
                 ; Download map
                 downloadMapImage(settings, gameMemoryData, imageData)
-                
+                IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
+                IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
+                IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0
+                imageData["levelScale"] := levelScale
+                imageData["levelxmargin"] := levelxmargin
+                imageData["levelymargin"] := levelymargin
+
                 ; Show Map
                 if (lastlevel == "") {
                     Gui, Map: Show, NA
@@ -216,13 +222,12 @@ While 1 {
 
                 rotatedWidth := uiData["rotatedWidth"]
                 rotatedHeight := uiData["rotatedHeight"]
-                    
+                
                 SelectObject(hdc, obm)
                 DeleteObject(hbm)
                 DeleteDC(hdc)
                 Gdip_DeleteGraphics(G)
         
-                pToken := Gdip_Startup()
                 hbm := CreateDIBSection(rotatedWidth, rotatedHeight)
                 hdc := CreateCompatibleDC()
                 obm := SelectObject(hdc, hbm)
@@ -232,9 +237,9 @@ While 1 {
             ; update player layer on each loop
             uiData["ticktock"] := ticktock
             ; update player layer on each loop
-            if (!ticktock) {
-                ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
-            }
+            
+            ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
+            
             if (settings["centerMode"]) {
                 MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData, uiData)
             }

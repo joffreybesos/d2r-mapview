@@ -204,12 +204,7 @@ While 1 {
                 ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help", "44") ; 22 is opacity
                 ; Download map
                 downloadMapImage(settings, gameMemoryData, imageData)
-                IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
-                IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
-                IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0
-                imageData["levelScale"] := levelScale
-                imageData["levelxmargin"] := levelxmargin
-                imageData["levelymargin"] := levelymargin
+                
 
                 ; Show Map
                 if (lastlevel == "") {
@@ -217,22 +212,33 @@ While 1 {
                     Gui, Units: Show, NA
                 }
                 mapLoading := 0
-                ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
                 Gui, LoadingText: Destroy ; remove loading text
+                redrawMap := 1
+            }
+            if (redrawMap) {
+                levelNo := gameMemoryData["levelNo"]
+                IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
+                IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
+                IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0
+                imageData["levelScale"] := levelScale
+                imageData["levelxmargin"] := levelxmargin
+                imageData["levelymargin"] := levelymargin
+                ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
 
-                rotatedWidth := uiData["rotatedWidth"]
-                rotatedHeight := uiData["rotatedHeight"]
+                scaledWidth := uiData["scaledWidth"]
+                scaledHeight := uiData["scaledHeight"]
                 
                 SelectObject(hdc, obm)
                 DeleteObject(hbm)
                 DeleteDC(hdc)
                 Gdip_DeleteGraphics(G)
         
-                hbm := CreateDIBSection(rotatedWidth, rotatedHeight)
+                hbm := CreateDIBSection(scaledWidth, scaledHeight)
                 hdc := CreateCompatibleDC()
                 obm := SelectObject(hdc, hbm)
                 
                 G := Gdip_GraphicsFromHDC(hdc)
+                redrawMap := 0
             }
             ; update player layer on each loop
             uiData["ticktock"] := ticktock
@@ -348,8 +354,7 @@ MapSizeIncrease:
     if (levelNo and levelScale and not settings["centerMode"]) {
         levelScale := levelScale + 0.05
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
-        imageData["levelScale"] := levelScale
-        ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+        redrawMap := 1
         WriteLog("Increased level " levelNo " scale by 0.05 to " levelScale)
     }
     if (levelNo and settings["centerMode"]) {
@@ -357,7 +362,7 @@ MapSizeIncrease:
         centerModeScale := centerModeScale + 0.05
         IniWrite, %centerModeScale%, settings.ini, MapSettings, centerModeScale
         settings["centerModeScale"] := centerModeScale
-        ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+        redrawMap := 1
         WriteLog("Increased centerModeScale global setting by 0.05 to " levelScale)
     }
     return
@@ -370,9 +375,7 @@ MapSizeDecrease:
     if (levelNo and levelScale and not settings["centerMode"]) {
         levelScale := levelScale - 0.05
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
-        imageData["levelScale"] := levelScale
-        ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-        
+        redrawMap := 1
         WriteLog("Decreased level " levelNo " scale by 0.05 to " levelScale)
     }
     if (levelNo and settings["centerMode"]) {
@@ -380,7 +383,7 @@ MapSizeDecrease:
         centerModeScale := centerModeScale - 0.05
         IniWrite, %centerModeScale%, settings.ini, MapSettings, centerModeScale
         settings["centerModeScale"] := centerModeScale
-        ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+        redrawMap := 1
         WriteLog("Decreased centerModeScale global setting by 0.05 to " levelScale)
     }
     return
@@ -411,9 +414,7 @@ MapSizeDecrease:
         if (levelNo and not settings["centerMode"]) {
             levelxmargin := levelxmargin - 25
             IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
-            imageData["levelxmargin"] := levelxmargin
-            ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-            
+            redrawMap := 1
         }
         return
     }
@@ -425,8 +426,7 @@ MapSizeDecrease:
         if (levelNo and not settings["centerMode"]) {
             levelxmargin := levelxmargin + 25
             IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
-            imageData["levelxmargin"] := levelxmargin
-            ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+            redrawMap := 1     
         }
         return
     }
@@ -438,8 +438,7 @@ MapSizeDecrease:
         if (levelNo and not settings["centerMode"]) {
             levelymargin := levelymargin - 25
             IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
-            imageData["levelymargin"] := levelymargin
-            ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+            redrawMap := 1
         }
         return
     }
@@ -451,8 +450,7 @@ MapSizeDecrease:
         if (levelNo and not settings["centerMode"]) {
             levelymargin := levelymargin + 25
             IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
-            imageData["levelymargin"] := levelymargin
-            ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+            redrawMap := 1
         }
         return
     }

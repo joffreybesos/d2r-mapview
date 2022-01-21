@@ -2,6 +2,9 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
+global lastLeftMargin := 0
+global lastTopMargin := 0
+
 MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData, uiData) {
     
     ; read from memory
@@ -64,7 +67,15 @@ MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData
         regionHeight := gameHeight - topMargin
     }
 
-    WinMove, ahk_id %mapHwnd1%,, leftMargin, topMargin
-    WinMove, ahk_id %unitHwnd1%,, leftMargin, topMargin
+    leftDiff :=  lastLeftMargin - leftMargin
+    topDiff :=  lastTopMargin - topMargin
+    ; leftDiff :=  0
+    ; topDiff :=  0
+
+
+    WinMove, ahk_id %mapHwnd1%,, leftMargin + (leftDiff/2), topMargin + (topDiff/2)
+    WinMove, ahk_id %unitHwnd1%,, leftMargin + (leftDiff/2), topMargin + (topDiff/2)
+    lastLeftMargin := leftMargin
+    lastTopMargin := topMargin
 
 } 

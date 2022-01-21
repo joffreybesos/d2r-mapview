@@ -20,10 +20,10 @@ readSettings(settingsFile, ByRef settings) {
     settings["centerModeScale"] := "2.262"
     settings["serverScale"] := "3"
     settings["centerModeOpacity"] := "0.7"
-    settings["centerModeXoffset"] := "0"
-    settings["centerModeYoffset"] := "-56"
-    settings["centerModeXUnitoffset"] := "1"
-    settings["centerModeYUnitoffset"] := "16"
+    settings["centerModeXoffset"] := "-1"
+    settings["centerModeYoffset"] := "-25"
+    settings["centerModeXUnitoffset"] := "4"
+    settings["centerModeYUnitoffset"] := "0"
     settings["showGameInfo"] := 1
     settings["textSectionWidth"] := "700"
     settings["textSize"] := "20"
@@ -87,7 +87,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["moveMapDown"] := "#Down"
     settings["switchMapMode"] := "~/"
     settings["historyToggleKey"] := "^g"
-    settings["performanceMode"] := "0"
+    settings["performanceMode"] := "50ms"
     settings["enableD2ML"] := 0
     settings["windowTitle"] := "D2R:main"
     settings["debug"] := 0

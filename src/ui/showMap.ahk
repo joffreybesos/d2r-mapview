@@ -2,17 +2,17 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
+ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
     
     scale:= settings["scale"]
     leftMargin:= settings["leftMargin"]
     topMargin:= settings["topMargin"]
     opacity:= settings["opacity"]
-    sFile := mapData["sFile"] ; downloaded map image
+    sFile := imageData["sFile"] ; downloaded map image
     levelNo:= gameMemoryData["levelNo"]
-    levelScale := mapData["levelScale"]
-    levelxmargin := mapData["levelxmargin"]
-    levelymargin := mapData["levelymargin"]
+    levelScale := imageData["levelScale"]
+    levelxmargin := imageData["levelxmargin"]
+    levelymargin := imageData["levelymargin"]
     scale := levelScale * scale
     leftMargin := leftMargin + levelxmargin
     topMargin := topMargin + levelymargin
@@ -30,13 +30,13 @@ ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
     ; WriteLog("leftMargin := " leftMargin)
     ; WriteLog("topMargin := " topMargin)
     ; WriteLog("opacity := " opacity)
-    ; WriteLog(mapData["sFile"])
-    ; WriteLog(mapData["leftTrimmed"])
-    ; WriteLog(mapData["topTrimmed"])
-    ; WriteLog(mapData["mapOffsetX"])
-    ; WriteLog(mapData["mapOffsety"])
-    ; WriteLog(mapData["mapwidth"])
-    ; WriteLog(mapData["mapheight"])
+    ; WriteLog(imageData["sFile"])
+    ; WriteLog(imageData["leftTrimmed"])
+    ; WriteLog(imageData["topTrimmed"])
+    ; WriteLog(imageData["mapOffsetX"])
+    ; WriteLog(imageData["mapOffsety"])
+    ; WriteLog(imageData["mapwidth"])
+    ; WriteLog(imageData["mapheight"])
 
     ; WriteLog(gameMemoryData["xPos"])
     ; WriteLog(gameMemoryData["yPos"])
@@ -75,8 +75,8 @@ ShowMap(settings, mapHwnd1, mapData, gameMemoryData, ByRef uiData) {
         ; get relative position of player in world
         ; xpos is absolute world pos in game
         ; each map has offset x and y which is absolute world position
-        xPosDot := ((gameMemoryData["xPos"] - mapData["mapOffsetX"]) * serverScale) + padding
-        yPosDot := ((gameMemoryData["yPos"] - mapData["mapOffsetY"]) * serverScale) + padding
+        xPosDot := ((gameMemoryData["xPos"] - imageData["mapOffsetX"]) * serverScale) + padding
+        yPosDot := ((gameMemoryData["yPos"] - imageData["mapOffsetY"]) * serverScale) + padding
 
         correctedPos := findNewPos(xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
         xPosDot := correctedPos["x"]

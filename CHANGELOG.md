@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## [2.4.9] - 2021-01-21 - Performance improvements
+
+- Centered map mode now performs much better
+
 ## [2.4.8] - 2021-01-18 - Bug fixes
 
 - Bug where the map would flash on startup _should_ be fixed

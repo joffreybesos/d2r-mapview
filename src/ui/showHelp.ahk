@@ -150,6 +150,9 @@ ShowHelpText(settings, leftMargin, topMargin) {
     }
     bmp.SetToControl(HelpText1)
     leftMargin := A_ScreenWidth / 4
+    SetFormat Integer, D
+    leftMargin := leftMargin + 0
+    topMargin := topMargin + 0
     gui, HelpText: Show, x%leftMargin% y%topMargin% NA
     Return
 }

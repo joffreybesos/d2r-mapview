@@ -2,10 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
-
 ## [2.4.9] - 2021-01-21 - Performance improvements
 
 - Centered map mode now performs much better
+  Previously the centered map would move on the screen based on the player's game world position which was tile based
+  Since this was whole tiles the map would move in a jagged or rigid manner
+  Now the MH reads partial game tiles and gives a much smoother movement.
+- Player/NPC movement on the map is now much more smooth
+- Changing map scale adjustment to work more reliably
+- `showPlayerDotCenter` is now turn on by default
+- Set `performanceMode` to `50ms` by default
+  If you find the MH uses too much CPU then add `performanceMode=0` to `settings.ini`
+- Trailing slash in baseUrl no longer causes an error
+- Fixed bug when pressing Ctrl+H for help
 
 ## [2.4.8] - 2021-01-18 - Bug fixes
 

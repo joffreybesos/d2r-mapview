@@ -8,6 +8,7 @@ readSettings(settingsFile, ByRef settings) {
 
     ; these are the default values
     settings := []
+    settings["baseUrl"] := "http://localhost:3002"
     settings["scale"] := "1.000000"
     settings["leftMargin"] := "20"
     settings["topMargin"] := "20"
@@ -37,7 +38,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["showBosses"] := 1
     settings["showDeadMobs"] := 1
     settings["showImmunities"] := 1
-    settings["showPlayerDotCenter"] := 0
+    settings["showPlayerDotCenter"] := 1
     settings["showOtherPlayers"] := 1
     settings["showOtherPlayerNames"] := 0
     settings["showShrines"] := 1
@@ -118,6 +119,13 @@ readSettings(settingsFile, ByRef settings) {
         gameWindowId := "ahk_exe D2R.exe"  ;default to normal window id
     }
     settings["gameWindowId"] := gameWindowId
+
+    baseUrl := settings["baseUrl"]
+    StringRight, lastChar, baseUrl, 1
+    if (lastChar=="/") {
+        StringTrimRight, baseUrl, baseUrl, 1
+        settings["baseUrl"] := baseUrl
+    }
 
     WriteLog("Using configuration:")
     WriteLog("- baseUrl: " settings["baseUrl"])

@@ -173,7 +173,7 @@ showImmunities=false
 
 | Setting |     Default     |    Description    |
 | :-------------- | :------------------ | :---------------------- |
-| showPlayerDotCenter | false | Center mode only, shows current player green dot |
+| showPlayerDotCenter | true | Center mode only, shows current player green dot |
 | showOtherPlayers | true | Show other players as squares |
 | showOtherPlayerNames | false | Show names above player dots, disabled by default |
 | showShrines | true | Show shrines |

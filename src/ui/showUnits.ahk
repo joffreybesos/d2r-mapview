@@ -296,25 +296,25 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
     pPenMagicMinor := Gdip_CreatePen(MagicMinorColor, psize1)
     pPenOtherMissiles := Gdip_CreatePen(OtherMissilesColor, psize1)
     pPenunknownMissiles := Gdip_CreatePen(unknownMissilesColor, psize1)
+    majorDotSize :=settings["missileMajorDotSize"]
+    minorDotSize :=settings["missileMinorDotSize"]
 
     if (settings["showPlayerMissiles"] | settings["showEnemyMissiles"]) {
         static oldMissilex
         static oldMissiley
         for index,  missilearray in gameMemoryData["missiles"]
-        {
+        {   
+            
             for each, missile in missilearray
             {
-                missilex := ((missile["x"] - mapData["mapOffsetX"]) * serverScale) + padding
-                missiley := ((missile["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+                missilex := ((missile["x"] - imageData["mapOffsetX"]) * serverScale) + padding
+                missiley := ((missile["y"] - imageData["mapOffsetY"]) * serverScale) + padding
+                
                 correctedPos := findNewPos(missilex, missiley, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 missilex := correctedPos["x"]
                 missiley := correctedPos["y"]
                 if (oldMissilex = missilex && oldMissiley = missiley){
                 } else {
-
-                    majorDotSize :=settings["missileMajorDotSize"]
-                    minorDotSize :=settings["missileMinorDotSize"]
-                    ; WriteLog(majorDotSize " " minorDotSize " " missilex " " missiley " " missile["UnitType"])
                     switch (missile["UnitType"]){
                         case "PhysicalMajor": Gdip_DrawEllipse(G, pPenPhysicalMajor, missilex-3, missiley-3, majorDotSize, majorDotSize/2)
                         case "PhysicalMinor": Gdip_DrawEllipse(G, pPenPhysicalMinor, missilex-3, missiley-3, minorDotSize, minorDotSize/2)

@@ -8,7 +8,7 @@ readSettings(settingsFile, ByRef settings) {
 
     ; these are the default values
     settings := []
-    settings["baseUrl"] := "http://localhost:3002"
+    settings["baseUrl"] := "http://map.d2r-mapview.xyz:8080"
     settings["scale"] := "1.000000"
     settings["leftMargin"] := "20"
     settings["topMargin"] := "20"
@@ -55,8 +55,8 @@ readSettings(settingsFile, ByRef settings) {
     settings["mercColor"] := "00FFFF"
     settings["deadColor"] := "000000"
     settings["showMercs"] := 0
-    settings["showPlayerMissiles"] := 1
-    settings["showEnemyMissiles"] := 1
+    settings["showPlayerMissiles"] := 0
+    settings["showEnemyMissiles"] := 0
     settings["normalDotSize"] := "5"
     settings["normalImmunitySize"] := "8"
     settings["uniqueDotSize"] := "8"

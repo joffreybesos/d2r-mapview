@@ -2,17 +2,17 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrines, uiData) {
+ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData) {
     scale:= settings["scale"]
     leftMargin:= settings["leftMargin"]
     topMargin:= settings["topMargin"]
     Width := uiData["sizeWidth"]
     Height := uiData["sizeHeight"]
     levelNo:= gameMemoryData["levelNo"]
-    IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
+    levelScale := imageData["levelScale"]
+    levelxmargin := imageData["levelxmargin"]
+    levelymargin := imageData["levelymargin"]
     scale := levelScale * scale
-    IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
-    IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0
     leftMargin := leftMargin + levelxmargin
     topMargin := topMargin + levelymargin
 
@@ -23,7 +23,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     } else {
         serverScale := 2 
     }
-
+    
     StartTime := A_TickCount
     Angle := 45
     opacity := 1.0
@@ -37,8 +37,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     ; get relative position of player in world
     ; xpos is absolute world pos in game
     ; each map has offset x and y which is absolute world position
-    xPosDot := ((gameMemoryData["xPos"] - mapData["mapOffsetX"]) * serverScale) + padding
-    yPosDot := ((gameMemoryData["yPos"] - mapData["mapOffsetY"]) * serverScale) + padding
+    xPosDot := ((gameMemoryData["xPos"] - imageData["mapOffsetX"]) * serverScale) + padding
+    yPosDot := ((gameMemoryData["yPos"] - imageData["mapOffsetY"]) * serverScale) + padding
     correctedPos := correctPos(settings, xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
     xPosDot := correctedPos["x"]
     yPosDot := correctedPos["y"]
@@ -59,8 +59,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
         {
             ;WriteLog(object["txtFileNo"] " " object["isRedPortal"])
             if (object["isPortal"]) {
-                objectx := ((object["objectx"] - mapData["mapOffsetX"]) * serverScale) + padding
-                objecty := ((object["objecty"] - mapData["mapOffsetY"]) * serverScale) + padding
+                objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
+                objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
                 correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 objectx := correctedPos["x"]
                 objecty := correctedPos["y"]
@@ -73,8 +73,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
                 }
             }
             if (object["isRedPortal"]) {
-                objectx := ((object["objectx"] - mapData["mapOffsetX"]) * serverScale) + padding
-                objecty := ((object["objecty"] - mapData["mapOffsetY"]) * serverScale) + padding
+                objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
+                objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
                 correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 objectx := correctedPos["x"]
                 objecty := correctedPos["y"]
@@ -129,8 +129,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
         for index, mob in mobs
         {
             if (mob["mode"] == 0 or mob["mode"] == 12) { ; dead
-                mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
-                moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+                mobx := ((mob["x"] - imageData["mapOffsetX"]) * serverScale) + padding
+                moby := ((mob["y"] - imageData["mapOffsetY"]) * serverScale) + padding
                 correctedPos := correctPos(settings, mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 mobx := correctedPos["x"]
                 moby := correctedPos["y"]
@@ -142,8 +142,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     if (settings["showNormalMobs"]) {
         for index, mob in mobs
         {
-            mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
-            moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+            mobx := ((mob["x"] - imageData["mapOffsetX"]) * serverScale) + padding
+            moby := ((mob["y"] - imageData["mapOffsetY"]) * serverScale) + padding
             correctedPos := correctPos(settings, mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             mobx := correctedPos["x"]
             moby := correctedPos["y"]
@@ -198,8 +198,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     for index, mob in mobs
     {
         
-        mobx := ((mob["x"] - mapData["mapOffsetX"]) * serverScale) + padding
-        moby := ((mob["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+        mobx := ((mob["x"] - imageData["mapOffsetX"]) * serverScale) + padding
+        moby := ((mob["y"] - imageData["mapOffsetY"]) * serverScale) + padding
         correctedPos := correctPos(settings, mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
         mobx := correctedPos["x"]
         moby := correctedPos["y"]
@@ -369,7 +369,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     ; draw way point line
     if (settings["showWaypointLine"]) {
         ;WriteLog(settings["showWaypointLine"])
-        waypointHeader := mapData["waypoint"]
+        waypointHeader := imageData["waypoint"]
         if (waypointHeader) {
             wparray := StrSplit(waypointHeader, ",")
             waypointX := (wparray[1] * serverScale) + padding
@@ -385,7 +385,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
 
     ; ;draw exit lines
     if (settings["showNextExitLine"]) {
-        exitsHeader := mapData["exits"]
+        exitsHeader := imageData["exits"]
         if (exitsHeader) {
             Loop, parse, exitsHeader, `|
             {
@@ -410,7 +410,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
 
     ; ;draw boss lines
     if (settings["showBossLine"]) {
-        bossHeader := mapData["bosses"]
+        bossHeader := imageData["bosses"]
         if (bossHeader) {
             bossArray := StrSplit(bossHeader, ",")
             ;bossArray[1] ; name of boss
@@ -431,7 +431,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
     ; ;draw quest lines
     if (settings["showQuestLine"]) {
         
-        questsHeader := mapData["quests"]
+        questsHeader := imageData["quests"]
         
         if (questsHeader) {
             Loop, parse, questsHeader, `|
@@ -460,8 +460,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
             
             if (gameMemoryData["playerName"] != player["playerName"]) {
                 ;WriteLog(gameMemoryData["playerName"] " " player["playerName"])
-                playerx := ((player["x"] - mapData["mapOffsetX"]) * serverScale) + padding
-                playery := ((player["y"] - mapData["mapOffsetY"]) * serverScale) + padding
+                playerx := ((player["x"] - imageData["mapOffsetX"]) * serverScale) + padding
+                playery := ((player["y"] - imageData["mapOffsetY"]) * serverScale) + padding
                 correctedPos := correctPos(settings, playerx, playery, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 playerx := correctedPos["x"]
                 playery := correctedPos["y"]
@@ -502,8 +502,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
         items := gameMemoryData["items"]
         for index, item in items
         {
-            itemx := ((item["itemx"] - mapData["mapOffsetX"]) * serverScale) + padding
-            itemy := ((item["itemy"] - mapData["mapOffsetY"]) * serverScale) + padding
+            itemx := ((item["itemx"] - imageData["mapOffsetX"]) * serverScale) + padding
+            itemy := ((item["itemy"] - imageData["mapOffsetY"]) * serverScale) + padding
             correctedPos := correctPos(settings, itemx, itemy, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             itemx := correctedPos["x"]
             itemy := correctedPos["y"]
@@ -601,27 +601,29 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
         }
         for index, object in shrines
         {
-            objectx := ((object["objectx"] - mapData["mapOffsetX"]) * serverScale) + padding
-            objecty := ((object["objecty"] - mapData["mapOffsetY"]) * serverScale) + padding
-            correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-            objectx := correctedPos["x"]
-            objecty := correctedPos["y"]
-            shrineType := object["shrineType"]
-            textx := objectx - 100
-            texty := objecty - 107
-            
-            Options = x%textx% y%texty% Center vBottom c%shrineColor% r8 s%shrineTextSize%
-            Gdip_TextToGraphics(G,shrineType, Options, diabloFont, 200, 100)
-            Gdip_DrawRectangle(G, pPen, objectx-2, objecty-2, 2.5, 2)
+            if (object["levelNo"] == gameMemoryData["levelNo"]) {
+                
+                objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
+                objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
+                correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                objectx := correctedPos["x"]
+                objecty := correctedPos["y"]
+                shrineType := object["shrineType"]
+                textx := objectx - 100
+                texty := objecty - 107
+                Options = x%textx% y%texty% Center vBottom c%shrineColor% r8 s%shrineTextSize%
+                Gdip_TextToGraphics(G,shrineType, Options, diabloFont, 200, 100)
+                Gdip_DrawRectangle(G, pPen, objectx-2, objecty-2, 2.5, 2)
+            }
         }
         Gdip_DeletePen(pPen)    
     }
 
-    if (!settings["centerMode"]) {
+    if (!settings["centerMode"] or settings["showPlayerDotCenter"]) {
         ; draw player
         pPen := Gdip_CreatePen(0xff00FF00, 6)
         ;WriteLog(xPosDot " " yPosDot " " midW " " midH " " scaledWidth " " scaledHeight " " scale " " newPos["x"] " " newPos["y"])
-        Gdip_DrawRectangle(G, pPen, xPosDot-3, (yPosDot)-2 , 6, 6)
+        Gdip_DrawRectangle(G, pPen, xPosDot-3, (yPosDot)-3 , 6, 6)
         ; Gdip_DrawRectangle(G, pPen, 0, 0, scaledWidth, scaledHeight) ;outline for whole map used for troubleshooting
         Gdip_DeletePen(pPen)
     }
@@ -653,7 +655,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, mapData, gameMemoryData, shrine
         WinMove, ahk_id %unitHwnd1%,, windowLeftMargin+leftMargin, windowTopMargin+topMargin
         WinSet, Region, , ahk_id %mapHwnd1%
         WinSet, Region, , ahk_id %unitHwnd1%
-        UpdateLayeredWindow(unitHwnd1, hdc, , , rotatedWidth, rotatedHeight)
+        UpdateLayeredWindow(unitHwnd1, hdc, , , scaledWidth, scaledHeight)
         Gdip_GraphicsClear( G )
     }
 
@@ -731,8 +733,8 @@ isNextExit(currentLvl) {
 correctPos(settings, xPosDot, yPosDot, centerX, centerY, RWidth, RHeight, scale) {
     correctedPos := findNewPos(xPosDot, yPosDot, centerX, centerY, RWidth, RHeight, scale)
     if (settings["centerMode"]) {
-        correctedPos["x"] := correctedPos["x"] - (settings["centerModeXoffset"] / 2)
-        correctedPos["y"] := correctedPos["y"] - (settings["centerModeYoffset"] / 2)
+        correctedPos["x"] := correctedPos["x"] + settings["centerModeXUnitoffset"]
+        correctedPos["y"] := correctedPos["y"] + settings["centerModeYUnitoffset"]
     }
     return correctedPos
 }

@@ -89,7 +89,10 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
                 if (FileExist(sFile)) {
                     WriteLog("Downloaded image to file, but something else went wrong " sFile)
                 }
-                Msgbox, 48, d2r-mapview, Error downloading map image.`nCheck map server baseUrl in settings.ini or errors in log.txt`n`nExiting....
+                If InStr(baseUrl, "map.d2r-mapview.xyz")
+                    Msgbox, 48, d2r-mapview, Error downloading map image.`nPublic map server may be down`nConsider running your own map server, it's easy to setup now and much faster`n`nCheck map server baseUrl in settings.ini or errors in log.txt`n`nExiting....
+                Else
+                    Msgbox, 48, d2r-mapview, Error downloading map image from %baseUrl%.`nCheck that map server is running`nCheck baseUrl in settings.ini or errors in log.txt`n`nExiting....
             }
         }
         FileAppend, %respHeaders%, %sFileTxt%

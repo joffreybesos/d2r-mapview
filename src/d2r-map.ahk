@@ -24,7 +24,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.4.5"
+expectedVersion := "2.4.9"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -41,7 +41,7 @@ WriteLog("*******************************************************************")
 WriteLog("Version: " expectedVersion)
 WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyVW3uj")
 ClearCache(A_Temp)
-readSettings("settings.ini", settings)
+readSettings(settings.ini, settings)
 
 lastlevel:=""
 lastSeed:=""
@@ -108,7 +108,7 @@ playerOffset := settings["playerOffset"]
 startingOffset := settings["playerOffset"]
 uiOffset := settings["uiOffset"]
 
-
+pToken := Gdip_Startup()
 
 ; create GUI windows
 Gui, IPaddress: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs +HwndipHwnd1
@@ -166,6 +166,7 @@ While 1 {
                 ShowHistoryText(gamenameHwnd1, gameWindowId, sessionList, historyToggle, settings["textAlignment"], settings["textSectionWidth"], settings["textSize"])
             }
             offsetAttempts := 26
+            WriteLogDebug("Offset attempts " offsetAttempts)
         }
         Sleep, 100 ; sleep when no offset found, you're likely in menu
     } else {
@@ -195,9 +196,6 @@ While 1 {
 
             ; if there's a level num then the player is in a map
             if (gameMemoryData["levelNo"] != lastlevel) { ; only redraw map when it changes
-                if (getAct(gameMemoryData["levelNo"]) != getAct(lastLevel)) { ;changed act
-                    shrines := []
-                }
                 ; Show loading text
                 ;Gui, Map: Show, NA
                 mapLoading := 1
@@ -207,34 +205,47 @@ While 1 {
                 ; Download map
                 downloadMapImage(settings, gameMemoryData, imageData)
                 
+
                 ; Show Map
                 if (lastlevel == "") {
                     Gui, Map: Show, NA
                     Gui, Units: Show, NA
                 }
                 mapLoading := 0
-                ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
                 Gui, LoadingText: Destroy ; remove loading text
+                redrawMap := 1
+            }
+            if (redrawMap) {
+                levelNo := gameMemoryData["levelNo"]
+                IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
+                IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
+                IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0
+                imageData["levelScale"] := levelScale
+                imageData["levelxmargin"] := levelxmargin
+                imageData["levelymargin"] := levelymargin
+                ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
 
-                rotatedWidth := uiData["rotatedWidth"]
-                rotatedHeight := uiData["rotatedHeight"]
-                    
+                scaledWidth := uiData["scaledWidth"]
+                scaledHeight := uiData["scaledHeight"]
+
                 SelectObject(hdc, obm)
                 DeleteObject(hbm)
                 DeleteDC(hdc)
                 Gdip_DeleteGraphics(G)
         
-                pToken := Gdip_Startup()
-                hbm := CreateDIBSection(rotatedWidth, rotatedHeight)
+                hbm := CreateDIBSection(scaledWidth, scaledHeight)
                 hdc := CreateCompatibleDC()
                 obm := SelectObject(hdc, hbm)
                 
                 G := Gdip_GraphicsFromHDC(hdc)
+                redrawMap := 0
             }
             ; update player layer on each loop
             uiData["ticktock"] := ticktock
             ; update player layer on each loop
+
             ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
+
             if (settings["centerMode"]) {
                 MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData, uiData)
             }
@@ -308,16 +319,11 @@ unHideMap() {
         Gui, Map: Show, NA
         Gui, Units: Show, NA
         Gui, IPaddress: Show, NA
+    } else {
+        WriteLogDebug("Tried to show map while map loading, ignoring...")
     }
 }
-getAct(levelNo) {
-    if (levelNo < 40) return 1
-    if (levelNo < 75) return 2
-    If (levelNo < 103) return 3
-    if (levelNo < 109) return 4
-    return 5
-}
-return
+
 
 +F10::
 {
@@ -348,8 +354,7 @@ MapSizeIncrease:
     if (levelNo and levelScale and not settings["centerMode"]) {
         levelScale := levelScale + 0.05
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
-        imageData["levelScale"] := levelScale
-        ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+        redrawMap := 1
         WriteLog("Increased level " levelNo " scale by 0.05 to " levelScale)
     }
     if (levelNo and settings["centerMode"]) {
@@ -357,7 +362,7 @@ MapSizeIncrease:
         centerModeScale := centerModeScale + 0.05
         IniWrite, %centerModeScale%, settings.ini, MapSettings, centerModeScale
         settings["centerModeScale"] := centerModeScale
-        ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+        redrawMap := 1
         WriteLog("Increased centerModeScale global setting by 0.05 to " levelScale)
     }
     return
@@ -370,9 +375,7 @@ MapSizeDecrease:
     if (levelNo and levelScale and not settings["centerMode"]) {
         levelScale := levelScale - 0.05
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
-        imageData["levelScale"] := levelScale
-        ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-        
+        redrawMap := 1
         WriteLog("Decreased level " levelNo " scale by 0.05 to " levelScale)
     }
     if (levelNo and settings["centerMode"]) {
@@ -380,7 +383,7 @@ MapSizeDecrease:
         centerModeScale := centerModeScale - 0.05
         IniWrite, %centerModeScale%, settings.ini, MapSettings, centerModeScale
         settings["centerModeScale"] := centerModeScale
-        ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+        redrawMap := 1
         WriteLog("Decreased centerModeScale global setting by 0.05 to " levelScale)
     }
     return
@@ -411,9 +414,7 @@ MapSizeDecrease:
         if (levelNo and not settings["centerMode"]) {
             levelxmargin := levelxmargin - 25
             IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
-            imageData["levelxmargin"] := levelxmargin
-            ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-            
+            redrawMap := 1
         }
         return
     }
@@ -425,8 +426,7 @@ MapSizeDecrease:
         if (levelNo and not settings["centerMode"]) {
             levelxmargin := levelxmargin + 25
             IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
-            imageData["levelxmargin"] := levelxmargin
-            ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+            redrawMap := 1
         }
         return
     }
@@ -438,8 +438,7 @@ MapSizeDecrease:
         if (levelNo and not settings["centerMode"]) {
             levelymargin := levelymargin - 25
             IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
-            imageData["levelymargin"] := levelymargin
-            ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+            redrawMap := 1
         }
         return
     }
@@ -451,8 +450,7 @@ MapSizeDecrease:
         if (levelNo and not settings["centerMode"]) {
             levelymargin := levelymargin + 25
             IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
-            imageData["levelymargin"] := levelymargin
-            ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+            redrawMap := 1
         }
         return
     }
@@ -476,6 +474,7 @@ MapSizeDecrease:
     ~TAB::
     ~Space::
     {
+        WriteLogDebug("TAB or Space pressed")
         checkAutomapVisibility(d2rprocess, settings, gameMemoryData)
         return
     }
@@ -484,7 +483,12 @@ MapSizeDecrease:
         Gui, HelpText: Hide
         helpToggle := 1
     }
-        return
+    ~+F9::
+    {
+        WriteLog("Debug mode set to " debug)
+        debug := !debug
+    }
+return
 
 ~F13 & del::reload
 ~F13 & c::clipboard:=readLastGameName(d2rprocess, gameWindowId, settings, session)

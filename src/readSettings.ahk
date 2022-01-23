@@ -8,6 +8,7 @@ readSettings(settingsFile, ByRef settings) {
 
     ; these are the default values
     settings := []
+    settings["baseUrl"] := "http://localhost:3002"
     settings["scale"] := "1.000000"
     settings["leftMargin"] := "20"
     settings["topMargin"] := "20"
@@ -20,8 +21,10 @@ readSettings(settingsFile, ByRef settings) {
     settings["centerModeScale"] := "2.262"
     settings["serverScale"] := "3"
     settings["centerModeOpacity"] := "0.7"
-    settings["centerModeXoffset"] := "0"
-    settings["centerModeYoffset"] := "-28"
+    settings["centerModeXoffset"] := "-1"
+    settings["centerModeYoffset"] := "-25"
+    settings["centerModeXUnitoffset"] := "4"
+    settings["centerModeYUnitoffset"] := "0"
     settings["showGameInfo"] := 1
     settings["textSectionWidth"] := "700"
     settings["textSize"] := "20"
@@ -35,6 +38,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["showBosses"] := 1
     settings["showDeadMobs"] := 1
     settings["showImmunities"] := 1
+    settings["showPlayerDotCenter"] := 1
     settings["showOtherPlayers"] := 1
     settings["showOtherPlayerNames"] := 0
     settings["showShrines"] := 1
@@ -86,9 +90,9 @@ readSettings(settingsFile, ByRef settings) {
     settings["moveMapRight"] := "#Right"
     settings["moveMapUp"] := "#Up"
     settings["moveMapDown"] := "#Down"
-    settings["switchMapMode"] := "/"
+    settings["switchMapMode"] := "~/"
     settings["historyToggleKey"] := "^g"
-    settings["performanceMode"] := "0"
+    settings["performanceMode"] := "50ms"
     settings["enableD2ML"] := 0
     settings["windowTitle"] := "D2R:main"
     settings["debug"] := 0
@@ -137,6 +141,13 @@ readSettings(settingsFile, ByRef settings) {
         gameWindowId := "ahk_exe D2R.exe"  ;default to normal window id
     }
     settings["gameWindowId"] := gameWindowId
+
+    baseUrl := settings["baseUrl"]
+    StringRight, lastChar, baseUrl, 1
+    if (lastChar=="/") {
+        StringTrimRight, baseUrl, baseUrl, 1
+        settings["baseUrl"] := baseUrl
+    }
 
     WriteLog("Using configuration:")
     WriteLog("- baseUrl: " settings["baseUrl"])

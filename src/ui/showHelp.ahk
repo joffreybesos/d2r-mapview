@@ -150,6 +150,9 @@ ShowHelpText(settings, leftMargin, topMargin) {
     }
     bmp.SetToControl(HelpText1)
     leftMargin := A_ScreenWidth / 4
+    SetFormat Integer, D
+    leftMargin := leftMargin + 0
+    topMargin := topMargin + 0
     gui, HelpText: Show, x%leftMargin% y%topMargin% NA
     Return
 }
@@ -161,6 +164,8 @@ drawHelpDot(bmp, pen, x, y, dotsize) {
 formatHotkeyString(keyString) {
     ; make hotkey look more logical
     firstChar := SubStr(keyString, 1, 1)
+    if (firstChar == "~")
+        keyString := StrReplace(keyString, "~", "")
     if (firstChar == "#")
         keyString := StrReplace(keyString, "#", "Win+")
     if (firstChar == "+")

@@ -2,6 +2,9 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
+global lastLeftMargin := 0
+global lastTopMargin := 0
+
 MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData, uiData) {
     
     ; read from memory
@@ -17,6 +20,15 @@ MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData
     yPosAddress := pathAddress + 0x06
     xPos := d2rprocess.read(xPosAddress, "UShort") 
     yPos := d2rprocess.read(yPosAddress, "UShort")
+    xPosOffset := d2rprocess.read(pathAddress + 0x00, "UShort") 
+    yPosOffset := d2rprocess.read(pathAddress + 0x04, "UShort")
+    xPosOffset := xPosOffset / 65536   ; get percentage
+    yPosOffset := yPosOffset / 65536   ; get percentage
+
+    xPos := xPos + xPosOffset
+    yPos := yPos + yPosOffset
+
+    ; WriteLog(xPos " " yPos)
 
     ; calculate new position
     padding := 150
@@ -37,6 +49,8 @@ MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData
     xPosDot := correctedPos["x"] 
     yPosDot := correctedPos["y"] 
 
+    ; ToolTip, % "`n`n`n`" xPosDot " " yPosDot
+
     WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
     leftMargin := (gameWidth/2) - xPosDot + (settings["centerModeXoffset"] /2) + windowLeftMargin
     topMargin := (gameHeight/2) - yPosDot + (settings["centerModeYoffset"] /2) + windowTopMargin
@@ -53,7 +67,15 @@ MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData
         regionHeight := gameHeight - topMargin
     }
 
-    WinMove, ahk_id %mapHwnd1%,, leftMargin, topMargin
-    WinMove, ahk_id %unitHwnd1%,, leftMargin, topMargin
+    leftDiff :=  lastLeftMargin - leftMargin
+    topDiff :=  lastTopMargin - topMargin
+    ; leftDiff :=  0
+    ; topDiff :=  0
+
+
+    WinMove, ahk_id %mapHwnd1%,, leftMargin + (leftDiff/2), topMargin + (topDiff/2)
+    WinMove, ahk_id %unitHwnd1%,, leftMargin + (leftDiff/2), topMargin + (topDiff/2)
+    lastLeftMargin := leftMargin
+    lastTopMargin := topMargin
 
 } 

@@ -2,7 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.4.7] - 2021-01-16 - Base Items alerts on ground
+## [2.4.9] - 2021-01-23 - Performance improvements
+
+- Centered map mode now performs much better
+  Previously the centered map would move on the screen based on the player's game world tile position
+  Since this was whole tiles the map would move in a jagged or rigid manner
+  Now the MH reads partial game tiles and gives a much smoother movement.
+- Player/NPC movement on the map is now much more smooth as well
+- Improved code that handles map scale adjustment to work more reliably
+- `showPlayerDotCenter` is now turn on by default
+- Set `performanceMode` to `50ms` by default
+  If you find the MH uses too much CPU then add `performanceMode=0` to `settings.ini`
+- Trailing slash in baseUrl no longer causes an error
+- Fixed bug when pressing Ctrl+H for help
+
+## [2.4.8] - 2021-01-18 - Bug fixes
+
+- Bug where the map would flash on startup _should_ be fixed
+- Bug where debug logging wouldn't work is now fixed
+- Bug where shrines would appear on the wrong map has been fixed
+- Pressing Shift+F9 will toggle debug mode, this can help with bug finding
+- Other minor tweaks
+
+## [2.4.7] - 2021-01-18 - Base Items alerts on ground
 
 - Good base items now get a flashing visual alert while on the ground
 - You can turn this off by adding `showBaseItems=false` in `settings.ini`
@@ -34,11 +56,18 @@ All notable changes to this project will be documented in this file.
   - 3os Targe
   - 3os Rondache
   - 3os Heraldic Shield
+  - 4os Heraldic Shield
   - 3os Aerin Shield
   - 4os Giant Thresher
   - 4os Thresher
   - 4os Colossus Voulge
 - Map cache files will now be deleted properly on startup
+- Pressing `/` to make map centered will now work in chat
+- New setting `showPlayerDotCenter` set to true to show play dot in center mode
+- Centered mode: Units (i.e. players, mobs etc) now have their own position offset in pixels
+  `centerModeXUnitoffset` and `centerModeYUnitoffset`
+  This works in conjunction with `centerModeXoffset` and `centerModeYoffset`
+  Adjust those 4 values to get the map and the units to align in centered mode.
 
 ## [2.4.6] - 2021-01-13 - Minor improvements
 
@@ -192,7 +221,7 @@ Multi session improvements:
 
 - Static offsets are now automatically calculated based on patterns
 - This means when Blizzard updates D2R this MH will still work
-- Shout out to Map Assist for the patterns!
+- Shout out to @OneXDeveloper's project MapAssist for the patterns!
 
 ## [2.3.3] - 2021-12-13 - Shrines and portals
 

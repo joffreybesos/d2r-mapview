@@ -122,7 +122,7 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     }
 
     ; get items
-    if (settings["showUniqueAlerts"] or settings["showSetItemAlerts"] or settings["showRuneAlerts"] or settings["showJewelAlerts"] or settings["showCharmAlerts"]) {
+    if (settings["showUniqueAlerts"] or settings["showSetItemAlerts"] or settings["showRuneAlerts"] or settings["showJewelAlerts"] or settings["showCharmAlerts"] or settings["showBaseItems"]) {
         ReadItems(d2rprocess, startingOffset, items)
     }
 
@@ -136,10 +136,15 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     ; player position
     pPath := playerUnit + 0x38
     pathAddress := d2rprocess.read(pPath, "Int64")
-    xPosAddress := pathAddress + 0x02
-    yPosAddress := pathAddress + 0x06
-    xPos := d2rprocess.read(xPosAddress, "UShort") 
-    yPos := d2rprocess.read(yPosAddress, "UShort")
+    xPos := d2rprocess.read(pathAddress + 0x02, "UShort") 
+    yPos := d2rprocess.read(pathAddress + 0x06, "UShort")
+    xPosOffset := d2rprocess.read(pathAddress + 0x00, "UShort") 
+    yPosOffset := d2rprocess.read(pathAddress + 0x04, "UShort")
+    xPosOffset := xPosOffset / 65535   ; get percentage
+    yPosOffset := yPosOffset / 65535   ; get percentage
+
+    xPos := xPos + xPosOffset
+    yPos := yPos + yPosOffset
 
     if (!xPos) {
         WriteLog("Did not find player position at player offset " playerOffset) 

@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [2.4.9] - 2021-01-21 - Performance improvements
 
-- Centered map mode now performs much better
+- Centered map mode now performs much better (more improvements to come later)
   Previously the centered map would move on the screen based on the player's game world position which was tile based
   Since this was whole tiles the map would move in a jagged or rigid manner
   Now the MH reads partial game tiles and gives a much smoother movement.

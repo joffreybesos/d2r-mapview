@@ -12,6 +12,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\memory\readIPAddress.ahk
 #Include %A_ScriptDir%\memory\patternScan.ahk
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
+#Include %A_ScriptDir%\ui\image\prefetchMaps.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
 #Include %A_ScriptDir%\ui\showMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
@@ -191,6 +192,7 @@ While 1 {
                     ipAddress := readIPAddress(d2rprocess, gameWindowId, settings, session)
                     ShowIPText(ipHwnd1, gameWindowId, ipAddress, settings["textIPalignment"], settings["textIPfontSize"])
                 }
+                prefetchMaps(settings, gameMemoryData)
                 shrines := []
             }
 
@@ -205,7 +207,6 @@ While 1 {
                 ; Download map
                 downloadMapImage(settings, gameMemoryData, imageData)
                 
-
                 ; Show Map
                 if (lastlevel == "") {
                     Gui, Map: Show, NA

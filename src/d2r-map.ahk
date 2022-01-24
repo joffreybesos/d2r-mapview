@@ -24,7 +24,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.4.9"
+expectedVersion := "2.5.0"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -60,6 +60,7 @@ global gameWindowId := settings["gameWindowId"]
 global gameStartTime:=0
 global diabloFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
 global mapLoading := 0
+global seenItems := []
 
 switchMapModeKey := settings["switchMapMode"]
 Hotkey, IfWinActive, ahk_exe D2R.exe
@@ -155,6 +156,7 @@ While 1 {
                     session.saveEntryToFile()
                     sessionList.push(session)
                 }
+                session :=
             }
             if (settings["showGameInfo"]) {
                 SetFormat Integer, D
@@ -182,6 +184,17 @@ While 1 {
             if (gameMemoryData["mapSeed"] != lastSeed) {
                 gameStartTime := A_TickCount    
                 currentGameName := readLastGameName(d2rprocess, gameWindowId, settings, session)
+
+                if (session) {
+                    session.setEndTime(gameEndTime)
+                    session.endingPlayerLevel := lastPlayerLevel
+                    session.endingExperience := lastPlayerExperience
+                    if (!session.isLogged) {
+                        SetFormat Integer, D
+                        session.saveEntryToFile()
+                        sessionList.push(session)
+                    }
+                }
                 
                 session := new GameSession(currentGameName, A_TickCount, gameMemoryData["playerName"])
                 session.startingPlayerLevel := gameMemoryData["playerLevel"]
@@ -192,6 +205,7 @@ While 1 {
                     ShowIPText(ipHwnd1, gameWindowId, ipAddress, settings["textIPalignment"], settings["textIPfontSize"])
                 }
                 shrines := []
+                seenItems := []
             }
 
             ; if there's a level num then the player is in a map
@@ -335,6 +349,7 @@ return
 
 MapAlwaysShow:
 {
+    SetFormat Integer, D
     settings["alwaysShowMap"] := !settings["alwaysShowMap"]
     checkAutomapVisibility(d2rprocess, settings, gameMemoryData)
     if (settings["alwaysShowMap"]) {
@@ -349,8 +364,9 @@ MapAlwaysShow:
 
 MapSizeIncrease:
 {
-    levelNo := gameMemoryData["levelNo"]
-    levelScale := imageData["levelScale"]
+    SetFormat Integer, D
+    levelNo := gameMemoryData["levelNo"] + 0
+    levelScale := imageData["levelScale"] + 0
     if (levelNo and levelScale and not settings["centerMode"]) {
         levelScale := levelScale + 0.05
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
@@ -370,8 +386,9 @@ MapSizeIncrease:
 
 MapSizeDecrease:
 {
-    levelNo := gameMemoryData["levelNo"]
-    levelScale := imageData["levelScale"]
+    SetFormat Integer, D
+    levelNo := gameMemoryData["levelNo"] + 0
+    levelScale := imageData["levelScale"] + 0
     if (levelNo and levelScale and not settings["centerMode"]) {
         levelScale := levelScale - 0.05
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
@@ -408,9 +425,10 @@ MapSizeDecrease:
     }
     MoveMapLeft:
     {
-        levelNo := gameMemoryData["levelNo"]
-        levelxmargin := imageData["levelxmargin"]
-        levelymargin := imageData["levelymargin"]
+        SetFormat Integer, D
+        levelNo := gameMemoryData["levelNo"] + 0
+        levelxmargin := imageData["levelxmargin"] + 0
+        levelymargin := imageData["levelymargin"] + 0
         if (levelNo and not settings["centerMode"]) {
             levelxmargin := levelxmargin - 25
             IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
@@ -420,9 +438,10 @@ MapSizeDecrease:
     }
     MoveMapRight:
     {
-        levelNo := gameMemoryData["levelNo"]
-        levelxmargin := imageData["levelxmargin"]
-        levelymargin := imageData["levelymargin"]
+        SetFormat Integer, D
+        levelNo := gameMemoryData["levelNo"] + 0
+        levelxmargin := imageData["levelxmargin"] + 0
+        levelymargin := imageData["levelymargin"] + 0
         if (levelNo and not settings["centerMode"]) {
             levelxmargin := levelxmargin + 25
             IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
@@ -432,9 +451,10 @@ MapSizeDecrease:
     }
     MoveMapUp:
     {
-        levelNo := gameMemoryData["levelNo"]
-        levelxmargin := imageData["levelxmargin"]
-        levelymargin := imageData["levelymargin"]
+        SetFormat Integer, D
+        levelNo := gameMemoryData["levelNo"] + 0
+        levelxmargin := imageData["levelxmargin"] + 0
+        levelymargin := imageData["levelymargin"] + 0
         if (levelNo and not settings["centerMode"]) {
             levelymargin := levelymargin - 25
             IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
@@ -444,9 +464,10 @@ MapSizeDecrease:
     }
     MoveMapDown:
     {
-        levelNo := gameMemoryData["levelNo"]
-        levelxmargin := imageData["levelxmargin"]
-        levelymargin := imageData["levelymargin"]
+        SetFormat Integer, D
+        levelNo := gameMemoryData["levelNo"] + 0
+        levelxmargin := imageData["levelxmargin"] + 0
+        levelymargin := imageData["levelymargin"] + 0
         if (levelNo and not settings["centerMode"]) {
             levelymargin := levelymargin + 25
             IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y

@@ -509,6 +509,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
             itemy := correctedPos["y"]
             if (settings["showRuneAlerts"]) {
                 if (item["isRune"] == 1) { ; rune
+                    announceItem(settings, item)
                     ticktock := uiData["ticktock"]
                     if (ticktock) {
                         Gdip_DrawEllipse(G, pPenRune, itemx-2, itemy-2, 12, 12)
@@ -519,6 +520,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
             }
             if (settings["showUniqueAlerts"]) {
                 if (item["itemQuality"] == 7) { ; unique
+                    announceItem(settings, item)
                     ticktock := uiData["ticktock"]
                     if (ticktock) {
                         Gdip_DrawEllipse(G, pPenUnique, itemx-2, itemy-2, 12, 12)
@@ -529,6 +531,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
             }
             if (settings["showSetItemAlerts"]) {
                 if (item["itemQuality"] == 5) { ; set
+                    announceItem(settings, item)
                     ticktock := uiData["ticktock"]
                     if (ticktock) {
                         Gdip_DrawEllipse(G, pPenSetItem, itemx-2, itemy-2, 12, 12)
@@ -540,6 +543,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
             if (settings["showCharmAlerts"]) {
                 
                 if (item["txtFileNo"] == 603 or item["txtFileNo"] == 604 or item["txtFileNo"] == 605) { ; charm
+                    announceItem(settings, item)
                     ticktock := uiData["ticktock"]
                     if (ticktock) {
                         Gdip_DrawEllipse(G, pPenCharm, itemx-2, itemy-2, 12, 12)
@@ -550,6 +554,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
             }
             if (settings["showJewelAlerts"]) {
                 if (item["txtFileNo"] == 643) { ; jewel
+                    announceItem(settings, item)
                     ticktock := uiData["ticktock"]
                     if (ticktock) {
                         Gdip_DrawEllipse(G, pPenJewel, itemx-2, itemy-2, 12, 12)
@@ -560,6 +565,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
             }
             if (settings["baseItemColor"]) {
                 if (item["isBaseItem"]) { ; baseitem
+                    announceItem(settings, item)
                     ticktock := uiData["ticktock"]
                     if (ticktock) {
                         Gdip_DrawEllipse(G, pPenBaseItem, itemx-2, itemy-2, 12, 12)
@@ -766,4 +772,32 @@ getDistanceFromCoords(x2,y2,x1,y1){
 getPosFromAngle(x1,y1,len,ang){
 	ang:=(ang-90) * 0.0174532925
 	return {"x": x1+len*cos(ang),"y": y1+len*sin(ang)}
+}
+
+
+announceItem(settings, item) {
+    if (settings["textToSpeech"]) {
+        if (!hasVal(seenItems, item["hash"])) {
+            ; seen item for the first time
+            volume := settings["textToSpeechVolume"]
+            pitch := settings["textToSpeechPitch"]
+            speed := settings["textToSpeechSpeed"]
+            if (settings["itemSoundEffect"]) {
+                soundfile := settings["itemSoundEffect"]
+                SoundPlay, %soundfile%
+            }
+
+            ComObjCreate("SAPI.SpVoice").Speak("<pitch absmiddle=""" pitch """><rate absspeed=""" speed """><volume level=""" volume """>" item["textToSpeech"] "</volume></rate></pitch>")
+            seenItems.push(item["hash"])
+        }
+    }
+}
+
+hasVal(haystack, needle) {
+	for index, value in haystack
+		if (value = needle)
+			return index
+	if !IsObject(haystack)
+		throw Exception("Bad haystack!", -1, haystack)
+	return 0
 }

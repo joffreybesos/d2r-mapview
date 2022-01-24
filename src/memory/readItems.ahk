@@ -74,7 +74,8 @@ ReadItems(d2rprocess, startingOffset, ByRef items) {
 
 formatName(itemName, numSockets, itemQuality) {
     quality := getQuality(itemQuality)
-    ;if (quality == "Normal") quality := ""
+    if (quality == "Normal")
+        quality := ""
 
     sockets := ""
     if (numSockets > 0) {

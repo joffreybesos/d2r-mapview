@@ -510,6 +510,3 @@ MapSizeDecrease:
         debug := !debug
     }
 return
-
-~F13 & del::reload
-~F13 & c::clipboard:=readLastGameName(d2rprocess, gameWindowId, settings, session)

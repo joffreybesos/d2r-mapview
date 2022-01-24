@@ -106,7 +106,6 @@ readSettings(settingsFile, ByRef settings) {
     settings["windowTitle"] := "D2R:main"
     settings["debug"] := 0
     
-    settings["showOtherMissileDebug"] := 1
     settings["physicalMajorColor"] := "FFC2C2"
     settings["physicalMinorColor"] := "C99D9D"
     settings["fireMajorColor"] := "FF0000"

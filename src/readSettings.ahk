@@ -61,8 +61,9 @@ readSettings(settingsFile, ByRef settings) {
     settings["mercColor"] := "00FFFF"
     settings["deadColor"] := "000000"
     settings["showMercs"] := 0
-    settings["showPlayerMissiles"] := 0
-    settings["showEnemyMissiles"] := 0
+    settings["showPlayerMissiles"] := 1
+    settings["showEnemyMissiles"] := 1
+    settings["missileOpacity"] := "0x88"
     settings["normalDotSize"] := "5"
     settings["normalImmunitySize"] := "8"
     settings["uniqueDotSize"] := "8"

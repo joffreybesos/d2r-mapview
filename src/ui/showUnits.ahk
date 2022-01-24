@@ -262,21 +262,23 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
     }
 
     ;Missiles
-    missileColor := 0xff . settings["missileColor"]
-    PhysicalMajorColor := 0xff . settings["physicalMajorColor"]
-    PhysicalMinorColor := 0xff . settings["physicalMinorColor"]
-    FireMajorColor := 0xff . settings["fireMajorColor"]
-    FireMinorColor := 0xff . settings["fireMinorColor"]
-    IceMajorColor := 0xff . settings["iceMajorColor"]
-    IceMinorColor := 0xff . settings["iceMinorColor"]
-    LightMajorColor := 0xff . settings["lightMajorColor"]
-    LightMinorColor := 0xff . settings["lightMajorColor"]
-    PoisonMajorColor := 0xff . settings["poisonMajorColor"]
-    PoisonMinorColor := 0xff . settings["poisonMajorColor"]
-    MagicMajorColor := 0xff . settings["magicMajorColor"]
-    MagicMinorColor := 0xff . settings["magicMajorColor"]
-    OtherMissilesColor := 0xff . settings["otherMissilesColor"]
-    unknownMissilesColor := 0xff . settings["unknownMissilesColor"]
+    missileOpacity := settings["missileOpacity"]
+    ;missileOpacity := 0x33
+    missileColor := missileOpacity . settings["missileColor"]
+    PhysicalMajorColor := missileOpacity . settings["physicalMajorColor"]
+    PhysicalMinorColor := missileOpacity . settings["physicalMinorColor"]
+    FireMajorColor := missileOpacity . settings["fireMajorColor"]
+    FireMinorColor := missileOpacity . settings["fireMinorColor"]
+    IceMajorColor := missileOpacity . settings["iceMajorColor"]
+    IceMinorColor := missileOpacity . settings["iceMinorColor"]
+    LightMajorColor := missileOpacity . settings["lightMajorColor"]
+    LightMinorColor := missileOpacity . settings["lightMajorColor"]
+    PoisonMajorColor := missileOpacity . settings["poisonMajorColor"]
+    PoisonMinorColor := missileOpacity . settings["poisonMajorColor"]
+    MagicMajorColor := missileOpacity . settings["magicMajorColor"]
+    MagicMinorColor := missileOpacity . settings["magicMajorColor"]
+    OtherMissilesColor := missileOpacity . settings["otherMissilesColor"]
+    unknownMissilesColor := missileOpacity . settings["unknownMissilesColor"]
 
     psize1:=1.5
     psize2:=2

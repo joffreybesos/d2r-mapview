@@ -44,4 +44,5 @@ PatternScan(d2r, ByRef settings) {
     menuOffset := ((patternAddress - d2r.BaseAddress) + 6 + offsetBuffer)
     settings["menuOffset"] := menuOffset
     WriteLog("Scanned and found menu offset: " menuOffset)
+    SetFormat, Integer, D
 }

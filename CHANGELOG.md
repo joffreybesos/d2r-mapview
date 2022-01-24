@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.0] - 2021-01-24 - Speech to Text
+
+- Items dropped on ground now give an audio description
+  So if a 3os Archon plate drops, you will hear a text-to-speech voice saying 'Normal Archon Player 3 sockets'
+- You can turn this off by adding `textToSpeech=false` in `settings.ini`
+- You can adjust the volume with `textToSpeechVolume=50` as a percentage
+- There is also `textToSpeechPitch=1` and `textToSpeechSpeed=1` which you can also tweak
+- There's also an option to add your own sound effect, simply add `itemSoundEffect=wavfile.wav` to your `settings.ini`
+  Where wavfile.wav is a wav file of your choice, located in the same folder as the Maphack
+  No sound effect is included by default
+- Hotkeys were broken in a previous release for some people, this has now been fixed
+
 ## [2.4.9] - 2021-01-23 - Performance improvements
 
 - Centered map mode now performs much better

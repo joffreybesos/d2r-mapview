@@ -36,6 +36,7 @@ getPlayerOffset(d2r, startingOffset, loops, settings) {
         
         newOffset := HexAdd(startingOffset, (attempts - 1) * 8)
         startingAddress := d2r.BaseAddress + newOffset
+        SetFormat Integer, D
         if (loops > 1) {
             WriteLogDebug("Checking player unit " attempts " of 128 with offset " newOffset)
         }

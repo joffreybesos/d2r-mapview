@@ -50,10 +50,12 @@ ReadItems(d2rprocess, startingOffset, ByRef items) {
                             break
                         }
                     }
+                    itemHash := txtFileNo "-" itemx "-" itemy
 
                     name := getItemName(txtFileNo)
                     isBaseItem := isBaseItem(name, numSockets, itemQuality)
-                    item := {"txtFileNo": txtFileNo, "name": name, "itemLoc": itemLoc, "itemQuality": itemQuality, "isRune": isRune, "itemx": itemx, "itemy": itemy, "numSockets": numSockets, "isBaseItem": isBaseItem }
+                    textToSpeech := formatName(name, numSockets, itemQuality)
+                    item := {"txtFileNo": txtFileNo, "name": name, "itemLoc": itemLoc, "itemQuality": itemQuality, "isRune": isRune, "itemx": itemx, "itemy": itemy, "numSockets": numSockets, "isBaseItem": isBaseItem, "hash": itemHash, "textToSpeech": textToSpeech }
                     ;WriteLog("txtFileNo: " txtFileNo ", name: " name ", itemLoc: " itemLoc ", itemQuality: " itemQuality ", isRune: " isRune ", itemx: " itemx ", itemy: " itemy)
                     items.push(item)
                 }
@@ -63,6 +65,42 @@ ReadItems(d2rprocess, startingOffset, ByRef items) {
     } 
     SetFormat Integer, D
 }
+
+formatName(itemName, numSockets, itemQuality) {
+    quality := getQuality(itemQuality)
+    ;if (quality == "Normal") quality := ""
+    
+    sockets := ""
+    if (numSockets > 0) {
+        sockets := numSockets " sockets"
+    }
+    switch (itemName) {
+        case "Tiara": itemName := "tee-aaruh"
+        case "Shael Rune": itemName := "Shayel Rune"
+        case "Ko Rune": itemName := "kohh Rune"
+        case "Gul Rune": itemName := "Gull Rune"
+        case "Amn Rune": itemName := "Amm Rune"
+    }
+    speechString := quality " " itemName " " sockets
+    return speechString
+
+}
+
+getQuality(itemQuality) {
+    switch (itemQuality) {
+        case 1: return "Inferior"
+        case 2: return "Normal"
+        case 3: return "Superior"
+        case 4: return "Magic"
+        case 5: return "Set"
+        case 6: return "Rare"
+        case 7: return "Unique"
+        case 8: return "Crafted"
+        case 9: return "Tempered"
+    }
+    return ""
+}
+
 
 isBaseItem(itemName, numSockets, itemQuality) {
     if (itemQuality == 2 or itemQuality == 3) { ; normal or superior

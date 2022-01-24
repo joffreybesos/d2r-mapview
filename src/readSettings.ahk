@@ -8,7 +8,7 @@ readSettings(settingsFile, ByRef settings) {
 
     ; these are the default values
     settings := []
-    settings["baseUrl"] := "http://localhost:3002"
+    settings["baseUrl"] := "http://map.d2r-mapview.xyz:8080"
     settings["scale"] := "1.000000"
     settings["leftMargin"] := "20"
     settings["topMargin"] := "20"
@@ -43,6 +43,12 @@ readSettings(settingsFile, ByRef settings) {
     settings["showOtherPlayerNames"] := 0
     settings["showShrines"] := 1
     settings["showPortals"] := 1
+
+    settings["textToSpeech"] := 1
+    settings["textToSpeechVolume"] := 50
+    settings["textToSpeechPitch"] := 4
+    settings["textToSpeechSpeed"] := 1
+    settings["itemSoundEffect"] := ""
     settings["showUniqueAlerts"] := 1
     settings["showSetItemAlerts"] := 1
     settings["showRuneAlerts"] := 1
@@ -79,6 +85,8 @@ readSettings(settingsFile, ByRef settings) {
     settings["showNextExitLine"] := 1
     settings["showBossLine"] := 1
     settings["showQuestLine"] := 1
+    
+
     settings["increaseMapSizeKey"] := "NumpadAdd"
     settings["decreaseMapSizeKey"] := "NumpadSub"
     settings["alwaysShowKey"] := "NumpadMult"

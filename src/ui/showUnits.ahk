@@ -43,6 +43,93 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
     xPosDot := correctedPos["x"]
     yPosDot := correctedPos["y"]
 
+    
+    ;Missiles
+    if (settings["showPlayerMissiles"] or settings["showEnemyMissiles"]) {
+        missileOpacity := settings["missileOpacity"]
+        physicalMajorColor := missileOpacity . settings["missileColorPhysicalMajor"]
+        physicalMinorColor := missileOpacity . settings["missileColorPhysicalMinor"]
+        fireMajorColor := missileOpacity . settings["missileFireMajorColor"]
+        fireMinorColor := missileOpacity . settings["missileFireMinorColor"]
+        iceMajorColor := missileOpacity . settings["missileIceMajorColor"]
+        iceMinorColor := missileOpacity . settings["missileIceMinorColor"]
+        lightMajorColor := missileOpacity . settings["missileLightMajorColor"]
+        lightMinorColor := missileOpacity . settings["missileLightMinorColor"]
+        poisonMajorColor := missileOpacity . settings["missilePoisonMajorColor"]
+        poisonMinorColor := missileOpacity . settings["missilePoisonMinorColor"]
+        magicMajorColor := missileOpacity . settings["missileMagicMajorColor"]
+        magicMinorColor := missileOpacity . settings["missileMagicMinorColor"]
+        
+
+        penSize:=2
+        majorDotSize :=settings["missileMajorDotSize"]
+        minorDotSize :=settings["missileMinorDotSize"]
+        if (settings["centerMode"]) {
+            penSize := penSize * (scale / 1.2)
+            majorDotSize :=majorDotSize * (scale / 1.2)
+            minorDotSize :=minorDotSize * (scale / 1.2)
+        }
+        
+        pPenPhysicalMajor := Gdip_CreatePen(physicalMajorColor, penSize)
+        pPenPhysicalMinor := Gdip_CreatePen(physicalMinorColor, penSize)
+        pPenFireMajor := Gdip_CreatePen(fireMajorColor, penSize)
+        pPenFireMinor := Gdip_CreatePen(fireMajorColor, penSize)
+        pPenIceMajor := Gdip_CreatePen(iceMajorColor, penSize)
+        pPenIceMinor := Gdip_CreatePen(iceMinorColor, penSize)
+        pPenLightMajor := Gdip_CreatePen(lightMajorColor, penSize)
+        pPenLightMinor := Gdip_CreatePen(lightMinorColor, penSize)
+        pPenPoisonMajor := Gdip_CreatePen(poisonMajorColor, penSize)
+        pPenPoisonMinor := Gdip_CreatePen(poisonMinorColor, penSize)
+        pPenMagicMajor := Gdip_CreatePen(magicMajorColor, penSize)
+        pPenMagicMinor := Gdip_CreatePen(magicMinorColor, penSize)
+        
+        static oldMissilex
+        static oldMissiley
+        for index,  missilearray in gameMemoryData["missiles"]
+        {   
+            for each, missile in missilearray
+            {
+                missilex := ((missile["x"] - imageData["mapOffsetX"]) * serverScale) + padding
+                missiley := ((missile["y"] - imageData["mapOffsetY"]) * serverScale) + padding
+                correctedPos := findNewPos(missilex, missiley, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                missilex := correctedPos["x"]
+                missiley := correctedPos["y"]
+                if (oldMissilex = missilex && oldMissiley = missiley){
+                } else {
+                    switch (missile["UnitType"]){
+                        case "PhysicalMajor": Gdip_DrawEllipse(G, pPenPhysicalMajor, missilex-3, missiley-3, majorDotSize, majorDotSize/2)
+                        case "PhysicalMinor": Gdip_DrawEllipse(G, pPenPhysicalMinor, missilex-3, missiley-3, minorDotSize, minorDotSize/2)
+                        case "FireMajor": Gdip_DrawEllipse(G, pPenFireMajor, missilex-3, missiley-3, majorDotSize, majorDotSize/2)
+                        case "FireMinor": Gdip_DrawEllipse(G, pPenFireMinor, missilex-3, missiley-3, minorDotSize, minorDotSize/2)
+                        case "IceMajor": Gdip_DrawEllipse(G, pPenIceMajor, missilex-3, missiley-3, majorDotSize, majorDotSize/2)
+                        case "IceMinor": Gdip_DrawEllipse(G, pPenIceMinor, missilex-3, missiley-3, minorDotSize, minorDotSize/2)
+                        case "LightMajor": Gdip_DrawEllipse(G, pPenLightMajor, missilex-3, missiley-3, majorDotSize, majorDotSize/2)
+                        case "LightMinor": Gdip_DrawEllipse(G, pPenLightMinor, missilex-3, missiley-3, minorDotSize, minorDotSize/2)
+                        case "PoisonMajor": Gdip_DrawEllipse(G, pPenPoisonMajor, missilex-3, missiley-3, majorDotSize, majorDotSize/2)
+                        case "PoisonMinor": Gdip_DrawEllipse(G, pPenPoisonMinor, missilex-3, missiley-3, minorDotSize, minorDotSize/2)
+                        case "MagicMajor": Gdip_DrawEllipse(G, pPenMagicMajor, missilex-3, missiley-3, majorDotSize, majorDotSize/2)
+                        case "MagicMinor": Gdip_DrawEllipse(G, pPenMagicMinor, missilex-3, missiley-3, minorDotSize, minorDotSize/2)
+                    }
+                }
+                oldMissilex:=missilex
+                oldMissiley:=missiley
+            }
+         }
+        
+        Gdip_DeletePen(pPenPhysicalMajor)
+        Gdip_DeletePen(pPenPhysicalMinor)
+        Gdip_DeletePen(pPenFireMajor)
+        Gdip_DeletePen(pPenFireMinor)
+        Gdip_DeletePen(pPenIceMajor)
+        Gdip_DeletePen(pPenIceMinor)
+        Gdip_DeletePen(pPenLightMajor)
+        Gdip_DeletePen(pPenLightMinor)
+        Gdip_DeletePen(pPenPoisonMajor)
+        Gdip_DeletePen(pPenPoisonMinor)
+        Gdip_DeletePen(pPenMagicMajor)
+        Gdip_DeletePen(pPenMagicMinor)
+    }
+
     ; draw portals
     if (settings["showPortals"]) {
         gameObjects := gameMemoryData["objects"]
@@ -91,265 +178,282 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
     }
 
     ; draw monsters
-    mobs := gameMemoryData["mobs"]
-    normalMobColor := 0xff . settings["normalMobColor"] 
-    uniqueMobColor := 0xff . settings["uniqueMobColor"] 
-    bossColor := 0xff . settings["bossColor"] 
-    deadColor := 0xff . settings["deadColor"] 
+    if (settings["showNormalMobs"] or settings["showDeadMobs"] or settings["showUniqueMobs"] or settings["showBosses"]) {
+        mobs := gameMemoryData["mobs"]
+        normalMobColor := 0xff . settings["normalMobColor"] 
+        uniqueMobColor := 0xff . settings["uniqueMobColor"] 
+        bossColor := 0xff . settings["bossColor"] 
+        deadColor := 0xff . settings["deadColor"] 
+        mercColor := 0xcc . settings["mercColor"]
+        deadDotSize := settings["deadDotSize"]     ; 2
+        normalDotSize := settings["normalDotSize"] ; 5
+        normalImmunitySize := settings["normalImmunitySize"]  ; 8
+        uniqueDotSize := settings["uniqueDotSize"] ; 8
+        uniqueImmunitySize := settings["uniqueImmunitySize"] ; 14
+        bossDotSize := settings["bossDotSize"]     ; 5
 
-    pPenNormal := Gdip_CreatePen(normalMobColor, 3)
-    pPenUnique := Gdip_CreatePen(uniqueMobColor, 5)
-    pPenBoss := Gdip_CreatePen(bossColor, 6)
-    pPenDead := Gdip_CreatePen(deadColor, 2)
+        if (settings["centerMode"]) {
+            deadDotSize := deadDotSize * (scale / 1.2)
+            normalDotSize := normalDotSize * (scale / 1.2)
+            normalImmunitySize := normalImmunitySize * (scale / 1.2)
+            uniqueDotSize := uniqueDotSize * (scale / 1.2)
+            uniqueImmunitySize := uniqueImmunitySize * (scale / 1.2)
+            bossDotSize := bossDotSize * (scale / 1.2)
+        }
 
-    physicalImmuneColor := 0xff . settings["physicalImmuneColor"] 
-    magicImmuneColor := 0xff . settings["magicImmuneColor"] 
-    fireImmuneColor := 0xff . settings["fireImmuneColor"] 
-    lightImmuneColor := 0xff . settings["lightImmuneColor"] 
-    coldImmuneColor := 0xff . settings["coldImmuneColor"] 
-    poisonImmuneColor := 0xff . settings["poisonImmuneColor"] 
+        pPenNormal := Gdip_CreatePen(normalMobColor, normalDotSize * 0.7)
+        pPenUnique := Gdip_CreatePen(uniqueMobColor, uniqueDotSize * 0.7)
+        pPenBoss := Gdip_CreatePen(bossColor, bossDotSize)
+        pPenDead := Gdip_CreatePen(deadColor, deadDotSize)
+        pPenMerc := Gdip_CreatePen(mercColor, normalDotSize * 0.7)
 
-    pPenPhysical := Gdip_CreatePen(physicalImmuneColor, 5)
-    pPenMagic := Gdip_CreatePen(magicImmuneColor, 5)
-    pPenFire := Gdip_CreatePen(fireImmuneColor, 5)
-    pPenLight := Gdip_CreatePen(lightImmuneColor, 5)
-    pPenCold := Gdip_CreatePen(coldImmuneColor, 5)
-    pPenPoison := Gdip_CreatePen(poisonImmuneColor, 5)
+        physicalImmuneColor := 0xff . settings["physicalImmuneColor"] 
+        magicImmuneColor := 0xff . settings["magicImmuneColor"] 
+        fireImmuneColor := 0xff . settings["fireImmuneColor"] 
+        lightImmuneColor := 0xff . settings["lightImmuneColor"] 
+        coldImmuneColor := 0xff . settings["coldImmuneColor"] 
+        poisonImmuneColor := 0xff . settings["poisonImmuneColor"] 
 
-    deadDotSize := settings["deadDotSize"] 
-    normalDotSize := settings["normalDotSize"] 
-    normalImmunitySize := settings["normalImmunitySize"] 
-    uniqueDotSize := settings["uniqueDotSize"] 
-    uniqueImmunitySize := settings["uniqueImmunitySize"] 
-    bossDotSize := settings["bossDotSize"] 
+        pPenPhysical := Gdip_CreatePen(physicalImmuneColor, normalDotSize)
+        pPenMagic := Gdip_CreatePen(magicImmuneColor, normalDotSize)
+        pPenFire := Gdip_CreatePen(fireImmuneColor, normalDotSize)
+        pPenLight := Gdip_CreatePen(lightImmuneColor, normalDotSize)
+        pPenCold := Gdip_CreatePen(coldImmuneColor, normalDotSize)
+        pPenPoison := Gdip_CreatePen(poisonImmuneColor, normalDotSize)
 
-    if (settings["showDeadMobs"]) {
-        for index, mob in mobs
-        {
-            if (mob["mode"] == 0 or mob["mode"] == 12) { ; dead
+
+
+        if (settings["showDeadMobs"]) {
+            for index, mob in mobs
+            {
+                if (mob["mode"] == 0 or mob["mode"] == 12) { ; dead
+                    mobx := ((mob["x"] - imageData["mapOffsetX"]) * serverScale) + padding
+                    moby := ((mob["y"] - imageData["mapOffsetY"]) * serverScale) + padding
+                    correctedPos := correctPos(settings, mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                    mobx := correctedPos["x"]
+                    moby := correctedPos["y"]
+                    Gdip_DrawEllipse(G, pPenDead, mobx-(deadDotSize/2), moby-(deadDotSize/2), deadDotSize, deadDotSize/2)
+                }
+            }
+        }
+        
+        if (settings["showNormalMobs"]) {
+            for index, mob in mobs
+            {
                 mobx := ((mob["x"] - imageData["mapOffsetX"]) * serverScale) + padding
                 moby := ((mob["y"] - imageData["mapOffsetY"]) * serverScale) + padding
                 correctedPos := correctPos(settings, mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 mobx := correctedPos["x"]
                 moby := correctedPos["y"]
-                Gdip_DrawEllipse(G, pPenDead, mobx-(deadDotSize/2), moby-(deadDotSize/2), deadDotSize, deadDotSize/2)
+
+                ;WriteLog(mobx " " moby)
+                if (mob["isUnique"] == 0) {
+                    if (mob["mode"] != 0 and mob["mode"] != 12) { ; not dead
+                        if (settings["showImmunities"]) {
+                            immunities := mob["immunities"]
+                            noImmunities := immunities["physical"] + immunities["magic"] + immunities["fire"] + immunities["light"] + immunities["cold"] + immunities["poison"]
+                            sliceSize := 360 / noImmunities
+                            angleDegrees := 90
+                            dotAdjust := normalImmunitySize/2
+                            if (immunities["physical"]) {
+                                Gdip_DrawPie(G, pPenMagic, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2, angleDegrees, sliceSize)
+                                angleDegrees := angleDegrees + sliceSize
+                            }
+                            if (immunities["magic"]) {
+                                Gdip_DrawPie(G, pPenMagic, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2, angleDegrees, sliceSize)
+                                angleDegrees := angleDegrees + sliceSize
+                            }
+                            if (immunities["fire"]) {
+                                Gdip_DrawPie(G, pPenFire, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2, angleDegrees, sliceSize)
+                                angleDegrees := angleDegrees + sliceSize
+                            }
+                            if (immunities["light"]) {
+                                Gdip_DrawPie(G, pPenLight, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2, angleDegrees, sliceSize)
+                                angleDegrees := angleDegrees + sliceSize
+                            }
+                            if (immunities["cold"]) {
+                                Gdip_DrawPie(G, pPenCold, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2, angleDegrees, sliceSize)
+                                angleDegrees := angleDegrees + sliceSize
+                            }
+                            if (immunities["poison"]) {
+                                Gdip_DrawPie(G, pPenPoison, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2,angleDegrees, sliceSize)
+                                angleDegrees := angleDegrees + sliceSize
+                            }
+                        }
+                        
+                        if (!mob["isMerc"]) {
+                            Gdip_DrawEllipse(G, pPenNormal, mobx-(normalDotSize/2), moby-(normalDotSize/1.5), normalDotSize, normalDotSize/2)
+                        } else if (settings["showMercs"]) {
+                            Gdip_DrawEllipse(G, pPenMerc, mobx-(normalDotSize/2), moby-(normalDotSize/1.5), normalDotSize, normalDotSize/2)
+                        }
+                    }
+                    
+                }
             }
         }
-    }
-    
-    if (settings["showNormalMobs"]) {
+
+        ; having this in a separate loop forces it to be drawn on top
         for index, mob in mobs
         {
+            
             mobx := ((mob["x"] - imageData["mapOffsetX"]) * serverScale) + padding
             moby := ((mob["y"] - imageData["mapOffsetY"]) * serverScale) + padding
             correctedPos := correctPos(settings, mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             mobx := correctedPos["x"]
             moby := correctedPos["y"]
-
-            ;WriteLog(mobx " " moby)
-            if (mob["isUnique"] == 0) {
-                if (mob["mode"] != 0 and mob["mode"] != 12) { ; not dead
-                    if (settings["showImmunities"]) {
-                        immunities := mob["immunities"]
-                        noImmunities := immunities["physical"] + immunities["magic"] + immunities["fire"] + immunities["light"] + immunities["cold"] + immunities["poison"]
-                        sliceSize := 360 / noImmunities
-                        angleDegrees := 90
-                        dotAdjust := normalImmunitySize/2
-                        if (immunities["physical"]) {
-                            Gdip_DrawPie(G, pPenMagic, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2, angleDegrees, sliceSize)
-                            angleDegrees := angleDegrees + sliceSize
-                        }
-                        if (immunities["magic"]) {
-                            Gdip_DrawPie(G, pPenMagic, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2, angleDegrees, sliceSize)
-                            angleDegrees := angleDegrees + sliceSize
-                        }
-                        if (immunities["fire"]) {
-                            Gdip_DrawPie(G, pPenFire, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2, angleDegrees, sliceSize)
-                            angleDegrees := angleDegrees + sliceSize
-                        }
-                        if (immunities["light"]) {
-                            Gdip_DrawPie(G, pPenLight, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2, angleDegrees, sliceSize)
-                            angleDegrees := angleDegrees + sliceSize
-                        }
-                        if (immunities["cold"]) {
-                            Gdip_DrawPie(G, pPenCold, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2, angleDegrees, sliceSize)
-                            angleDegrees := angleDegrees + sliceSize
-                        }
-                        if (immunities["poison"]) {
-                            Gdip_DrawPie(G, pPenPoison, mobx-dotAdjust, moby-dotAdjust, normalImmunitySize, normalImmunitySize/2,angleDegrees, sliceSize)
-                            angleDegrees := angleDegrees + sliceSize
-                        }
+            if (mob["isBoss"]) {
+                if (settings["showBosses"]) {
+                    if (mob["mode"] != 0 and mob["mode"] != 12) {
+                        ;WriteLog("Boss: " mob["textTitle"])
+                        textx := mobx-(bossDotSize/2) - 75
+                        texty := moby-(bossDotSize/2) - 100
+                        bossTextColor := "ff" . settings["bossColor"] 
+                        Options = x%textx% y%texty% Center vBottom cffff0000 r8 s24
+                        Gdip_TextToGraphics(G, mob["textTitle"], Options, diabloFont, 160, 100)
+                        Gdip_DrawEllipse(G, pPenBoss, mobx-(bossDotSize/2), moby-(bossDotSize/2), bossDotSize, bossDotSize/2)
                     }
-                    
-                    Gdip_DrawEllipse(G, pPenNormal, mobx-(normalDotSize/2), moby-(normalDotSize/1.5), normalDotSize, normalDotSize/2)
-
-                }
-                
-            }
-        }
-    }
-
-    ; having this in a separate loop forces it to be drawn on top
-    for index, mob in mobs
-    {
-        
-        mobx := ((mob["x"] - imageData["mapOffsetX"]) * serverScale) + padding
-        moby := ((mob["y"] - imageData["mapOffsetY"]) * serverScale) + padding
-        correctedPos := correctPos(settings, mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-        mobx := correctedPos["x"]
-        moby := correctedPos["y"]
-        if (mob["isBoss"]) {
-            if (settings["showBosses"]) {
-                if (mob["mode"] != 0 and mob["mode"] != 12) {
-                    ;WriteLog("Boss: " mob["textTitle"])
-                    textx := mobx-(bossDotSize/2) - 75
-                    texty := moby-(bossDotSize/2) - 100
-                    bossTextColor := "ff" . settings["bossColor"] 
-                    Options = x%textx% y%texty% Center vBottom cffff0000 r8 s24
-                    Gdip_TextToGraphics(G, mob["textTitle"], Options, diabloFont, 160, 100)
-                    Gdip_DrawEllipse(G, pPenBoss, mobx-(bossDotSize/2), moby-(bossDotSize/2), bossDotSize, bossDotSize/2)
                 }
             }
-        }
-        else if (mob["isUnique"]) {
-            if (settings["showUniqueMobs"]) {
-                if (mob["mode"] != 0 and mob["mode"] != 12) { ; not dead
-                    ;WriteLog("Unique: " mob["textTitle"])
-                    
-                    if (settings["showImmunities"]) {
-                        immunities := mob["immunities"]
-                        noImmunities := immunities["physical"] + immunities["magic"] + immunities["fire"] + immunities["light"] + immunities["cold"] + immunities["poison"]
-                        sliceSize := 360 / noImmunities
-                        angleDegrees := 90
-                        ;WriteLog(mob["txtFileNo"] " " immunities["fire"] immunities["light"] immunities["cold"] immunities["poison"])
-                        ;txtFileNo := mob["txtFileNo"]
-                        ;WriteLog("noImmunities: " noImmunities ", txtFileNo: " txtFileNo ", " immunities["physical"] immunities["magic"] immunities["fire"] immunities["light"] immunities["cold"] immunities["poison"])
-                        if (immunities["physical"]) {
-                            
-                            Gdip_DrawPie(G, pPenPhysical, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
-                            angleDegrees := angleDegrees + sliceSize
+            else if (mob["isUnique"]) {
+                if (settings["showUniqueMobs"]) {
+                    if (mob["mode"] != 0 and mob["mode"] != 12) { ; not dead
+                        ;WriteLog("Unique: " mob["textTitle"])
+                        
+                        if (settings["showImmunities"]) {
+                            immunities := mob["immunities"]
+                            noImmunities := immunities["physical"] + immunities["magic"] + immunities["fire"] + immunities["light"] + immunities["cold"] + immunities["poison"]
+                            sliceSize := 360 / noImmunities
+                            angleDegrees := 90
+                            ;WriteLog(mob["txtFileNo"] " " immunities["fire"] immunities["light"] immunities["cold"] immunities["poison"])
+                            ;txtFileNo := mob["txtFileNo"]
+                            ;WriteLog("noImmunities: " noImmunities ", txtFileNo: " txtFileNo ", " immunities["physical"] immunities["magic"] immunities["fire"] immunities["light"] immunities["cold"] immunities["poison"])
+                            if (immunities["physical"]) {
+                                
+                                Gdip_DrawPie(G, pPenPhysical, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
+                                angleDegrees := angleDegrees + sliceSize
+                            }
+                            if (immunities["magic"]) {
+                                Gdip_DrawPie(G, pPenMagic, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
+                                angleDegrees := angleDegrees + sliceSize
+                            }
+                            if (immunities["fire"]) {
+                                Gdip_DrawPie(G, pPenFire, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
+                                angleDegrees := angleDegrees + sliceSize
+                            }
+                            if (immunities["light"]) {
+                                Gdip_DrawPie(G, pPenLight, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
+                                angleDegrees := angleDegrees + sliceSize
+                            }
+                            if (immunities["cold"]) {
+                                Gdip_DrawPie(G, pPenCold, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
+                                angleDegrees := angleDegrees + sliceSize
+                            }
+                            if (immunities["poison"]) {
+                                Gdip_DrawPie(G, pPenPoison, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
+                                angleDegrees := angleDegrees + sliceSize
+                            }
                         }
-                        if (immunities["magic"]) {
-                            Gdip_DrawPie(G, pPenMagic, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
-                            angleDegrees := angleDegrees + sliceSize
-                        }
-                        if (immunities["fire"]) {
-                            Gdip_DrawPie(G, pPenFire, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
-                            angleDegrees := angleDegrees + sliceSize
-                        }
-                        if (immunities["light"]) {
-                            Gdip_DrawPie(G, pPenLight, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
-                            angleDegrees := angleDegrees + sliceSize
-                        }
-                        if (immunities["cold"]) {
-                            Gdip_DrawPie(G, pPenCold, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
-                            angleDegrees := angleDegrees + sliceSize
-                        }
-                        if (immunities["poison"]) {
-                            Gdip_DrawPie(G, pPenPoison, mobx-(uniqueImmunitySize/2), moby-(uniqueImmunitySize/2), uniqueImmunitySize, uniqueImmunitySize/2, angleDegrees, sliceSize)
-                            angleDegrees := angleDegrees + sliceSize
-                        }
+                        Gdip_DrawEllipse(G, pPenUnique, mobx-(uniqueDotSize/2), moby-(uniqueDotSize/1.5), uniqueDotSize, uniqueDotSize/2)
                     }
-                    Gdip_DrawEllipse(G, pPenUnique, mobx-(uniqueDotSize/2), moby-(uniqueDotSize/1.5), uniqueDotSize, uniqueDotSize/2)
                 }
             }
         }
-    }
-    
-    Gdip_DeletePen(pPenBoss)
-    Gdip_DeletePen(pPenNormal)
-    Gdip_DeletePen(pPenUnique)
-    Gdip_DeletePen(pPenDead)
-    
-    Gdip_DeletePen(pPenPhysical)
-    Gdip_DeletePen(pPenMagic)
-    Gdip_DeletePen(pPenFire)
-    Gdip_DeletePen(pPenLight)
-    Gdip_DeletePen(pPenCold)
-    Gdip_DeletePen(pPenPoison)
+        Gdip_DeletePen(pPenPhysical)
+        Gdip_DeletePen(pPenMagic)
+        Gdip_DeletePen(pPenFire)
+        Gdip_DeletePen(pPenLight)
+        Gdip_DeletePen(pPenCold)
+        Gdip_DeletePen(pPenPoison)
 
-    
-    ; draw way point line
-    if (settings["showWaypointLine"]) {
-        ;WriteLog(settings["showWaypointLine"])
-        waypointHeader := imageData["waypoint"]
-        if (waypointHeader) {
-            wparray := StrSplit(waypointHeader, ",")
-            waypointX := (wparray[1] * serverScale) + padding
-            wayPointY := (wparray[2] * serverScale) + padding
-            correctedPos := correctPos(settings, waypointX, wayPointY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-            waypointX := correctedPos["x"]
-            wayPointY := correctedPos["y"]
-            pPen := Gdip_CreatePen(0x55ffFF00, 3)
-            Gdip_DrawLine(G, pPen, xPosDot, yPosDot, waypointX, wayPointY)
-            Gdip_DeletePen(pPen)
+        Gdip_DeletePen(pPenBoss)
+        Gdip_DeletePen(pPenNormal)
+        Gdip_DeletePen(pPenUnique)
+        Gdip_DeletePen(pPenDead)
+        Gdip_DeletePen(pPenMerc)
+    }
+
+    ; draw lines
+    if (settings["showWaypointLine"] or settings["showNextExitLine"] or settings["showBossLine"]) {
+        ; draw way point line
+        if (settings["showWaypointLine"]) {
+            ;WriteLog(settings["showWaypointLine"])
+            waypointHeader := imageData["waypoint"]
+            if (waypointHeader) {
+                wparray := StrSplit(waypointHeader, ",")
+                waypointX := (wparray[1] * serverScale) + padding
+                wayPointY := (wparray[2] * serverScale) + padding
+                correctedPos := correctPos(settings, waypointX, wayPointY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                waypointX := correctedPos["x"]
+                wayPointY := correctedPos["y"]
+                pPen := Gdip_CreatePen(0x55ffFF00, 3)
+                Gdip_DrawLine(G, pPen, xPosDot, yPosDot, waypointX, wayPointY)
+                Gdip_DeletePen(pPen)
+            }
         }
-    }
 
-    ; ;draw exit lines
-    if (settings["showNextExitLine"]) {
-        exitsHeader := imageData["exits"]
-        if (exitsHeader) {
-            Loop, parse, exitsHeader, `|
-            {
-                exitArray := StrSplit(A_LoopField, ",")
-                ;exitArray[1] ; id of exit
-                ;exitArray[2] ; name of exit
-                exitX := (exitArray[3] * serverScale) + padding
-                exitY := (exitArray[4] * serverScale) + padding
-                correctedPos := correctPos(settings, exitX, exitY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-                exitX := correctedPos["x"]
-                exitY := correctedPos["y"]
+        ; ;draw exit lines
+        if (settings["showNextExitLine"]) {
+            exitsHeader := imageData["exits"]
+            if (exitsHeader) {
+                Loop, parse, exitsHeader, `|
+                {
+                    exitArray := StrSplit(A_LoopField, ",")
+                    ;exitArray[1] ; id of exit
+                    ;exitArray[2] ; name of exit
+                    exitX := (exitArray[3] * serverScale) + padding
+                    exitY := (exitArray[4] * serverScale) + padding
+                    correctedPos := correctPos(settings, exitX, exitY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                    exitX := correctedPos["x"]
+                    exitY := correctedPos["y"]
 
-                ; only draw the line if it's a 'next' exit
-                if (isNextExit(gameMemoryData["levelNo"]) == exitArray[1]) {
-                    pPen := Gdip_CreatePen(0x55FF00FF, 3)
-                    Gdip_DrawLine(G, pPen, xPosDot, yPosDot, exitX, exitY)
+                    ; only draw the line if it's a 'next' exit
+                    if (isNextExit(gameMemoryData["levelNo"]) == exitArray[1]) {
+                        pPen := Gdip_CreatePen(0x55FF00FF, 3)
+                        Gdip_DrawLine(G, pPen, xPosDot, yPosDot, exitX, exitY)
+                        Gdip_DeletePen(pPen)
+                    }
+                }
+            }
+        }
+
+        ; ;draw boss lines
+        if (settings["showBossLine"]) {
+            bossHeader := imageData["bosses"]
+            if (bossHeader) {
+                bossArray := StrSplit(bossHeader, ",")
+                ;bossArray[1] ; name of boss
+                bossX := (bossArray[2] * serverScale) + padding
+                bossY := (bossArray[3] * serverScale) + padding
+                correctedPos := correctPos(settings, bossX, bossY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                bossX := correctedPos["x"]
+                bossY := correctedPos["y"]
+
+                pPen := Gdip_CreatePen(0x55FF0000, 3)
+                Gdip_DrawLine(G, pPen, xPosDot, yPosDot, bossX, bossY)
+                Gdip_DeletePen(pPen)
+            }
+        }
+
+        ; ;draw quest lines
+        if (settings["showQuestLine"]) {
+            
+            questsHeader := imageData["quests"]
+            
+            if (questsHeader) {
+                Loop, parse, questsHeader, `|
+                {
+                    questsArray := StrSplit(A_LoopField, ",")
+                    ;questsArray[1] ; name of quest
+                    questX := (questsArray[2] * serverScale) + padding
+                    questY := (questsArray[3] * serverScale) + padding
+                    correctedPos := correctPos(settings, questX, questY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                    questX := correctedPos["x"]
+                    questY := correctedPos["y"]
+
+                    pPen := Gdip_CreatePen(0x5500FF00, 3)
+                    Gdip_DrawLine(G, pPen, xPosDot, yPosDot, questX, questY)
                     Gdip_DeletePen(pPen)
                 }
-            }
-        }
-    }
-
-    ; ;draw boss lines
-    if (settings["showBossLine"]) {
-        bossHeader := imageData["bosses"]
-        if (bossHeader) {
-            bossArray := StrSplit(bossHeader, ",")
-            ;bossArray[1] ; name of boss
-            bossX := (bossArray[2] * serverScale) + padding
-            bossY := (bossArray[3] * serverScale) + padding
-            correctedPos := correctPos(settings, bossX, bossY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-            bossX := correctedPos["x"]
-            bossY := correctedPos["y"]
-
-            pPen := Gdip_CreatePen(0x55FF0000, 3)
-            Gdip_DrawLine(G, pPen, xPosDot, yPosDot, bossX, bossY)
-            Gdip_DeletePen(pPen)
-        }
-    }
-
-
-
-    ; ;draw quest lines
-    if (settings["showQuestLine"]) {
-        
-        questsHeader := imageData["quests"]
-        
-        if (questsHeader) {
-            Loop, parse, questsHeader, `|
-            {
-                questsArray := StrSplit(A_LoopField, ",")
-                ;questsArray[1] ; name of quest
-                questX := (questsArray[2] * serverScale) + padding
-                questY := (questsArray[3] * serverScale) + padding
-                correctedPos := correctPos(settings, questX, questY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-                questX := correctedPos["x"]
-                questY := correctedPos["y"]
-
-                pPen := Gdip_CreatePen(0x5500FF00, 3)
-                Gdip_DrawLine(G, pPen, xPosDot, yPosDot, questX, questY)
-                Gdip_DeletePen(pPen)
             }
         }
     }
@@ -380,28 +484,28 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
         Gdip_DeletePen(pPen)    
     }
 
-    ; draw item alerts
-    runeColor := 0xcc . settings["runeItemColor"] 
-    uniqueColor := 0xcc . settings["uniqueItemColor"] 
-    setColor := 0xcc . settings["setItemColor"] 
-    charmItemColor := 0xcc . settings["charmItemColor"] 
-    jewelItemColor := 0xcc . settings["jewelItemColor"] 
-    baseItemColor := 0xcc . settings["baseItemColor"] 
-    pPenRune := Gdip_CreatePen(runeColor, 12)
-    pPenRune2 := Gdip_CreatePen(0xccffffff, 8)
-    pPenUnique := Gdip_CreatePen(uniqueColor, 12)
-    pPenUnique2 := Gdip_CreatePen(0xccffffff, 8)
-    pPenSetItem := Gdip_CreatePen(setColor, 12)
-    pPenSetItem2 := Gdip_CreatePen(0xccffffff, 8)
-    pPenCharm := Gdip_CreatePen(charmItemColor, 12)
-    pPenCharm2 := Gdip_CreatePen(0xccffffff, 8)
-    pPenJewel := Gdip_CreatePen(jewelItemColor, 12)
-    pPenJewel2 := Gdip_CreatePen(0xccffffff, 8)
-    pPenBaseItem := Gdip_CreatePen(baseItemColor, 12)
-    pPenBaseItem2 := Gdip_CreatePen(0xccffffff, 8)
     ; show items
-    
     if (settings["showUniqueAlerts"] or settings["showSetItemAlerts"] or settings["showRuneAlerts"] or settings["showJewelAlerts"] or settings["showCharmAlerts"]) {
+
+        ; draw item alerts
+        runeColor := 0xcc . settings["runeItemColor"] 
+        uniqueColor := 0xcc . settings["uniqueItemColor"] 
+        setColor := 0xcc . settings["setItemColor"] 
+        charmItemColor := 0xcc . settings["charmItemColor"] 
+        jewelItemColor := 0xcc . settings["jewelItemColor"]
+        baseItemColor := 0xcc . settings["baseItemColor"]
+        pPenRune := Gdip_CreatePen(runeColor, 12)
+        pPenRune2 := Gdip_CreatePen(0xccffffff, 8)
+        pPenUnique := Gdip_CreatePen(uniqueColor, 12)
+        pPenUnique2 := Gdip_CreatePen(0xccffffff, 8)
+        pPenSetItem := Gdip_CreatePen(setColor, 12)
+        pPenSetItem2 := Gdip_CreatePen(0xccffffff, 8)
+        pPenCharm := Gdip_CreatePen(charmItemColor, 12)
+        pPenCharm2 := Gdip_CreatePen(0xccffffff, 8)
+        pPenJewel := Gdip_CreatePen(jewelItemColor, 12)
+        pPenJewel2 := Gdip_CreatePen(0xccffffff, 8)
+        pPenBaseItem := Gdip_CreatePen(baseItemColor, 12)
+        pPenBaseItem2 := Gdip_CreatePen(0xccffffff, 8)
         items := gameMemoryData["items"]
         for index, item in items
         {
@@ -478,15 +582,15 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                 }
             }
         }
+        Gdip_DeletePen(pPenRune)
+        Gdip_DeletePen(pPenRune2)
+        Gdip_DeletePen(pPenUnique)
+        Gdip_DeletePen(pPenUnique2)
+        Gdip_DeletePen(pPenSetItem)
+        Gdip_DeletePen(pPenSetItem2)
     }
-    Gdip_DeletePen(pPenRune)
-    Gdip_DeletePen(pPenRune2)
-    Gdip_DeletePen(pPenUnique)
-    Gdip_DeletePen(pPenUnique2)
-    Gdip_DeletePen(pPenSetItem)
-    Gdip_DeletePen(pPenSetItem2)
 
-    ; draw other players
+    ; draw Shrines
     if (settings["showShrines"]) {
         gameObjects := gameMemoryData["objects"]
         shrineColor := "ff" . settings["shrineColor"]
@@ -571,11 +675,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
     ElapsedTime := A_TickCount - StartTime
     ;ToolTip % "`n`n`n`n" ElapsedTime
     ;WriteLog("Draw players " ElapsedTime " ms taken")
-    
-    ; SelectObject(hdc, obm)
-    ; DeleteObject(hbm)
-    ; DeleteDC(hdc)
-    ; Gdip_DeleteGraphics(G)
+
     
 }
 

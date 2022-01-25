@@ -41,7 +41,7 @@ WriteLog("*******************************************************************")
 WriteLog("Version: " expectedVersion)
 WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyVW3uj")
 ClearCache(A_Temp)
-readSettings(settings.ini, settings)
+readSettings("settings.ini", settings)
 
 lastlevel:=""
 lastSeed:=""
@@ -241,7 +241,7 @@ While 1 {
 
                 scaledWidth := uiData["scaledWidth"]
                 scaledHeight := uiData["scaledHeight"]
-                
+
                 SelectObject(hdc, obm)
                 DeleteObject(hbm)
                 DeleteDC(hdc)
@@ -257,9 +257,9 @@ While 1 {
             ; update player layer on each loop
             uiData["ticktock"] := ticktock
             ; update player layer on each loop
-            
+
             ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
-            
+
             if (settings["centerMode"]) {
                 MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData, uiData)
             }
@@ -345,7 +345,7 @@ unHideMap() {
     session.saveEntry()
     ExitApp
 }
-
+return
 
 MapAlwaysShow:
 {
@@ -445,7 +445,7 @@ MapSizeDecrease:
         if (levelNo and not settings["centerMode"]) {
             levelxmargin := levelxmargin + 25
             IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
-            redrawMap := 1     
+            redrawMap := 1
         }
         return
     }

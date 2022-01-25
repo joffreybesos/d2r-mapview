@@ -27,6 +27,12 @@ ReadItems(d2rprocess, startingOffset, ByRef items) {
 
                     ; itemQuality - 5 is set, 7 is unique (6 rare, 4, magic)
                     itemQuality := d2rprocess.read(pUnitData, "UInt")
+
+                    ;isRune := false
+                    isGem := false
+                    if ((txtFileNo >= 557 and txtFileNo <= 586) or (txtFileNo >= 597 and txtFileNo <= 601)) {
+                        isGem:= true
+                    }
                     isRune := false
                     if (txtFileNo >= 629 and txtFileNo <= 642) {
                         isRune:= true
@@ -55,7 +61,7 @@ ReadItems(d2rprocess, startingOffset, ByRef items) {
                     name := getItemName(txtFileNo)
                     isBaseItem := isBaseItem(name, numSockets, itemQuality)
                     textToSpeech := formatName(name, numSockets, itemQuality)
-                    item := {"txtFileNo": txtFileNo, "name": name, "itemLoc": itemLoc, "itemQuality": itemQuality, "isRune": isRune, "itemx": itemx, "itemy": itemy, "numSockets": numSockets, "isBaseItem": isBaseItem, "hash": itemHash, "textToSpeech": textToSpeech }
+                    item := {"txtFileNo": txtFileNo, "name": name, "itemLoc": itemLoc, "itemQuality": itemQuality, "isGem": isGem, "isRune": isRune, "itemx": itemx, "itemy": itemy, "numSockets": numSockets, "isBaseItem": isBaseItem, "hash": itemHash, "textToSpeech": textToSpeech }
                     ;WriteLog("txtFileNo: " txtFileNo ", name: " name ", itemLoc: " itemLoc ", itemQuality: " itemQuality ", isRune: " isRune ", itemx: " itemx ", itemy: " itemy)
                     items.push(item)
                 }
@@ -68,8 +74,9 @@ ReadItems(d2rprocess, startingOffset, ByRef items) {
 
 formatName(itemName, numSockets, itemQuality) {
     quality := getQuality(itemQuality)
-    ;if (quality == "Normal") quality := ""
-    
+    if (quality == "Normal")
+        quality := ""
+
     sockets := ""
     if (numSockets > 0) {
         sockets := numSockets " sockets"

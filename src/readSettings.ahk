@@ -58,10 +58,13 @@ readSettings(settingsFile, ByRef settings) {
     settings["normalMobColor"] := "FFFFFF"
     settings["uniqueMobColor"] := "D4AF37"
     settings["bossColor"] := "FF0000"
+    settings["mercColor"] := "00FFFF"
     settings["deadColor"] := "000000"
-    settings["normalDotSize"] := "5"
-    settings["normalImmunitySize"] := "8"
-    settings["uniqueDotSize"] := "8"
+    settings["showMercs"] := 0
+
+    settings["normalDotSize"] := "4"
+    settings["normalImmunitySize"] := "7"
+    settings["uniqueDotSize"] := "7"
     settings["uniqueImmunitySize"] := "14"
     settings["deadDotSize"] := "2"
     settings["bossDotSize"] := "5"
@@ -100,14 +103,33 @@ readSettings(settingsFile, ByRef settings) {
     settings["enableD2ML"] := 0
     settings["windowTitle"] := "D2R:main"
     settings["debug"] := 0
+    
+    settings["showPlayerMissiles"] := 1
+    settings["showEnemyMissiles"] := 1
+    settings["missileOpacity"] := "0x77"
+    settings["missileColorPhysicalMajor"] := "FFC2C2"
+    settings["missileColorPhysicalMinor"] := "C99D9D"
+    settings["missileFireMajorColor"] := "FF0000"
+    settings["missileFireMinorColor"] := "C20000"
+    settings["missileIceMajorColor"] := "00D0FF"
+    settings["missileIceMinorColor"] := "00D0FF"
+    settings["missileLightMajorColor"] := "FFFF00"
+    settings["missileLightMinorColor"] := "A3A300"
+    settings["missilePoisonMajorColor"] := "00FF00"
+    settings["missilePoisonMinorColor"] := "009C00"
+    settings["missileMagicMajorColor"] := "FF7300"
+    settings["missileMagicMinorColor"] := "B35000"
+
+    settings["missileMajorDotSize"] := "4"
+    settings["missileMinorDotSize"] := "2"
 
     ; read from the ini file and overwrite any of the above values
-    IniRead, sectionNames, settings.ini
+    IniRead, sectionNames, %settingsFile%
     Loop, Parse, sectionNames , `n
     {
         
         thisSection := A_LoopField
-        IniRead, OutputVarSection, settings.ini, %thisSection%
+        IniRead, OutputVarSection, %settingsFile%, %thisSection%
         Loop, Parse, OutputVarSection , `n
         {
             valArr := StrSplit(A_LoopField,"=")

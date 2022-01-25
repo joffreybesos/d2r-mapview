@@ -4,6 +4,7 @@
 #Include %A_ScriptDir%\memory\readMobs.ahk
 #Include %A_ScriptDir%\memory\readItems.ahk
 #Include %A_ScriptDir%\memory\readObjects.ahk
+#Include %A_ScriptDir%\memory\readMissiles.ahk
 #Include %A_ScriptDir%\memory\readUI.ahk
 
 #Include %A_ScriptDir%\include\logging.ahk
@@ -107,6 +108,19 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
         ReadMobs(d2rprocess, startingOffset, mobs)
     }
 
+    ; missiles
+    missiles:=[]
+    ; PlayerMissiles
+    if (settings["showPlayerMissiles"]){
+        playerMissiles := readMissiles(d2rprocess, startingOffset + (6 * 1024))
+        missiles.push(playerMissiles)
+    }
+    ; EnemyMissiles
+    if (settings["showEnemyMissiles"]){
+        enemyMissiles := readMissiles(d2rprocess, startingOffset)
+        missiles.push(enemyMissiles)
+    }
+
     ; get items
     if (settings["showUniqueAlerts"] or settings["showSetItemAlerts"] or settings["showRuneAlerts"] or settings["showJewelAlerts"] or settings["showCharmAlerts"] or settings["showBaseItems"]) {
         ReadItems(d2rprocess, startingOffset, items)
@@ -135,7 +149,7 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     if (!xPos) {
         WriteLog("Did not find player position at player offset " playerOffset) 
     }
-    gameMemoryData := {"gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName, "experience": experience, "playerLevel": playerLevel, "menuShown": menuShown }
+    gameMemoryData := {"gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "missiles": missiles, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName, "experience": experience, "playerLevel": playerLevel, "menuShown": menuShown }
     ElapsedTime := A_TickCount - StartTime
     ;ToolTip % "`n`n`n`n" ElapsedTime
 }

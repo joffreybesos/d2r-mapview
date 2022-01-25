@@ -62,6 +62,8 @@ global diabloFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
 global mapLoading := 0
 global seenItems := []
 global oSpVoice := ComObjCreate("SAPI.SpVoice")
+global centerLeftOffset := 0
+global centerTopOffset := 0
 switchMapModeKey := settings["switchMapMode"]
 Hotkey, IfWinActive, ahk_exe D2R.exe
 Hotkey, %switchMapModeKey%, SwitchMapMode
@@ -246,8 +248,9 @@ While 1 {
                 DeleteObject(hbm)
                 DeleteDC(hdc)
                 Gdip_DeleteGraphics(G)
-        
-                hbm := CreateDIBSection(scaledWidth, scaledHeight)
+                WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
+                
+                hbm := CreateDIBSection(1200, 800)
                 hdc := CreateCompatibleDC()
                 obm := SelectObject(hdc, hbm)
                 
@@ -510,3 +513,5 @@ MapSizeDecrease:
         debug := !debug
     }
 return
+
+~Del::Reload

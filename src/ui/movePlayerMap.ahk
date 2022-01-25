@@ -74,7 +74,8 @@ MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData
 
 
     WinMove, ahk_id %mapHwnd1%,, leftMargin + (leftDiff/2), topMargin + (topDiff/2)
-    WinMove, ahk_id %unitHwnd1%,, leftMargin + (leftDiff/2), topMargin + (topDiff/2)
+    ;WinMove, ahk_id %unitHwnd1%,, leftMargin + (leftDiff/2), topMargin + (topDiff/2)
+    WinMove, ahk_id %unitHwnd1%,, 1320, 400
     lastLeftMargin := leftMargin
     lastTopMargin := topMargin
 

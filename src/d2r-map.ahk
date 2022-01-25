@@ -4,6 +4,7 @@ SendMode Input
 SetWinDelay, 0
 SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\logging.ahk
+#Include %A_ScriptDir%\include\Yaml.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk
 #Include %A_ScriptDir%\memory\scanForPlayer.ahk
 #Include %A_ScriptDir%\memory\readGameMemory.ahk
@@ -101,6 +102,8 @@ if (not WinExist(gameWindowId)) {
     Msgbox, 48, d2r-mapview, Did not find D2R game window`nGame must be started before running this program`n`nOtherwise check for errors in log.txt`nAlso try running both D2R and this program as admin`n`nExiting....
     ExitApp
 }
+
+
 
 ; initialise memory reading
 d2rprocess := initMemory(gameWindowId)

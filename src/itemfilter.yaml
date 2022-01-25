@@ -1,0 +1,152 @@
+sounds:
+	rune: rune.wav
+	triplerune: triple_rune_alert.wav
+	jewel: haha.wav
+	charm: charmdrop.wav
+	beep: beep.wav
+	ammy: ammy.wav
+	goodsetitem: beep.wav
+	
+colors:
+	runecolor: #FFa700
+	charmcolor: #6D6DFF
+	jewelcolor: #6D6DFF
+	basecolor: #AAAAAA
+	uniquecolor: #BBA45B
+	rarecolor: #FFFF00
+	setcolor: #00FC00
+	magiccolor: #6D6DFF
+	bonuscolor: #ff00ff
+
+# Alerts are applied in the order listed here
+# To disable an alert, remove it from this list
+# As soon as an item matches an alert, any alerts ranked underneath won't be checked
+enabledAlerts:
+	- UniqueRingsAndAmmys
+	- SpecificSetItemsAlert
+	- BaseItems
+	- AllUniqueItems
+	- AllSetItems
+	- Jewels
+	- Charms
+
+##############################################
+#### Define all alerts below this section ####
+##############################################
+
+# This is the format:
+#<AlertName>:
+#  quality:
+#   - <quality> List all qualities that you want to include, Inferior, Normal, Magic, Rare, Unique, Set
+#  item:
+#   - <item name> List only the item name, you CANNOT list the name of the actual Unique e.g. String of Ears
+#   xsockets:
+#     - <item name> You can list items under xsockets if you want to contrict items for a specific number of sockets
+#  sound: <from sound file list at top>  # sound that plays when item is seen on ground
+#  color: <from list of colors at top>   # color of alert on the screen
+
+
+# just unique rings and ammys
+UniqueRingsAndAmmys:
+	quality:
+		- "Unique"
+	item:
+		- "Ring"
+		- "Amulet"
+	sound: ammy
+	color: uniquecolor
+
+# specific set items give a different alert
+SpecificSetItemsAlert:
+	quality:
+		- "Set"
+	color: setcolor
+	items:
+		- Lacquered Plate   # Tal Rasha's Guardianship
+		- Death Mask        # Tal Rasha's Horadric Crest
+		- Mesh Belt         # Tal Rasha's Fine Spun Cloth
+		- Sacred Armor      # Immortal King
+		- Heavy Bracers     # Trang-Oul's Claws
+		- Winged Helm       # Guillaume's Face
+		- Russet Armor      # Aldur's Advance
+		- Swirling Crystal  # Tal Rasha's Lidless Eye
+		- Ring
+		- Amulet
+	sound: goodsetitem
+	color: setcolor
+
+# base items
+BaseItems:
+	quality:
+		- "Normal"
+		- "Superior"
+	items:
+		3sockets:
+			- Aerin Shield
+			- Akaran Rondache
+			- Akaran Targe
+			- Bone Visage
+			- Circlet
+			- Coronet
+			- Crystal Sword
+			- Diadem
+			- Heraldic Shield
+			- Mage Plate
+			- Phase Blade
+			- Rondache
+			- Sacred Rondache
+			- Sacred Targe
+			- Targe
+			- Wyrmhide
+		4sockets:
+			- Archon Plate
+			- Colossus Voulge
+			- Crystal Sword
+			- Dusk Shroud
+			- Flail
+			- Giant Thresher
+			- Heraldic Shield
+			- Long Sword
+			- Monarch
+			- Phase Blade
+			- Thresher
+			- Wyrmhide
+		5sockets:
+			- Crystal Sword
+			- Flail
+			- Phase Blade
+	sound: beep
+	color: basecolor
+
+# all uniques
+AllUniqueItems:
+	quality:
+		- "Unique"
+	sound: beep
+	color: uniquecolor
+
+# all set items
+AllSetItems:
+	quality:
+		- "Set"
+	color: setcolor
+
+Jewels:
+	quality:
+		- "Magic"
+		- "Rare"
+		- "Unique"
+	item:
+		- "Jewel"
+	soundeffect: jewel
+	alertcolor: jewelcolor
+	
+Charms:
+	quality:
+		- magic
+		- rare
+		- unique
+	soundeffect: charm
+	alertcolor: charmcolor
+
+

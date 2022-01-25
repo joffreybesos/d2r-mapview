@@ -8,6 +8,7 @@ readSettings(settingsFile, ByRef settings) {
 
     ; these are the default values
     settings := []
+    settings["settingsFile"] := settingsFile
     settings["baseUrl"] := "http://map.d2r-mapview.xyz:8080"
     settings["scale"] := "1.000000"
     settings["leftMargin"] := "20"

@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.1] - 2021-01-25 - Missiles
+
+- Player and enemy missles now show on the map (thanks @tthreeoh!)
+- Color, size, and opacity of missiles is also configurable
+- You'll see cold, ice, fire etc each have their own color.
+- Can be turned off with `showPlayerMissiles=false` and `showEnemyMissiles=false`
+
+Other changes:
+
+- The dot size of monters now scale larger when in centered mode
+- Fixed bug where text to speech would cause the MH to pause while speaking
+- Fixed bug where alert sound didn't play if text to speech was disabled
+
 ## [2.5.0] - 2021-01-24 - Speech to Text
 
 - Items dropped on ground now give an audio description

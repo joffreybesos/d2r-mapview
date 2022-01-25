@@ -783,18 +783,19 @@ getPosFromAngle(x1,y1,len,ang){
 
 
 announceItem(settings, item) {
-    if (settings["textToSpeech"]) {
+    if (settings["textToSpeech"] or settings["itemSoundEffect"]) {
         if (!hasVal(seenItems, item["hash"])) {
             ; seen item for the first time
-            volume := settings["textToSpeechVolume"]
-            pitch := settings["textToSpeechPitch"]
-            speed := settings["textToSpeechSpeed"]
+            if (settings["textToSpeech"]) {
+                volume := settings["textToSpeechVolume"]
+                pitch := settings["textToSpeechPitch"]
+                speed := settings["textToSpeechSpeed"]
+                oSpVoice.Speak("<pitch absmiddle=""" pitch """><rate absspeed=""" speed """><volume level=""" volume """>" item["textToSpeech"] "</volume></rate></pitch>", 1)
+            }
             if (settings["itemSoundEffect"]) {
                 soundfile := settings["itemSoundEffect"]
                 SoundPlay, %soundfile%
             }
-
-            ComObjCreate("SAPI.SpVoice").Speak("<pitch absmiddle=""" pitch """><rate absspeed=""" speed """><volume level=""" volume """>" item["textToSpeech"] "</volume></rate></pitch>")
             seenItems.push(item["hash"])
         }
     }

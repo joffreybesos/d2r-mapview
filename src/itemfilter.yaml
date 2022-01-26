@@ -8,22 +8,22 @@ sounds:
 	goodsetitem: beep.wav
 	
 colors:
-	runecolor: #FFa700
-	charmcolor: #6D6DFF
-	jewelcolor: #6D6DFF
-	basecolor: #AAAAAA
-	uniquecolor: #BBA45B
-	rarecolor: #FFFF00
-	setcolor: #00FC00
-	magiccolor: #6D6DFF
-	bonuscolor: #ff00ff
+	runecolor: FFa700
+	charmcolor: 6D6DFF
+	jewelcolor: 6D6DFF
+	basecolor: AAAAAA
+	uniquecolor: BBA45B
+	rarecolor: FFFF00
+	setcolor: 00FC00
+	magiccolor: 6D6DFF
+	bonuscolor: ff00ff
 
 # Alerts are applied in the order listed here
 # To disable an alert, remove it from this list
 # As soon as an item matches an alert, any alerts ranked underneath won't be checked
 enabledAlerts:
 	- UniqueRingsAndAmmys
-	- SpecificSetItemsAlert
+	- SpecificSetItems
 	- BaseItems
 	- AllUniqueItems
 	- AllSetItems
@@ -35,118 +35,123 @@ enabledAlerts:
 ##############################################
 
 # This is the format:
-#<AlertName>:
+#<AlertName>:     # The alertname can be whatever you like
 #  quality:
 #   - <quality> List all qualities that you want to include, Inferior, Normal, Magic, Rare, Unique, Set
+#               If you don't specify any qualities, then ALL qualities will be accepted
 #  item:
-#   - <item name> List only the item name, you CANNOT list the name of the actual Unique e.g. String of Ears
-#   xsockets:
-#     - <item name> You can list items under xsockets if you want to contrict items for a specific number of sockets
+#   - <item name> List only the item name, you CANNOT list the name of the actual Unique e.g. 'String of Ears'
+#                 You can add number of sockets such as "Death Mask, 2" for 2 sockets. If you don't specify
+#                 number of sockets then any amount of sockets will be accepted.
 #  sound: <from sound file list at top>  # sound that plays when item is seen on ground
 #  color: <from list of colors at top>   # color of alert on the screen
+#  speak: true/false                     # set to true to suppress text to speech, defaults to true
 
+# Only the first matching alert will be applied
 
-# just unique rings and ammys
-UniqueRingsAndAmmys:
-	quality:
-		- "Unique"
-	item:
-		- "Ring"
-		- "Amulet"
-	sound: ammy
-	color: uniquecolor
+Alerts:
+	# just unique rings and ammys
+	UniqueRingsAndAmmys:
+		quality:
+			- Unique
+		items:
+			- Ring
+			- Amulet
+		sound: ammy
+		color: uniquecolor
+		speak: false
 
-# specific set items give a different alert
-SpecificSetItemsAlert:
-	quality:
-		- "Set"
-	color: setcolor
-	items:
-		- Lacquered Plate   # Tal Rasha's Guardianship
-		- Death Mask        # Tal Rasha's Horadric Crest
-		- Mesh Belt         # Tal Rasha's Fine Spun Cloth
-		- Sacred Armor      # Immortal King
-		- Heavy Bracers     # Trang-Oul's Claws
-		- Winged Helm       # Guillaume's Face
-		- Russet Armor      # Aldur's Advance
-		- Swirling Crystal  # Tal Rasha's Lidless Eye
-		- Ring
-		- Amulet
-	sound: goodsetitem
-	color: setcolor
+	# specific set items give a different alert
+	SpecificSetItems:
+		quality:
+			- Set
+		items:
+			- Lacquered Plate   # Tal Rasha's Guardianship
+			- Death Mask        # Tal Rasha's Horadric Crest
+			- Mesh Belt         # Tal Rasha's Fine Spun Cloth
+			- Sacred Armor      # Immortal King
+			- Heavy Bracers     # Trang-Oul's Claws
+			- Winged Helm       # Guillaume's Face
+			- Russet Armor      # Aldur's Advance
+			- Swirling Crystal  # Tal Rasha's Lidless Eye
+			- Ring
+			- Amulet
+		sound: goodsetitem
+		color: setcolor
 
-# base items
-BaseItems:
-	quality:
-		- "Normal"
-		- "Superior"
-	items:
-		3sockets:
-			- Aerin Shield
-			- Akaran Rondache
-			- Akaran Targe
-			- Bone Visage
-			- Circlet
-			- Coronet
-			- Crystal Sword
-			- Diadem
-			- Heraldic Shield
-			- Mage Plate
-			- Phase Blade
-			- Rondache
-			- Sacred Rondache
-			- Sacred Targe
-			- Targe
-			- Wyrmhide
-		4sockets:
-			- Archon Plate
-			- Colossus Voulge
-			- Crystal Sword
-			- Dusk Shroud
-			- Flail
-			- Giant Thresher
-			- Heraldic Shield
-			- Long Sword
-			- Monarch
-			- Phase Blade
-			- Thresher
-			- Wyrmhide
-		5sockets:
-			- Crystal Sword
-			- Flail
-			- Phase Blade
-	sound: beep
-	color: basecolor
+	# base items
+	BaseItems:
+		quality:
+			- Normal
+			- Superior
+		items:
+			- Aerin Shield, 3
+			- Akaran Rondache, 3
+			- Akaran Targe, 3
+			- Bone Visage, 3
+			- Circlet, 3
+			- Coronet, 3
+			- Crystal Sword, 3
+			- Diadem, 3
+			- Heraldic Shield, 3
+			- Mage Plate, 3
+			- Phase Blade, 3
+			- Rondache, 3
+			- Sacred Rondache, 3
+			- Sacred Targe, 3
+			- Targe, 3
+			- Wyrmhide, 3
+			- Archon Plate, 4
+			- Colossus Voulge, 4
+			- Crystal Sword, 4
+			- Dusk Shroud, 4
+			- Flail, 4
+			- Giant Thresher, 4
+			- Heraldic Shield, 4
+			- Long Sword, 4
+			- Monarch, 4
+			- Phase Blade, 4
+			- Thresher, 4
+			- Wyrmhide, 4
+			- Crystal Sword, 5
+			- Flail, 5
+			- Phase Blade, 5
+		sound: beep
+		color: basecolor
 
-# all uniques
-AllUniqueItems:
-	quality:
-		- "Unique"
-	sound: beep
-	color: uniquecolor
+	# all uniques
+	AllUniqueItems:
+		quality:
+			- Unique
+		sound: beep
+		color: uniquecolor
 
-# all set items
-AllSetItems:
-	quality:
-		- "Set"
-	color: setcolor
+	# all set items
+	AllSetItems:
+		quality:
+			- Set
+		color: setcolor
 
-Jewels:
-	quality:
-		- "Magic"
-		- "Rare"
-		- "Unique"
-	item:
-		- "Jewel"
-	soundeffect: jewel
-	alertcolor: jewelcolor
-	
-Charms:
-	quality:
-		- magic
-		- rare
-		- unique
-	soundeffect: charm
-	alertcolor: charmcolor
+	Jewels:
+		quality:
+			- Magic
+			- Rare
+			- Unique
+		items:
+			- Jewel
+		soundeffect: jewel
+		alertcolor: jewelcolor
+		
+	Charms:
+		quality:
+			- Magic
+			- Rare
+			- Unique
+		items:
+			- Small Charm
+			- Large Charm
+			- Grand Charm
+		soundeffect: charm
+		alertcolor: charmcolor
 
 

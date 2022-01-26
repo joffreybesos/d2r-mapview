@@ -412,109 +412,107 @@ MapSizeDecrease:
     return
 }
     
-    SwitchMapMode:
-    {
-        settings["centerMode"] := !settings["centerMode"]
-        lastlevel := "INVALIDATED"
+SwitchMapMode:
+{
+    settings["centerMode"] := !settings["centerMode"]
+    lastlevel := "INVALIDATED"
 
-        imageData := {}
-        gameMemoryData  := {}
-        uiData := {}
-        WinSet, Region, , ahk_id %mapHwnd1%
-        WinSet, Region, , ahk_id %unitHwnd1%
-        Gui, Map: Hide
-        Gui, Units: Hide
-        mapShowing := 0
+    imageData := {}
+    gameMemoryData  := {}
+    uiData := {}
+    WinSet, Region, , ahk_id %mapHwnd1%
+    WinSet, Region, , ahk_id %unitHwnd1%
+    Gui, Map: Hide
+    Gui, Units: Hide
+    mapShowing := 0
+    return
+}
 
-        return
+MoveMapLeft:
+{
+    SetFormat Integer, D
+    levelNo := gameMemoryData["levelNo"] + 0
+    levelxmargin := imageData["levelxmargin"] + 0
+    levelymargin := imageData["levelymargin"] + 0
+    if (levelNo and not settings["centerMode"]) {
+        levelxmargin := levelxmargin - 25
+        IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
+        redrawMap := 1
     }
-    MoveMapLeft:
-    {
-        SetFormat Integer, D
-        levelNo := gameMemoryData["levelNo"] + 0
-        levelxmargin := imageData["levelxmargin"] + 0
-        levelymargin := imageData["levelymargin"] + 0
-        if (levelNo and not settings["centerMode"]) {
-            levelxmargin := levelxmargin - 25
-            IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
-            redrawMap := 1
-        }
-        return
+    return
+}
+MoveMapRight:
+{
+    SetFormat Integer, D
+    levelNo := gameMemoryData["levelNo"] + 0
+    levelxmargin := imageData["levelxmargin"] + 0
+    levelymargin := imageData["levelymargin"] + 0
+    if (levelNo and not settings["centerMode"]) {
+        levelxmargin := levelxmargin + 25
+        IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
+        redrawMap := 1
     }
-    MoveMapRight:
-    {
-        SetFormat Integer, D
-        levelNo := gameMemoryData["levelNo"] + 0
-        levelxmargin := imageData["levelxmargin"] + 0
-        levelymargin := imageData["levelymargin"] + 0
-        if (levelNo and not settings["centerMode"]) {
-            levelxmargin := levelxmargin + 25
-            IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
-            redrawMap := 1
-        }
-        return
+    return
+}
+MoveMapUp:
+{
+    SetFormat Integer, D
+    levelNo := gameMemoryData["levelNo"] + 0
+    levelxmargin := imageData["levelxmargin"] + 0
+    levelymargin := imageData["levelymargin"] + 0
+    if (levelNo and not settings["centerMode"]) {
+        levelymargin := levelymargin - 25
+        IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
+        redrawMap := 1
     }
-    MoveMapUp:
-    {
-        SetFormat Integer, D
-        levelNo := gameMemoryData["levelNo"] + 0
-        levelxmargin := imageData["levelxmargin"] + 0
-        levelymargin := imageData["levelymargin"] + 0
-        if (levelNo and not settings["centerMode"]) {
-            levelymargin := levelymargin - 25
-            IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
-            redrawMap := 1
-        }
-        return
+    return
+}
+MoveMapDown:
+{
+    SetFormat Integer, D
+    levelNo := gameMemoryData["levelNo"] + 0
+    levelxmargin := imageData["levelxmargin"] + 0
+    levelymargin := imageData["levelymargin"] + 0
+    if (levelNo and not settings["centerMode"]) {
+        levelymargin := levelymargin + 25
+        IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
+        redrawMap := 1
     }
-    MoveMapDown:
-    {
-        SetFormat Integer, D
-        levelNo := gameMemoryData["levelNo"] + 0
-        levelxmargin := imageData["levelxmargin"] + 0
-        levelymargin := imageData["levelymargin"] + 0
-        if (levelNo and not settings["centerMode"]) {
-            levelymargin := levelymargin + 25
-            IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
-            redrawMap := 1
-        }
-        return
-    }
-    HistoryToggle:
-    {
-        historyToggle := !historyToggle
-        return
-    }
-    ^H::
-    {
-        if (helpToggle) {
-            ShowHelpText(settings, 400, 200)
-            WriteLogDebug("Show Help")
-        } else {
-            Gui, HelpText: Hide
-            WriteLogDebug("Hide Help")
-        }
-        helpToggle := !helpToggle
-        return
-    }
-    ~TAB::
-    ~Space::
-    {
-        WriteLogDebug("TAB or Space pressed")
-        checkAutomapVisibility(d2rprocess, settings, gameMemoryData)
-        return
-    }
-    ~Esc::
-    {
+    return
+}
+HistoryToggle:
+{
+    historyToggle := !historyToggle
+    return
+}
+^H::
+{
+    if (helpToggle) {
+        ShowHelpText(settings)
+        WriteLogDebug("Show Help")
+    } else {
         Gui, HelpText: Hide
-        helpToggle := 1
+        WriteLogDebug("Hide Help")
     }
+    helpToggle := !helpToggle
     return
-    ~+F9::
-    {
-        WriteLog("Debug mode set to " debug)
-        debug := !debug
-    }
-
+}
+~TAB::
+~Space::
+{
+    WriteLogDebug("TAB or Space pressed")
+    checkAutomapVisibility(d2rprocess, settings, gameMemoryData)
     return
-
+}
+~Esc::
+{
+    Gui, HelpText: Hide
+    helpToggle := 1
+    return
+}
+~+F9::
+{
+    WriteLog("Debug mode set to " debug)
+    debug := !debug
+    return
+}

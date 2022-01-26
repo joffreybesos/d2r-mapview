@@ -4,7 +4,7 @@ SetWorkingDir, %A_ScriptDir%
 #include %A_ScriptDir%\include\OGdip.ahk
 
 
-ShowHelpText(settings, leftMargin, topMargin) {
+ShowHelpText(settings) {
     increaseMapSizeKey := formatHotkeyString(settings["increaseMapSizeKey"])
     decreaseMapSizeKey:= formatHotkeyString(settings["decreaseMapSizeKey"])
     alwaysShowKey:= formatHotkeyString(settings["alwaysShowKey"])
@@ -73,7 +73,7 @@ ShowHelpText(settings, leftMargin, topMargin) {
     bmp.G.DrawString(s, whiteTextFont, 20, 20, 0, 0, textFormat)
 
     whiteTextFont := new OGdip.Font("Arial", 36)
-    bmp.G.DrawString("Press CTRL+H to hide", whiteTextFont, 15, 610, 0, 0, textFormat)
+    bmp.G.DrawString("Press CTRL+H to hide", whiteTextFont, 15, 650, 0, 0, textFormat)
 
     ; add map legend        
     WhiteBrush:= new OGdip.Brush(0xFFFFFFFF)
@@ -149,11 +149,12 @@ ShowHelpText(settings, leftMargin, topMargin) {
         drawHelpDot(bmp, pPenNormal, mobx+(dotSize/2), moby + (rowHeight * (4 + A_Index)+(dotSize/2)), dotSize)
     }
     bmp.SetToControl(HelpText1)
-    leftMargin := A_ScreenWidth / 4
+
     SetFormat Integer, D
-    leftMargin := leftMargin + 0
-    topMargin := topMargin + 0
-    gui, HelpText: Show, x%leftMargin% y%topMargin% NA
+    WinGetPos, lm, tm, gameWidth, gameHeight, %gameWindowId% 
+    leftMargin := lm + gameWidth / 4
+    topMargin := tm + 200
+    Gui, HelpText: Show, x%leftMargin% y%topMargin% NA
     Return
 }
 
@@ -174,5 +175,8 @@ formatHotkeyString(keyString) {
         keyString := StrReplace(keyString, "#", "Ctrl+")
     if (firstChar == "!")
         keyString := StrReplace(keyString, "#", "Alt+")
+    keyString := StrReplace(keyString, "Mult", "*")
+    keyString := StrReplace(keyString, "Add", "+")
+    keyString := StrReplace(keyString, "Sub", "-")
     return keyString
 }

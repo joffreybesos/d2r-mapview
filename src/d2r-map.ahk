@@ -24,7 +24,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.5.1"
+expectedVersion := "2.5.2"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -62,6 +62,8 @@ global diabloFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
 global mapLoading := 0
 global seenItems := []
 global oSpVoice := ComObjCreate("SAPI.SpVoice")
+global centerLeftOffset := 0
+global centerTopOffset := 0
 switchMapModeKey := settings["switchMapMode"]
 Hotkey, IfWinActive, ahk_exe D2R.exe
 Hotkey, %switchMapModeKey%, SwitchMapMode
@@ -246,8 +248,12 @@ While 1 {
                 DeleteObject(hbm)
                 DeleteDC(hdc)
                 Gdip_DeleteGraphics(G)
-        
-                hbm := CreateDIBSection(scaledWidth, scaledHeight)
+                if (settings["centerMode"]) {
+                    WinGetPos, ,  , gameWidth, gameHeight, %gameWindowId% 
+                    hbm := CreateDIBSection(gameWidth, gameHeight)
+                } else {
+                    hbm := CreateDIBSection(scaledWidth, scaledHeight)
+                }
                 hdc := CreateCompatibleDC()
                 obm := SelectObject(hdc, hbm)
                 
@@ -510,3 +516,5 @@ MapSizeDecrease:
         debug := !debug
     }
 return
+
+~Del::Reload

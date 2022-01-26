@@ -65,23 +65,23 @@ global oSpVoice := ComObjCreate("SAPI.SpVoice")
 global centerLeftOffset := 0
 global centerTopOffset := 0
 switchMapModeKey := settings["switchMapMode"]
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %switchMapModeKey%, SwitchMapMode
 
 historyToggleKey := settings["historyToggleKey"]
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %historyToggleKey%, HistoryToggle
 
 alwaysShowKey := settings["alwaysShowKey"]
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %alwaysShowKey%, MapAlwaysShow
 
 increaseMapSizeKey := settings["increaseMapSizeKey"]
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %increaseMapSizeKey%, MapSizeIncrease
 
 decreaseMapSizeKey := settings["decreaseMapSizeKey"]
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %decreaseMapSizeKey%, MapSizeDecrease
 
 moveMapLeftKey := settings["moveMapLeft"]
@@ -89,13 +89,13 @@ moveMapRightKey := settings["moveMapRight"]
 moveMapUpKey := settings["moveMapUp"]
 moveMapDownKey := settings["moveMapDown"]
 
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %moveMapLeftKey%, MoveMapLeft
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %moveMapRightKey%, MoveMapRight
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %moveMapUpKey%, MoveMapUp
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %moveMapDownKey%, MoveMapDown
 
 if (not WinExist(gameWindowId)) {
@@ -344,7 +344,7 @@ unHideMap() {
     }
 }
 
-
+return
 +F10::
 {
     WriteLog("Pressed Shift+F10, exiting...")
@@ -412,7 +412,6 @@ MapSizeDecrease:
     return
 }
     
-#IfWinActive, ahk_exe D2R.exe
     SwitchMapMode:
     {
         settings["centerMode"] := !settings["centerMode"]
@@ -510,11 +509,12 @@ MapSizeDecrease:
         Gui, HelpText: Hide
         helpToggle := 1
     }
+    return
     ~+F9::
     {
         WriteLog("Debug mode set to " debug)
         debug := !debug
     }
-return
 
-~Del::Reload
+    return
+

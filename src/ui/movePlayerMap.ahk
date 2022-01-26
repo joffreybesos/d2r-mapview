@@ -69,6 +69,13 @@ MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData
 
     leftDiff :=  lastLeftMargin - leftMargin
     topDiff :=  lastTopMargin - topMargin
+
+    ; when moving by a large amount, just update straight away
+    if (leftDiff > 20 or topDiff > 20) {
+        leftDiff := 0
+        topDiff := 0
+    }
+    ;ToolTip % "`n`n`n`n`n`n" leftDiff " " topDiff
     ; leftDiff :=  0
     ; topDiff :=  0
 

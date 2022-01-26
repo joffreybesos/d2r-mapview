@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 - Massive performance improvement for centered mode (only)
 - Entered centered mode with `/` hot key (configurable)
-- Drawing in centered mode should be less jittery and more consistent
+- Map drawing in centered mode should be less jittery and more consistent
 - Please report any performance slowdowns as I think there's still room for improvment
 - Help text screen location is calculated differently
 - Fixed bug where debug mode would unexpectedly toggle when pressing ESC (thanks @tthreeoh)

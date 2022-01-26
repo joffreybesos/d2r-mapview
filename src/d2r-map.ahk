@@ -24,7 +24,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.5.1"
+expectedVersion := "2.5.2"
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -248,9 +248,12 @@ While 1 {
                 DeleteObject(hbm)
                 DeleteDC(hdc)
                 Gdip_DeleteGraphics(G)
-                WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
-                
-                hbm := CreateDIBSection(1200, 800)
+                if (settings["centerMode"]) {
+                    WinGetPos, ,  , gameWidth, gameHeight, %gameWindowId% 
+                    hbm := CreateDIBSection(gameWidth, gameHeight)
+                } else {
+                    hbm := CreateDIBSection(scaledWidth, scaledHeight)
+                }
                 hdc := CreateCompatibleDC()
                 obm := SelectObject(hdc, hbm)
                 

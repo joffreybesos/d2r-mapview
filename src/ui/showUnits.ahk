@@ -65,8 +65,10 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
 
         leftDiff :=  lastLeftMargin - leftMargin
         topDiff :=  lastTopMargin - topMargin
-        centerLeftOffset := leftMargin + (leftDiff/2) - 1320
-        centerTopOffset := topMargin + (topDiff/2) - 400
+        ; leftDiff := 0
+        ; topDiff :=  0
+        centerLeftOffset := leftMargin + (leftDiff/2)
+        centerTopOffset := topMargin + (topDiff/2)
 
         ;ToolTip % centerLeftOffset " " centerTopOffset
     }
@@ -413,7 +415,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                 waypointX := correctedPos["x"] + centerLeftOffset
                 wayPointY := correctedPos["y"] + centerTopOffset
                 pPen := Gdip_CreatePen(0x55ffFF00, 3)
-                Gdip_DrawLine(G, pPen, xPosDot, yPosDot, waypointX, wayPointY)
+                Gdip_DrawLine(G, pPen, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, waypointX, wayPointY)
                 Gdip_DeletePen(pPen)
             }
         }
@@ -456,7 +458,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                 bossY := correctedPos["y"] + centerTopOffset
 
                 pPen := Gdip_CreatePen(0x55FF0000, 3)
-                Gdip_DrawLine(G, pPen, xPosDot, yPosDot, bossX, bossY)
+                Gdip_DrawLine(G, pPen, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, bossX, bossY)
                 Gdip_DeletePen(pPen)
             }
         }
@@ -478,7 +480,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                     questY := correctedPos["y"] + centerTopOffset
 
                     pPen := Gdip_CreatePen(0x5500FF00, 3)
-                    Gdip_DrawLine(G, pPen, xPosDot, yPosDot, questX, questY)
+                    Gdip_DrawLine(G, pPen, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, questX, questY)
                     Gdip_DeletePen(pPen)
                 }
             }
@@ -488,7 +490,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
     ; draw other players
     if (settings["showOtherPlayers"]) {
         otherPlayers := gameMemoryData["otherPlayers"]
-        pPen := Gdip_CreatePen(0xff00AA00, 4)
+        pPen := Gdip_CreatePen(0xff00AA00, 6)
         for index, player in otherPlayers
         {
             
@@ -505,7 +507,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                     Options = x%textx% y%texty% Center vBottom cff00AA00 r8 s24
                     Gdip_TextToGraphics(G, player["playerName"], Options, diabloFont, 160, 100)
                 }
-                Gdip_DrawRectangle(G, pPen, playerx-2, playery-2, 4, 4)
+                Gdip_DrawRectangle(G, pPen, playerx-3, playery-3, 6, 6)
             }
         }
         Gdip_DeletePen(pPen)    
@@ -689,7 +691,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
         ;ToolTip % "`n`n`n`n" regionX " " regionY " " regionWidth " " regionHeight
         WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapHwnd1%
         ;WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %unitHwnd1%
-        UpdateLayeredWindow(unitHwnd1, hdc, 1320, 400, 1200, 800)
+        UpdateLayeredWindow(unitHwnd1, hdc, 0, 0, gameWidth, gameHeight)
         Gdip_GraphicsClear( G )
     } else {
         WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 

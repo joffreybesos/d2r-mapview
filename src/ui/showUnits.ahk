@@ -484,7 +484,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
         Gdip_DeletePen(pPen)    
     }
 
-    ; show items
+    ; show item alerts
     if (settings["showUniqueAlerts"] or settings["showSetItemAlerts"] or settings["showRuneAlerts"] or settings["showJewelAlerts"] or settings["showCharmAlerts"]) {
 
         ; draw item alerts
@@ -499,7 +499,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
             itemx := correctedPos["x"]
             itemy := correctedPos["y"]
             alert := itemAlertList.findAlert(item)
-            WriteLog(item.quality " " item.name " matched alert " alert.name)
+            ;WriteLog(item.quality " " item.name " matched alert " alert.name)
             if (alert) {
                 if (alert.speak) {
                     announceItem(settings, item, alert)
@@ -513,74 +513,6 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                 }
                 Gdip_DeletePen(pItemPen)
             }
-
-            ; if (settings["showRuneAlerts"]) {
-            ;     if (item.isRune()) { ; rune
-            ;         announceItem(settings, item)
-                    ; ticktock := uiData["ticktock"]
-                    ; if (ticktock) {
-                    ;     Gdip_DrawEllipse(G, pPenRune, itemx-2, itemy-2, 12, 12)
-                    ; } else {
-                    ;     Gdip_DrawEllipse(G, pPenRune2, itemx, itemy, 8, 8)
-                    ; }
-            ;     }
-            ; }
-            ; if (settings["showUniqueAlerts"]) {
-            ;     if (item.quality == "Unique") { ; unique
-            ;         announceItem(settings, item)
-            ;         ticktock := uiData["ticktock"]
-            ;         if (ticktock) {
-            ;             Gdip_DrawEllipse(G, pPenUnique, itemx-2, itemy-2, 12, 12)
-            ;         } else {
-            ;             Gdip_DrawEllipse(G, pPenUnique2, itemx, itemy, 8, 8)
-            ;         }
-            ;     }
-            ; }
-            ; if (settings["showSetItemAlerts"]) {
-            ;     if (item.quality == "Set") { ; set
-            ;         announceItem(settings, item)
-            ;         ticktock := uiData["ticktock"]
-            ;         if (ticktock) {
-            ;             Gdip_DrawEllipse(G, pPenSetItem, itemx-2, itemy-2, 12, 12)
-            ;         } else {
-            ;             Gdip_DrawEllipse(G, pPenSetItem2, itemx, itemy, 8, 8)
-            ;         }
-            ;     }
-            ; }
-            ; if (settings["showCharmAlerts"]) {
-                
-            ;     if (item.txtFileNo == 603 or item.txtFileNo == 604 or item.txtFileNo == 605) { ; charm
-            ;         announceItem(settings, item)
-            ;         ticktock := uiData["ticktock"]
-            ;         if (ticktock) {
-            ;             Gdip_DrawEllipse(G, pPenCharm, itemx-2, itemy-2, 12, 12)
-            ;         } else {
-            ;             Gdip_DrawEllipse(G, pPenCharm2, itemx, itemy, 8, 8)
-            ;         }
-            ;     }
-            ; }
-            ; if (settings["showJewelAlerts"]) {
-            ;     if (item.txtFileNo == 643) { ; jewel
-            ;         announceItem(settings, item)
-            ;         ticktock := uiData["ticktock"]
-            ;         if (ticktock) {
-            ;             Gdip_DrawEllipse(G, pPenJewel, itemx-2, itemy-2, 12, 12)
-            ;         } else {
-            ;             Gdip_DrawEllipse(G, pPenJewel2, itemx, itemy, 8, 8)
-            ;         }
-            ;     }
-            ; }
-            ; if (settings["baseItemColor"]) {
-            ;     if (item["isBaseItem"]) { ; baseitem
-            ;         announceItem(settings, item)
-            ;         ticktock := uiData["ticktock"]
-            ;         if (ticktock) {
-            ;             Gdip_DrawEllipse(G, pPenBaseItem, itemx-2, itemy-2, 12, 12)
-            ;         } else {
-            ;             Gdip_DrawEllipse(G, pPenBaseItem2, itemx, itemy, 8, 8)
-            ;         }
-            ;     }
-            ; }
         }
         Gdip_DeletePen(pItemPen2)
     }

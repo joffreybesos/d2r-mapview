@@ -10,6 +10,4 @@ class ItemAlert {
     hasQualities := false
     hasItems := false
 
-
-    
 }

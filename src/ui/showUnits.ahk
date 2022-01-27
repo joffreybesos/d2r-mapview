@@ -1,7 +1,6 @@
 #SingleInstance, Force
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
-#Include %A_ScriptDir%\types\Item.ahk
 
 ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData) {
     scale:= settings["scale"]
@@ -489,24 +488,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
     if (settings["showUniqueAlerts"] or settings["showSetItemAlerts"] or settings["showRuneAlerts"] or settings["showJewelAlerts"] or settings["showCharmAlerts"]) {
 
         ; draw item alerts
-        runeColor := 0xcc . settings["runeItemColor"] 
-        uniqueColor := 0xcc . settings["uniqueItemColor"] 
-        setColor := 0xcc . settings["setItemColor"] 
-        charmItemColor := 0xcc . settings["charmItemColor"] 
-        jewelItemColor := 0xcc . settings["jewelItemColor"]
-        baseItemColor := 0xcc . settings["baseItemColor"]
-        pPenRune := Gdip_CreatePen(runeColor, 12)
-        pPenRune2 := Gdip_CreatePen(0xccffffff, 8)
-        pPenUnique := Gdip_CreatePen(uniqueColor, 12)
-        pPenUnique2 := Gdip_CreatePen(0xccffffff, 8)
-        pPenSetItem := Gdip_CreatePen(setColor, 12)
-        pPenSetItem2 := Gdip_CreatePen(0xccffffff, 8)
-        pPenCharm := Gdip_CreatePen(charmItemColor, 12)
-        pPenCharm2 := Gdip_CreatePen(0xccffffff, 8)
-        pPenJewel := Gdip_CreatePen(jewelItemColor, 12)
-        pPenJewel2 := Gdip_CreatePen(0xccffffff, 8)
-        pPenBaseItem := Gdip_CreatePen(baseItemColor, 12)
-        pPenBaseItem2 := Gdip_CreatePen(0xccffffff, 8)
+        pItemPen2 := Gdip_CreatePen(0xCCFFFFFF, 8)
+
         items := gameMemoryData["items"]
         for index, item in items
         {
@@ -515,80 +498,91 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
             correctedPos := correctPos(settings, itemx, itemy, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             itemx := correctedPos["x"]
             itemy := correctedPos["y"]
-            if (settings["showRuneAlerts"]) {
-                if (item.isRune()) { ; rune
-                    announceItem(settings, item)
-                    ticktock := uiData["ticktock"]
-                    if (ticktock) {
-                        Gdip_DrawEllipse(G, pPenRune, itemx-2, itemy-2, 12, 12)
-                    } else {
-                        Gdip_DrawEllipse(G, pPenRune2, itemx, itemy, 8, 8)
-                    }
+            alert := itemAlertList.findAlert(item)
+            WriteLog(item.quality " " item.name " matched alert " alert.name)
+            if (alert) {
+                if (alert.speak) {
+                    announceItem(settings, item, alert)
                 }
-            }
-            if (settings["showUniqueAlerts"]) {
-                if (item.quality == "Unique") { ; unique
-                    announceItem(settings, item)
-                    ticktock := uiData["ticktock"]
-                    if (ticktock) {
-                        Gdip_DrawEllipse(G, pPenUnique, itemx-2, itemy-2, 12, 12)
-                    } else {
-                        Gdip_DrawEllipse(G, pPenUnique2, itemx, itemy, 8, 8)
-                    }
+                pItemPen := Gdip_CreatePen(alert.color, 12)
+                ticktock := uiData["ticktock"]
+                if (ticktock) {
+                    Gdip_DrawEllipse(G, pItemPen, itemx-2, itemy-2, 12, 12)
+                } else {
+                    Gdip_DrawEllipse(G, pItemPen2, itemx, itemy, 8, 8)
                 }
+                Gdip_DeletePen(pItemPen)
             }
-            if (settings["showSetItemAlerts"]) {
-                if (item.quality == "Set") { ; set
-                    announceItem(settings, item)
-                    ticktock := uiData["ticktock"]
-                    if (ticktock) {
-                        Gdip_DrawEllipse(G, pPenSetItem, itemx-2, itemy-2, 12, 12)
-                    } else {
-                        Gdip_DrawEllipse(G, pPenSetItem2, itemx, itemy, 8, 8)
-                    }
-                }
-            }
-            if (settings["showCharmAlerts"]) {
+
+            ; if (settings["showRuneAlerts"]) {
+            ;     if (item.isRune()) { ; rune
+            ;         announceItem(settings, item)
+                    ; ticktock := uiData["ticktock"]
+                    ; if (ticktock) {
+                    ;     Gdip_DrawEllipse(G, pPenRune, itemx-2, itemy-2, 12, 12)
+                    ; } else {
+                    ;     Gdip_DrawEllipse(G, pPenRune2, itemx, itemy, 8, 8)
+                    ; }
+            ;     }
+            ; }
+            ; if (settings["showUniqueAlerts"]) {
+            ;     if (item.quality == "Unique") { ; unique
+            ;         announceItem(settings, item)
+            ;         ticktock := uiData["ticktock"]
+            ;         if (ticktock) {
+            ;             Gdip_DrawEllipse(G, pPenUnique, itemx-2, itemy-2, 12, 12)
+            ;         } else {
+            ;             Gdip_DrawEllipse(G, pPenUnique2, itemx, itemy, 8, 8)
+            ;         }
+            ;     }
+            ; }
+            ; if (settings["showSetItemAlerts"]) {
+            ;     if (item.quality == "Set") { ; set
+            ;         announceItem(settings, item)
+            ;         ticktock := uiData["ticktock"]
+            ;         if (ticktock) {
+            ;             Gdip_DrawEllipse(G, pPenSetItem, itemx-2, itemy-2, 12, 12)
+            ;         } else {
+            ;             Gdip_DrawEllipse(G, pPenSetItem2, itemx, itemy, 8, 8)
+            ;         }
+            ;     }
+            ; }
+            ; if (settings["showCharmAlerts"]) {
                 
-                if (item.txtFileNo == 603 or item.txtFileNo == 604 or item.txtFileNo == 605) { ; charm
-                    announceItem(settings, item)
-                    ticktock := uiData["ticktock"]
-                    if (ticktock) {
-                        Gdip_DrawEllipse(G, pPenCharm, itemx-2, itemy-2, 12, 12)
-                    } else {
-                        Gdip_DrawEllipse(G, pPenCharm2, itemx, itemy, 8, 8)
-                    }
-                }
-            }
-            if (settings["showJewelAlerts"]) {
-                if (item.txtFileNo == 643) { ; jewel
-                    announceItem(settings, item)
-                    ticktock := uiData["ticktock"]
-                    if (ticktock) {
-                        Gdip_DrawEllipse(G, pPenJewel, itemx-2, itemy-2, 12, 12)
-                    } else {
-                        Gdip_DrawEllipse(G, pPenJewel2, itemx, itemy, 8, 8)
-                    }
-                }
-            }
-            if (settings["baseItemColor"]) {
-                if (item["isBaseItem"]) { ; baseitem
-                    announceItem(settings, item)
-                    ticktock := uiData["ticktock"]
-                    if (ticktock) {
-                        Gdip_DrawEllipse(G, pPenBaseItem, itemx-2, itemy-2, 12, 12)
-                    } else {
-                        Gdip_DrawEllipse(G, pPenBaseItem2, itemx, itemy, 8, 8)
-                    }
-                }
-            }
+            ;     if (item.txtFileNo == 603 or item.txtFileNo == 604 or item.txtFileNo == 605) { ; charm
+            ;         announceItem(settings, item)
+            ;         ticktock := uiData["ticktock"]
+            ;         if (ticktock) {
+            ;             Gdip_DrawEllipse(G, pPenCharm, itemx-2, itemy-2, 12, 12)
+            ;         } else {
+            ;             Gdip_DrawEllipse(G, pPenCharm2, itemx, itemy, 8, 8)
+            ;         }
+            ;     }
+            ; }
+            ; if (settings["showJewelAlerts"]) {
+            ;     if (item.txtFileNo == 643) { ; jewel
+            ;         announceItem(settings, item)
+            ;         ticktock := uiData["ticktock"]
+            ;         if (ticktock) {
+            ;             Gdip_DrawEllipse(G, pPenJewel, itemx-2, itemy-2, 12, 12)
+            ;         } else {
+            ;             Gdip_DrawEllipse(G, pPenJewel2, itemx, itemy, 8, 8)
+            ;         }
+            ;     }
+            ; }
+            ; if (settings["baseItemColor"]) {
+            ;     if (item["isBaseItem"]) { ; baseitem
+            ;         announceItem(settings, item)
+            ;         ticktock := uiData["ticktock"]
+            ;         if (ticktock) {
+            ;             Gdip_DrawEllipse(G, pPenBaseItem, itemx-2, itemy-2, 12, 12)
+            ;         } else {
+            ;             Gdip_DrawEllipse(G, pPenBaseItem2, itemx, itemy, 8, 8)
+            ;         }
+            ;     }
+            ; }
         }
-        Gdip_DeletePen(pPenRune)
-        Gdip_DeletePen(pPenRune2)
-        Gdip_DeletePen(pPenUnique)
-        Gdip_DeletePen(pPenUnique2)
-        Gdip_DeletePen(pPenSetItem)
-        Gdip_DeletePen(pPenSetItem2)
+        Gdip_DeletePen(pItemPen2)
     }
 
     ; draw Shrines
@@ -783,7 +777,7 @@ getPosFromAngle(x1,y1,len,ang){
 }
 
 
-announceItem(settings, item) {
+announceItem(settings, item, alert) {
     if (settings["textToSpeech"] or settings["itemSoundEffect"]) {
         if (!hasVal(seenItems, item.getHash())) {
             ; seen item for the first time
@@ -794,8 +788,10 @@ announceItem(settings, item) {
                 oSpVoice.Speak("<pitch absmiddle=""" pitch """><rate absspeed=""" speed """><volume level=""" volume """>" item.getTextToSpeech() "</volume></rate></pitch>", 1)
             }
             if (settings["itemSoundEffect"]) {
-                soundfile := settings["itemSoundEffect"]
-                SoundPlay, %soundfile%
+                if (alert.soundfile) {
+                    soundfile := alert.soundfile
+                    SoundPlay, %soundfile%
+                }
             }
             seenItems.push(item.getHash())
         }

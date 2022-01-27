@@ -1,7 +1,6 @@
 #SingleInstance, Force
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
-#Include %A_ScriptDir%\include\classMemory.ahk
 
 initMemory(gameWindowId) {
     if (_ClassMemory.__Class != "_ClassMemory")

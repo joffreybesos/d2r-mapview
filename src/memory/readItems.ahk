@@ -1,8 +1,4 @@
-#SingleInstance, Force
-SendMode Input
-SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\types\Item.ahk
-
 
 ReadItems(d2rprocess, startingOffset, ByRef items) {
     ; items
@@ -29,8 +25,6 @@ ReadItems(d2rprocess, startingOffset, ByRef items) {
                     ; itemQuality - 5 is set, 7 is unique (6 rare, 4, magic)
                     itemQuality := d2rprocess.read(pUnitData, "UInt")
 
-
-
                     pPath := d2rprocess.read(itemUnit + 0x38, "Int64")  
                     itemx := d2rprocess.read(pPath + 0x10, "UShort")
                     itemy := d2rprocess.read(pPath + 0x14, "UShort")
@@ -49,12 +43,12 @@ ReadItems(d2rprocess, startingOffset, ByRef items) {
                             break
                         }
                     }
-                    item := new Item(txtFileNo, itemQuality)
+                    item := new GameItem(txtFileNo, itemQuality)
                     item.itemLoc := itemLoc
                     item.itemx := itemx
                     item.itemy := itemy
                     item.numSockets := numSockets
-                    ;WriteLog(item.toString())
+                    ;WriteLog(txtFileNo " " item.toString())
                     items.push(item)
                 }
             }

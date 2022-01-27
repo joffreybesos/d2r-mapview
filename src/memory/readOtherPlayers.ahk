@@ -1,7 +1,4 @@
-#SingleInstance, Force
-SendMode Input
-SetWorkingDir, %A_ScriptDir%
-#Include %A_ScriptDir%\include\classMemory.ahk
+
 
 ReadOtherPlayers(d2rprocess, startingOffset, ByRef otherPlayers) {
     otherPlayers := []

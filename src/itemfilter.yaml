@@ -1,3 +1,6 @@
+# You can add/change/remove from the sounds and colors below
+# Each of these sounds and colors can be referenced in any of the alerts
+
 sounds:
 	rune: rune.wav
 	triplerune: triple_rune_alert.wav
@@ -18,7 +21,7 @@ colors:
 	magiccolor: 6D6DFF
 	bonuscolor: ff00ff
 
-# Alerts are applied in the order listed here
+# Alerts will be applied in the order listed here
 # To disable an alert, remove it from this list
 # As soon as an item matches an alert, any alerts ranked underneath won't be checked
 enabledAlerts:
@@ -29,10 +32,14 @@ enabledAlerts:
 	- AllSetItems
 	- Jewels
 	- Charms
+	- Runes
 
 ##############################################
 #### Define all alerts below this section ####
 ##############################################
+
+# You can define your own alerts, so long as it's a child of 'Alerts'
+# If you create a new alert, remember to add it to the 'enabledAlerts' list above
 
 # This is the format:
 #<AlertName>:     # The alertname can be whatever you like
@@ -45,7 +52,7 @@ enabledAlerts:
 #                 number of sockets then any amount of sockets will be accepted.
 #  sound: <from sound file list at top>  # sound that plays when item is seen on ground
 #  color: <from list of colors at top>   # color of alert on the screen
-#  speak: true/false                     # set to true to suppress text to speech, defaults to true
+#  speak: true/false                     # set to false to suppress text to speech, defaults to true
 
 # Only the first matching alert will be applied
 
@@ -59,7 +66,7 @@ Alerts:
 			- Amulet
 		sound: ammy
 		color: uniquecolor
-		speak: false
+		speak: true
 
 	# specific set items give a different alert
 	SpecificSetItems:
@@ -123,7 +130,6 @@ Alerts:
 	AllUniqueItems:
 		quality:
 			- Unique
-		sound: beep
 		color: uniquecolor
 
 	# all set items
@@ -133,25 +139,53 @@ Alerts:
 		color: setcolor
 
 	Jewels:
-		quality:
-			- Magic
-			- Rare
-			- Unique
 		items:
 			- Jewel
 		soundeffect: jewel
 		alertcolor: jewelcolor
 		
 	Charms:
-		quality:
-			- Magic
-			- Rare
-			- Unique
 		items:
 			- Small Charm
 			- Large Charm
 			- Grand Charm
 		soundeffect: charm
-		alertcolor: charmcolor
+		color: charmcolor
 
+	Runes:
+		items:
+			# - El Rune 
+			# - Eld Rune 
+			# - Tir Rune 
+			# - Nef Rune 
+			# - Eth Rune 
+			# - Ith Rune 
+			# - Tal Rune 
+			# - Ral Rune 
+			# - Ort Rune 
+			# - Thul Rune 
+			# - Amn Rune 
+			# - Sol Rune 
+			# - Shael Rune 
+			# - Dol Rune 
+			# - Hel Rune 
+			# - Io Rune 
+			# - Lum Rune 
+			# - Ko Rune 
+			# - Fal Rune 
+			- Lem Rune 
+			- Pul Rune 
+			- Um Rune 
+			- Mal Rune 
+			- Ist Rune 
+			- Gul Rune 
+			- Vex Rune 
+			- Ohm Rune 
+			- Lo Rune 
+			- Sur Rune 
+			- Ber Rune 
+			- Jah Rune 
+			- Cham Rune 
+			- Zod Rune 
+		color: runecolor
 

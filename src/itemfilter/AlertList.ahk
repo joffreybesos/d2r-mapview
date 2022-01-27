@@ -1,5 +1,3 @@
-#Include ItemAlert.ahk
-
 class AlertList {
     colors := []
     soundfiles := []
@@ -63,7 +61,7 @@ class AlertList {
                 alert.sound := yamlAlert.sound
             }
             if (yamlAlert.color) {
-                alert.color := yamlAlert.color
+                alert.color := this.getColor(yamlAlert.color)
             }
             if (yamlAlert.speak) {
                 if (yamlAlert.speak == "true" or yamlAlert.speak == true) {
@@ -77,24 +75,29 @@ class AlertList {
         }
     }
 
-    findAlert(item) {
+    getColor(col) {
+        for index, color in this.colors
+        {
+            valArr := StrSplit(color,":")
+            if (valArr[1] == col) {
+                return "0xCC" Trim(valArr[2])   ; opacity is hardcoded here
+            }
+        }
+    }
 
-        ; item.name
-        ; item.quality
-        ; item.numSockets
-        item.name := Trim(item.name)
-        qualityName := getQuality(item.itemQuality)
+    findAlert(item) {       
         for index, alert in this.alerts
         {
             ; check quality
             foundQuality := true
             
             if (alert.hasQualities) {
+                ;WriteLog(item.quality " " item.name)
                 
                 foundQuality := false
-                for index, qual in alert.qualities
+                for index, checkqual in alert.qualities
                 {
-                    if (qualityName == qual) {
+                    if (item.quality == checkqual) {
                         ; matched quality
                         foundQuality := true
                     }
@@ -130,19 +133,3 @@ class AlertList {
         return ""
     }
 }
-
-getQuality(qualityNo) {
-    switch (qualityNo) {
-        case 1: return "Inferior"
-        case 2: return "Normal"
-        case 3: return "Superior"
-        case 4: return "Magic"
-        case 5: return "Set"
-        case 6: return "Rare"
-        case 7: return "Unique"
-        case 8: return "Crafted"
-        case 9: return "Tempered"
-    }
-    return ""
-}
-

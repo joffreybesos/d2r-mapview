@@ -1,7 +1,3 @@
-#SingleInstance, Force
-#Include %A_ScriptDir%\include\classMemory.ahk
-#Include %A_ScriptDir%\include\logging.ahk
-SetWorkingDir, %A_ScriptDir%
 
 scanForPlayer(d2rprocess, lastOffset, startingOffset, settings) {
     ; check the one that previously worked, it's likely not checkLastOffset()

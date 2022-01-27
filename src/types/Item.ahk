@@ -1,4 +1,4 @@
-class Item {
+class GameItem {
 
     txtFileNo := 0
     qualityNo := 0
@@ -15,8 +15,6 @@ class Item {
         this.setItemName(txtFileNo)
         this.setQuality(qualityNo)
     }
-
-
 
     isGem() {
         if ((this.txtFileNo >= 557 and this.txtFileNo <= 586) or (this.txtFileNo >= 597 and this.txtFileNo <= 601)) {

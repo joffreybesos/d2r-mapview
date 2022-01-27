@@ -5,6 +5,8 @@ SetWinDelay, 0
 SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\logging.ahk
 #Include %A_ScriptDir%\include\Yaml.ahk
+#Include %A_ScriptDir%\itemfilter\AlertList.ahk
+#Include %A_ScriptDir%\itemfilter\ItemAlert.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk
 #Include %A_ScriptDir%\memory\scanForPlayer.ahk
 #Include %A_ScriptDir%\memory\readGameMemory.ahk
@@ -63,6 +65,8 @@ global diabloFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
 global mapLoading := 0
 global seenItems := []
 global oSpVoice := ComObjCreate("SAPI.SpVoice")
+global itemAlertList := new AlertList("itemfilter.yaml")
+
 switchMapModeKey := settings["switchMapMode"]
 Hotkey, IfWinActive, ahk_exe D2R.exe
 Hotkey, %switchMapModeKey%, SwitchMapMode

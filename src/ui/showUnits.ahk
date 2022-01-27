@@ -1,6 +1,7 @@
 #SingleInstance, Force
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
+#Include %A_ScriptDir%\types\Item.ahk
 
 ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData) {
     scale:= settings["scale"]
@@ -509,13 +510,13 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
         items := gameMemoryData["items"]
         for index, item in items
         {
-            itemx := ((item["itemx"] - imageData["mapOffsetX"]) * serverScale) + padding
-            itemy := ((item["itemy"] - imageData["mapOffsetY"]) * serverScale) + padding
+            itemx := ((item.itemx - imageData["mapOffsetX"]) * serverScale) + padding
+            itemy := ((item.itemy - imageData["mapOffsetY"]) * serverScale) + padding
             correctedPos := correctPos(settings, itemx, itemy, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             itemx := correctedPos["x"]
             itemy := correctedPos["y"]
             if (settings["showRuneAlerts"]) {
-                if (item["isRune"] == 1) { ; rune
+                if (item.isRune()) { ; rune
                     announceItem(settings, item)
                     ticktock := uiData["ticktock"]
                     if (ticktock) {
@@ -526,7 +527,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                 }
             }
             if (settings["showUniqueAlerts"]) {
-                if (item["itemQuality"] == 7) { ; unique
+                if (item.quality == "Unique") { ; unique
                     announceItem(settings, item)
                     ticktock := uiData["ticktock"]
                     if (ticktock) {
@@ -537,7 +538,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                 }
             }
             if (settings["showSetItemAlerts"]) {
-                if (item["itemQuality"] == 5) { ; set
+                if (item.quality == "Set") { ; set
                     announceItem(settings, item)
                     ticktock := uiData["ticktock"]
                     if (ticktock) {
@@ -549,7 +550,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
             }
             if (settings["showCharmAlerts"]) {
                 
-                if (item["txtFileNo"] == 603 or item["txtFileNo"] == 604 or item["txtFileNo"] == 605) { ; charm
+                if (item.txtFileNo == 603 or item.txtFileNo == 604 or item.txtFileNo == 605) { ; charm
                     announceItem(settings, item)
                     ticktock := uiData["ticktock"]
                     if (ticktock) {
@@ -560,7 +561,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                 }
             }
             if (settings["showJewelAlerts"]) {
-                if (item["txtFileNo"] == 643) { ; jewel
+                if (item.txtFileNo == 643) { ; jewel
                     announceItem(settings, item)
                     ticktock := uiData["ticktock"]
                     if (ticktock) {
@@ -784,19 +785,19 @@ getPosFromAngle(x1,y1,len,ang){
 
 announceItem(settings, item) {
     if (settings["textToSpeech"] or settings["itemSoundEffect"]) {
-        if (!hasVal(seenItems, item["hash"])) {
+        if (!hasVal(seenItems, item.getHash())) {
             ; seen item for the first time
             if (settings["textToSpeech"]) {
                 volume := settings["textToSpeechVolume"]
                 pitch := settings["textToSpeechPitch"]
                 speed := settings["textToSpeechSpeed"]
-                oSpVoice.Speak("<pitch absmiddle=""" pitch """><rate absspeed=""" speed """><volume level=""" volume """>" item["textToSpeech"] "</volume></rate></pitch>", 1)
+                oSpVoice.Speak("<pitch absmiddle=""" pitch """><rate absspeed=""" speed """><volume level=""" volume """>" item.getTextToSpeech() "</volume></rate></pitch>", 1)
             }
             if (settings["itemSoundEffect"]) {
                 soundfile := settings["itemSoundEffect"]
                 SoundPlay, %soundfile%
             }
-            seenItems.push(item["hash"])
+            seenItems.push(item.getHash())
         }
     }
 }

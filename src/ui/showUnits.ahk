@@ -710,16 +710,16 @@ getPosFromAngle(x1,y1,len,ang){
 
 
 announceItem(settings, item, alert) {
-    if (settings["textToSpeech"] or settings["itemSoundEffect"]) {
+    if (settings["allowTextToSpeech"] or settings["allowItemDropSounds"]) {
         if (!hasVal(seenItems, item.getHash())) {
             ; seen item for the first time
-            if (settings["textToSpeech"]) {
+            if (settings["allowTextToSpeech"]) {
                 volume := settings["textToSpeechVolume"]
                 pitch := settings["textToSpeechPitch"]
                 speed := settings["textToSpeechSpeed"]
                 oSpVoice.Speak("<pitch absmiddle=""" pitch """><rate absspeed=""" speed """><volume level=""" volume """>" item.getTextToSpeech() "</volume></rate></pitch>", 1)
             }
-            if (settings["itemSoundEffect"]) {
+            if (settings["allowItemDropSounds"]) {
                 if (alert.soundfile) {
                     soundfile := alert.soundfile
                     SoundPlay, %soundfile%

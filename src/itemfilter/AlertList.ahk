@@ -1,29 +1,9 @@
 class AlertList {
-    colors := []
-    soundfiles := []
     alerts := []  ; list of Alerts
 
     __new(yamlFile) {
         
         yamlObj := Yaml(yamlFile, isfile:=1) ;isfile is set to 1 by default
-
-        ; load sounds
-        sounds := yamlObj.sounds.Dump(2)
-        Loop, Parse, sounds, `n
-        {
-            sound := StrReplace(A_LoopField, "- ", "")
-            sound := StrReplace(sound, """", "")
-            this.soundfiles.Push(sound)
-        }
-
-        ; load colors
-        colors := yamlObj.colors.Dump(2)
-        Loop, Parse, colors, `n
-        {
-            color := StrReplace(A_LoopField, "- ", "")
-            color := StrReplace(color, """", "")
-            this.colors.Push(color)   
-        }
 
         ; load alerts
         numAlerts := yamlObj.enabledAlerts.()
@@ -57,11 +37,11 @@ class AlertList {
                 alert.hasItems := true
             }
 
-            if (yamlAlert.sound) {
-                alert.sound := yamlAlert.sound
+            if (yamlAlert.soundeffect) {
+                alert.soundfile := yamlAlert.soundeffect
             }
             if (yamlAlert.color) {
-                alert.color := this.getColor(yamlAlert.color)
+                alert.color := "0xCC" Trim(yamlAlert.color)
             }
             if (yamlAlert.speak) {
                 if (yamlAlert.speak == "true" or yamlAlert.speak == true) {
@@ -72,16 +52,6 @@ class AlertList {
                 }
             }
             this.alerts.Push(alert)
-        }
-    }
-
-    getColor(col) {
-        for index, color in this.colors
-        {
-            valArr := StrSplit(color,":")
-            if (valArr[1] == col) {
-                return "0xCC" Trim(valArr[2])   ; opacity is hardcoded here
-            }
         }
     }
 

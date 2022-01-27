@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.2] - 2021-01-26 - Performance
+
+- Massive performance improvement for centered mode (only)
+- Entered centered mode with `/` hot key (configurable)
+- Map drawing in centered mode should be less jittery and more consistent
+- Please report any performance slowdowns as I think there's still room for improvment
+- Help text screen location is calculated differently
+- Fixed bug where debug mode would unexpectedly toggle when pressing ESC (thanks @tthreeoh)
+
 ## [2.5.1] - 2021-01-25 - Missiles
 
 - Player and enemy missles now show on the map (thanks @tthreeoh!)

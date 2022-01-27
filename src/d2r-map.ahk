@@ -29,6 +29,7 @@ SetWorkingDir, %A_ScriptDir%
 
 expectedVersion := "2.5.3"
 
+
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
     ExitApp
@@ -66,25 +67,27 @@ global mapLoading := 0
 global seenItems := []
 global oSpVoice := ComObjCreate("SAPI.SpVoice")
 global itemAlertList := new AlertList("itemfilter.yaml")
+global centerLeftOffset := 0
+global centerTopOffset := 0
 
 switchMapModeKey := settings["switchMapMode"]
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %switchMapModeKey%, SwitchMapMode
 
 historyToggleKey := settings["historyToggleKey"]
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %historyToggleKey%, HistoryToggle
 
 alwaysShowKey := settings["alwaysShowKey"]
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %alwaysShowKey%, MapAlwaysShow
 
 increaseMapSizeKey := settings["increaseMapSizeKey"]
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %increaseMapSizeKey%, MapSizeIncrease
 
 decreaseMapSizeKey := settings["decreaseMapSizeKey"]
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %decreaseMapSizeKey%, MapSizeDecrease
 
 moveMapLeftKey := settings["moveMapLeft"]
@@ -92,13 +95,13 @@ moveMapRightKey := settings["moveMapRight"]
 moveMapUpKey := settings["moveMapUp"]
 moveMapDownKey := settings["moveMapDown"]
 
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %moveMapLeftKey%, MoveMapLeft
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %moveMapRightKey%, MoveMapRight
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %moveMapUpKey%, MoveMapUp
-Hotkey, IfWinActive, ahk_exe D2R.exe
+Hotkey, IfWinActive, % gameWindowId
 Hotkey, %moveMapDownKey%, MoveMapDown
 
 if (not WinExist(gameWindowId)) {
@@ -253,8 +256,12 @@ While 1 {
                 DeleteObject(hbm)
                 DeleteDC(hdc)
                 Gdip_DeleteGraphics(G)
-        
-                hbm := CreateDIBSection(scaledWidth, scaledHeight)
+                if (settings["centerMode"]) {
+                    WinGetPos, ,  , gameWidth, gameHeight, %gameWindowId% 
+                    hbm := CreateDIBSection(gameWidth, gameHeight)
+                } else {
+                    hbm := CreateDIBSection(scaledWidth, scaledHeight)
+                }
                 hdc := CreateCompatibleDC()
                 obm := SelectObject(hdc, hbm)
                 
@@ -345,7 +352,7 @@ unHideMap() {
     }
 }
 
-
+return
 +F10::
 {
     WriteLog("Pressed Shift+F10, exiting...")
@@ -413,107 +420,107 @@ MapSizeDecrease:
     return
 }
     
-#IfWinActive, ahk_exe D2R.exe
-    SwitchMapMode:
-    {
-        settings["centerMode"] := !settings["centerMode"]
-        lastlevel := "INVALIDATED"
+SwitchMapMode:
+{
+    settings["centerMode"] := !settings["centerMode"]
+    lastlevel := "INVALIDATED"
 
-        imageData := {}
-        gameMemoryData  := {}
-        uiData := {}
-        WinSet, Region, , ahk_id %mapHwnd1%
-        WinSet, Region, , ahk_id %unitHwnd1%
-        Gui, Map: Hide
-        Gui, Units: Hide
-        mapShowing := 0
+    imageData := {}
+    gameMemoryData  := {}
+    uiData := {}
+    WinSet, Region, , ahk_id %mapHwnd1%
+    WinSet, Region, , ahk_id %unitHwnd1%
+    Gui, Map: Hide
+    Gui, Units: Hide
+    mapShowing := 0
+    return
+}
 
-        return
+MoveMapLeft:
+{
+    SetFormat Integer, D
+    levelNo := gameMemoryData["levelNo"] + 0
+    levelxmargin := imageData["levelxmargin"] + 0
+    levelymargin := imageData["levelymargin"] + 0
+    if (levelNo and not settings["centerMode"]) {
+        levelxmargin := levelxmargin - 25
+        IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
+        redrawMap := 1
     }
-    MoveMapLeft:
-    {
-        SetFormat Integer, D
-        levelNo := gameMemoryData["levelNo"] + 0
-        levelxmargin := imageData["levelxmargin"] + 0
-        levelymargin := imageData["levelymargin"] + 0
-        if (levelNo and not settings["centerMode"]) {
-            levelxmargin := levelxmargin - 25
-            IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
-            redrawMap := 1
-        }
-        return
+    return
+}
+MoveMapRight:
+{
+    SetFormat Integer, D
+    levelNo := gameMemoryData["levelNo"] + 0
+    levelxmargin := imageData["levelxmargin"] + 0
+    levelymargin := imageData["levelymargin"] + 0
+    if (levelNo and not settings["centerMode"]) {
+        levelxmargin := levelxmargin + 25
+        IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
+        redrawMap := 1
     }
-    MoveMapRight:
-    {
-        SetFormat Integer, D
-        levelNo := gameMemoryData["levelNo"] + 0
-        levelxmargin := imageData["levelxmargin"] + 0
-        levelymargin := imageData["levelymargin"] + 0
-        if (levelNo and not settings["centerMode"]) {
-            levelxmargin := levelxmargin + 25
-            IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
-            redrawMap := 1
-        }
-        return
+    return
+}
+MoveMapUp:
+{
+    SetFormat Integer, D
+    levelNo := gameMemoryData["levelNo"] + 0
+    levelxmargin := imageData["levelxmargin"] + 0
+    levelymargin := imageData["levelymargin"] + 0
+    if (levelNo and not settings["centerMode"]) {
+        levelymargin := levelymargin - 25
+        IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
+        redrawMap := 1
     }
-    MoveMapUp:
-    {
-        SetFormat Integer, D
-        levelNo := gameMemoryData["levelNo"] + 0
-        levelxmargin := imageData["levelxmargin"] + 0
-        levelymargin := imageData["levelymargin"] + 0
-        if (levelNo and not settings["centerMode"]) {
-            levelymargin := levelymargin - 25
-            IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
-            redrawMap := 1
-        }
-        return
+    return
+}
+MoveMapDown:
+{
+    SetFormat Integer, D
+    levelNo := gameMemoryData["levelNo"] + 0
+    levelxmargin := imageData["levelxmargin"] + 0
+    levelymargin := imageData["levelymargin"] + 0
+    if (levelNo and not settings["centerMode"]) {
+        levelymargin := levelymargin + 25
+        IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
+        redrawMap := 1
     }
-    MoveMapDown:
-    {
-        SetFormat Integer, D
-        levelNo := gameMemoryData["levelNo"] + 0
-        levelxmargin := imageData["levelxmargin"] + 0
-        levelymargin := imageData["levelymargin"] + 0
-        if (levelNo and not settings["centerMode"]) {
-            levelymargin := levelymargin + 25
-            IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
-            redrawMap := 1
-        }
-        return
-    }
-    HistoryToggle:
-    {
-        historyToggle := !historyToggle
-        return
-    }
-    ^H::
-    {
-        if (helpToggle) {
-            ShowHelpText(settings, 400, 200)
-            WriteLogDebug("Show Help")
-        } else {
-            Gui, HelpText: Hide
-            WriteLogDebug("Hide Help")
-        }
-        helpToggle := !helpToggle
-        return
-    }
-    ~TAB::
-    ~Space::
-    {
-        WriteLogDebug("TAB or Space pressed")
-        checkAutomapVisibility(d2rprocess, settings, gameMemoryData)
-        return
-    }
-    ~Esc::
-    {
+    return
+}
+HistoryToggle:
+{
+    historyToggle := !historyToggle
+    return
+}
+^H::
+{
+    if (helpToggle) {
+        ShowHelpText(settings)
+        WriteLogDebug("Show Help")
+    } else {
         Gui, HelpText: Hide
-        helpToggle := 1
+        WriteLogDebug("Hide Help")
     }
-    ~+F9::
-    {
-        WriteLog("Debug mode set to " debug)
-        debug := !debug
-    }
-return
+    helpToggle := !helpToggle
+    return
+}
+~TAB::
+~Space::
+{
+    WriteLogDebug("TAB or Space pressed")
+    checkAutomapVisibility(d2rprocess, settings, gameMemoryData)
+    return
+}
+~Esc::
+{
+    Gui, HelpText: Hide
+    helpToggle := 1
+    return
+}
+~+F9::
+{
+    WriteLog("Debug mode set to " debug)
+    debug := !debug
+    return
+}

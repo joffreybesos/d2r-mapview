@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.3] - 2021-01-27 - Advanced item filter
+
+- You can now define your own item filter alerts!
+- A file called `itemfilter.yaml` will be automatically created if you don't have one
+- Refer to the contents of that file to learn how to define your own alerts
+- You can define your own sound effects for a given item or group of items
+- All of the existing item drop alerts are already configured in `itemfilter.yaml`
+  So if you're happy with the current item alerts then you don't need to change anything.
+
+- Note: some settings have been renamed:
+  `textToSpeech=true/false` is now `allowTextToSpeech=true/false`
+  `itemDropSound="file.wav"` is now `allowItemDropSounds=true/false`
+
 ## [2.5.2] - 2021-01-26 - Performance
 
 - Massive performance improvement for centered mode (only)

@@ -423,6 +423,11 @@ MapSizeDecrease:
 SwitchMapMode:
 {
     settings["centerMode"] := !settings["centerMode"]
+    if (settings["centerMode"]) {
+        WriteLog("Switched to centered mode")
+    } else {
+        WriteLog("Turn off centered mode")
+    }
     lastlevel := "INVALIDATED"
 
     imageData := {}

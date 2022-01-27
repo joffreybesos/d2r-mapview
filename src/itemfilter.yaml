@@ -1,0 +1,166 @@
+# Alerts will be applied in the order listed here
+# To disable an alert, remove it from this list
+# As soon as an item matches an alert, any alerts ranked underneath won't be checked
+enabledAlerts:
+	- UniqueRingsAndAmmys
+	- SpecificSetItems
+	- BaseItems
+	- AllUniqueItems
+	- AllSetItems
+	- Jewels
+	- Charms
+	- Runes
+
+##############################################
+#### Define all alerts below this section ####
+##############################################
+
+# You can define your own alerts, so long as it's a child of 'Alerts'
+# If you create a new alert, remember to add it to the 'enabledAlerts' list above
+
+# This is the format:
+#<AlertName>:     # The alertname can be whatever you like
+#  quality:
+#   - <quality> List all qualities that you want to include, Inferior, Normal, Magic, Rare, Unique, Set
+#               If you don't specify any qualities, then ALL qualities will be accepted
+#  item:
+#   - <item name> List only the item name, you CANNOT list the name of the actual Unique e.g. 'String of Ears'
+#                 You can add number of sockets such as "Death Mask, 2" for 2 sockets. If you don't specify
+#                 number of sockets then any amount of sockets will be accepted.
+#  soundeffect: <filename.wav>           # soundeffect that plays when item is seen on ground
+#  color: <hex value>                    # color of alert on the screen
+#  speak: true/false                     # set to false to suppress text to speech, defaults to true
+
+# Only the first matching alert will be applied
+
+Alerts:
+	# just unique rings and ammys
+	UniqueRingsAndAmmys:
+		quality:
+			- Unique
+		items:
+			- Ring
+			- Amulet
+		soundeffect: ching.wav
+		color: BBA45B
+
+	# specific set items give a different alert
+	SpecificSetItems:
+		quality:
+			- Set
+		items:
+			- Lacquered Plate   # Tal Rasha's Guardianship
+			- Death Mask        # Tal Rasha's Horadric Crest
+			- Mesh Belt         # Tal Rasha's Fine Spun Cloth
+			- Sacred Armor      # Immortal King
+			- Heavy Bracers     # Trang-Oul's Claws
+			- Winged Helm       # Guillaume's Face
+			- Russet Armor      # Aldur's Advance
+			- Swirling Crystal  # Tal Rasha's Lidless Eye
+			- Ring
+			- Amulet
+		soundeffect: goodsetitem.wav
+		color: 00FC00
+
+	# base items
+	BaseItems:
+		quality:
+			- Normal
+			- Superior
+		items:
+			- Aerin Shield, 3
+			- Akaran Rondache, 3
+			- Akaran Targe, 3
+			- Bone Visage, 3
+			- Circlet, 3
+			- Coronet, 3
+			- Crystal Sword, 3
+			- Diadem, 3
+			- Heraldic Shield, 3
+			- Mage Plate, 3
+			- Phase Blade, 3
+			- Rondache, 3
+			- Sacred Rondache, 3
+			- Sacred Targe, 3
+			- Targe, 3
+			- Wyrmhide, 3
+			- Archon Plate, 4
+			- Colossus Voulge, 4
+			- Crystal Sword, 4
+			- Dusk Shroud, 4
+			- Flail, 4
+			- Giant Thresher, 4
+			- Heraldic Shield, 4
+			- Long Sword, 4
+			- Monarch, 4
+			- Phase Blade, 4
+			- Thresher, 4
+			- Wyrmhide, 4
+			- Crystal Sword, 5
+			- Flail, 5
+			- Phase Blade, 5
+		soundeffect: ching.wav
+		color: AAAAAA
+
+	# all uniques
+	AllUniqueItems:
+		quality:
+			- Unique
+		color: BBA45B
+
+	# all set items
+	AllSetItems:
+		quality:
+			- Set
+		color: 00FC00
+
+	Jewels:
+		items:
+			- Jewel
+		soundeffect: jewel.wav
+		color: 6D6DFF
+		
+	Charms:
+		items:
+			- Small Charm
+			- Large Charm
+			- Grand Charm
+		soundeffect: charm.wav
+		color: 6D6DFF
+
+	Runes:
+		items:
+			# - El Rune 
+			# - Eld Rune 
+			# - Tir Rune 
+			# - Nef Rune 
+			# - Eth Rune 
+			# - Ith Rune 
+			# - Tal Rune 
+			# - Ral Rune 
+			# - Ort Rune 
+			# - Thul Rune 
+			# - Amn Rune 
+			# - Sol Rune 
+			# - Shael Rune 
+			# - Dol Rune 
+			# - Hel Rune 
+			# - Io Rune 
+			# - Lum Rune 
+			# - Ko Rune 
+			# - Fal Rune 
+			- Lem Rune 
+			- Pul Rune 
+			- Um Rune 
+			- Mal Rune 
+			- Ist Rune 
+			- Gul Rune 
+			- Vex Rune 
+			- Ohm Rune 
+			- Lo Rune 
+			- Sur Rune 
+			- Ber Rune 
+			- Jah Rune 
+			- Cham Rune 
+			- Zod Rune 
+		color: FFA700

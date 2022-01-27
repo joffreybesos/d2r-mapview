@@ -4,6 +4,7 @@ SetWorkingDir, %A_ScriptDir%
 
 readSettings(settingsFile, ByRef settings) {
     FileInstall, mapconfig-default.ini, mapconfig.ini , 0
+    FileInstall, itemfilter.yaml, itemfilter.yaml , 0
     FileInstall, exocetblizzardot-medium.otf, exocetblizzardot-medium.otf , 1
 
     ; these are the default values
@@ -45,11 +46,11 @@ readSettings(settingsFile, ByRef settings) {
     settings["showShrines"] := 1
     settings["showPortals"] := 1
 
-    settings["textToSpeech"] := 1
+    settings["allowTextToSpeech"] := 1
     settings["textToSpeechVolume"] := 50
     settings["textToSpeechPitch"] := 4
     settings["textToSpeechSpeed"] := 1
-    settings["itemSoundEffect"] := ""
+    settings["allowItemDropSounds"] := true
     settings["showUniqueAlerts"] := 1
     settings["showSetItemAlerts"] := 1
     settings["showRuneAlerts"] := 1

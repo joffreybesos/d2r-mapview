@@ -204,13 +204,13 @@ showImmunities=false
 
 #### Text to speech
 
-| Setting            | Default | Description                                                                    |
-| :----------------- | :------ | :----------------------------------------------------------------------------- |
-| textToSpeech       | true    | When an item of interest drops, the MH will read out a description of the item |
-| textToSpeechVolume | 50      | Range 1-100 - Volume of text to speech                                         |
-| textToSpeechPitch  | 1       | Voice pitch                                                                    |
-| textToSpeechSpeed  | 1       | Speaking speed                                                                 |
-| itemSoundEffect    | N/A     | Sound effect to play when an item of interest has dropped, .wav file name      |
+| Setting             | Default | Description                                                             |
+| :------------------ | :------ | :---------------------------------------------------------------------- |
+| allowTextToSpeech   | true    | Toggle whether an item of interest is announced in speech when it drops |
+| textToSpeechVolume  | 50      | Range 1-100 - Volume of text to speech                                  |
+| textToSpeechPitch   | 1       | Voice pitch                                                             |
+| textToSpeechSpeed   | 1       | Speaking speed                                                          |
+| allowItemDropSounds | true    | Toggle sound effects in itemfilter.yaml                                 |
 
 #### Guide lines
 

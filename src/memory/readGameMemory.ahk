@@ -1,14 +1,9 @@
-#SingleInstance, Force
-
 #Include %A_ScriptDir%\memory\readOtherPlayers.ahk
 #Include %A_ScriptDir%\memory\readMobs.ahk
 #Include %A_ScriptDir%\memory\readItems.ahk
 #Include %A_ScriptDir%\memory\readObjects.ahk
 #Include %A_ScriptDir%\memory\readMissiles.ahk
 #Include %A_ScriptDir%\memory\readUI.ahk
-
-#Include %A_ScriptDir%\include\logging.ahk
-SetWorkingDir, %A_ScriptDir%
 
 readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     StartTime := A_TickCount

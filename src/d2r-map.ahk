@@ -4,6 +4,9 @@ SendMode Input
 SetWinDelay, 0
 SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\logging.ahk
+#Include %A_ScriptDir%\include\Yaml.ahk
+#Include %A_ScriptDir%\itemfilter\AlertList.ahk
+#Include %A_ScriptDir%\itemfilter\ItemAlert.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk
 #Include %A_ScriptDir%\memory\scanForPlayer.ahk
 #Include %A_ScriptDir%\memory\readGameMemory.ahk
@@ -24,7 +27,8 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.5.2"
+expectedVersion := "2.5.3"
+
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
     MsgBox, , Missing settings, Could not find settings.ini file
@@ -62,8 +66,10 @@ global diabloFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
 global mapLoading := 0
 global seenItems := []
 global oSpVoice := ComObjCreate("SAPI.SpVoice")
+global itemAlertList := new AlertList("itemfilter.yaml")
 global centerLeftOffset := 0
 global centerTopOffset := 0
+
 switchMapModeKey := settings["switchMapMode"]
 Hotkey, IfWinActive, % gameWindowId
 Hotkey, %switchMapModeKey%, SwitchMapMode
@@ -103,6 +109,8 @@ if (not WinExist(gameWindowId)) {
     Msgbox, 48, d2r-mapview, Did not find D2R game window`nGame must be started before running this program`n`nOtherwise check for errors in log.txt`nAlso try running both D2R and this program as admin`n`nExiting....
     ExitApp
 }
+
+
 
 ; initialise memory reading
 d2rprocess := initMemory(gameWindowId)

@@ -37,13 +37,12 @@ class GameItem {
     getTextToSpeech() {
         quality := this.quality
         itemName := this.name
-        sockets := this.numSockets
         if (quality == "Normal")
             quality := ""
 
         sockets := ""
-        if (numSockets > 0) {
-            sockets := numSockets " sockets"
+        if (this.numSockets > 0) {
+            sockets := this.numSockets " sockets"
         }
         switch (itemName) {
             case "Tiara": itemName := "tee-aaruh"

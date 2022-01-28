@@ -171,6 +171,16 @@ showImmunities=false
 | coldImmuneColor     | 0000FF  | How coldimmunity will display                |
 | poisonImmuneColor   | 32CD32  | How poison immunity will display             |
 
+#### Missiles/projectiles
+
+| Setting             | Default | Description                                      |
+| :------------------ | :------ | :----------------------------------------------- |
+| showPlayerMissiles  | true    | Player missiles/projectiles will display         |
+| showEnemyMissiles   | true    | Enemy missiles/projectiles will display          |
+| missileOpacity      | 0x77    | The opacity of the missiles, must be a hex value |
+| missileMajorDotSize | 4       | The larger missiles have a larger dot            |
+| missileMinorDotSize | 2       | The smaller missiles have a smaller dot          |
+
 #### Other players/shrines/portals on map
 
 | Setting              | Default | Description                                       |

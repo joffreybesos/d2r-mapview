@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.4] - 2021-01-29 - Item filter enhancements
+
+- Added ability to filter if item is identified or not
+  Use by adding `ignoreunidentified: true` or `ignoreidentified: true` to `itemfilter.yaml`
+  If you don't specify either then it doesn't matter whether the item is identified or not
+- Added ability to filter if item is ethereal or not
+  Use by adding `onlyethereal: true` or `ignoreethereal: true` to `itemfilter.yaml`
+  If you don't specify either then it doesn't matter whether the item is ethereal or not.
+- Fixed bug where speciying 0 sockets matched against any socket amount.
+
 ## [2.5.3] - 2021-01-27 - Advanced item filter
 
 - You can now define your own item filter alerts!

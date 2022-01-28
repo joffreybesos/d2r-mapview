@@ -6,8 +6,11 @@ class ItemAlert {
     soundfile := ""
     speak := true
     color := ""
-    etherealonly := false
-    excludeethereal := false
+    ignoreethereal := false
+    onlyethereal := false
+    
+    ignoreidentified := false
+    ignoreunidentified := false
 
     hasQualities := false
     hasItems := false

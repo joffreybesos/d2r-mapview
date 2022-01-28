@@ -44,14 +44,25 @@ class AlertList {
                 alert.color := "0xCC" Trim(yamlAlert.color)
             }
 
-            if (yamlAlert.etherealonly) {
-                if (yamlAlert.etherealonly == "true" or yamlAlert.etherealonly == true) {
-                    alert.etherealonly := true
+            if (yamlAlert.onlyethereal) {
+                if (yamlAlert.onlyethereal == "true" or yamlAlert.onlyethereal == true) {
+                    alert.onlyethereal := true
                 }
             }
-            if (yamlAlert.excludeethereal) {
-                if (yamlAlert.excludeethereal == "true" or yamlAlert.excludeethereal == true) {
-                    alert.excludeethereal := true
+            if (yamlAlert.ignoreethereal) {
+                if (yamlAlert.ignoreethereal == "true" or yamlAlert.ignoreethereal == true) {
+                    alert.ignoreethereal := true
+                }
+            }
+
+            if (yamlAlert.ignoreunidentified) {
+                if (yamlAlert.ignoreunidentified == "true" or yamlAlert.ignoreunidentified == true) {
+                    alert.ignoreunidentified := true
+                }
+            }
+            if (yamlAlert.ignoreidentified) {
+                if (yamlAlert.ignoreidentified == "true" or yamlAlert.ignoreidentified == true) {
+                    alert.ignoreidentified := true
                 }
             }
             if (yamlAlert.speak) {
@@ -96,7 +107,7 @@ class AlertList {
                     if (item.name == itarr[1]) {
                         ; matched item
                         
-                        if (itarr[2]) { ; if sockets are defined
+                        if (itarr[2] != "") { ; if sockets are defined
                             if (itarr[2] == item.numSockets) {
                                 foundItemName := true
                             }
@@ -109,7 +120,7 @@ class AlertList {
 
             ; check ethereal
             iseth := true
-            if (alert.etherealonly) {
+            if (alert.onlyethereal) {
                 if (item.ethereal) {
                     iseth := true
                 } else {
@@ -118,7 +129,7 @@ class AlertList {
             }
 
             noneth := true
-            if (alert.excludeethereal) {
+            if (alert.ignoreethereal) {
                 if (item.ethereal) {
                     noneth := false
                 } else {
@@ -126,7 +137,26 @@ class AlertList {
                 }
             }
 
-            if (foundItemName && foundQuality && iseth && noneth) {
+            ; identified
+            iden := true
+            if (alert.ignoreidentified) {
+                if (item.identified) {
+                    iden := false
+                } else {
+                    iden := true
+                }
+            }
+
+            unid := true
+            if (alert.ignoreunidentified) {
+                if (item.identified) {
+                    unid := true
+                } else {
+                    unid := false
+                }
+            }
+
+            if (foundItemName && foundQuality && iseth && noneth && iden && unid) {
                 ;msgbox % qualityName " " item.name " matched " alert.name
                 return alert
             }

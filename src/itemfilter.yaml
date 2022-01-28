@@ -172,6 +172,7 @@ Alerts:
 		items:
 			- Jewel
 		soundeffect: jewel.wav
+		ignoreidentified: true     # only alert if the jewel is not identified
 		color: 6D6DFF
 		
 	Charms:
@@ -180,6 +181,7 @@ Alerts:
 			- Large Charm
 			- Grand Charm
 		soundeffect: charm.wav
+		ignoreidentified: true     # only alert if the charm is not identified
 		color: 6D6DFF
 	
 	# note: anything with a # in front of it is ignored
@@ -199,7 +201,7 @@ Alerts:
 			# - Sol Rune 
 			# - Shael Rune 
 			# - Dol Rune 
-			# - Hel Rune 
+			- Hel Rune 
 			# - Io Rune 
 			# - Lum Rune 
 			# - Ko Rune 

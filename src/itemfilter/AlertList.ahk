@@ -43,6 +43,17 @@ class AlertList {
             if (yamlAlert.color) {
                 alert.color := "0xCC" Trim(yamlAlert.color)
             }
+
+            if (yamlAlert.etherealonly) {
+                if (yamlAlert.etherealonly == "true" or yamlAlert.etherealonly == true) {
+                    alert.etherealonly := true
+                }
+            }
+            if (yamlAlert.excludeethereal) {
+                if (yamlAlert.excludeethereal == "true" or yamlAlert.excludeethereal == true) {
+                    alert.excludeethereal := true
+                }
+            }
             if (yamlAlert.speak) {
                 if (yamlAlert.speak == "true" or yamlAlert.speak == true) {
                     alert.speak := true
@@ -95,7 +106,27 @@ class AlertList {
                     }
                 }
             }
-            if (foundItemName && foundQuality) {
+
+            ; check ethereal
+            iseth := true
+            if (alert.etherealonly) {
+                if (item.ethereal) {
+                    iseth := true
+                } else {
+                    iseth := false
+                }
+            }
+
+            noneth := true
+            if (alert.excludeethereal) {
+                if (item.ethereal) {
+                    noneth := false
+                } else {
+                    noneth := true
+                }
+            }
+
+            if (foundItemName && foundQuality && iseth && noneth) {
                 ;msgbox % qualityName " " item.name " matched " alert.name
                 return alert
             }

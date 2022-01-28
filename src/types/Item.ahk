@@ -8,6 +8,8 @@ class GameItem {
     itemx := 0
     itemy := 0 
     numSockets := 0
+    identified := false
+    ethereal := false
 
     __new(txtFileNo, qualityNo) {
         this.txtFileNo := txtFileNo
@@ -56,7 +58,91 @@ class GameItem {
     }
 
     toString() {
-        return "txtFileNo: " this.txtFileNo ", name: " this.name ", itemLoc: " this.itemLoc ", quality: " this.quality ", isRune: " this.isRune() ", itemx: " this.itemx ", itemy: " this.itemy
+        return "txtFileNo: " this.txtFileNo ", name: " this.name ", itemLoc: " this.itemLoc ", quality: " this.quality ", isRune: " this.isRune() ", id: " this.identified ", eth: " this.ethereal ", itemx: " this.itemx ", itemy: " this.itemy
+    }
+
+    calculateFlags(flags) {
+        flagsList := []
+        SetFormat Integer, H
+        hexFlags := flags + 0
+        SetFormat Integer, D
+        
+        ; if (0x00000002 & flags) {  ; IFLAG_TARGET
+        ;     ; flagsList.push("IFLAG_TARGET") 
+        ; }
+        ; if (0x00000004 & flags) {  ; IFLAG_TARGETING
+        ;     ; flagsList.push("IFLAG_TARGETING") 
+        ; }
+        ; if (0x00000008 & flags) {  ; IFLAG_TARGET
+        ;     ; flagsList.push("IFLAG_TARGET") 
+        ; }
+        if (0x00000010 & flags) {  ; IFLAG_IDENTIFIED
+            this.identified := true
+        }
+        ; if (0x00000020 & flags) {  ; IFLAG_QUANTITY
+        ;     ; flagsList.push("IFLAG_QUANTITY") 
+        ; }
+        ; if (0x00000040 & flags) {  ; IFLAG_SWITCHIN
+        ;     ; flagsList.push("IFLAG_SWITCHIN") 
+        ; }
+        ; if (0x00000080 & flags) {  ; IFLAG_SWITCHOUT
+        ;     ; flagsList.push("IFLAG_SWITCHOUT") 
+        ; }
+        ; if (0x00000100 & flags) {  ; IFLAG_BROKEN
+        ;     ; flagsList.push("IFLAG_BROKEN") 
+        ; }
+        ; if (0x00000200 & flags) {  ; IFLAG_REPAIRED
+        ;     ; flagsList.push("IFLAG_REPAIRED") 
+        ; }
+        ; if (0x00000400 & flags) {  ; IFLAG_UNK1
+        ;     ; flagsList.push("IFLAG_UNK1") 
+        ; }
+        ; if (0x00000800 & flags) {  ; IFLAG_SOCKETED
+        ;     this.socketed := true
+        ;     ; flagsList.push("IFLAG_SOCKETED") 
+        ; }
+        ; if (0x00001000 & flags) {  ; IFLAG_NOSELL
+        ;     ; flagsList.push("IFLAG_NOSELL") 
+        ; }
+        ; if (0x00002000 & flags) {  ; IFLAG_INSTORE
+        ;     ; flagsList.push("IFLAG_INSTORE") 
+        ; }
+        ; if (0x00004000 & flags) {  ; IFLAG_NOEQUIP
+        ;     ; flagsList.push("IFLAG_NOEQUIP") 
+        ; }
+        ; if (0x00008000 & flags) {  ; IFLAG_NAMED
+        ;     ; flagsList.push("IFLAG_NAMED")
+        ; } 
+        ; if (0x00010000 & flags) {  ; IFLAG_ISEAR
+        ;     ; flagsList.push("IFLAG_ISEAR") 
+        ; }
+        ; ; if (0x00020000 & flags) { ; IFLAG_STARTITEM
+        ; ;     flagsList.push("IFLAG_STARTITEM") 
+        ; }  
+        ; if (0x00080000 & flags)  { ; IFLAG_INIT
+        ;     ; flagsList.push("IFLAG_INIT") 
+        ; }
+        if (0x00400000 & flags) { ; IFLAG_ETHEREAL
+            this.ethereal := true 
+        }
+        ; if (0x01000000 & flags) { ; IFLAG_PERSONALIZED
+        ;     ; flagsList.push("IFLAG_PERSONALIZED") 
+        ; }
+        ; if (0x02000000 & flags) { ; IFLAG_LOWQUALITY
+        ;     ; flagsList.push("IFLAG_LOWQUALITY") 
+        ; }
+        ; if (0x04000000 & flags) { ; IFLAG_RUNEWORD
+        ;     this.runeword := true
+        ; }
+        ; if (0x08000000 & flags) { ; IFLAG_ITEM
+        ;     ; flagsList.push("IFLAG_ITEM") 
+        ; }
+
+        ; sep := ","
+        ; for index,param in flagsList
+        ;     str .= sep . param
+        ; flagsText := SubStr(str, StrLen(sep)+1)
+        ; return flagsText
     }
 
     setQuality(qualityNo) {

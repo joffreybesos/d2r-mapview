@@ -10,6 +10,7 @@ enabledAlerts:
 	- Jewels
 	- Charms
 	- Runes
+	- RareHeadGear
 
 ##############################################
 #### Define all alerts below this section ####
@@ -57,50 +58,103 @@ Alerts:
 			- Winged Helm       # Guillaume's Face
 			- Russet Armor      # Aldur's Advance
 			- Swirling Crystal  # Tal Rasha's Lidless Eye
-			- Ring
-			- Amulet
 		soundeffect: goodsetitem.wav
 		color: 00FC00
 
-	# base items
+	# base items with sockets
 	BaseItems:
 		quality:
 			- Normal
 			- Superior
 		items:
+			# shields
 			- Aerin Shield, 3
 			- Akaran Rondache, 3
 			- Akaran Targe, 3
-			- Bone Visage, 3
-			- Circlet, 3
-			- Coronet, 3
-			- Crystal Sword, 3
-			- Diadem, 3
 			- Heraldic Shield, 3
-			- Mage Plate, 3
-			- Phase Blade, 3
+			- Heraldic Shield, 4
+			- Monarch, 3
+			- Monarch, 4
 			- Rondache, 3
 			- Sacred Rondache, 3
 			- Sacred Targe, 3
 			- Targe, 3
-			- Wyrmhide, 3
+			- Zakarum Shield, 3
+			- Zakarum Shield, 4
+
+			# Armor
 			- Archon Plate, 4
-			- Colossus Voulge, 4
-			- Crystal Sword, 4
+			- Balrog Skin, 3
+			- Balrog Skin, 4
+			- Diamond Mail, 3
+			- Diamond Mail, 4
+			- Dusk Shroud, 3
 			- Dusk Shroud, 4
-			- Flail, 4
-			- Giant Thresher, 4
-			- Heraldic Shield, 4
-			- Long Sword, 4
-			- Monarch, 4
-			- Phase Blade, 4
-			- Thresher, 4
+			- Great Hauberk, 3
+			- Great Hauberk, 4
+			- Hellforge Plate, 3
+			- Hellforge Plate, 4
+			- Kraken Shell, 3
+			- Kraken Shell, 4
+			- Lacquered Plate, 3
+			- Lacquered Plate, 4
+			- Loricated Mail, 3
+			- Loricated Mail, 4
+			- Mage Plate, 3
+			- Sacred Armor, 3
+			- Sacred Armor, 4
+			- Scarab Husk, 3
+			- Scarab Husk, 4
+			- Shadow Plate, 3
+			- Shadow Plate, 4
+			- Wire Fleece, 3
+			- Wire Fleece, 4
+			- Wyrmhide, 3
 			- Wyrmhide, 4
+
+			# Helms
+			- Bone Visage, 3
+			- Boneweave, 3
+			- Boneweave, 4
+			- Circlet, 3
+			- Coronet, 3
+			- Demonhead, 3
+			- Diadem, 3
+
+			# Polearms
+			- Colossus Voulge, 4
+			- Giant Thresher, 4
+			- Cryptic Axe, 4
+			- Thresher, 4
+
+			# Swords
+			- Crystal Sword, 3
+			- Crystal Sword, 4
 			- Crystal Sword, 5
-			- Flail, 5
+			- Long Sword, 4
+			- Phase Blade, 3
+			- Phase Blade, 4
 			- Phase Blade, 5
-		soundeffect: ching.wav
+
+			# Mace class
+			- Flail, 4
+			- Flail, 5
+
+			# claws
+			- Greater Talons, 3
+			- Runic Talons, 3
+			- Feral Claws, 3
 		color: AAAAAA
+
+	RareHeadGear:
+		quality:
+			- Rare
+		items:
+			- Coronet
+			- Diadem
+			- Tiara
+			- Circlet
+		color: FFFF00
 
 	# all uniques
 	AllUniqueItems:
@@ -127,7 +181,8 @@ Alerts:
 			- Grand Charm
 		soundeffect: charm.wav
 		color: 6D6DFF
-
+	
+	# note: anything with a # in front of it is ignored
 	Runes:
 		items:
 			# - El Rune 

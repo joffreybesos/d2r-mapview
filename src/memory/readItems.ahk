@@ -43,12 +43,15 @@ ReadItems(d2rprocess, startingOffset, ByRef items) {
                             break
                         }
                     }
+                    flags := d2rprocess.read(pUnitData + 0x18, "UInt")
+
                     item := new GameItem(txtFileNo, itemQuality)
                     item.itemLoc := itemLoc
                     item.itemx := itemx
                     item.itemy := itemy
                     item.numSockets := numSockets
-                    ;WriteLog(txtFileNo " " item.toString())
+                    item.calculateFlags(flags)
+                    WriteLog(txtFileNo " " item.toString())
                     items.push(item)
                 }
             }

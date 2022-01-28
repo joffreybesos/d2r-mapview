@@ -55,11 +55,9 @@ Do not accept executables for this from any other source!
   - Monsters as a white dot
   - Unique/champion/superunique monsters as a larger gold dot
   - Monster immunities
-  - Unique items on ground (flashing alert)
-  - Set items on ground (flashing alert)
-  - High runes on ground (Lem and above) (flashing alert)
-  - Super chests marked (Lower Kurast chests)
-  - Shrines and their type
+  - Item drop alerts with a customisable filter
+  - Text to speech to announce dropped special items defined in your item filter
+  - Shows shrines and their type
   - Portals
   - All doors and waypoints marked
   - A purple line drawn to the next level exit
@@ -76,11 +74,11 @@ Do not accept executables for this from any other source!
 
 **Other notes**
 
-- Press Ctrl+H to see help in game, including a map legend
-- You can exit the maphack with Shift+F10
+- Press `Ctrl+H` to see help in game, including a map legend
+- Press `/` (the one next to your shift key) to switch map to centered mode.
+- You can exit the maphack with `Shift+F10`
 - You can also right click the icon in the system tray.
 - This MH will automatically exit when you exit D2R.
-- Please ignore the message at the top, it's to alert anyone who may have been scammed.
 
 ## Discord
 
@@ -244,7 +242,7 @@ It's a good idea to add `~` in front of the hotkey. This is to make the key stil
 | moveMapRight       | #Right     | Shortcut to move map right (Win + Right)           |
 | moveMapUp          | #Up        | Shortcut to move map up (Win + Up)                 |
 | moveMapDown        | #Down      | Shortcut to move map down (Win + Down)             |
-| switchMapMode      | /          | Shortcut to toggle centered map mode               |
+| switchMapMode      | /          | Shortcut to toggle centered map mode (not Numpad/) |
 | historyToggleKey   | ^g         | Shortcut key to hide game history in menu (Ctrl+G) |
 
 To better understand the keyboard shortcut format, refer to <https://www.autohotkey.com/docs/KeyList.htm#modifier>
@@ -253,7 +251,7 @@ To better understand the keyboard shortcut format, refer to <https://www.autohot
 
 | Setting         | Default  | Description                                                                                                                                                                                                                                                             |
 | :-------------- | :------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| performanceMode | 0        | Experimental, set to `-1` to max out performance. This may use too much CPU and cause strange behaviour. Try setting to `50ms` if `-1` uses too much CPU. Refer to this [doc](https://www.autohotkey.com/docs/commands/SetBatchLines.htm) to understand what it's doing |
+| performanceMode | 50ms        | Experimental, set to `-1` to max out performance. This may use too much CPU and cause strange behaviour. Try setting to `0` if it uses too much CPU. Refer to this [doc](https://www.autohotkey.com/docs/commands/SetBatchLines.htm) to understand what it's doing |
 | enableD2ML      | false    | Only enable if you use multiple D2R sessions                                                                                                                                                                                                                            |
 | windowTitle     | D2R:main | This is ignored unless `enableD2ML` is turned on. It is the window title of one D2R session for multi sesion                                                                                                                                                            |
 

@@ -27,7 +27,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 
-expectedVersion := "2.5.3"
+expectedVersion := "2.5.5"
 
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
@@ -110,8 +110,6 @@ if (not WinExist(gameWindowId)) {
     ExitApp
 }
 
-
-
 ; initialise memory reading
 d2rprocess := initMemory(gameWindowId)
 patternScan(d2rprocess, settings)
@@ -132,14 +130,6 @@ global mapHwnd1 := WinExist()
 
 Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
 global unitHwnd1 := WinExist()
-
-; ; #2: Disable DWM rendering of the window's frame.
-; DllCall("dwmapi\DwmSetWindowAttribute", "ptr", mapHwnd1
-;   , "uint", DWMWA_NCRENDERING_POLICY := 2, "int*", DWMNCRP_DISABLED := 1, "uint", 4)
-
-; ; #2: Disable DWM rendering of the window's frame.
-; DllCall("dwmapi\DwmSetWindowAttribute", "ptr", unitHwnd1
-;   , "uint", DWMWA_NCRENDERING_POLICY := 2, "int*", DWMNCRP_DISABLED := 1, "uint", 4)
 
 sessionList := []
 offsetAttempts := 6
@@ -335,6 +325,7 @@ hideMap(alwaysShowMap, menuShown := 0) {
         }
         isMapShowing:= 0
     }
+    return
 }
 
 unHideMap() {
@@ -350,9 +341,10 @@ unHideMap() {
     } else {
         WriteLogDebug("Tried to show map while map loading, ignoring...")
     }
+    return
 }
 
-return
+
 +F10::
 {
     WriteLog("Pressed Shift+F10, exiting...")
@@ -502,10 +494,10 @@ HistoryToggle:
 {
     if (helpToggle) {
         ShowHelpText(settings)
-        WriteLogDebug("Show Help")
+        WriteLog("Show Help")
     } else {
         Gui, HelpText: Hide
-        WriteLogDebug("Hide Help")
+        WriteLog("Hide Help")
     }
     helpToggle := !helpToggle
     return

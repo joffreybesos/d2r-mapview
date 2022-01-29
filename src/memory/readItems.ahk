@@ -51,7 +51,7 @@ ReadItems(d2rprocess, startingOffset, ByRef items) {
                     item.itemy := itemy
                     item.numSockets := numSockets
                     item.calculateFlags(flags)
-                    WriteLog(txtFileNo " " item.toString())
+                    ; WriteLog(txtFileNo " " item.toString())
                     items.push(item)
                 }
             }

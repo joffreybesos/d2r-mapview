@@ -10,7 +10,7 @@ readSettings(settingsFile, ByRef settings) {
     ; these are the default values
     settings := []
     settings["settingsFile"] := settingsFile
-    settings["baseUrl"] := "http://map.d2r-mapview.xyz:8080"
+    settings["baseUrl"] := "http://localhost:3002"
     settings["scale"] := "1.000000"
     settings["leftMargin"] := "20"
     settings["topMargin"] := "20"
@@ -158,6 +158,27 @@ readSettings(settingsFile, ByRef settings) {
         StringTrimRight, baseUrl, baseUrl, 1
         settings["baseUrl"] := baseUrl
     }
+
+    ;health check
+    testUrl := baseUrl "/health"
+    try {
+        whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+        WinHttpReq.SetTimeouts("10", "10", "10", "10")
+        whr.Open("GET", testUrl, true)
+        whr.Send()
+        whr.WaitForResponse()
+        healthCheck := whr.ResponseText
+        IfNotInString, healthCheck, Ok
+        {
+            Msgbox % "Could not connect to " baseUrl "`n`nMake sure the server is running`n`nExiting..."
+            ExitApp
+        }
+    } catch e {
+        emsg := e.message
+        Msgbox, 48, d2r-mapview, Could not connect to %baseUrl%`n`nMake sure the server is running`nDouble check your baseUrl in settings.ini`n`n%emsg%`n`nExiting...
+        ExitApp
+    }
+    
 
     WriteLog("Using configuration:")
     WriteLog("- baseUrl: " settings["baseUrl"])

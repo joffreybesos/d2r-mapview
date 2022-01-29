@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
 - Added ability to filter if item is ethereal or not
   Use by adding `onlyethereal: true` or `ignoreethereal: true` to `itemfilter.yaml`
   If you don't specify either then it doesn't matter whether the item is ethereal or not.
-- Fixed bug where speciying 0 sockets matched against any socket amount.
+- Fixed bug where speciying 0 sockets matched against _any_ socket amount.
+- Updated README with info on how to disable missiles/projectiles.
 
 ## [2.5.3] - 2021-01-27 - Advanced item filter
 

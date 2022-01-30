@@ -12,6 +12,7 @@ class AlertList {
             yamlAlert := yamlObj.Alerts[yamlObj.enabledAlerts.(A_Index)]
             alert := new ItemAlert()
             alert.name := yamlObj.enabledAlerts.(A_Index)
+            validate(yamlAlert, alert.name)
 
             qualities := yamlAlert.quality.Dump(3)
             numQualities := yamlAlert.quality.()
@@ -24,7 +25,7 @@ class AlertList {
                 }
                 alert.hasQualities := true
             }
-
+            
             numItems := yamlAlert.items.()
             if (numItems > 0) {
                 items := yamlAlert.items.Dump(3)
@@ -171,5 +172,15 @@ class AlertList {
             }
         }
         return ""
+    }
+}
+
+
+validate(yamlAlert, name) {
+    rawAlert := yamlAlert.Dump(0)
+    WriteLog(name " alert config: " rawAlert)
+    if (rawAlert == "") {
+        WriteLog("ERROR: Alert '" name "' in enabled list but missing in config, check formatting of itemfilter.yaml")
+        Msgbox, 48, Item Filter, Item filter alert '%name%' is in enabledAlerts but not found in config`n`nCheck the format of your itemfilter.yaml
     }
 }

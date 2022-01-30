@@ -2,15 +2,17 @@
 # To disable an alert, remove it from this list
 # As soon as an item matches an alert, any alerts ranked underneath won't be checked
 enabledAlerts:
-	- UniqueRingsAndAmmys
-	- SpecificSetItems
-	- BaseItems
-	- AllUniqueItems
-	- AllSetItems
-	- Jewels
-	- Charms
-	- Runes
-	- RareHeadGear
+  - UniqueRingsAndAmmys
+  - SpecificSetItems
+  - BaseItems
+  - AllUniqueItems
+  - AllSetItems
+  - Jewels
+  - Charms
+  - Runes
+  - RareHeadGear
+  - RareJewelry
+  - Gems
 
 ##############################################
 #### Define all alerts below this section ####
@@ -31,193 +33,242 @@ enabledAlerts:
 #  soundeffect: <filename.wav>           # soundeffect that plays when item is seen on ground
 #  color: <hex value>                    # color of alert on the screen
 #  speak: true/false                     # set to false to suppress text to speech, defaults to true
+#  ignoreethereal : true/false           # exclude etheral from the alert
+#  ignoreidentified : true/false         # exclude identified items from the alert
+#  onlyethereal : true/false             # only inclue etheral items from the alert
+#  ignoreunidentified : true/false       # exclude identified items from the alert
+
 
 # Only the first matching alert will be applied
 
 Alerts:
-	# just unique rings and ammys
-	UniqueRingsAndAmmys:
-		quality:
-			- Unique
-		items:
-			- Ring
-			- Amulet
-		soundeffect: ching.wav
-		color: BBA45B
+  # just unique rings and ammys
+  UniqueRingsAndAmmys:
+    quality:
+      - Unique
+    items:
+      - Ring
+      - Amulet
+    soundeffect: ching.wav
+    color: BBA45B
 
-	# specific set items give a different alert
+  # specific set items give a different alert
 	SpecificSetItems:
-		quality:
-			- Set
-		items:
-			- Lacquered Plate   # Tal Rasha's Guardianship
-			- Death Mask        # Tal Rasha's Horadric Crest
-			- Mesh Belt         # Tal Rasha's Fine Spun Cloth
-			- Sacred Armor      # Immortal King
-			- Heavy Bracers     # Trang-Oul's Claws
-			- Winged Helm       # Guillaume's Face
-			- Russet Armor      # Aldur's Advance
-			- Swirling Crystal  # Tal Rasha's Lidless Eye
-		soundeffect: goodsetitem.wav
-		color: 00FC00
+    quality:
+      - Set
+    items:
+      - Lacquered Plate   # Tal Rasha's Guardianship
+      - Death Mask        # Tal Rasha's Horadric Crest
+      - Mesh Belt         # Tal Rasha's Fine Spun Cloth
+      - Sacred Armor      # Immortal King
+      - Heavy Bracers     # Trang-Oul's Claws
+      - Winged Helm       # Guillaume's Face
+      - Russet Armor      # Aldur's Advance
+      - Swirling Crystal  # Tal Rasha's Lidless Eye
+    soundeffect: goodsetitem.wav
+    color: 00FC00
 
-	# base items with sockets
-	BaseItems:
-		quality:
-			- Normal
-			- Superior
-		items:
-			# shields
-			- Aerin Shield, 3
-			- Akaran Rondache, 3
-			- Akaran Targe, 3
-			- Heraldic Shield, 3
-			- Heraldic Shield, 4
-			- Monarch, 3
-			- Monarch, 4
-			- Rondache, 3
-			- Sacred Rondache, 3
-			- Sacred Targe, 3
-			- Targe, 3
-			- Zakarum Shield, 3
-			- Zakarum Shield, 4
+  # base items with sockets
+  BaseItems:
+    quality:
+      - Normal
+      - Superior
+    items:
+      # shields
+      - Aerin Shield, 3
+      - Akaran Rondache, 3
+      - Akaran Targe, 3
+      - Heraldic Shield, 3
+      - Heraldic Shield, 4
+      - Monarch, 3
+      - Monarch, 4
+      - Rondache, 3
+      - Sacred Rondache, 3
+      - Sacred Targe, 3
+      - Targe, 3
+      - Zakarum Shield, 3
+      - Zakarum Shield, 4
 
-			# Armor
-			- Archon Plate, 4
-			- Balrog Skin, 3
-			- Balrog Skin, 4
-			- Diamond Mail, 3
-			- Diamond Mail, 4
-			- Dusk Shroud, 3
-			- Dusk Shroud, 4
-			- Great Hauberk, 3
-			- Great Hauberk, 4
-			- Hellforge Plate, 3
-			- Hellforge Plate, 4
-			- Kraken Shell, 3
-			- Kraken Shell, 4
-			- Lacquered Plate, 3
-			- Lacquered Plate, 4
-			- Loricated Mail, 3
-			- Loricated Mail, 4
-			- Mage Plate, 3
-			- Sacred Armor, 3
-			- Sacred Armor, 4
-			- Scarab Husk, 3
-			- Scarab Husk, 4
-			- Shadow Plate, 3
-			- Shadow Plate, 4
-			- Wire Fleece, 3
-			- Wire Fleece, 4
-			- Wyrmhide, 3
-			- Wyrmhide, 4
+      # Armor
+      - Archon Plate, 4
+      - Balrog Skin, 3
+      - Balrog Skin, 4
+      - Diamond Mail, 3
+      - Diamond Mail, 4
+      - Dusk Shroud, 3
+      - Dusk Shroud, 4
+      - Great Hauberk, 3
+      - Great Hauberk, 4
+      - Hellforge Plate, 3
+      - Hellforge Plate, 4
+      - Kraken Shell, 3
+      - Kraken Shell, 4
+      - Lacquered Plate, 3
+      - Lacquered Plate, 4
+      - Loricated Mail, 3
+      - Loricated Mail, 4
+      - Mage Plate, 3
+      - Sacred Armor, 3
+      - Sacred Armor, 4
+      - Scarab Husk, 3
+      - Scarab Husk, 4
+      - Shadow Plate, 3
+      - Shadow Plate, 4
+      - Wire Fleece, 3
+      - Wire Fleece, 4
+      - Wyrmhide, 3
+      - Wyrmhide, 4
 
-			# Helms
-			- Bone Visage, 3
-			- Boneweave, 3
-			- Boneweave, 4
-			- Circlet, 3
-			- Coronet, 3
-			- Demonhead, 3
-			- Diadem, 3
+      # Helms
+      - Bone Visage, 3
+      - Boneweave, 3
+      - Boneweave, 4
+      - Circlet, 3
+      - Coronet, 3
+      - Demonhead, 3
+      - Diadem, 3
 
-			# Polearms
-			- Colossus Voulge, 4
-			- Giant Thresher, 4
-			- Cryptic Axe, 4
-			- Thresher, 4
+      # Polearms
+      - Colossus Voulge, 4
+      - Giant Thresher, 4
+      - Cryptic Axe, 4
+      - Thresher, 4
 
-			# Swords
-			- Crystal Sword, 3
-			- Crystal Sword, 4
-			- Crystal Sword, 5
-			- Long Sword, 4
-			- Phase Blade, 3
-			- Phase Blade, 4
-			- Phase Blade, 5
+      # Swords
+      - Crystal Sword, 3
+      - Crystal Sword, 4
+      - Crystal Sword, 5
+      - Long Sword, 4
+      - Phase Blade, 3
+      - Phase Blade, 4
+      - Phase Blade, 5
 
-			# Mace class
-			- Flail, 4
-			- Flail, 5
+      # Mace class
+      - Flail, 4
+      - Flail, 5
 
-			# claws
-			- Greater Talons, 3
-			- Runic Talons, 3
-			- Feral Claws, 3
-		color: AAAAAA
+      # claws
+      - Greater Talons, 2
+      - Runic Talons, 2
+      - Feral Claws, 2
+    color: AAAAAA
 
-	RareHeadGear:
-		quality:
-			- Rare
-		items:
-			- Coronet
-			- Diadem
-			- Tiara
-			- Circlet
-		color: FFFF00
+  RareHeadGear:
+    quality:
+      - Rare
+    items:
+      - Coronet
+      - Diadem
+      - Tiara
+      - Circlet
+    color: FFdd00
 
-	# all uniques
-	AllUniqueItems:
-		quality:
-			- Unique
-		color: BBA45B
+  RareJewelry:
+    quality:
+      - Rare
+    items:
+      - Ring
+      - Amulet
+    color: FFFF00
 
-	# all set items
-	AllSetItems:
-		quality:
-			- Set
-		color: 00FC00
+  # all uniques
+  AllUniqueItems:
+    quality:
+      - Unique
+    color: BBA45B
 
-	Jewels:
-		items:
-			- Jewel
-		soundeffect: jewel.wav
-		ignoreidentified: true     # only alert if the jewel is not identified
-		color: 6D6DFF
-		
-	Charms:
-		items:
-			- Small Charm
-			- Large Charm
-			- Grand Charm
-		soundeffect: charm.wav
-		ignoreidentified: true     # only alert if the charm is not identified
-		color: 6D6DFF
-	
-	# note: anything with a # in front of it is ignored
-	Runes:
-		items:
-			# - El Rune 
-			# - Eld Rune 
-			# - Tir Rune 
-			# - Nef Rune 
-			# - Eth Rune 
-			# - Ith Rune 
-			# - Tal Rune 
-			# - Ral Rune 
-			# - Ort Rune 
-			# - Thul Rune 
-			# - Amn Rune 
-			# - Sol Rune 
-			# - Shael Rune 
-			# - Dol Rune 
-			- Hel Rune 
-			# - Io Rune 
-			# - Lum Rune 
-			# - Ko Rune 
-			# - Fal Rune 
-			- Lem Rune 
-			- Pul Rune 
-			- Um Rune 
-			- Mal Rune 
-			- Ist Rune 
-			- Gul Rune 
-			- Vex Rune 
-			- Ohm Rune 
-			- Lo Rune 
-			- Sur Rune 
-			- Ber Rune 
-			- Jah Rune 
-			- Cham Rune 
-			- Zod Rune 
-		color: FFA700
+  # all set items
+  AllSetItems:
+    quality:
+      - Set
+    color: 00FC00
+
+  Jewels:
+    items:
+      - Jewel
+    soundeffect: jewel.wav
+    ignoreidentified: true     # only alert if the jewel is not identified
+    color: 6D6DFF
+    
+  Charms:
+    items:
+      - Small Charm
+      - Large Charm
+      - Grand Charm
+    soundeffect: charm.wav
+    # ignoreidentified: true     # only alert if the charm is not identified
+    color: 6D6DFF
+  
+  # note: anything with a # in front of it is ignored
+  Runes:
+    items:
+      # - El Rune 
+      # - Eld Rune 
+      # - Tir Rune 
+      # - Nef Rune 
+      # - Eth Rune 
+      # - Ith Rune 
+      # - Tal Rune 
+      # - Ral Rune 
+      # - Ort Rune 
+      # - Thul Rune 
+      # - Amn Rune 
+      # - Sol Rune 
+      # - Shael Rune 
+      # - Dol Rune 
+      - Hel Rune 
+      # - Io Rune 
+      # - Lum Rune 
+      # - Ko Rune 
+      # - Fal Rune 
+      - Lem Rune 
+      - Pul Rune 
+      - Um Rune 
+      - Mal Rune 
+      - Ist Rune 
+      - Gul Rune 
+      - Vex Rune 
+      - Ohm Rune 
+      - Lo Rune 
+      - Sur Rune 
+      - Ber Rune 
+      - Jah Rune 
+      - Cham Rune 
+      - Zod Rune 
+    color: FFA700
+
+  # note: anything with a # in front of it is ignored
+  Gems:
+    items:
+      # - Chipped Amethyst
+      # - Chipped Diamond
+      # - Chipped Emerald
+      # - Chipped Ruby
+      # - Chipped Sapphire
+      # - Chipped Topaz
+      # - Flawed Amethyst
+      # - Flawed Diamond
+      # - Flawed Emerald
+      # - Flawed Ruby
+      # - Flawed Sapphire
+      # - Flawed Topaz
+      # - Amethyst
+      # - Diamond
+      # - Emerald
+      # - Ruby
+      # - Sapphire
+      # - Topaz
+      # - Flawless Amethyst
+      # - Flawless Diamond
+      # - Flawless Emerald
+      # - Flawless Ruby
+      # - Flawless Sapphire
+      # - Flawless Topaz
+      - Perfect Amethyst
+      - Perfect Diamond
+      - Perfect Emerald
+      - Perfect Ruby
+      - Perfect Sapphire
+      - Perfect Topaz
+    color: FF0000
+    speak: false

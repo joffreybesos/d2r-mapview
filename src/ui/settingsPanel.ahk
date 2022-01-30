@@ -701,5 +701,7 @@ writeIniVar(valname, settings, defaultsettings) {
     if (settings[valname] != defaultsettings[valname]) {
         ;WriteLog("Updating setting '" valname "' with " settings[valname])
         IniWrite, % settings[valname], settings.ini, Settings, %valname%
+    } else {
+        IniDelete, settings.ini, Settings , %valname%
     }
 }

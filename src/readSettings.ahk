@@ -50,7 +50,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["textToSpeechVolume"] := 50
     settings["textToSpeechPitch"] := 4
     settings["textToSpeechSpeed"] := 1
-    settings["allowItemDropSounds"] := true
+    settings["allowItemDropSounds"] := 1
     settings["showUniqueAlerts"] := 1
     settings["showSetItemAlerts"] := 1
     settings["showRuneAlerts"] := 1
@@ -178,7 +178,7 @@ readSettings(settingsFile, ByRef settings) {
         Msgbox, 48, d2r-mapview, Could not connect to %baseUrl%`n`nMake sure the server is running`nDouble check your baseUrl in settings.ini`n`n%emsg%`n`nExiting...
         ExitApp
     }
-    
+    defaultSettings := settings
 
     WriteLog("Using configuration:")
     WriteLog("- baseUrl: " settings["baseUrl"])

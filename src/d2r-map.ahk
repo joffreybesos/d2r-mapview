@@ -26,6 +26,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\stats\GameSession.ahk
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\readSettings.ahk
+#Include %A_ScriptDir%\ui\settingsPanel.ahk
 
 expectedVersion := "2.5.5"
 
@@ -45,7 +46,10 @@ WriteLog("*******************************************************************")
 WriteLog("Version: " expectedVersion)
 WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyVW3uj")
 ClearCache(A_Temp)
+global settings
 readSettings("settings.ini", settings)
+CreateSettingsGUI(settings)
+
 
 lastlevel:=""
 lastSeed:=""
@@ -57,6 +61,7 @@ performanceMode := settings["performanceMode"]
 if (performanceMode != 0) {
     SetBatchLines, %performanceMode%
 }
+showSettingsGUI := 0
 
 global isMapShowing:=1
 global debug := settings["debug"]
@@ -69,6 +74,7 @@ global oSpVoice := ComObjCreate("SAPI.SpVoice")
 global itemAlertList := new AlertList("itemfilter.yaml")
 global centerLeftOffset := 0
 global centerTopOffset := 0
+global redrawMap := 1
 
 switchMapModeKey := settings["switchMapMode"]
 Hotkey, IfWinActive, % gameWindowId
@@ -230,6 +236,7 @@ While 1 {
                 redrawMap := 1
             }
             if (redrawMap) {
+                WriteLog("Redraw map")
                 levelNo := gameMemoryData["levelNo"]
                 IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
                 IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
@@ -360,10 +367,11 @@ MapAlwaysShow:
     checkAutomapVisibility(d2rprocess, settings, gameMemoryData)
     if (settings["alwaysShowMap"]) {
         unHideMap()
-        IniWrite, true, settings.ini, MapSettings, alwaysShowMap
+        IniWrite, true, settings.ini, Settings, alwaysShowMap
     } else {
-        IniWrite, false, settings.ini, MapSettings, alwaysShowMap
+        IniWrite, false, settings.ini, Settings, alwaysShowMap
     }
+    GuiControl, Settings:, alwaysShowMap, % settings["alwaysShowMap"]
     WriteLog("alwaysShowMap set to " settings["alwaysShowMap"])
     return
 }
@@ -382,7 +390,7 @@ MapSizeIncrease:
     if (levelNo and settings["centerMode"]) {
         centerModeScale := settings["centerModeScale"]
         centerModeScale := centerModeScale + 0.05
-        IniWrite, %centerModeScale%, settings.ini, MapSettings, centerModeScale
+        IniWrite, %centerModeScale%, settings.ini, Settings, centerModeScale
         settings["centerModeScale"] := centerModeScale
         redrawMap := 1
         WriteLog("Increased centerModeScale global setting by 0.05 to " levelScale)
@@ -404,7 +412,7 @@ MapSizeDecrease:
     if (levelNo and settings["centerMode"]) {
         centerModeScale := settings["centerModeScale"]
         centerModeScale := centerModeScale - 0.05
-        IniWrite, %centerModeScale%, settings.ini, MapSettings, centerModeScale
+        IniWrite, %centerModeScale%, settings.ini, Settings, centerModeScale
         settings["centerModeScale"] := centerModeScale
         redrawMap := 1
         WriteLog("Decreased centerModeScale global setting by 0.05 to " levelScale)
@@ -430,6 +438,7 @@ SwitchMapMode:
     Gui, Map: Hide
     Gui, Units: Hide
     mapShowing := 0
+    GuiControl, Settings:, centerMode, % settings["centerMode"]
     return
 }
 
@@ -519,5 +528,35 @@ HistoryToggle:
 {
     WriteLog("Debug mode set to " debug)
     debug := !debug
+    return
+}
+
+~^O::
+{
+    showSettingsGUI := !showSettingsGUI
+    if (showSettingsGUI) {
+        Gui, Settings: Show, h482 w362, d2r-mapview settings
+    } else {
+        Gui, Settings: Hide
+    }
+    return
+}
+
+Update:
+{
+    cmode := settings["centerMode"]
+    UpdateSettings(settings)
+    if (cmode != settings["centerMode"]) { ; if centermode changed
+        lastlevel := "INVALIDATED"
+        imageData := {}
+        gameMemoryData  := {}
+        uiData := {}
+        WinSet, Region, , ahk_id %mapHwnd1%
+        WinSet, Region, , ahk_id %unitHwnd1%
+        Gui, Map: Hide
+        Gui, Units: Hide
+        mapShowing := 0
+    }
+    redrawMap := 1
     return
 }

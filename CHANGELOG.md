@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.5] - 2021-01-30 - Settings UI window
+
+- You can now configure settings with a nice new settings UI (thanks @Sithel)
+- Settings don't update straight away you must click Apply for it to take effect
+- Currently settings don't save to your settings.ini
+
 ## [2.5.4] - 2021-01-29 - Item filter enhancements
 
 - Added ability to filter if item is identified or not

@@ -38,30 +38,30 @@ class AlertList {
             }
 
             if (yamlAlert.soundeffect) {
-                alert.soundfile := yamlAlert.soundeffect
+                alert.soundfile := Trim(yamlAlert.soundeffect)
             }
             if (yamlAlert.color) {
                 alert.color := "0xCC" Trim(yamlAlert.color)
             }
 
             if (yamlAlert.onlyethereal) {
-                if (yamlAlert.onlyethereal == "true" or yamlAlert.onlyethereal == true) {
+                if (Trim(yamlAlert.onlyethereal) == "true" or yamlAlert.onlyethereal == true) {
                     alert.onlyethereal := true
                 }
             }
             if (yamlAlert.ignoreethereal) {
-                if (yamlAlert.ignoreethereal == "true" or yamlAlert.ignoreethereal == true) {
+                if (Trim(yamlAlert.ignoreethereal) == "true" or yamlAlert.ignoreethereal == true) {
                     alert.ignoreethereal := true
                 }
             }
 
             if (yamlAlert.ignoreunidentified) {
-                if (yamlAlert.ignoreunidentified == "true" or yamlAlert.ignoreunidentified == true) {
+                if (Trim(yamlAlert.ignoreunidentified) == "true" or yamlAlert.ignoreunidentified == true) {
                     alert.ignoreunidentified := true
                 }
             }
             if (yamlAlert.ignoreidentified) {
-                if (yamlAlert.ignoreidentified == "true" or yamlAlert.ignoreidentified == true) {
+                if (Trim(yamlAlert.ignoreidentified) == "true" or yamlAlert.ignoreidentified == true) {
                     alert.ignoreidentified := true
                 }
             }

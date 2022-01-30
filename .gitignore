@@ -12,3 +12,4 @@ currentmap.png
 /src/mapconfig.ini
 /src/GameSessionLog.csv
 
+/src/*.wav

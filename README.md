@@ -122,8 +122,8 @@ showImmunities=false
 | centerModeOpacity | 0.7                     | Opacity of the centered map                                                                                                                                                              |
 | centerModeXoffset | 0                       | Change this if the map doesn't line up with the normal automap horizontally                                                                                                              |
 | centerModeYoffset | -56                     | Change this if the map doesn't line up with the normal automap vertically                                                                                                                |
-| centerModeXoffset | 1                       | Change this if the units (players, monsters etc) doesn't line up horizontally with the normal automap                                                                                    |
-| centerModeYoffset | 16                      | Change this if the units (players, monsters etc) doesn't line up vertically with the normal automap                                                                                      |
+| centerModeXUnitoffset | 1                       | Change this if the units (players, monsters etc) doesn't line up horizontally with the normal automap                                                                                    |
+| centerModeYUnitoffset | 16                      | Change this if the units (players, monsters etc) doesn't line up vertically with the normal automap                                                                                      |
 
 #### Game History/info
 

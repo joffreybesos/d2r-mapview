@@ -223,7 +223,7 @@ While 1 {
                 mapLoading := 1
                 Gui, Map: Hide ; hide map
                 Gui, Units: Hide ; hide player dot
-                ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help", "44") ; 22 is opacity
+                ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 22 is opacity
                 ; Download map
                 downloadMapImage(settings, gameMemoryData, imageData)
                 
@@ -534,7 +534,7 @@ HistoryToggle:
 
 ~^O::
 {
-    Gui, Settings: Show, h482 w362, d2r-mapview settings
+    Gui, Settings: Show, x200 y200 h482 w362, d2r-mapview settings
     return
 }
 

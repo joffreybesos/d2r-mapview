@@ -5,8 +5,15 @@ All notable changes to this project will be documented in this file.
 ## [2.5.5] - 2021-01-30 - Settings UI window
 
 - You can now configure settings with a nice new settings UI (thanks @Sithel)
-- Settings don't update straight away you must click Apply for it to take effect
-- Currently settings don't save to your settings.ini
+- Press `Ctrl+O` to make the window appear, closing it will just hide it
+- When you make a change to the config, you must click Apply/Save
+- Any settings which differ from the default will be saved to your `settings.ini`
+- If you want to restore to defaults settings, download a fresh copy of `settings.ini`
+- Note that this is difficult to test, so expect bugs!
+- Added validation to the item filter to highlight any errors in formatting
+- How each alert in `itemfilter.yaml` is interpreted will now appear in `log.txt` at startup
+- When an alert is in `enabledAlerts` but the config is not found an error message will now appear
+- Fixed a bug with performance as it was logging to file incorrectly
 
 ## [2.5.4] - 2021-01-29 - Item filter enhancements
 

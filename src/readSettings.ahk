@@ -46,17 +46,13 @@ readSettings(settingsFile, ByRef settings) {
     settings["showShrines"] := 1
     settings["showPortals"] := 1
 
+    settings["enableItemFilter"] := 1
     settings["allowTextToSpeech"] := 1
     settings["textToSpeechVolume"] := 50
     settings["textToSpeechPitch"] := 4
     settings["textToSpeechSpeed"] := 1
     settings["allowItemDropSounds"] := 1
-    settings["showUniqueAlerts"] := 1
-    settings["showSetItemAlerts"] := 1
-    settings["showRuneAlerts"] := 1
-    settings["showJewelAlerts"] := 1
-    settings["showCharmAlerts"] := 1
-    settings["showBaseItems"] := 1
+
     settings["normalMobColor"] := "FFFFFF"
     settings["uniqueMobColor"] := "D4AF37"
     settings["bossColor"] := "FF0000"
@@ -76,15 +72,9 @@ readSettings(settingsFile, ByRef settings) {
     settings["lightImmuneColor"] := "FFFF00"
     settings["coldImmuneColor"] := "0000FF"
     settings["poisonImmuneColor"] := "32CD32"
-    settings["runeItemColor"] := "FFa700"
-    settings["uniqueItemColor"] := "BBA45B"
-    settings["setItemColor"] := "00FC00"
-    settings["charmItemColor"] := "6D6DFF"
-    settings["jewelItemColor"] := "6D6DFF"
     settings["portalColor"] := "00AAFF"
     settings["redPortalColor"] := "FF0000"
     settings["shrineColor"] := "FFD700"
-    settings["baseItemColor"] := "AAAAAA"
     settings["shrineTextSize"] := "20"
     settings["showWaypointLine"] := 0
     settings["showNextExitLine"] := 1
@@ -124,6 +114,8 @@ readSettings(settingsFile, ByRef settings) {
 
     settings["missileMajorDotSize"] := "4"
     settings["missileMinorDotSize"] := "2"
+
+    defaultSettings := settings.clone()
 
     ; read from the ini file and overwrite any of the above values
     IniRead, sectionNames, %settingsFile%
@@ -178,7 +170,6 @@ readSettings(settingsFile, ByRef settings) {
         Msgbox, 48, d2r-mapview, Could not connect to %baseUrl%`n`nMake sure the server is running`nDouble check your baseUrl in settings.ini`n`n%emsg%`n`nExiting...
         ExitApp
     }
-    defaultSettings := settings
 
     WriteLog("Using configuration:")
     WriteLog("- baseUrl: " settings["baseUrl"])

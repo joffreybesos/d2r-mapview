@@ -47,8 +47,8 @@ WriteLog("Version: " expectedVersion)
 WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyVW3uj")
 ClearCache(A_Temp)
 global settings
+global defaultSettings
 readSettings("settings.ini", settings)
-CreateSettingsGUI(settings)
 
 
 lastlevel:=""
@@ -61,7 +61,6 @@ performanceMode := settings["performanceMode"]
 if (performanceMode != 0) {
     SetBatchLines, %performanceMode%
 }
-showSettingsGUI := 0
 
 global isMapShowing:=1
 global debug := settings["debug"]
@@ -75,6 +74,8 @@ global itemAlertList := new AlertList("itemfilter.yaml")
 global centerLeftOffset := 0
 global centerTopOffset := 0
 global redrawMap := 1
+
+CreateSettingsGUI(settings)
 
 switchMapModeKey := settings["switchMapMode"]
 Hotkey, IfWinActive, % gameWindowId
@@ -139,6 +140,7 @@ global unitHwnd1 := WinExist()
 
 sessionList := []
 offsetAttempts := 6
+settingupGUI := false
 
 ticktock := 0
 While 1 {
@@ -236,7 +238,7 @@ While 1 {
                 redrawMap := 1
             }
             if (redrawMap) {
-                WriteLog("Redraw map")
+                WriteLogDebug("Redrawing map")
                 levelNo := gameMemoryData["levelNo"]
                 IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
                 IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
@@ -265,10 +267,7 @@ While 1 {
                 G := Gdip_GraphicsFromHDC(hdc)
                 redrawMap := 0
             }
-            ; update player layer on each loop
             uiData["ticktock"] := ticktock
-            ; update player layer on each loop
-
             ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
 
             if (settings["centerMode"]) {
@@ -497,6 +496,8 @@ MoveMapDown:
 HistoryToggle:
 {
     historyToggle := !historyToggle
+    ; settings["showGameInfo"] := historyToggle
+    ; IniWrite, %historyToggle%, settings.ini, Settings, showGameInfo
     return
 }
 ^H::
@@ -533,19 +534,16 @@ HistoryToggle:
 
 ~^O::
 {
-    showSettingsGUI := !showSettingsGUI
-    if (showSettingsGUI) {
-        Gui, Settings: Show, h482 w362, d2r-mapview settings
-    } else {
-        Gui, Settings: Hide
-    }
+    Gui, Settings: Show, h482 w362, d2r-mapview settings
     return
 }
 
 Update:
 {
+    WriteLog("Applying new settings...")
     cmode := settings["centerMode"]
-    UpdateSettings(settings)
+    gameinfo := settings["showGameInfo"]
+    UpdateSettings(settings, defaultSettings)
     if (cmode != settings["centerMode"]) { ; if centermode changed
         lastlevel := "INVALIDATED"
         imageData := {}
@@ -557,6 +555,17 @@ Update:
         Gui, Units: Hide
         mapShowing := 0
     }
+    GuiControl, Hide, Unsaved
+    GuiControl, Disable, UpdateBtn
     redrawMap := 1
+    return
+}
+
+UpdateFlag:
+{
+    if (!settingupGUI) {
+        GuiControl, Show, Unsaved
+        GuiControl, Enable, UpdateBtn
+    }
     return
 }

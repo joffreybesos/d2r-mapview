@@ -89,7 +89,6 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
         magicMajorColor := missileOpacity . settings["missileMagicMajorColor"]
         magicMinorColor := missileOpacity . settings["missileMagicMinorColor"]
         
-
         penSize:=2
         majorDotSize :=settings["missileMajorDotSize"]
         minorDotSize :=settings["missileMinorDotSize"]
@@ -514,7 +513,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
     }
 
     ; show item alerts
-    if (settings["showUniqueAlerts"] or settings["showSetItemAlerts"] or settings["showRuneAlerts"] or settings["showJewelAlerts"] or settings["showCharmAlerts"]) {
+    if (settings["enableItemFilter"]) {
 
         ; draw item alerts
         pItemPen2 := Gdip_CreatePen(0xCCFFFFFF, 8)

@@ -77,6 +77,15 @@ class AlertList {
         }
     }
 
+    toString() {
+        alertStr := "Enabled alerts:`n"
+        for index, alert in this.alerts
+        {
+            alertStr := alertStr . "- " . alert.name . "`n"
+        }
+        return alertStr
+    }
+
     findAlert(item) {       
         for index, alert in this.alerts
         {

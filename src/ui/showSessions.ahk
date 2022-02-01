@@ -24,6 +24,7 @@ ShowHistoryText(hwnd1, gameWindowId, sessionList, historyToggle, position = "RIG
         obm := SelectObject(hdc, hbm)
         G := Gdip_GraphicsFromHDC(hdc)
         Gdip_SetSmoothingMode(G, 4)
+        Gdip_SetInterpolationMode(G, 7)
 
         col1 := 0
         col2 := textBoxWidth * 0.06

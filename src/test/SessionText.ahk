@@ -51,6 +51,7 @@ ShowHistoryText(hwnd1, gameWindowId, sessionList, position = "RIGHT", textBoxWid
         obm := SelectObject(hdc, hbm)
         G := Gdip_GraphicsFromHDC(hdc)
         Gdip_SetSmoothingMode(G, 4)
+        Gdip_SetInterpolationMode(G, 7)
         pBrush := Gdip_BrushCreateSolid(0xAA000000)
         Gdip_DeleteBrush(pBrush)
 

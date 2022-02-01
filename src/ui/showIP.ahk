@@ -33,6 +33,7 @@ ShowIPText(hwnd1, gameWindowId, ipaddress, position = "LEFT", fontSize = 26) {
         obm := SelectObject(hdc, hbm)
         G := Gdip_GraphicsFromHDC(hdc)
         Gdip_SetSmoothingMode(G, 4)
+        Gdip_SetInterpolationMode(G, 7)
 
         Options = x0 y0 %align% vTop cffAAAAAA r4 s%fontSize% Bold
         

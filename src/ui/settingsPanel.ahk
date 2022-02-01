@@ -6,7 +6,7 @@ CreateSettingsGUI(settings) {
     Gui, Settings: Font, S8 CRed,    
     Gui, Settings:Add, Text, x120 y453 w115 h17 +Right vUnsaved Hidden gUpdateFlag, Unsaved changes*
     Gui, Settings: Font, S8 CDefault,    
-    Gui, Settings: Add, Tab, x2 y1 w360 h440, Info|General|Map Items|Game History|Monsters|Immunities|Item Filter|Hotkeys|Other|Advanced
+    Gui, Settings: Add, Tab3, x2 y1 w360 h440, Info|General|Map Items|Game History|Monsters|Immunities|Item Filter|Hotkeys|Other|Advanced
 
     Gui, Settings: Tab, General
     Gui, Settings: Font, S8 CGray, 
@@ -231,16 +231,14 @@ CreateSettingsGUI(settings) {
     Gui, Settings: Add, Link, x95 y418 w200 h20 , Click <a href="https://www.autohotkey.com/docs/KeyList.htm">here</a> for possible key combos
 
     Gui, Settings: Tab, Info
-    Gui, Settings: Font, S12 CBlack,
-    Gui, Settings: Add, Text, x61 y119 w240 h20 , This is a settings GUI created for    
-    Gui, Settings: Font, S12 CRed,    
-    Gui, Settings: Add, Text, x121 y139 w120 h30 , d2r-mapview
-    Gui, Settings: Font, S9 CDefault,
-    Gui, Settings: Add, Text, x86 y189 w190 h20 , For more information about the project
-    Gui, Settings: Add, Text, x121 y209 w120 h20 , Check out the link below
-    Gui, Settings: Add, Link, x71 y229 w220 h20 , <a href="https://github.com/joffreybesos/d2r-mapview#readme">https://github.com/joffreybesos/d2r-mapview</a>
-    Gui, Settings: Add, Text, x96 y269 w170 h20 , Click below to join the community!
-    Gui, Settings: Add, Link, x81 y289 w200 h20 , <a href="https://discord.com/invite/qEgqyVW3uj">https://discord.com/invite/qEgqyVW3uj</a>
+    Gui, Settings: Font, S26 CRed,    
+    Gui, Settings:Add, Text, x30 y75 w300 h50 +Center, d2r-mapview
+    Gui, Settings:Font, S12 CDefault
+    Gui, Settings:Add, Text, x30 y135 w300 h90 +Center, Please note that the public map server is shutting down soon. However you can set up your own easily and free.
+    Gui, Settings:Add, Link, x90 y220 w300 h25 +Center, <a href="https://github.com/joffreybesos/d2-mapserver/blob/master/INSTALLATION.md">Please follow this guide</a>
+    Gui, Settings:Font, S16 CDefault
+    Gui, Settings:Add, Link, x70 y380 w120 h30 +Center, <a href="https://github.com/joffreybesos/d2r-mapview#readme">GitHub</a>
+    Gui, Settings:Add, Link, x240 y380 w120 h30 +Center, <a href="https://discord.com/invite/qEgqyVW3uj">Discord</a>
 
     settingupGUI := true
     ;Gui, Settings: Show, h482 w362, d2r-mapview settings

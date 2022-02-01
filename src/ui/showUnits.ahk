@@ -94,8 +94,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
         minorDotSize :=settings["missileMinorDotSize"]
         if (settings["centerMode"]) {
             penSize := penSize * (scale / 1.2)
-            majorDotSize :=majorDotSize * (scale / 1.2)
-            minorDotSize :=minorDotSize * (scale / 1.2)
+            majorDotSize :=majorDotSize * (scale / 1.1)
+            minorDotSize :=minorDotSize * (scale / 1.1)
         }
         
         pPenPhysicalMajor := Gdip_CreatePen(physicalMajorColor, penSize)
@@ -166,7 +166,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
         normalMobColor := 0xff . settings["normalMobColor"] 
         uniqueMobColor := 0xff . settings["uniqueMobColor"] 
         bossColor := 0xff . settings["bossColor"] 
-        deadColor := 0xff . settings["deadColor"] 
+        deadColor := 0x44 . settings["deadColor"] 
         mercColor := 0xcc . settings["mercColor"]
         deadDotSize := settings["deadDotSize"]     ; 2
         normalDotSize := settings["normalDotSize"] ; 5
@@ -587,7 +587,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
         gameObjects := gameMemoryData["objects"]
         shrineColor := "ff" . settings["shrineColor"]
         shrineTextSize := settings["shrineTextSize"]
-        pPen := Gdip_CreatePen("0xff" . settings["shrineColor"], 4)
+        pBrush := Gdip_BrushCreateSolid("0xff" . settings["shrineColor"])
         for index, object in gameObjects
         {
             if (object["isShrine"]) {
@@ -615,14 +615,26 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                 objecty := correctedPos["y"] + centerTopOffset
                 shrineType := object["shrineType"]
                 textx := objectx - 100
-                texty := objecty - 107
+                texty := objecty - 112
                 Options = x%textx% y%texty% Center Bold vBottom c%shrineColor% r8 s%shrineTextSize%
                 textx := textx + 2
                 texty := texty + 2
                 Options2 = x%textx% y%texty% Center Bold vBottom cff000000 r8 s%shrineTextSize%
                 Gdip_TextToGraphics(G,shrineType, Options2, diabloFont, 200, 100)
                 Gdip_TextToGraphics(G,shrineType, Options, diabloFont, 200, 100)
-                Gdip_DrawRectangle(G, pPen, objectx+0.5, objecty+2, 2.5, 2)
+
+                xscale := 7
+                yscale := 10
+                x1 := objectx - xscale
+                x2 := objectx
+                x3 := objectx + xscale
+                y1 := objecty - yscale + 1
+                y2 := objecty + 1
+                y3 := objecty + yscale + 1
+
+                points = %x1%,%y2%|%x2%,%y1%|%x3%,%y2%|%x2%,%y3%
+                Gdip_FillPolygon(G, pBrush, points)
+                ;Gdip_DrawRectangle(G, pPen, objectx+0.5, objecty+2, 2.5, 2)
             }
         }
         Gdip_DeletePen(pPen)    
@@ -654,8 +666,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
         } else {
             ; draw a square dot, but angled along the map Gdip_PathOutline()
             pBrush := Gdip_BrushCreateSolid(0xff00FF00)
-            xscale := 5 * scale
-            yscale := 2.5 * scale
+            xscale := 7 * scale
+            yscale := 3.5 * scale
             x1 := playerCrossXoffset - xscale
             x2 := playerCrossXoffset
             x3 := playerCrossXoffset + xscale

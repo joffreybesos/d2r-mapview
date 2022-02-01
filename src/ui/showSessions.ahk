@@ -31,16 +31,12 @@ ShowHistoryText(hwnd1, gameWindowId, sessionList, historyToggle, position = "RIG
         col3 := textBoxWidth * 0.31
         col4 := textBoxWidth * 0.61
         col5 := textBoxWidth * 0.79
-        Options = x%col1% y0 Left vCenter cffffffff r4 s%fontSize% Bold
-        Gdip_TextToGraphics(G, "L", Options, diabloFont, Width, 50)
-        Options = x%col2% y0 Left vCenter cffffffff r4 s%fontSize% Bold
-        Gdip_TextToGraphics(G, "Character", Options, diabloFont, Width, 50)
-        Options = x%col3% y0 Left vCenter cffffffff r4 s%fontSize% Bold
-        Gdip_TextToGraphics(G, "Game Name", Options, diabloFont, Width, 50)
-        Options = x%col4% y0 Left vCenter cffffffff r4 s%fontSize% Bold
-        Gdip_TextToGraphics(G, "Duration", Options, diabloFont, Width, 50)
-        Options = x%col5% y0 Left vCenter cffffffff r4 s%fontSize% Bold
-        Gdip_TextToGraphics(G, "+XP", Options, diabloFont, Width, 50)
+
+        drawHeader(G, col1, 0, Width, fontSize, "L")
+        drawHeader(G, col2, 0, Width, fontSize, "Character")
+        drawHeader(G, col3, 0, Width, fontSize, "Game Name")
+        drawHeader(G, col4, 0, Width, fontSize, "Duration")
+        drawHeader(G, col5, 0, Width, fontSize, "+XP")
 
         ; lists is in reverse order
         max := sessionList.length()
@@ -59,17 +55,11 @@ ShowHistoryText(hwnd1, gameWindowId, sessionList, historyToggle, position = "RIG
             gameTime := session.duration . "s"
             gameTimeList := gameTimeList . gameTime . "`n"
         }
-        
-        Options = x%col1% y40 Left vTop cffFFD700 r4 s%fontSize%
-        Gdip_TextToGraphics(G, playerLevelList, Options, diabloFont, Width, Height)
-        Options = x%col2% y40 Left vTop cffFFD700 r4 s%fontSize%
-        Gdip_TextToGraphics(G, playerNameList, Options, diabloFont, Width, Height)
-        Options = x%col3% y40 Left vTop cffFFD700 r4 s%fontSize%
-        Gdip_TextToGraphics(G, gameNameList, Options, diabloFont, Width, Height)
-        Options = x%col4% y40 Left vTop cffFFD700 r4 s%fontSize%
-        Gdip_TextToGraphics(G, gameTimeList, Options, diabloFont, Width/2, Height)
-        Options = x%col5% y40 Left vTop cffFFD700 r4 s%fontSize%
-        Gdip_TextToGraphics(G, xpgainedList, Options, diabloFont, Width/2, Height)
+        drawData(G, col1, 40, Width, Height, fontSize, playerLevelList)
+        drawData(G, col2, 40, Width, Height, fontSize, playerNameList)
+        drawData(G, col3, 40, Width, Height, fontSize, gameNameList)
+        drawData(G, col4, 40, Width/2, Height, fontSize, gameTimeList)
+        drawData(G, col5, 40, Width/2, Height, fontSize, xpgainedList)
 
         
         UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, Width, Height)
@@ -88,3 +78,20 @@ ShowHistoryText(hwnd1, gameWindowId, sessionList, historyToggle, position = "RIG
     }
 }
 
+drawHeader(G, textx, texty, Width, fontSize, textStr) {
+    Options = x%textx% y%texty% Left vCenter cffffffff r4 s%fontSize% Bold
+    textx := textx + 2
+    texty := texty + 2
+    Options2 = x%textx% y%texty% Left vCenter cff000000 r4 s%fontSize% Bold
+    Gdip_TextToGraphics(G, textStr, Options2, diabloFont, Width, 50)
+    Gdip_TextToGraphics(G, textStr, Options, diabloFont, Width, 50)
+}
+
+drawData(G, textx, texty, Width, Height, fontSize, textList) {
+    Options = x%textx% y%texty% Left vTop cffFFD700 r4 s%fontSize% Bold
+    textx := textx + 2
+    texty := texty + 2
+    Options2 = x%textx% y%texty% Left vTop cff000000 r4 s%fontSize% Bold
+    Gdip_TextToGraphics(G, textList, Options2, diabloFont, Width, Height)
+    Gdip_TextToGraphics(G, textList, Options, diabloFont, Width, Height)
+}

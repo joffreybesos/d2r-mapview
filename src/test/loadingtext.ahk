@@ -4,7 +4,7 @@ Text:= "Loading"
 Width:= 1000
 Height:= 600
 pToken := Gdip_Startup()
-Options = x0 y0 Center vCenter c22ffffff r4 s20
+Options = x0 y0 Center vCenter c66ffffff r4 s20
 Font = Arial
 
 DetectHiddenWindows, On

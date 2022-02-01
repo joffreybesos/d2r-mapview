@@ -767,6 +767,7 @@ announceItem(settings, item, alert) {
     if (settings["allowTextToSpeech"] or settings["allowItemDropSounds"]) {
         if (!hasVal(seenItems, item.getHash())) {
             ; seen item for the first time
+            WriteLog("ITEMLOG: Found item '" item.quality " " item.name "' matched to alert '" alert.name "'")
             if (settings["allowTextToSpeech"]) {
                 volume := settings["textToSpeechVolume"]
                 pitch := settings["textToSpeechPitch"]

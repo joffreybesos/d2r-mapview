@@ -187,7 +187,7 @@ Alerts:
     items:
       - Jewel
     soundeffect: jewel.wav
-    ignoreidentified: true     # only alert if the jewel is not identified
+    #ignoreidentified: true     # only alert if the jewel is not identified
     color: 6D6DFF
     
   Charms:

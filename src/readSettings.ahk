@@ -41,10 +41,14 @@ readSettings(settingsFile, ByRef settings) {
     settings["showDeadMobs"] := 1
     settings["showImmunities"] := 1
     settings["showPlayerDotCenter"] := 1
+    settings["playerAsCross"] := 0
     settings["showOtherPlayers"] := 1
     settings["showOtherPlayerNames"] := 0
     settings["showShrines"] := 1
     settings["showPortals"] := 1
+    settings["lastActiveGUITab"] := "Info"
+    settings["settingsUIX"] := 100
+    settings["settingsUIX"] := 100
 
     settings["enableItemFilter"] := 1
     settings["allowTextToSpeech"] := 1

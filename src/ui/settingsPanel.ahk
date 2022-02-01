@@ -2,11 +2,12 @@
 
 CreateSettingsGUI(settings) {
     global
+    tabtitles = Info|General|Map Items|Game History|Monsters|Immunities|Item Filter|Hotkeys|Other|Advanced
     Gui, Settings:Add, Button, x240 y445 w115 h30 gUpdate vUpdateBtn Disabled, Save && Apply
     Gui, Settings: Font, S8 CRed,    
     Gui, Settings:Add, Text, x120 y453 w115 h17 +Right vUnsaved Hidden gUpdateFlag, Unsaved changes*
     Gui, Settings: Font, S8 CDefault,    
-    Gui, Settings: Add, Tab3, x2 y1 w360 h440, Info|General|Map Items|Game History|Monsters|Immunities|Item Filter|Hotkeys|Other|Advanced
+    Gui, Settings: Add, Tab3, x2 y1 w360 h440 vTabList, %tabtitles%
 
     Gui, Settings: Tab, General
     Gui, Settings: Font, S8 CGray, 
@@ -38,7 +39,8 @@ CreateSettingsGUI(settings) {
     Gui, Settings: Add, GroupBox, x11 y279 w340 h130 , Map Center Mode
     Gui, Settings: Font, S8 CDefault, 
     Gui, Settings: Add, CheckBox, x22 y299 w110 h20 vCenterMode gUpdateFlag, Center Mode ;False
-    Gui, Settings: Add, CheckBox, x222 y299 w120 h20 vShowPlayerDotCenter gUpdateFlag, Show Player Dot ;True
+    Gui, Settings: Add, CheckBox, x222 y299 w120 h20 vShowPlayerDotCenter gUpdateFlag, Mark player position ;True
+    Gui, Settings: Add, CheckBox, x222 y319 w120 h20 vplayerAsCross gUpdateFlag, Show Player as cross ;True
     Gui, Settings: Add, Text, x54 y322 w90 h20 , X Offset (Map)
     Gui, Settings: Add, Edit, x22 y319 w30 h20 vCenterModeXoffset gUpdateFlag, 0
     Gui, Settings: Add, Text, x54 y342 w90 h20 , Y Offset (Map)
@@ -47,10 +49,10 @@ CreateSettingsGUI(settings) {
     Gui, Settings: Add, Edit, x22 y359 w30 h20 vCenterModeXUnitoffset gUpdateFlag, 1
     Gui, Settings: Add, Text, x54 y382 w160 h20 , Y Offset (Players/Monsters)
     Gui, Settings: Add, Edit, x22 y379 w30 h20 vCenterModeYUnitoffset gUpdateFlag, 16
-    Gui, Settings: Add, Text, x253 y322 w40 h20 , Scale
-    Gui, Settings: Add, Edit, x222 y319 w28 h20 vCenterModeScale gUpdateFlag, 1.7
-    Gui, Settings: Add, Text, x253 y342 w50 h20 , Opacity
-    Gui, Settings: Add, Edit, x222 y339 w28 h20 vCenterModeOpacity gUpdateFlag, 0.7
+    Gui, Settings: Add, Text, x253 y342 w40 h20 , Scale
+    Gui, Settings: Add, Edit, x222 y339 w28 h20 vCenterModeScale gUpdateFlag, 1.7
+    Gui, Settings: Add, Text, x253 y362 w50 h20 , Opacity
+    Gui, Settings: Add, Edit, x222 y359 w28 h20 vCenterModeOpacity gUpdateFlag, 0.7
 
     Gui, Settings: Tab, Map Items
     Gui, Settings: Font, S8 CGray, 
@@ -210,38 +212,46 @@ CreateSettingsGUI(settings) {
     Gui, Settings: Add, GroupBox, x11 y59 w340 h220 , Shortcut Keys
     Gui, Settings: Font, S8 CDefault, 
     Gui, Settings: Tab, Hotkeys
-    Gui, Settings: Add, Text, x115 y82 w250 h20 , Increase Size of Map
+    Gui, Settings: Add, Text, x115 y82 w200 h20 , Increase Size of Map
     Gui, Settings: Add, Edit, x22 y79 w90 h20 vincreaseMapSizeKey gUpdateFlag, 
-    Gui, Settings: Add, Text, x115 y102 w250 h20 , Decrease Size of Map
+    Gui, Settings: Add, Text, x115 y102 w200 h20 , Decrease Size of Map
     Gui, Settings: Add, Edit, x22 y99 w90 h20 vdecreaseMapSizeKey gUpdateFlag, 
-    Gui, Settings: Add, Text, x115 y122 w250 h20 , Move Map Left
+    Gui, Settings: Add, Text, x115 y122 w200 h20 , Move Map Left
     Gui, Settings: Add, Edit, x22 y119 w90 h20 vmoveMapLeft gUpdateFlag, 
-    Gui, Settings: Add, Text, x115 y142 w250 h20 , Move Map Right
+    Gui, Settings: Add, Text, x115 y142 w200 h20 , Move Map Right
     Gui, Settings: Add, Edit, x22 y139 w90 h20 vmoveMapRight gUpdateFlag, 
-    Gui, Settings: Add, Text, x115 y162 w250 h20 , Move Map Up
+    Gui, Settings: Add, Text, x115 y162 w200 h20 , Move Map Up
     Gui, Settings: Add, Edit, x22 y159 w90 h20 vmoveMapUp gUpdateFlag, 
-    Gui, Settings: Add, Text, x115 y182 w250 h20 , Move Map Down
+    Gui, Settings: Add, Text, x115 y182 w200 h20 , Move Map Down
     Gui, Settings: Add, Edit, x22 y179 w90 h20 vmoveMapDown gUpdateFlag, 
-    Gui, Settings: Add, Text, x115 y202 w250 h20 , Hide Game History in Menu
+    Gui, Settings: Add, Text, x115 y202 w200 h20 , Hide Game History in Menu
     Gui, Settings: Add, Edit, x22 y199 w90 h20 vhistoryToggleKey gUpdateFlag, 
-    Gui, Settings: Add, Text, x115 y222 w250 h20 , Always Show Map (Toggle)
+    Gui, Settings: Add, Text, x115 y222 w200 h20 , Always Show Map (Toggle)
     Gui, Settings: Add, Edit, x22 y219 w90 h20 valwaysShowKey gUpdateFlag, 
-    Gui, Settings: Add, Text, x115 y242 w250 h20 , Center Map Mode (Toggle)
+    Gui, Settings: Add, Text, x115 y242 w200 h20 , Center Map Mode (Toggle)
     Gui, Settings: Add, Edit, x22 y239 w90 h20 vswitchMapMode gUpdateFlag, 
+
+    Gui, Settings: Add, Text, x22 y282 w300 h20 , NOTE: Any hotkey changes requires a restart of the MH
     Gui, Settings: Add, Link, x95 y418 w200 h20 , Click <a href="https://www.autohotkey.com/docs/KeyList.htm">here</a> for possible key combos
 
     Gui, Settings: Tab, Info
     Gui, Settings: Font, S26 CRed,    
     Gui, Settings:Add, Text, x30 y75 w300 h50 +Center, d2r-mapview
     Gui, Settings:Font, S12 CDefault
-    Gui, Settings:Add, Text, x30 y135 w300 h90 +Center, Please note that the public map server is shutting down soon. However you can set up your own easily and free.
-    Gui, Settings:Add, Link, x90 y220 w300 h25 +Center, <a href="https://github.com/joffreybesos/d2-mapserver/blob/master/INSTALLATION.md">Please follow this guide</a>
+    if (settings["baseUrl"] == "http://map.d2r-mapview.xyz") {
+        Gui, Settings:Add, Text, x30 y135 w300 h90 +Center, Please note that the public map server is shutting down soon. However you can set up your own easily and free.
+        Gui, Settings:Add, Link, x90 y220 w300 h25 +Center, <a href="https://github.com/joffreybesos/d2-mapserver/blob/master/INSTALLATION.md">Please follow this guide</a>
+    } else {
+        Gui, Settings:Add, Text, x30 y135 w300 h90 +Center, Thank you for running your own map server. I'd appreciate it if you helped others in discord set up theirs as well
+    }
     Gui, Settings:Font, S16 CDefault
     Gui, Settings:Add, Link, x70 y380 w120 h30 +Center, <a href="https://github.com/joffreybesos/d2r-mapview#readme">GitHub</a>
     Gui, Settings:Add, Link, x240 y380 w120 h30 +Center, <a href="https://discord.com/invite/qEgqyVW3uj">Discord</a>
 
     settingupGUI := true
     ;Gui, Settings: Show, h482 w362, d2r-mapview settings
+    tabtitles := StrReplace(tabtitles, settings["lastActiveGUITab"], settings["lastActiveGUITab"] "|")
+    GuiControl, Settings:, TabList, % "|" tabtitles
     GuiControl, Settings:, baseUrl, % settings["baseUrl"]
     GuiControl, Settings:, scale, % settings["scale"]
     GuiControl, Settings:, leftMargin, % settings["leftMargin"]
@@ -282,6 +292,7 @@ CreateSettingsGUI(settings) {
     GuiControl, Settings:, showDeadMobs, % settings["showDeadMobs"]
     GuiControl, Settings:, showImmunities, % settings["showImmunities"]
     GuiControl, Settings:, showPlayerDotCenter, % settings["showPlayerDotCenter"]
+    GuiControl, Settings:, playerAsCross, % settings["playerAsCross"]
     GuiControl, Settings:, showOtherPlayers, % settings["showOtherPlayers"]
     GuiControl, Settings:, showOtherPlayerNames, % settings["showOtherPlayerNames"]
     GuiControl, Settings:, showShrines, % settings["showShrines"]
@@ -344,18 +355,18 @@ CreateSettingsGUI(settings) {
     GuiControl, Settings:, showPlayerMissiles, % settings["showPlayerMissiles"]
     GuiControl, Settings:, showEnemyMissiles, % settings["showEnemyMissiles"]
     GuiControl, Settings:, missileOpacity, % settings["missileOpacity"]
-    GuiControl, Settings:, missileColorPhysicalMajor, % settings["missileColorPhysicalMajor"]
-    GuiControl, Settings:, missileColorPhysicalMinor, % settings["missileColorPhysicalMinor"]
-    GuiControl, Settings:, missileFireMajorColor, % settings["missileFireMajorColor"]
-    GuiControl, Settings:, missileFireMinorColor, % settings["missileFireMinorColor"]
-    GuiControl, Settings:, missileIceMajorColor, % settings["missileIceMajorColor"]
-    GuiControl, Settings:, missileIceMinorColor, % settings["missileIceMinorColor"]
-    GuiControl, Settings:, missileLightMajorColor, % settings["missileLightMajorColor"]
-    GuiControl, Settings:, missileLightMinorColor, % settings["missileLightMinorColor"]
-    GuiControl, Settings:, missilePoisonMajorColor, % settings["missilePoisonMajorColor"]
-    GuiControl, Settings:, missilePoisonMinorColor, % settings["missilePoisonMinorColor"]
-    GuiControl, Settings:, missileMagicMajorColor, % settings["missileMagicMajorColor"]
-    GuiControl, Settings:, missileMagicMinorColor, % settings["missileMagicMinorColor"]
+    ; GuiControl, Settings:, missileColorPhysicalMajor, % settings["missileColorPhysicalMajor"]
+    ; GuiControl, Settings:, missileColorPhysicalMinor, % settings["missileColorPhysicalMinor"]
+    ; GuiControl, Settings:, missileFireMajorColor, % settings["missileFireMajorColor"]
+    ; GuiControl, Settings:, missileFireMinorColor, % settings["missileFireMinorColor"]
+    ; GuiControl, Settings:, missileIceMajorColor, % settings["missileIceMajorColor"]
+    ; GuiControl, Settings:, missileIceMinorColor, % settings["missileIceMinorColor"]
+    ; GuiControl, Settings:, missileLightMajorColor, % settings["missileLightMajorColor"]
+    ; GuiControl, Settings:, missileLightMinorColor, % settings["missileLightMinorColor"]
+    ; GuiControl, Settings:, missilePoisonMajorColor, % settings["missilePoisonMajorColor"]
+    ; GuiControl, Settings:, missilePoisonMinorColor, % settings["missilePoisonMinorColor"]
+    ; GuiControl, Settings:, missileMagicMajorColor, % settings["missileMagicMajorColor"]
+    ; GuiControl, Settings:, missileMagicMinorColor, % settings["missileMagicMinorColor"]
 
     GuiControl, Settings:, missileMajorDotSize, % settings["missileMajorDotSize"]
     GuiControl, Settings:, missileMinorDotSize, % settings["missileMinorDotSize"]
@@ -370,6 +381,12 @@ CreateSettingsGUI(settings) {
 
 UpdateSettings(ByRef settings, defaultSettings) {
 
+    ; stupid ahk doesn't let me update the array value directly here
+    ; so I have to save to a variable and THEN update the settings array
+    ; ugh
+
+    ; this just gets all the values of all the gui elements
+    GuiControlGet, TabList, ,TabList
     GuiControlGet, baseUrl, ,baseUrl
     GuiControlGet, scale, ,scale
     GuiControlGet, leftMargin, ,leftMargin
@@ -401,6 +418,7 @@ UpdateSettings(ByRef settings, defaultSettings) {
     GuiControlGet, showDeadMobs, ,showDeadMobs
     GuiControlGet, showImmunities, ,showImmunities
     GuiControlGet, showPlayerDotCenter, ,showPlayerDotCenter
+    GuiControlGet, playerAsCross, ,playerAsCross
     GuiControlGet, showOtherPlayers, ,showOtherPlayers
     GuiControlGet, showOtherPlayerNames, ,showOtherPlayerNames
     GuiControlGet, showShrines, ,showShrines
@@ -455,6 +473,7 @@ UpdateSettings(ByRef settings, defaultSettings) {
     GuiControlGet, showPlayerMissiles, ,showPlayerMissiles
     GuiControlGet, showEnemyMissiles, ,showEnemyMissiles
     GuiControlGet, missileOpacity, ,missileOpacity
+    ; missile colors don't exist in the GUI
     ; GuiControlGet, missileColorPhysicalMajor, ,missileColorPhysicalMajor
     ; GuiControlGet, missileColorPhysicalMinor, ,missileColorPhysicalMinor
     ; GuiControlGet, missileFireMajorColor, ,missileFireMajorColor
@@ -469,6 +488,12 @@ UpdateSettings(ByRef settings, defaultSettings) {
     ; GuiControlGet, missileMagicMinorColor, ,missileMagicMinorColor
     GuiControlGet, missileMajorDotSize, ,missileMajorDotSize
     GuiControlGet, missileMinorDotSize, ,missileMinorDotSize
+
+    WinGetPos, settingsUIX, settingsUIY, , , d2r-mapview settings
+    
+    settings["settingsUIX"] := settingsUIX
+    settings["settingsUIY"] := settingsUIY
+    settings["lastActiveGUITab"] := TabList
     settings["baseUrl"] := baseUrl
     settings["scale"] := scale
     settings["leftMargin"] := leftMargin
@@ -500,6 +525,7 @@ UpdateSettings(ByRef settings, defaultSettings) {
     settings["showDeadMobs"] := showDeadMobs
     settings["showImmunities"] := showImmunities
     settings["showPlayerDotCenter"] := showPlayerDotCenter
+    settings["playerAsCross"] := playerAsCross
     settings["showOtherPlayers"] := showOtherPlayers
     settings["showOtherPlayerNames"] := showOtherPlayerNames
     settings["showShrines"] := showShrines
@@ -579,6 +605,9 @@ UpdateSettings(ByRef settings, defaultSettings) {
 
 
 saveSettings(settings, defaultSettings) {
+    writeIniVar("settingsUIX", settings, defaultsettings)
+    writeIniVar("settingsUIY", settings, defaultsettings)
+    writeIniVar("lastActiveGUITab", settings, defaultsettings)
     writeIniVar("baseUrl", settings, defaultsettings)
     writeIniVar("scale", settings, defaultsettings)
     writeIniVar("leftMargin", settings, defaultsettings)
@@ -610,6 +639,7 @@ saveSettings(settings, defaultSettings) {
     writeIniVar("showDeadMobs", settings, defaultsettings)
     writeIniVar("showImmunities", settings, defaultsettings)
     writeIniVar("showPlayerDotCenter", settings, defaultsettings)
+    writeIniVar("playerAsCross", settings, defaultsettings)
     writeIniVar("showOtherPlayers", settings, defaultsettings)
     writeIniVar("showOtherPlayerNames", settings, defaultsettings)
     writeIniVar("showShrines", settings, defaultsettings)

@@ -495,7 +495,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
     ; draw other players
     if (settings["showOtherPlayers"]) {
         otherPlayers := gameMemoryData["otherPlayers"]
-        pPen := Gdip_CreatePen(0xff00AA00, 6)
+        
+        pBrush := Gdip_BrushCreateSolid(0xff00aA00)
         for index, player in otherPlayers
         {
             
@@ -516,11 +517,27 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                     Gdip_TextToGraphics(G, player["playerName"], Options2, diabloFont, 160, 100)
                     Gdip_TextToGraphics(G, player["playerName"], Options, diabloFont, 160, 100)
                 }
-                Gdip_DrawRectangle(G, pPen, playerx-3, playery-3, 6, 6)
+                ; draw a square dot, but angled along the map Gdip_PathOutline()
+                
+                xscale := 5 * scale
+                yscale := 2.5 * scale
+                x1 := playerx - xscale
+                x2 := playerx
+                x3 := playerx + xscale
+                y1 := playery - yscale
+                y2 := playery
+                y3 := playery + yscale
+
+                points = %x1%,%y2%|%x2%,%y1%|%x3%,%y2%|%x2%,%y3%
+                Gdip_FillPolygon(G, pBrush, points)
+                pPen := Gdip_CreatePen(0xff000000, 1)
+                Gdip_DrawPolygon(g, pPen, Points)
+                Gdip_DeletePen(pPen)
+                ;Gdip_DrawRectangle(G, pPen, playerx-3, playery-3, 6, 6)
             }
         }
-        Gdip_DeletePen(pPen)    
-    }
+        Gdip_DeleteBrush(pBrush)
+     }
 
     ; show item alerts
     if (settings["enableItemFilter"]) {
@@ -613,13 +630,51 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
 
     if (!settings["centerMode"] or settings["showPlayerDotCenter"]) {
         ; draw player
-        pPen := Gdip_CreatePen(0xff00FF00, 6)
-        ;WriteLog(xPosDot " " yPosDot " " midW " " midH " " scaledWidth " " scaledHeight " " scale " " newPos["x"] " " newPos["y"])
-        Gdip_DrawRectangle(G, pPen, xPosDot-3+centerLeftOffset, (yPosDot)-3+centerTopOffset , 6, 6)
+        playerCrossXoffset := (xPosDot)+centerLeftOffset
+        playerCrossYoffset := (yPosDot)+centerTopOffset
+        if (settings["playerAsCross"]) {
+            ; draw a gress cross to represent the player
+            pPen := Gdip_CreatePen(0xff00FF00, 2)
+            xscale := 10
+            yscale := 5
+
+            x1 := playerCrossXoffset - xscale - xscale
+            x2 := playerCrossXoffset - xscale
+            x3 := playerCrossXoffset
+            x4 := playerCrossXoffset + xscale
+            x5 := playerCrossXoffset + xscale + xscale
+            y1 := playerCrossYoffset - yscale - yscale
+            y2 := playerCrossYoffset - yscale
+            y3 := playerCrossYoffset
+            y4 := playerCrossYoffset + yscale
+            y5 := playerCrossYoffset + yscale + yscale
+            points = %x1%,%y2%|%x2%,%y3%|%x1%,%y4%|%x2%,%y5%|%x3%,%y4%|%x4%,%y5%|%x5%,%y4%|%x4%,%y3%|%x5%,%y2%|%x4%,%y1%|%x3%,%y2%|%x2%,%y1%
+            Gdip_DrawPolygon(G, pPen, points)
+            Gdip_DeletePen(pPen)
+        } else {
+            ; draw a square dot, but angled along the map Gdip_PathOutline()
+            pBrush := Gdip_BrushCreateSolid(0xff00FF00)
+            xscale := 5 * scale
+            yscale := 2.5 * scale
+            x1 := playerCrossXoffset - xscale
+            x2 := playerCrossXoffset
+            x3 := playerCrossXoffset + xscale
+            y1 := playerCrossYoffset - yscale
+            y2 := playerCrossYoffset
+            y3 := playerCrossYoffset + yscale
+
+            points = %x1%,%y2%|%x2%,%y1%|%x3%,%y2%|%x2%,%y3%
+            Gdip_FillPolygon(G, pBrush, points)
+            Gdip_DeleteBrush(pBrush)    
+        }
+
+        ;Gdip_DrawRectangle(G, pPen, 0, 0, scaledWidth, scaledHeight) ;outline for whole map used for troubleshooting
+        ;Gdip_DrawRectangle(G, pPen, 0, 0, A_ScreenWidth, A_ScreenHeight) ;outline for whole map used for troubleshooting
+        ;Gdip_DrawRectangle(G, pPen, xPosDot-3+centerLeftOffset, (yPosDot)-3+centerTopOffset , 6, 6)
         ;Gdip_DrawRectangle(G, pPen, 0, 0, scaledWidth, scaledHeight) ;outline for whole map used for troubleshooting
         ;Gdip_DrawRectangle(G, pPen, 0, 0, A_ScreenWidth, A_ScreenHeight) ;outline for whole map used for troubleshooting
         
-        Gdip_DeletePen(pPen)
+        
     }
 
     if (settings["centerMode"]) {

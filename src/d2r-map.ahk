@@ -28,7 +28,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\readSettings.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
 
-expectedVersion := "2.5.5"
+expectedVersion := "2.5.6"
 
 
 if !FileExist(A_Scriptdir . "\settings.ini") {
@@ -534,9 +534,15 @@ HistoryToggle:
     return
 }
 
-~^O::
+^O::
 {
-    Gui, Settings: Show, x200 y200 h482 w362, d2r-mapview settings
+    uix := settings["settingsUIX"]
+    uiy := settings["settingsUIY"]
+    if (!uix)
+        uix := 100
+    if (!uiy)
+        uiy := 100
+    Gui, Settings: Show, x%uix% y%uiy% h482 w362, d2r-mapview settings
     return
 }
 
@@ -544,7 +550,6 @@ Update:
 {
     WriteLog("Applying new settings...")
     cmode := settings["centerMode"]
-    gameinfo := settings["showGameInfo"]
     UpdateSettings(settings, defaultSettings)
     if (cmode != settings["centerMode"]) { ; if centermode changed
         lastlevel := "INVALIDATED"

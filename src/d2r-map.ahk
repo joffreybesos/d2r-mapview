@@ -265,6 +265,8 @@ While 1 {
                 obm := SelectObject(hdc, hbm)
                 
                 G := Gdip_GraphicsFromHDC(hdc)
+                Gdip_SetSmoothingMode(G, 4)
+                Gdip_SetInterpolationMode(G, 7)
                 redrawMap := 0
             }
             uiData["ticktock"] := ticktock

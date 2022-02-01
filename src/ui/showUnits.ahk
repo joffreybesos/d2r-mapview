@@ -615,7 +615,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                 objecty := correctedPos["y"] + centerTopOffset
                 shrineType := object["shrineType"]
                 textx := objectx - 100
-                texty := objecty - 112
+                texty := objecty - 110
                 Options = x%textx% y%texty% Center Bold vBottom c%shrineColor% r8 s%shrineTextSize%
                 textx := textx + 2
                 texty := texty + 2
@@ -623,8 +623,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                 Gdip_TextToGraphics(G,shrineType, Options2, diabloFont, 200, 100)
                 Gdip_TextToGraphics(G,shrineType, Options, diabloFont, 200, 100)
 
-                xscale := 7
-                yscale := 10
+                xscale := 3 * scale
+                yscale := 5 * scale
                 x1 := objectx - xscale
                 x2 := objectx
                 x3 := objectx + xscale

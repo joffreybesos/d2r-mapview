@@ -2,16 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.5.6] - 2021-02-01 - Visual tweaks
+## [2.5.6] - 2021-02-02 - Visual tweaks
 
-- Anti-aliasing now! Graphics will appear much smoother and be visually appealing
+- Anti-aliasing now! Graphics will appear much smoother and visually appealing
 - Items dropped on the ground will now have the name appear above it
 - Drop shadows added to text labels
 - Updated settings UI to have a more modern tab look (thanks @Mr-Sithel)
 - Settings UI has had many tweaks including revamped info page
 - Settings UI window position and selected tab will now be remembered
 - Player square is now aligned with the plane
-- Player square can now be changed to a cross (under general tab) off my default
+- Player square can now be changed to a cross (under general tab), off my default
 - Other player squares now have a black thin outline to see them better
 - Slight performance tweaks
 

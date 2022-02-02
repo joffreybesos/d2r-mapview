@@ -142,7 +142,7 @@ sessionList := []
 offsetAttempts := 6
 settingupGUI := false
 
-ticktock := 0
+global ticktock := 0
 While 1 {
     ; scan for the player offset
     playerOffset := scanForPlayer(d2rprocess, playerOffset, startingOffset, settings)

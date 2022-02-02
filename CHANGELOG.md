@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.7] - 2021-02-02 - Map prefetching
+
+- Map images can now be pregenerated 
+
 ## [2.5.6] - 2021-02-02 - Visual tweaks
 
 - Anti-aliasing now! Graphics will appear much smoother and visually appealing

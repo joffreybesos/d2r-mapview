@@ -38,6 +38,8 @@ enabledAlerts:
 #  onlyethereal : true/false             # only inclue etheral items from the alert
 #  ignoreunidentified : true/false       # exclude identified items from the alert
 
+# Full list of matching items:
+# https://github.com/joffreybesos/d2r-mapview/wiki/Item-filter-configuration#full-list-of-items
 
 # Only the first matching alert will be applied
 

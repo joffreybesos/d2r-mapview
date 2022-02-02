@@ -6,6 +6,7 @@
 #Include %A_ScriptDir%\memory\readUI.ahk
 
 readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
+    static items
     StartTime := A_TickCount
     startingOffset := settings["playerOffset"]  ;default offset
     
@@ -118,7 +119,9 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
 
     ; get items
     if (settings["enableItemFilter"]) {
-        ReadItems(d2rprocess, startingOffset, items)
+        if (ticktock) {
+            ReadItems(d2rprocess, startingOffset, items)
+        }
     }
 
      ; get objects

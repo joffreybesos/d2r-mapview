@@ -556,7 +556,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                 correctedPos := correctPos(settings, itemx, itemy, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 itemx := correctedPos["x"] + centerLeftOffset
                 itemy := correctedPos["y"] + centerTopOffset
-                if (alert.speak) {
+                if (alert.speak or alert.soundfile) {
                     announceItem(settings, item, alert)
                 }
                 pItemPen := Gdip_CreatePen(alert.color, 12)
@@ -854,10 +854,8 @@ announceItem(settings, item, alert) {
 
 hasVal(haystack, needle) {
 	for index, value in haystack
-		if (value = needle)
+		if (value == needle)
 			return index
-	if !IsObject(haystack)
-		throw Exception("Bad haystack!", -1, haystack)
 	return 0
 }
 

@@ -16,6 +16,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\memory\patternScan.ahk
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
+#Include %A_ScriptDir%\ui\image\prefetchMaps.ahk
 #Include %A_ScriptDir%\ui\showMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
@@ -143,6 +144,7 @@ offsetAttempts := 6
 settingupGUI := false
 
 global ticktock := 0
+hasbeenPrefetched := false
 While 1 {
     ; scan for the player offset
     playerOffset := scanForPlayer(d2rprocess, playerOffset, startingOffset, settings)
@@ -214,6 +216,7 @@ While 1 {
                 }
                 shrines := []
                 seenItems := []
+                hasbeenPrefetched := false
             }
 
             ; if there's a level num then the player is in a map
@@ -226,12 +229,17 @@ While 1 {
                 ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 22 is opacity
                 ; Download map
                 downloadMapImage(settings, gameMemoryData, imageData)
-                
 
                 ; Show Map
                 if (lastlevel == "") {
                     Gui, Map: Show, NA
                     Gui, Units: Show, NA
+                }
+                
+                if (!hasbeenPrefetched) {
+                    WriteLog("Prefetch maps...")
+                    prefetchMaps(settings, gameMemoryData)
+                    hasbeenPrefetched := true
                 }
                 mapLoading := 0
                 Gui, LoadingText: Destroy ; remove loading text

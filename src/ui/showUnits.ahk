@@ -45,7 +45,6 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
     xPosDot := correctedPos["x"]
     yPosDot := correctedPos["y"]
 
-    
     if (settings["centerMode"]) {
         WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
         leftMargin := (gameWidth/2) - xPosDot + (settings["centerModeXoffset"] /2) + windowLeftMargin
@@ -719,12 +718,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
         UpdateLayeredWindow(unitHwnd1, hdc, , , scaledWidth, scaledHeight)
         Gdip_GraphicsClear( G )
     }
-
     ElapsedTime := A_TickCount - StartTime
-    ;ToolTip % "`n`n`n`n" ElapsedTime
-    ;WriteLog("Draw players " ElapsedTime " ms taken")
-
-    
 }
 
 isNextExit(currentLvl) {

@@ -120,14 +120,14 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
 
     ; get items
     if (settings["enableItemFilter"]) {
-        if (ticktock) {
+        if (Mod(ticktock, 3)) {
             ReadItems(d2rprocess, startingOffset, items)
         }
     }
 
      ; get objects
     if (settings["showShrines"] or settings["showPortals"] or settings["showChests"]) {
-        if (ticktock) {
+        if (Mod(ticktock, 3)) {
             ReadObjects(d2rprocess, startingOffset, levelNo, objects)
         }
     }

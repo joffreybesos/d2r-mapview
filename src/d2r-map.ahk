@@ -272,7 +272,7 @@ While 1 {
                 Gdip_SetInterpolationMode(G, 7)
                 redrawMap := 0
             }
-            uiData["ticktock"] := ticktock
+            
             ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
 
             if (settings["centerMode"]) {
@@ -292,7 +292,9 @@ While 1 {
         session.saveEntry()
         ExitApp
     }
-    ticktock := not ticktock
+    ticktock := ticktock + 1
+    if (ticktock > 6)
+        ticktock := 0
 }
 
 checkAutomapVisibility(d2rprocess, settings, gameMemoryData) {

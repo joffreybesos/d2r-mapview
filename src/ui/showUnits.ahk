@@ -555,7 +555,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
     if (settings["enableItemFilter"]) {
 
         ; draw item alerts
-        pItemPen2 := Gdip_CreatePen(0xCCFFFFFF, 8)
+        
 
         items := gameMemoryData["items"]
         for index, item in items
@@ -571,23 +571,30 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                 if (alert.speak or alert.soundfile) {
                     announceItem(settings, item, alert)
                 }
-                pItemPen := Gdip_CreatePen(alert.color, 12)
-                ticktock := uiData["ticktock"]
+                pBrush1 := Gdip_BrushCreateSolid("0xffffffff")
+                pBrush2 := Gdip_BrushCreateSolid("0xee" . alert.color)
+                pBrush3 := Gdip_BrushCreateSolid("0xdd" . alert.color)
+                pBrush4 := Gdip_BrushCreateSolid("0xaa" . alert.color)
+                pBrush5 := Gdip_BrushCreateSolid("0x55" . alert.color)
+                pBrush6 := Gdip_BrushCreateSolid("0x33" . alert.color)
                 textx := itemx - 100
                 texty := itemy - 107
-                acolor := StrReplace(alert.color, "0x", "")
+                acolor := "cc" . alert.color
                 Options = x%textx% y%texty% Center Bold vBottom c%acolor% r8 s18
                 textx := textx + 1.5
                 texty := texty + 1.5
                 Options2 = x%textx% y%texty% Center Bold vBottom cff000000 r8 s18
                 Gdip_TextToGraphics(G, item.name, Options2, diabloFont, 200, 100)
                 Gdip_TextToGraphics(G, item.name, Options, diabloFont, 200, 100)
-                
-                if (ticktock) {
-                    Gdip_DrawEllipse(G, pItemPen, itemx-2, itemy-2, 12, 12)
-                } else {
-                    Gdip_DrawEllipse(G, pItemPen2, itemx, itemy, 8, 8)
+                switch (ticktock) {
+                    case 1: Gdip_FillEllipse(G, pBrush1, itemx-5, itemy-5, 10, 10)
+                    case 2: Gdip_FillEllipse(G, pBrush2, itemx-6, itemy-6, 12, 12)
+                    case 3: Gdip_FillEllipse(G, pBrush3, itemx-8, itemy-8, 16, 16)
+                    case 4: Gdip_FillEllipse(G, pBrush4, itemx-10, itemy-10, 20, 20)
+                    case 5: Gdip_FillEllipse(G, pBrush5, itemx-14, itemy-14, 28, 28)
+                    case 6: Gdip_FillEllipse(G, pBrush6, itemx-16, itemy-16, 32, 32)
                 }
+                
                 Gdip_DeletePen(pItemPen)
             }
         }

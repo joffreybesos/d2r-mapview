@@ -42,7 +42,7 @@ class AlertList {
                 alert.soundfile := Trim(yamlAlert.soundeffect)
             }
             if (yamlAlert.color) {
-                alert.color := "0xCC" Trim(yamlAlert.color)
+                alert.color := Trim(yamlAlert.color)
             }
 
             if (yamlAlert.onlyethereal) {

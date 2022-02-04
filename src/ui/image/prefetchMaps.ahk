@@ -29,7 +29,7 @@ prefetchMaps(settings, gameMemoryData) {
         edges := "true"
     requestBody := requestBody """edge"": """ edges """}"
 
-    
+    WriteLogDebug("Prefetching maps: " mapIds)
     try {
         whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
         WinHttpReq.SetTimeouts("1", "1", "1", "1")
@@ -40,14 +40,11 @@ prefetchMaps(settings, gameMemoryData) {
     } catch e {
         ; fail silently
     }
-
-    WriteLog("Prefetching map images: " requestBody)
-
 }
 
 
 calculateLevel(currentLevel) {
-    allWPs := "1,3,5,6,27,28,29,32,35,40,42,43,45,46,48,74,75,78,79,80,81,83,101,103,105,107,109,111,112,113,115,118,121,123,129"
+    ;allWPs := "1,3,5,6,27,28,29,32,35,40,42,43,45,46,48,74,75,78,79,80,81,83,101,103,105,107,109,111,112,113,115,118,121,123,129"
     switch (currentLevel) {
         case 1: return "1,2,4,83,39"
         case 2: return "3,8"
@@ -128,12 +125,57 @@ calculateLevel(currentLevel) {
         case 78: return "79"
         case 79: return "80"
         case 80: return "81"
-        case 81: return "82"
+        case 81: return "82,92"
         case 82: return "83"
         case 83: return "100"
-        
-        
-
+        case 84: return ""
+        case 85: return ""
+        case 86: return "87"
+        case 87: return "90"
+        case 88: return "89"
+        case 89: return "91"
+        case 90: return ""
+        case 91: return ""
+        case 92: return ""
+        case 93: return ""
+        case 94: return ""
+        case 95: return ""
+        case 96: return ""
+        case 97: return ""
+        case 98: return ""
+        case 99: return ""
+        case 100: return "101"
+        case 101: return "102"
+        case 102: return "103"
+        case 103: return "107,1,109"
+        case 104: return ""
+        case 105: return ""
+        case 106: return ""
+        case 107: return "108"
+        case 108: return ""
+        case 109: return "129,121,111"
+        case 110: return "111"
+        case 111: return "112"
+        case 112: return "113"
+        case 113: return "115,114,120"
+        case 114: return ""
+        case 115: return "117"
+        case 116: return ""
+        case 117: return "118"
+        case 118: return "119"
+        case 119: return ""
+        case 120: return ""
+        case 121: return "122"
+        case 122: return "123"
+        case 123: return "124"
+        case 124: return ""
+        case 125: return ""
+        case 126: return ""
+        case 127: return ""
+        case 128: return "129"
+        case 129: return "130"
+        case 130: return "131"
+        case 131: return "132"
     }
     return ""
 }

@@ -17,10 +17,12 @@ ReadObjects(d2rprocess, startingOffset, levelNo, ByRef gameObjects) {
             
             if (itemType == 2) {  ; 2 == object
                 txtFileNo := d2rprocess.read(objectUnit + 0x04, "UInt")
+                mode := d2rprocess.read(objectUnit + 0x0c, "UInt")
                 isPortal := isPortal(txtFileNo)
                 isShrine := isShrine(txtFileNo)
                 isRedPortal := isRedPortal(txtFileNo)
-                if (isPortal or isShrine or isRedPortal) {
+                isChest := isChest(txtFileNo)
+                if (isPortal or isShrine or isRedPortal or isChest) {
                     
                     pUnitData := d2rprocess.read(objectUnit + 0x10, "Int64")
 
@@ -38,8 +40,11 @@ ReadObjects(d2rprocess, startingOffset, levelNo, ByRef gameObjects) {
                     if (isShrine) {
                         shrineType := shrineType(interactType)
                     }
+                    if (isChest) {
+                        chestState := chestState(interactType)
+                    }
 
-                    gameObject := {"txtFileNo": txtFileNo, "name": name, "isPortal": isPortal, "isRedPortal": isRedPortal, "isShrine": isShrine, "shrineType": shrineType, "objectx": objectx, "objecty": objecty, "levelNo": levelNo }
+                    gameObject := {"txtFileNo": txtFileNo, "name": name, "mode": mode, "isChest": isChest, "chestState": chestState, "isPortal": isPortal, "isRedPortal": isRedPortal, "isShrine": isShrine, "shrineType": shrineType, "objectx": objectx, "objecty": objecty, "levelNo": levelNo }
                     ;WriteLog("txtFileNo: " txtFileNo ", name: " name ", isPortal: " isPortal ", isShrine: " isShrine ", objectx: " objectx ", objecty: " objecty)
                     gameObjects.push(gameObject)
                 }
@@ -753,6 +758,156 @@ getObjectName(txtFileNo) {
         case 581: return "NotSoGoodChest"
     }
     return ""
+}
+
+isChest(txtFileNo) {
+    switch (txtFileNo) {
+        case 1: return 1  ;"Casket5"
+        case 3: return 1  ;"Casket6"
+        case 5: return 1  ;"LargeChestRight"
+        case 6: return 1  ;"LargeChestLeft"
+        case 50: return 1  ;"CasketR"
+        case 51: return 1  ;"CasketL"
+        case 53: return 1  ;"Casket"
+        case 54: return 1  ;"RogueCorpse1"
+        case 55: return 1  ;"RogueCorpse2"
+        case 56: return 1  ;"RogueCorpseRolling"
+        case 57: return 1  ;"CorpseOnStick1"
+        case 58: return 1  ;"CorpseOnStick2"
+        case 79: return 1  ;"Casket3"
+        case 87: return 1  ;"TombLargeChestL"
+        case 88: return 1  ;"TombLargeChestR"
+        case 89: return 1  ;"Sarcophagus"
+        case 125: return 1  ;"InnerHellHiddenStash"
+        case 126: return 1  ;"InnerHellSkullPile"
+        case 127: return 1  ;"InnerHellHiddenStash2"
+        case 128: return 1  ;"InnerHellHiddenStash3"
+        case 139: return 1  ;"Act1LargeChestRight"
+        case 140: return 1  ;"Act1TallChestRight"
+        case 141: return 1  ;"Act1MediumChestRight"
+        case 144: return 1  ;"Act1LargeChest1"
+        case 146: return 1  ;"Act2MediumChestRight"
+        case 147: return 1  ;"Act2LargeChestRight"
+        case 148: return 1  ;"Act2LargeChestLeft"
+        case 154: return 1  ;"GuardCorpse"
+        case 155: return 1  ;"HiddenStashRock"
+        case 158: return 1  ;"SkeletonCorpseIsAnOxymoron"
+        case 159: return 1  ;"HiddenStashRockB"
+        case 169: return 1  ;"HollowLog"
+        case 171: return 1  ;"SkeletonCorpseIsStillAnOxymoron"
+        case 174: return 1  ;"LooseRock"
+        case 175: return 1  ;"LooseBoulder"
+        case 176: return 1  ;"MediumChestLeft"
+        case 177: return 1  ;"LargeChestLeft2"
+        case 178: return 1  ;"GuardCorpseOnAStick"
+        case 181: return 1  ;"JungleChest"
+        case 182: return 1  ;"TombCoffin"
+        case 183: return 1  ;"JungleMediumChestLeft"
+        case 185: return 1  ;"JungleStashObject1"
+        case 186: return 1  ;"JungleStashObject2"
+        case 187: return 1  ;"JungleStashObject3"
+        case 188: return 1  ;"JungleStashObject4"
+        case 198: return 1  ;"TallChestLeft"
+        case 203: return 1  ;"MephistoLair"
+        case 204: return 1  ;"StashBox"
+        case 205: return 1  ;"StashAltar"
+        case 223: return 1  ;"Cocoon"
+        case 224: return 1  ;"Cocoon2"
+        case 225: return 1  ;"SkullPileH1"
+        case 240: return 1  ;"Gchest1L"
+        case 241: return 1  ;"Gchest2R"
+        case 242: return 1  ;"Gchest3R"
+        case 243: return 1  ;"GLchest3L"
+        case 244: return 1  ;"SewersRatNest"
+        case 247: return 1  ;"Act1BedBed1"
+        case 248: return 1  ;"Act1BedBed2"
+        case 266: return 1  ;"MaggotLairGooPile"
+        case 268: return 1  ;"WirtCorpse"
+        case 270: return 1  ;"GuardCorpse2"
+        case 271: return 1  ;"DeadVillager1"
+        case 272: return 1  ;"DeadVillager2"
+        case 274: return 1  ;"TinyPixelShapedThingie"
+        case 284: return 1  ;"Act2TombAnubisCoffin"
+        case 314: return 1  ;"HaremDeadGuard1"
+        case 315: return 1  ;"HaremDeadGuard2"
+        case 316: return 1  ;"HaremDeadGuard3"
+        case 317: return 1  ;"HaremDeadGuard4"
+        case 326: return 1  ;"Act3SewerDeadBody"
+        case 329: return 1  ;"MafistoLargeChestLeft"
+        case 330: return 1  ;"MafistoLargeChestRight"
+        case 331: return 1  ;"MafistoMediumChestLeft"
+        case 332: return 1  ;"MafistoMediumChestRight"
+        case 333: return 1  ;"SpiderLairLargeChestLeft"
+        case 334: return 1  ;"SpiderLairTallChestLeft"
+        case 335: return 1  ;"SpiderLairMediumChestRight"
+        case 336: return 1  ;"SpiderLairTallChestRight"
+        case 354: return 1  ;"HoradricCubeChest"
+        case 355: return 1  ;"HoradricScrollChest"
+        case 356: return 1  ;"StaffOfKingsChest"
+        case 360: return 1  ;"DungeonRockPile"
+        case 371: return 1  ;"LargeChestR"
+        case 372: return 1  ;"InnerHellBoneChest"
+        case 380: return 1  ;"BurningTrappedSoul1"
+        case 381: return 1  ;"BurningTrappedSoul2"
+        case 383: return 1  ;"StuckedTrappedSoul1"
+        case 384: return 1  ;"StuckedTrappedSoul2"
+        case 387: return 1  ;"ArcaneLargeChestLeft"
+        case 388: return 1  ;"ArcaneCasket"
+        case 389: return 1  ;"ArcaneLargeChestRight"
+        case 390: return 1  ;"ArcaneSmallChestLeft"
+        case 391: return 1  ;"ArcaneSmallChestRight"
+        case 397: return 1  ;"SparklyChest"
+        case 405: return 1  ;"KhalimChest1"
+        case 406: return 1  ;"KhalimChest2"
+        case 407: return 1  ;"KhalimChest3"
+        case 413: return 1  ;"ExpansionChestRight"
+        case 416: return 1  ;"ExpansionHiddenStash"
+        case 420: return 1  ;"ExpansionWoodChestLeft"
+        case 424: return 1  ;"BurialChestLeft"
+        case 425: return 1  ;"BurialChestRight"
+        case 430: return 1  ;"ExpansionChestLeft"
+        case 431: return 1  ;"ExpansionWoodChestRight"
+        case 432: return 1  ;"ExpansionSmallChestLeft"
+        case 433: return 1  ;"ExpansionSmallChestRight"
+        case 454: return 1  ;"ExpansionExplodingChest"
+        case 455: return 1  ;"ExpansionSpecialChest"
+        case 463: return 1  ;"IceCaveHiddenStash"
+        case 466: return 1  ;"IceCaveEvilUrn"
+        case 485: return 1  ;"WorldstoneTomb1"
+        case 486: return 1  ;"WorldstoneTomb2"
+        case 487: return 1  ;"WorldstoneTomb3"
+        case 501: return 1  ;"ExpansionSnowyWoodChestLeft"
+        case 502: return 1  ;"ExpansionSnowyWoodChestRight"
+        case 504: return 1  ;"ExpansionSnowyWoodChest2Left"
+        case 505: return 1  ;"ExpansionSnowyWoodChest2Right"
+        case 518: return 1  ;"WorldstoneMrBox"
+        case 524: return 1  ;"WorldstoneTomb1Left"
+        case 525: return 1  ;"WorldstoneTomb2Left"
+        case 526: return 1  ;"WorldstoneTomb3Left"
+        case 529: return 1  ;"RedBaalsLairTomb1"
+        case 530: return 1  ;"RedBaalsLairTomb1Left"
+        case 531: return 1  ;"RedBaalsLairTomb2"
+        case 532: return 1  ;"RedBaalsLairTomb2Left"
+        case 533: return 1  ;"RedBaalsLairTomb3"
+        case 534: return 1  ;"RedBaalsLairTomb3Left"
+        case 535: return 1  ;"RedBaalsLairMrBox"
+        case 540: return 1  ;"ExpansionDeadPerson1"
+        case 541: return 1  ;"TempleGroundTomb"
+        case 544: return 1  ;"TempleGroundTombLeft"
+        case 545: return 1  ;"ExpansionDeadPerson2"
+        case 556: return 1  ;"ExpansionDeadPerson3"
+        case 580: return 1  ;"GoodChest"
+        case 581: return 1  ;"NotSoGoodChest
+        default: return 0
+    }
+}
+
+chestState(interactType) {
+    switch (interactType) {
+        case 0: return ""
+        case 4: return "trap"
+        case 128: return "locked"
+    }
 }
 
 shrineType(interactType) {

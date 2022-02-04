@@ -7,6 +7,7 @@
 
 readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     static items
+    static objects
     StartTime := A_TickCount
     startingOffset := settings["playerOffset"]  ;default offset
     
@@ -125,8 +126,10 @@ readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
     }
 
      ; get objects
-    if (settings["showShrines"] or settings["showPortals"]) {
-        ReadObjects(d2rprocess, startingOffset, levelNo, objects)
+    if (settings["showShrines"] or settings["showPortals"] or settings["showChests"]) {
+        if (ticktock) {
+            ReadObjects(d2rprocess, startingOffset, levelNo, objects)
+        }
     }
 
     menuShown := readUI(d2rprocess, gameWindowId, settings, session)

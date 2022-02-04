@@ -144,7 +144,6 @@ offsetAttempts := 6
 settingupGUI := false
 
 global ticktock := 0
-hasbeenPrefetched := false
 While 1 {
     ; scan for the player offset
     playerOffset := scanForPlayer(d2rprocess, playerOffset, startingOffset, settings)
@@ -216,7 +215,6 @@ While 1 {
                 }
                 shrines := []
                 seenItems := []
-                hasbeenPrefetched := false
             }
 
             ; if there's a level num then the player is in a map
@@ -236,11 +234,8 @@ While 1 {
                     Gui, Units: Show, NA
                 }
                 
-                if (!hasbeenPrefetched) {
-                    WriteLog("Prefetch maps...")
-                    prefetchMaps(settings, gameMemoryData)
-                    hasbeenPrefetched := true
-                }
+                
+                prefetchMaps(settings, gameMemoryData)
                 mapLoading := 0
                 Gui, LoadingText: Destroy ; remove loading text
                 redrawMap := 1

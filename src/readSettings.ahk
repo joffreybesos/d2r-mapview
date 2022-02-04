@@ -46,6 +46,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["showOtherPlayerNames"] := 0
     settings["showShrines"] := 1
     settings["showPortals"] := 1
+    settings["showChests"] := 1
     settings["lastActiveGUITab"] := "Info"
     settings["settingsUIX"] := 100
     settings["settingsUIX"] := 100
@@ -80,6 +81,8 @@ readSettings(settingsFile, ByRef settings) {
     settings["redPortalColor"] := "FF0000"
     settings["shrineColor"] := "FFD700"
     settings["shrineTextSize"] := "20"
+    
+
     settings["showWaypointLine"] := 0
     settings["showNextExitLine"] := 1
     settings["showBossLine"] := 1

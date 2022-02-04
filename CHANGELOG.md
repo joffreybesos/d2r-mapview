@@ -2,13 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.5.7] - 2021-02-02 - Map prefetching
+## [2.5.7] - 2021-02-02 - Map prefetching and chests
 
 - Map images can now be pregenerated when running your own server
-- For this to work, you need to update your map server (at least beta 8)
-- With an update map server pre-fetching will be handled for you automatically
+- For this to work, you need to update your map server (beta 9)
+- If you don't update your map server then this release will still work fine
+- Chests now marked on the map! (red means it's booby trapped, yellow means it's locked)
+- Chests will disappear from the map after you open them
 - Fixed an issue where item filter was slowing down the MH
 - Fixed an issue where if you disabled speech for an alert, it also disabled the sound effect
+- Fixed Nihlithak's name
 
 ## [2.5.6] - 2021-02-02 - Visual tweaks
 

@@ -92,7 +92,7 @@ getBossName(txtFileNo) {
         case "267": return "Bloodraven"
         case "333": return "Diabloclone"
         case "365": return "Griswold"
-        case "526": return "Nihlathakboss"
+        case "526": return "Nihlathak"
         case "544": return "Baal"
         case "570": return "Baalclone"
         case "704": return "Uber Mephisto"

@@ -29,7 +29,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\readSettings.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
 
-expectedVersion := "2.5.6"
+expectedVersion := "2.5.7"
 
 
 if !FileExist(A_Scriptdir . "\settings.ini") {

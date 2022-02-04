@@ -594,6 +594,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                     case 5: Gdip_FillEllipse(G, pBrush5, itemx-14, itemy-14, 28, 28)
                     case 6: Gdip_FillEllipse(G, pBrush6, itemx-16, itemy-16, 32, 32)
                 }
+                Gdip_FillEllipse(G, pBrush2, itemx-2.5, itemy-2.5, 5, 5)
                 
                 Gdip_DeletePen(pItemPen)
             }

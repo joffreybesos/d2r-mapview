@@ -409,7 +409,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                     if (settings["centerMode"]) {
                         drawChest(G, objectx, objecty, 0.5, object["chestState"])
                     } else {
-                        drawChest(G, objectx, objecty, 0.2, object["chestState"])
+                        drawChest(G, objectx, objecty, 0.3, object["chestState"])
                     }
                 }
             }

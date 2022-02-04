@@ -76,6 +76,13 @@ CreateSettingsGUI(settings) {
     Gui, Settings: Font, S8 CDefault, 
     Gui, Settings: Add, CheckBox, x22 y239 w120 h20 vShowOtherPlayers gUpdateFlag, Show Other Players ;True
     Gui, Settings: Add, CheckBox, x22 y259 w170 h20 vShowOtherPlayerNames gUpdateFlag, Show names above player dots ;False
+
+    Gui, Settings: Font, S8 CGray, 
+    Gui, Settings: Add, GroupBox, x11 y299 w340 h50 , Chests
+    Gui, Settings: Font, S8 CDefault, 
+    Gui, Settings: Add, CheckBox, x22 y319 w120 h20 vShowChests gUpdateFlag, Show Chests ;True
+    
+    
     Gui, Settings: Add, Link, x95 y418 w200 h20 , Click <a href="https://htmlcolorcodes.com">here</a> for a HEX color chart
 
     Gui, Settings: Tab, Game History
@@ -297,6 +304,7 @@ CreateSettingsGUI(settings) {
     GuiControl, Settings:, showOtherPlayerNames, % settings["showOtherPlayerNames"]
     GuiControl, Settings:, showShrines, % settings["showShrines"]
     GuiControl, Settings:, showPortals, % settings["showPortals"]
+    GuiControl, Settings:, showChests, % settings["showChests"]
 
     GuiControl, Settings:, enableItemFilter, % settings["enableItemFilter"]
     GuiControl, Settings:, allowTextToSpeech, % settings["allowTextToSpeech"]
@@ -423,6 +431,7 @@ UpdateSettings(ByRef settings, defaultSettings) {
     GuiControlGet, showOtherPlayerNames, ,showOtherPlayerNames
     GuiControlGet, showShrines, ,showShrines
     GuiControlGet, showPortals, ,showPortals
+    GuiControlGet, showChests, ,showChests
     
     GuiControlGet, enableItemFilter, ,enableItemFilter
     GuiControlGet, allowTextToSpeech, ,allowTextToSpeech
@@ -530,6 +539,7 @@ UpdateSettings(ByRef settings, defaultSettings) {
     settings["showOtherPlayerNames"] := showOtherPlayerNames
     settings["showShrines"] := showShrines
     settings["showPortals"] := showPortals
+    settings["showChests"] := showChests
 
     settings["enableItemFilter"] := enableItemFilter
     settings["allowTextToSpeech"] := allowTextToSpeech

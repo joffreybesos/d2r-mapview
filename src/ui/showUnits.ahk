@@ -371,45 +371,49 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
         }
         for index, object in gameObjects
         {
-            ;WriteLog(object["txtFileNo"] " " object["isRedPortal"])
-            if (object["isPortal"]) {
-                objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
-                objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
-                correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-                objectx := correctedPos["x"] + centerLeftOffset
-                objecty := correctedPos["y"] + centerTopOffset
-                
-                ;Gdip_DrawString(G, text, hFont, hFormat, pBrush2, RectF)
-                if (settings["centerMode"]) {
-                    Gdip_DrawEllipse(G, pPen, objectx-8, objecty-25, 16, 32)
-                } else {
-                    Gdip_DrawEllipse(G, pPen, objectx-8, objecty-14, 9, 16)
-                }
-            }
-            if (object["isRedPortal"]) {
-                objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
-                objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
-                correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-                objectx := correctedPos["x"] + centerLeftOffset
-                objecty := correctedPos["y"] + centerTopOffset
-                if (settings["centerMode"]) {
+            if (settings["showPortals"]) {
+                ;WriteLog(object["txtFileNo"] " " object["isRedPortal"])
+                if (object["isPortal"]) {
+                    objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
+                    objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
+                    correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                    objectx := correctedPos["x"] + centerLeftOffset
+                    objecty := correctedPos["y"] + centerTopOffset
+                    
                     ;Gdip_DrawString(G, text, hFont, hFormat, pBrush2, RectF)
-                    Gdip_DrawEllipse(G, pPenRed, objectx-8, objecty-25, 16, 32)
-                } else {
-                    Gdip_DrawEllipse(G, pPenRed, objectx-8, objecty-14, 9, 16)
+                    if (settings["centerMode"]) {
+                        Gdip_DrawEllipse(G, pPen, objectx-8, objecty-25, 16, 32)
+                    } else {
+                        Gdip_DrawEllipse(G, pPen, objectx-8, objecty-14, 9, 16)
+                    }
                 }
-            }
-            if (object["isChest"]) {
-                if (object["mode"] == 0) {
+                if (object["isRedPortal"]) {
                     objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
                     objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
                     correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                     objectx := correctedPos["x"] + centerLeftOffset
                     objecty := correctedPos["y"] + centerTopOffset
                     if (settings["centerMode"]) {
-                        drawChest(G, objectx, objecty, 0.5, object["chestState"])
+                        ;Gdip_DrawString(G, text, hFont, hFormat, pBrush2, RectF)
+                        Gdip_DrawEllipse(G, pPenRed, objectx-8, objecty-25, 16, 32)
                     } else {
-                        drawChest(G, objectx, objecty, 0.3, object["chestState"])
+                        Gdip_DrawEllipse(G, pPenRed, objectx-8, objecty-14, 9, 16)
+                    }
+                }
+            }
+            if (settings["showChests"]) {
+                if (object["isChest"]) {
+                    if (object["mode"] == 0) {
+                        objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
+                        objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
+                        correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                        objectx := correctedPos["x"] + centerLeftOffset
+                        objecty := correctedPos["y"] + centerTopOffset
+                        if (settings["centerMode"]) {
+                            drawChest(G, objectx, objecty, 0.5, object["chestState"])
+                        } else {
+                            drawChest(G, objectx, objecty, 0.3, object["chestState"])
+                        }
                     }
                 }
             }

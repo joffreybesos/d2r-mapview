@@ -524,14 +524,14 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
                 playerx := correctedPos["x"] + centerLeftOffset
                 playery := correctedPos["y"] + centerTopOffset
                 if (settings["showOtherPlayerNames"]) {
-                    textx := playerx-2 - 75
+                    textx := playerx-2 - 160
                     texty := playery-2 - 100
                     Options = x%textx% y%texty% Center Bold vBottom cff00AA00 r8 s24
-                    textx := textx + 2
-                    texty := texty + 2
+                    textx := textx + 1.5
+                    texty := texty + 1.5
                     Options2 = x%textx% y%texty% Center Bold vBottom cff000000 r8 s24
-                    Gdip_TextToGraphics(G, player["playerName"], Options2, diabloFont, 160, 100)
-                    Gdip_TextToGraphics(G, player["playerName"], Options, diabloFont, 160, 100)
+                    Gdip_TextToGraphics(G, player["playerName"], Options2, diabloFont, 320, 100)
+                    Gdip_TextToGraphics(G, player["playerName"], Options, diabloFont, 320, 100)
                 }
                 ; draw a square dot, but angled along the map Gdip_PathOutline()
                 

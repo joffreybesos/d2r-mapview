@@ -2,7 +2,7 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-drawObjects(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, shrines) {
+drawObjects(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, shrines, centerLeftOffset, centerTopOffset) {
     if (settings["showPortals"] or settings["showChests"]) {
         gameObjects := gameMemoryData["objects"]
         portalColor := "ff" . settings["portalColor"]

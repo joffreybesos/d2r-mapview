@@ -81,32 +81,32 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
     
     ;Missiles
     if (settings["showPlayerMissiles"] or settings["showEnemyMissiles"]) {
-        drawMissiles(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight)
+        drawMissiles(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
     }
 
     ; draw monsters
     if (settings["showNormalMobs"] or settings["showDeadMobs"] or settings["showUniqueMobs"] or settings["showBosses"]) {
-        drawMonsters(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight)
+        drawMonsters(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
     }
 
     ; draw portals
     if (settings["showPortals"] or settings["showChests"] or settings["showShrines"]) {
-        drawObjects(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, shrines)
+        drawObjects(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, shrines, centerLeftOffset, centerTopOffset)
     }
 
     ; draw lines
     if (settings["showWaypointLine"] or settings["showNextExitLine"] or settings["showBossLine"]) {
-        drawLines(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight)
+        drawLines(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset, xPosDot, yPosDot)
     }
 
     ; draw other players
     if (settings["showOtherPlayers"]) {
-        drawPlayers(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight)
+        drawPlayers(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
      }
 
     ; show item alerts
     if (settings["enableItemFilter"]) {
-        drawItemAlerts(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight)
+        drawItemAlerts(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
     }
 
     if (!settings["centerMode"] or settings["showPlayerDotCenter"]) {

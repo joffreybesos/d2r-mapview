@@ -13,10 +13,15 @@ drawLines(G, settings, gameMemoryData, imageData, serverScale, scale, padding, W
             wayPointY := (wparray[2] * serverScale) + padding
             correctedPos := correctPos(settings, waypointX, wayPointY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             waypointX := correctedPos["x"] + centerLeftOffset
-            wayPointY := correctedPos["y"] + centerTopOffset
-            pPen := Gdip_CreatePen(0x55ffFF00, 3)
-            Gdip_DrawLine(G, pPen, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, waypointX, wayPointY)
-            Gdip_DeletePen(pPen)
+            wayPointY := correctedPos["y"] + 
+            newCoords := calculateFixedLength(xPosDot+centerLeftOffset, yPosDot+centerTopOffset, waypointX, wayPointY, (10 * scale))
+            if (newCoords["x1"]) {
+                if (newCoords["lineLength"] > (50 * scale)) {
+                    pPen := Gdip_CreatePen(0x55ffFF00, 3)
+                    Gdip_DrawLine(G, pPen, newCoords["x1"], newCoords["y1"], waypointX, wayPointY)
+                    Gdip_DeletePen(pPen)
+                }
+            }
         }
     }
 
@@ -35,11 +40,20 @@ drawLines(G, settings, gameMemoryData, imageData, serverScale, scale, padding, W
                 exitX := correctedPos["x"] + centerLeftOffset
                 exitY := correctedPos["y"] + centerTopOffset
 
+                ;WriteLog(xPosDot+centerLeftOffset " " yPosDot+centerTopOffset " " exitX " " exitY " " newCoords["x1"] " " newCoords["y1"])
+
                 ; only draw the line if it's a 'next' exit
                 if (isNextExit(gameMemoryData["levelNo"]) == exitArray[1]) {
-                    pPen := Gdip_CreatePen(0x55FF00FF, 3)
-                    Gdip_DrawLine(G, pPen, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, exitX, exitY)
-                    Gdip_DeletePen(pPen)
+                    newCoords := calculateFixedLength(xPosDot+centerLeftOffset, yPosDot+centerTopOffset, exitX, exitY, (10 * scale))
+                    if (newCoords["x1"]) {
+                        ;WriteLog(xPosDot+centerLeftOffset " " yPosDot+centerTopOffset " " exitX " " exitY " " newCoords["x1"] " " newCoords["y1"] " " newCoords["x2"] " " newCoords["y2"])
+                        
+                        if (newCoords["lineLength"] > (50 * scale)) {
+                            pPen := Gdip_CreatePen(0x55FF00FF, 3)
+                            Gdip_DrawLine(G, pPen, newCoords["x1"], newCoords["y1"], exitX, exitY)
+                            Gdip_DeletePen(pPen)
+                        }
+                    }
                 }
             }
         }
@@ -56,10 +70,16 @@ drawLines(G, settings, gameMemoryData, imageData, serverScale, scale, padding, W
             correctedPos := correctPos(settings, bossX, bossY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             bossX := correctedPos["x"] + centerLeftOffset
             bossY := correctedPos["y"] + centerTopOffset
-
-            pPen := Gdip_CreatePen(0x55FF0000, 3)
-            Gdip_DrawLine(G, pPen, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, bossX, bossY)
-            Gdip_DeletePen(pPen)
+            newCoords := calculateFixedLength(xPosDot+centerLeftOffset, yPosDot+centerTopOffset, bossX, bossY, (10 * scale))
+            if (newCoords["x1"]) {
+                ;WriteLog(xPosDot+centerLeftOffset " " yPosDot+centerTopOffset " " exitX " " exitY " " newCoords["x1"] " " newCoords["y1"] " " newCoords["x2"] " " newCoords["y2"])
+                
+                if (newCoords["lineLength"] > (50 * scale)) {
+                    pPen := Gdip_CreatePen(0x55FF0000, 3)
+                    Gdip_DrawLine(G, pPen, newCoords["x1"], newCoords["y1"], bossX, bossY)
+                    Gdip_DeletePen(pPen)
+                }
+            }
         }
     }
 
@@ -78,11 +98,54 @@ drawLines(G, settings, gameMemoryData, imageData, serverScale, scale, padding, W
                 correctedPos := correctPos(settings, questX, questY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 questX := correctedPos["x"] + centerLeftOffset
                 questY := correctedPos["y"] + centerTopOffset
-
-                pPen := Gdip_CreatePen(0x5500FF00, 3)
-                Gdip_DrawLine(G, pPen, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, questX, questY)
-                Gdip_DeletePen(pPen)
+                newCoords := calculateFixedLength(xPosDot+centerLeftOffset, yPosDot+centerTopOffset, questX, questY, (10 * scale))
+                if (newCoords["x1"]) {
+                    ;WriteLog(xPosDot+centerLeftOffset " " yPosDot+centerTopOffset " " exitX " " exitY " " newCoords["x1"] " " newCoords["y1"] " " newCoords["x2"] " " newCoords["y2"])
+                    
+                    if (newCoords["lineLength"] > (50 * scale)) {
+                        pPen := Gdip_CreatePen(0x5500FF00, 3)
+                        Gdip_DrawLine(G, pPen, newCoords["x1"], newCoords["y1"], questX, questY)
+                        Gdip_DeletePen(pPen)
+                    }
+                }
             }
         }
     }
+}
+
+calculateFixedLength(x1,y1,x2,y2, linegap)
+{
+    lineLength := Sqrt((Abs(x1 - x2) ** 2) + (Abs(y1 - y2) ** 2))
+    newPc := 1 - ((lineLength - linegap) / lineLength)
+    ;WriteLog(lineLength " " newPc)
+    if (x1 > x2) {
+        newx1 := x1 - ((x1 - x2) * newPc)
+    } else {
+        newx1 := x1 + ((x2 - x1) * newPc)
+    }
+
+    if (y1 > y2) {
+        newy1 := y1 - ((y1 - y2) * newPc)
+    } else {
+        newy1 := y1 + ((y2 - y1) * newPc)
+    }
+    
+    return {"x1": newx1, "y1": newy1, "lineLength": lineLength }
+}
+
+calculatePercentage(x1,y1,x2,y2, percentage)
+{
+    ;newPc := (ticktock * percentage) / 100
+    if (x1 > x2) {
+        newx1 := x1 - ((x1 - x2) * percentage)
+    } else {
+        newx1 := x1 + ((x2 - x1) * percentage)
+    }
+
+    if (y1 > y2) {
+        newy1 := y1 - ((y1 - y2) * percentage)
+    } else {
+        newy1 := y1 + ((y2 - y1) * percentage)
+    }
+    return {"x1": newx1, "y1": newy1 }
 }

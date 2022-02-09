@@ -10,7 +10,11 @@ All notable changes to this project will be documented in this file.
 - If it can't connect to the server at `baseUrl` it will start `d2-mapserver.exe` for you.
 - The public server has now be removed from the default configuration.
 - You no longer need your own `settings.ini` file, one will be created for you if needed.
+
+New features:
+
 - In game history, player level now includes percentage of xp level e.g. `94.51` instead of `94`
+- Tamoe Highlands now draws purple line to the Pits entrance
 
 ## [2.5.7] - 2021-02-02 - Chests and map prefetching
 

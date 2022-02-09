@@ -195,7 +195,7 @@ isNextExit(currentLvl) {
         case "3": return "9"
         case "4": return "10"
         case "6": return "20"
-        case "7": return "16"
+        case "7": return "12"
         case "8": return "2"
         case "9": return "13"
         case "10": return "5"

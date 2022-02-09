@@ -27,10 +27,10 @@ ShowHistoryText(hwnd1, gameWindowId, sessionList, historyToggle, position = "RIG
         Gdip_SetInterpolationMode(G, 7)
 
         col1 := 0
-        col2 := textBoxWidth * 0.06
-        col3 := textBoxWidth * 0.31
-        col4 := textBoxWidth * 0.61
-        col5 := textBoxWidth * 0.79
+        col2 := textBoxWidth * 0.11
+        col3 := textBoxWidth * 0.33
+        col4 := textBoxWidth * 0.63
+        col5 := textBoxWidth * 0.81
 
         drawHeader(G, col1, 0, Width, fontSize, "L")
         drawHeader(G, col2, 0, Width, fontSize, "Character")
@@ -48,7 +48,7 @@ ShowHistoryText(hwnd1, gameWindowId, sessionList, historyToggle, position = "RIG
         Loop %max%
         {
             session := sessionList[(max-A_Index+1)]
-            playerLevelList := playerLevelList . session.endingPlayerLevel . "`n"
+            playerLevelList := playerLevelList . session.getPreciseLevel() . "`n"
             playerNameList := playerNameList . session.playerName . "`n"
             gameNameList := gameNameList . session.gameName . "`n"
             xpgainedList := xpgainedList . session.getExperienceGained() . "`n"

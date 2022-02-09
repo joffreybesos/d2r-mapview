@@ -6,6 +6,7 @@ readSettings(settingsFile, ByRef settings) {
     FileInstall, mapconfig-default.ini, mapconfig.ini , 0
     FileInstall, itemfilter.yaml, itemfilter.yaml , 0
     FileInstall, exocetblizzardot-medium.otf, exocetblizzardot-medium.otf , 1
+    FileInstall, settings.ini, settings.ini, 1
 
     ; these are the default values
     settings := []
@@ -156,26 +157,6 @@ readSettings(settingsFile, ByRef settings) {
     if (lastChar=="/") {
         StringTrimRight, baseUrl, baseUrl, 1
         settings["baseUrl"] := baseUrl
-    }
-
-    ;health check
-    testUrl := baseUrl "/health"
-    try {
-        whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-        WinHttpReq.SetTimeouts("10", "10", "10", "10")
-        whr.Open("GET", testUrl, true)
-        whr.Send()
-        whr.WaitForResponse()
-        healthCheck := whr.ResponseText
-        IfNotInString, healthCheck, Ok
-        {
-            Msgbox % "Could not connect to " baseUrl "`n`nMake sure the server is running`n`nExiting..."
-            ExitApp
-        }
-    } catch e {
-        emsg := e.message
-        Msgbox, 48, d2r-mapview, Could not connect to %baseUrl%`n`nMake sure the server is running`nDouble check your baseUrl in settings.ini`n`n%emsg%`n`nExiting...
-        ExitApp
     }
 
     WriteLog("Using configuration:")

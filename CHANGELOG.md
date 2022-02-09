@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.8] - 2021-02-07 - Map server is now automatically started for you
+
+- From this release going forward, place this `d2r-map.exe` in the same folder as your `d2-mapserver.exe`
+- This MH will now automatically launch the server on startup.
+- It will check if a server is already running by trying to connect to `baseUrl`
+- If it can't connect to the server at `baseUrl` it will start `d2-mapserver.exe` for you.
+- The public server has now be removed from the default configuration.
+- You no longer need your own `settings.ini` file, one will be created for you if needed.
+- In game history, player level now includes percentage of xp level e.g. `94.51` instead of `94`
+
 ## [2.5.7] - 2021-02-02 - Chests and map prefetching
 
 - Map images can now be pregenerated when running your own server

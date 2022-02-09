@@ -27,15 +27,10 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\stats\GameSession.ahk
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\readSettings.ahk
+#Include %A_ScriptDir%\serverHealthCheck.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
 
-expectedVersion := "2.5.7"
-
-
-if !FileExist(A_Scriptdir . "\settings.ini") {
-    MsgBox, , Missing settings, Could not find settings.ini file
-    ExitApp
-}
+expectedVersion := "2.5.8"
 
 lastMap := ""
 exitArray := []
@@ -50,7 +45,7 @@ ClearCache(A_Temp)
 global settings
 global defaultSettings
 readSettings("settings.ini", settings)
-
+checkServer(settings)
 
 lastlevel:=""
 lastSeed:=""

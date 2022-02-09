@@ -12,7 +12,12 @@ enabledAlerts:
   - Runes
   - RareHeadGear
   - RareJewelry
-  - Gems
+  - GemsAmethyst
+  - GemsDiamond
+  - GemsEmerald
+  - GemsRuby
+  - GemsSapphire
+  - GemsTopaz
 
 ##############################################
 #### Define all alerts below this section ####
@@ -240,37 +245,56 @@ Alerts:
     color: FFA700
 
   # note: anything with a # in front of it is ignored
-  Gems:
+  GemsAmethyst:
     items:
-      # - Chipped Amethyst
-      # - Chipped Diamond
-      # - Chipped Emerald
-      # - Chipped Ruby
-      # - Chipped Sapphire
-      # - Chipped Topaz
+      - Chipped Amethyst
       # - Flawed Amethyst
-      # - Flawed Diamond
-      # - Flawed Emerald
-      # - Flawed Ruby
-      # - Flawed Sapphire
-      # - Flawed Topaz
       # - Amethyst
-      # - Diamond
-      # - Emerald
-      # - Ruby
-      # - Sapphire
-      # - Topaz
       # - Flawless Amethyst
-      # - Flawless Diamond
-      # - Flawless Emerald
-      # - Flawless Ruby
-      # - Flawless Sapphire
-      # - Flawless Topaz
       - Perfect Amethyst
+    color: 8C0088
+
+  GemsDiamond:
+    items:
+      - Chipped Diamond
+      # - Flawed Diamond
+      # - Diamond
+      # - Flawless Diamond
       - Perfect Diamond
+    color: FFFFFF
+
+  GemsEmerald:
+    items:
+      - Chipped Emerald
+      # - Flawed Emerald
+      # - Emerald
+      # - Flawless Emerald
       - Perfect Emerald
+    color: 00D612
+
+  GemsRuby:
+    items:
+      - Chipped Ruby
+      # - Flawed Ruby
+      # - Ruby
+      # - Flawless Ruby
       - Perfect Ruby
+    color: F7002D
+
+  GemsSapphire:
+    items:
+      - Chipped Sapphire
+      # - Flawed Sapphire
+      # - Sapphire
+      # - Flawless Sapphire
       - Perfect Sapphire
+    color: 0031F7
+
+  GemsTopaz:
+    items:
+      - Chipped Topaz
+      # - Flawed Topaz
+      # - Topaz
+      # - Flawless Topaz
       - Perfect Topaz
-    color: FF0000
-    speak: false
+    color: F7B100

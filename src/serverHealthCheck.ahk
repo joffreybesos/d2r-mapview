@@ -56,6 +56,7 @@ startMapServer(serverExe, ByRef settings) {
         Msgbox, 48, d2r-mapview, Could not connect to %newBaseUrl1%`n`nMake sure the server is running`nDouble check your baseUrl in settings.ini`n`n%emsg%`n`nExiting...
         ExitApp
     }
+    WriteLog("Started and using server on " newBaseUrl1)
     settings["baseUrl"] := newBaseUrl1
 }
 

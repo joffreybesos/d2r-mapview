@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.9] - 2021-02-07 - Settings bug fix
+
+- Fixed a bug where your settings wouldn't save to you `settings.ini`
+
 ## [2.5.8] - 2021-02-07 - Map server is now automatically started for you
 
 - From this release going forward, place this `d2r-map.exe` in the same folder as your `d2-mapserver.exe`

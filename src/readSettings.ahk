@@ -6,7 +6,7 @@ readSettings(settingsFile, ByRef settings) {
     FileInstall, mapconfig-default.ini, mapconfig.ini , 0
     FileInstall, itemfilter.yaml, itemfilter.yaml , 0
     FileInstall, exocetblizzardot-medium.otf, exocetblizzardot-medium.otf , 1
-    FileInstall, settings.ini, settings.ini, 1
+    FileInstall, settings.ini, settings.ini, 0
 
     ; these are the default values
     settings := []

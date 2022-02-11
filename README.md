@@ -25,17 +25,8 @@ This tool is licenced under GPLv3.
 | ![](darkwood.png) | ![](hallsofpain.png) | ![](canyonofthemagi.png) |
 
 ## Setup
-1. Setup a map server by following this guide: https://github.com/joffreybesos/d2-mapserver/blob/master/INSTALLATION.md
-2. Download the latest `d2rmap-vx.x.x.exe` (found on the [releases page](https://github.com/joffreybesos/d2r-mapview/releases))
-3. Save the d2rmap.exe in the same folder as your map server
-4. Launch D2R.
-5. Run `d2rmap.exe` while in menus or in game.
-6. You show see a 'Loading map data' message on the top left of the screen, this initial loading may take 10-15 seconds.
-7. Make sure you press TAB to show the minimap, this map will only display when your minmap is displayed.
-8. Press Ctrl+H in game for a help menu
 
-The executable does _not_ require administrator privileges unless you are running the game as administrator. Refer to troubleshooting below if you have issues.  
-Sometimes windows defender can intercept the download, try a different browser if this happens.
+Please read the wiki https://github.com/joffreybesos/d2r-mapview/wiki/Setup-guide
 
 ### Virustotal gave me an alert
 

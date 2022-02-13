@@ -14,6 +14,7 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
     imageUrl := baseUrl . "/v1/map/" . gameMemoryData["mapSeed"] . "/" . gameMemoryData["difficulty"] . "/" . gameMemoryData["levelNo"] . "/image?wallthickness=" . t
     sFile := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . gameMemoryData["levelNo"]
     sFileTxt := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . gameMemoryData["levelNo"]
+    imageUrl := imageUrl . "&rotate=true"
 
     if (settings["edges"]) {
         imageUrl := imageUrl . "&edge=true"
@@ -105,7 +106,7 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
         foundFields := 0
         Loop, Parse, respHeaders, `r`n
         {  
-            ;WriteLogDebug("Response Header: " A_LoopField)
+            WriteLogDebug("Response Header: " A_LoopField)
             
             field := StrSplit(A_LoopField, ":")
             switch (field[1]) {
@@ -119,6 +120,9 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
                 case "waypoint": waypoint := Trim(field[2]), foundFields++
                 case "bosses": bosses := Trim(field[2]), foundFields++
                 case "quests": quests := Trim(field[2]), foundFields++
+                case "prerotated": prerotated := convertToBool(field[2]), foundFields++
+                case "originalwidth": originalwidth := Trim(field[2]), foundFields++
+                case "originalheight": originalheight := Trim(field[2]), foundFields++
             }
         }
         if (foundFields < 9) {
@@ -126,5 +130,13 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
         }
     }
     ;WriteLog("sFile: " sFile ", leftTrimmed: " leftTrimmed ", topTrimmed: " topTrimmed ", levelScale: " levelScale ", levelxmargin: " levelxmargin ", levelymargin: " levelymargin ", mapOffsetX: " mapOffsetX ", mapOffsety: " mapOffsety ", mapwidth: " mapwidth ", mapheight: " mapheight ", exits: " exits  ", waypoint: " waypoint  ", bosses: " bosses)
-    mapData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "levelScale": levelScale, "levelxmargin": levelxmargin, "levelymargin": levelymargin, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight, "exits": exits, "waypoint": waypoint, "bosses": bosses, "quests": quests }
+    mapData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "levelScale": levelScale, "levelxmargin": levelxmargin, "levelymargin": levelymargin, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight, "exits": exits, "waypoint": waypoint, "bosses": bosses, "quests": quests, "prerotated": prerotated, "originalwidth": originalwidth, "originalheight": originalheight }
 } 
+
+
+convertToBool(field) {
+    
+    if (Trim(field) == "true")
+        return 1
+    return 0
+}

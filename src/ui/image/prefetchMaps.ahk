@@ -21,6 +21,7 @@ prefetchMaps(settings, gameMemoryData) {
     requestBody := requestBody """difficulty"": """ gameMemoryData["difficulty"] ""","
     requestBody := requestBody """mapIds"": [" mapIds "],"
     requestBody := requestBody """wallthickness"": """ t ""","
+    requestBody := requestBody """rotate"": ""true"","
 
     requestBody := requestBody """centerServerScale"": """ settings["serverScale"] ""","
     requestBody := requestBody """serverScale"": ""2"","

@@ -33,6 +33,7 @@ This tool is licenced under GPLv3.
 6. You show see a 'Loading map data' message on the top left of the screen, this initial loading may take 10-15 seconds.
 7. Make sure you press TAB to show the minimap, this map will only display when your minmap is displayed.
 8. Press Ctrl+H in game for a help menu
+9. Press Ctrl+O for in game options
 
 The executable does _not_ require administrator privileges unless you are running the game as administrator. Refer to troubleshooting below if you have issues.  
 Sometimes windows defender can intercept the download, try a different browser if this happens.

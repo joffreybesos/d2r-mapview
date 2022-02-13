@@ -151,6 +151,8 @@ While 1 {
         if (offsetAttempts > 25) {
             hideMap(false)
             lastlevel:=
+            shrines := []
+            seenItems := []
             if (session) {
                 session.setEndTime(gameEndTime)
                 session.endingPlayerLevel := lastPlayerLevel
@@ -174,7 +176,7 @@ While 1 {
             offsetAttempts := 26
             WriteLogDebug("Offset attempts " offsetAttempts)
         }
-        Sleep, 100 ; sleep when no offset found, you're likely in menu
+        Sleep, 80 ; sleep when no offset found, you're likely in menu
     } else {
         offsetAttempts := 0
         Gui, GameInfo: Hide  ; hide the last game info
@@ -228,7 +230,6 @@ While 1 {
                     Gui, Map: Show, NA
                     Gui, Units: Show, NA
                 }
-                
                 
                 prefetchMaps(settings, gameMemoryData)
                 mapLoading := 0

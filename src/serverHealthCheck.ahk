@@ -26,7 +26,7 @@ startMapServer(serverExe, ByRef settings) {
 
     ; wait until 'running on hostname' appears in logs
     start_time := A_TickCount
-    time_to_run := 30000
+    time_to_run := 60000
     end_time := start_time + time_to_run
     serverStarted := false
     while (A_tickcount < end_time)

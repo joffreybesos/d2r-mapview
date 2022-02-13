@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.0] - 2021-02-13 - Map server improvements
+
+- Map images are now rotated on the server rather than the client for performance
+  This will give a nice performance boost especially when prefetching maps
+  You need the latest version of the map server (beta 10) to do this
+- You can still use the old version of the server, or this version of the client (backwards compatible)
+- Increased timeout waiting for mapserver to start
+- Fixed bug where Shrines would be remembered between game sessions for offline characters
+
 ## [2.5.9] - 2021-02-07 - Settings bug fix
 
 - Fixed a bug where your settings wouldn't save to you `settings.ini`

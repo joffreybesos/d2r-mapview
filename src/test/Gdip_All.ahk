@@ -2421,6 +2421,7 @@ Gdip_GetRotatedDimensions(Width, Height, Angle, ByRef RWidth, ByRef RHeight)
 	pi := 3.14159, TAngle := Angle*(pi/180)
 	if !(Width && Height)
 		return -1
+
 	RWidth := Ceil(Abs(Width*Cos(TAngle))+Abs(Height*Sin(TAngle)))
 	RHeight := Ceil(Abs(Width*Sin(TAngle))+Abs(Height*Cos(Tangle)))
 }

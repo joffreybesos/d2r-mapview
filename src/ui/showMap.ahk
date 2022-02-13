@@ -37,6 +37,7 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
     ; WriteLog(imageData["mapOffsety"])
     ; WriteLog(imageData["mapwidth"])
     ; WriteLog(imageData["mapheight"])
+    ; WriteLog(imageData["prerotated"])
 
     ; WriteLog(gameMemoryData["xPos"])
     ; WriteLog(gameMemoryData["yPos"])
@@ -58,7 +59,16 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
     }
     Width := Gdip_GetImageWidth(pBitmap)
     Height := Gdip_GetImageHeight(pBitmap)
-    Gdip_GetRotatedDimensions(Width, Height, Angle, RWidth, RHeight)
+
+    if (imageData["prerotated"]) {
+        RWidth := Width
+        RHeight := Height
+        WriteLog( imageData["originalWidth"] " "  imageData["originalHeight"])
+        Width := imageData["originalWidth"]
+        Height := imageData["originalHeight"]
+    } else {
+        Gdip_GetRotatedDimensions(Width, Height, Angle, RWidth, RHeight)
+    }
 
     scaledWidth := (RWidth * scale)
     scaledHeight := (RHeight * 0.5) * scale
@@ -70,7 +80,11 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
     obm := SelectObject(hdc, hbm)
     Gdip_SetSmoothingMode(G, 4) 
     G := Gdip_GraphicsFromHDC(hdc)
-    pBitmap := Gdip_RotateBitmapAtCenter(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
+    
+    if (!imageData["prerotated"]) {
+        pBitmap := Gdip_RotateBitmapAtCenter(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
+    }
+
     if (settings["centerMode"]) {
         ; get relative position of player in world
         ; xpos is absolute world pos in game
@@ -93,6 +107,13 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
         WinMove, ahk_id %mapHwnd1%,, windowLeftMargin+leftMargin, windowTopMargin+topMargin
         WinMove, ahk_id %unitHwnd1%,, windowLeftMargin+leftMargin, windowTopMargin+topMargin
     }
+
+    ; WriteLog(scaledWidth " " scaledHeight " " RWidth " " RHeight " " xPosDot " " yPosDot)
+    ; seed := gameMemoryData["mapSeed"]
+    ; sOutput := A_ScriptDir "\" seed "_" levelNo ".png"
+    ; Gdip_SaveBitmapToFile(pBitmap, sOutput)
+    ; WriteLog(Width " " Height " " RWidth " " RHeight " " scale)
+
     SelectObject(hdc, obm)
     DeleteObject(hbm)
     DeleteDC(hdc)

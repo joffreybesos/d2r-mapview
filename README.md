@@ -3,7 +3,7 @@
 Noob friendly FREE map reveal tool for Diablo 2 Resurrected.  
 Use at your own risk, there is no warranty or responsibility taken for being penalised for using this.
 
-**NOTE: the public server is shutting down today**
+# **NOTE: the public server is shutting down today**
 Please follow this guide to setup your own, it's quite easy: https://github.com/joffreybesos/d2r-mapview/wiki/Setup-guide
 
 This tool is licenced under GPLv3.

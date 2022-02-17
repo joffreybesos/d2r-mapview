@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [2.6.1] - 2021-02-14 - Localization
 
-- Localization is here! Supported languages:
+- Localization is here (mostly)! Supported languages:
   English, 中文, 福佬話, français, Deutsch,español, italiano, 한국어, polski, 日本語, português, Русский язык
 - Localization only applies to item speech, item alerts, and the settings UI
 - It does not apply to shrines, objects, npcs, or exits

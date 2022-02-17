@@ -117,7 +117,7 @@ CreateSettingsGUI(ByRef settings, ByRef localizedStrings) {
     uitext := localizedStrings["uitext"]
     ; msgbox % t9
 
-    Gui, Settings:Add, Button, x240 y445 w115 h30 gUpdate vUpdateBtn Disabled, %r1%
+    Gui, Settings:Add, Button, x240 y445 w115 h30 gUpdate vUpdateBtn Disabled, %s1%
 
     Gui, Settings: Font, S8 CRed,    
     Gui, Settings:Add, Text, x120 y453 w115 h17 +Right vUnsaved Hidden gUpdateFlag, %s2%
@@ -154,8 +154,8 @@ CreateSettingsGUI(ByRef settings, ByRef localizedStrings) {
     Gui, Settings: Add, GroupBox, x11 y279 w340 h130 , %s14%
     Gui, Settings: Font, S8 CDefault, 
     Gui, Settings: Add, CheckBox, x22 y299 w110 h20 vCenterMode gUpdateFlag, %s15% ;False
-    Gui, Settings: Add, CheckBox, x222 y299 w130 h20 vShowPlayerDotCenter gUpdateFlag, %s16% ;True
-    Gui, Settings: Add, CheckBox, x222 y319 w130 h20 vplayerAsCross gUpdateFlag, %s17% ;True
+    Gui, Settings: Add, CheckBox, x222 y299 w120 h20 vShowPlayerDotCenter gUpdateFlag, %s16% ;True
+    Gui, Settings: Add, CheckBox, x222 y319 w120 h20 vplayerAsCross gUpdateFlag, %s17% ;True
     Gui, Settings: Add, Text, x54 y322 w150 h20 , %s18%
     Gui, Settings: Add, Edit, x22 y319 w30 h20 vCenterModeXoffset gUpdateFlag, 0
     Gui, Settings: Add, Text, x54 y342 w180 h20 , %s19%
@@ -287,7 +287,7 @@ CreateSettingsGUI(ByRef settings, ByRef localizedStrings) {
     voiceList := GetVoiceList()
     
     chosenVoice := settings["chosenVoice"]
-    
+    oSPVoice.Voice := oSPVoice.GetVoices().Item(chosenVoice-1)
     Gui, Settings: Add, DropDownList, x22 y243 w200 h90 vChosenVoice Choose%chosenVoice% ReadOnly AltSubmit gUpdateFlag, %voiceList%
     Gui, Settings: Add, Edit, x11 y288 w340 h120 vAlertListText ReadOnly gUpdateFlag, %t44%
     Gui, Settings: Add, Link, x95 y418 w200 h20 , Click <a href="https://github.com/joffreybesos/d2r-mapview/wiki/Item-filter-configuration">here</a> for the wiki on item filter

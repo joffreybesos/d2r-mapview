@@ -31,7 +31,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\serverHealthCheck.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
 
-expectedVersion := "2.5.8"
+expectedVersion := "2.6.1"
 
 lastMap := ""
 exitArray := []

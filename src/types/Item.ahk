@@ -42,8 +42,9 @@ class GameItem {
 
     getTextToSpeech() {
         quality := this.getLocalizedQuality(this.qualityNo)
-        if (qualityNo == 2)
+        if (this.qualityNo == 2)
             quality := ""
+
         itemName := this.localizedName
         sockets := ""
         if (this.numSockets > 0) {

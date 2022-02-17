@@ -31,8 +31,8 @@ drawItemAlerts(G, settings, gameMemoryData, imageData, serverScale, scale, paddi
             textx := textx + 1.5
             texty := texty + 1.5
             Options2 = x%textx% y%texty% Center Bold vBottom cff000000 r8 s18
-            Gdip_TextToGraphics(G, item.name, Options2, diabloFont, 200, 100)
-            Gdip_TextToGraphics(G, item.name, Options, diabloFont, 200, 100)
+            Gdip_TextToGraphics(G, item.localizedName, Options2, diabloFont, 200, 100)
+            Gdip_TextToGraphics(G, item.localizedName, Options, diabloFont, 200, 100)
             switch (ticktock) {
                 case 1: Gdip_FillEllipse(G, pBrush1, itemx-5, itemy-5, 10, 10)
                 case 2: Gdip_FillEllipse(G, pBrush2, itemx-6, itemy-6, 12, 12)

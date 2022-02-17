@@ -12,6 +12,7 @@ readSettings(settingsFile, ByRef settings) {
     settings := []
     settings["settingsFile"] := settingsFile
     settings["locale"] := ""
+    settings["chosenVoice"] := 1
     settings["baseUrl"] := "http://localhost:3002"
     settings["scale"] := "1.000000"
     settings["leftMargin"] := "20"

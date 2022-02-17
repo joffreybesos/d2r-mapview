@@ -41,7 +41,7 @@ class GameItem {
     }
 
     getTextToSpeech() {
-        quality := this.getLocalizedQuality(qualityNo)
+        quality := this.getLocalizedQuality(this.qualityNo)
         if (qualityNo == 2)
             quality := ""
         itemName := this.localizedName
@@ -157,11 +157,11 @@ class GameItem {
     }
 
     getLocalizedQuality(qualityNo) {
-        qualityStrName := "quality" . qualityNo
+        qualityStrName := "quality" qualityNo
         return localizedStrings[qualityStrName]
     }
     getLocalizedSockets(socketNum) {
-        socketStrName := "sockets" . socketNum
+        socketStrName := "sockets" socketNum
         return localizedStrings[socketStrName]
     } 
 

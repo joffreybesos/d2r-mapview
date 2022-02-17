@@ -276,15 +276,20 @@ CreateSettingsGUI(ByRef settings, ByRef localizedStrings) {
     Gui, Settings: Add, CheckBox, x22 y99 w270 h20 vallowItemDropSounds gUpdateFlag, %cb11%
     Gui, Settings: Add, CheckBox, x22 y119 w270 h20 vallowTextToSpeech gUpdateFlag, %cb12%
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y159 w340 h90 ,  %gb6%
+    Gui, Settings: Add, GroupBox, x11 y159 w340 h115 ,  %gb6%
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, Text, x55 y200 w200 h20 , %t22%
+    Gui, Settings: Add, Text, x55 y200 w200 h20, %t22%
     Gui, Settings: Add, Edit, x22 y197 w30 h20 vtextToSpeechPitch gUpdateFlag, 1
-    Gui, Settings: Add, Text, x55 y180 w200 h20 , %t23%
+    Gui, Settings: Add, Text, x55 y180 w200 h20, %t23%
     Gui, Settings: Add, Edit, x22 y177 w30 h20 vtextToSpeechVolume gUpdateFlag, 50
-    Gui, Settings: Add, Text, x55 y220 w200 h20 , %t24%
+    Gui, Settings: Add, Text, x55 y220 w200 h20, %t24%
     Gui, Settings: Add, Edit, x22 y217 w30 h20 vtextToSpeechSpeed gUpdateFlag, 1
-    Gui, Settings: Add, Edit, x11 y263 w340 h130 vAlertListText ReadOnly gUpdateFlag, %t44%
+    voiceList := GetVoiceList()
+    
+    chosenVoice := settings["chosenVoice"]
+    
+    Gui, Settings: Add, DropDownList, x22 y243 w200 h90 vChosenVoice Choose%chosenVoice% ReadOnly AltSubmit gUpdateFlag, %voiceList%
+    Gui, Settings: Add, Edit, x11 y288 w340 h120 vAlertListText ReadOnly gUpdateFlag, %t44%
     Gui, Settings: Add, Link, x95 y418 w200 h20 , Click <a href="https://github.com/joffreybesos/d2r-mapview/wiki/Item-filter-configuration">here</a> for the wiki on item filter
 
     Gui, Settings: Tab, Other
@@ -380,6 +385,11 @@ CreateSettingsGUI(ByRef settings, ByRef localizedStrings) {
     tabtitles := StrReplace(tabtitles, settings["lastActiveGUITab"], settings["lastActiveGUITab"] "|")
     GuiControl, Settings:, TabList, % "|" tabtitles
     GuiControl, Settings:, baseUrl, % settings["baseUrl"]
+    ; voiceList := StrReplace(voiceList, settings["chosenVoice"], settings["chosenVoice"] "|")
+    ; msgbox % voiceList
+    ; GuiControl, Settings:, chosenVoice, % "|" voiceList
+    chosen := "Choose" settings["chosenVoice"]
+    GuiControl, Settings:, Options, chosenVoice, %chosen%
     GuiControl, Settings:, scale, % settings["scale"]
     GuiControl, Settings:, leftMargin, % settings["leftMargin"]
     GuiControl, Settings:, topMargin, % settings["topMargin"]
@@ -518,6 +528,7 @@ UpdateSettings(ByRef settings, defaultSettings) {
     ; this just gets all the values of all the gui elements
     GuiControlGet, TabList, ,TabList
     GuiControlGet, baseUrl, ,baseUrl
+    GuiControlGet, chosenVoice, ,chosenVoice
     GuiControlGet, scale, ,scale
     GuiControlGet, leftMargin, ,leftMargin
     GuiControlGet, topMargin, ,topMargin
@@ -628,6 +639,8 @@ UpdateSettings(ByRef settings, defaultSettings) {
     settings["settingsUIY"] := settingsUIY
     settings["lastActiveGUITab"] := TabList
     settings["baseUrl"] := baseUrl
+    settings["chosenVoice"] := chosenVoice
+    oSPVoice.Voice := oSPVoice.GetVoices().Item(chosenVoice-1)
     settings["scale"] := scale
     settings["leftMargin"] := leftMargin
     settings["topMargin"] := topMargin
@@ -733,7 +746,7 @@ UpdateSettings(ByRef settings, defaultSettings) {
 
     settings["missileMajorDotSize"] := missileMajorDotSize
     settings["missileMinorDotSize"] := missileMinorDotSize
-
+    
 
     saveSettings(settings, defaultSettings)
     
@@ -745,6 +758,7 @@ saveSettings(settings, defaultSettings) {
     writeIniVar("settingsUIY", settings, defaultsettings)
     writeIniVar("lastActiveGUITab", settings, defaultsettings)
     writeIniVar("locale", settings, defaultsettings)
+    writeIniVar("chosenVoice", settings, defaultsettings)
     writeIniVar("baseUrl", settings, defaultsettings)
     writeIniVar("scale", settings, defaultsettings)
     writeIniVar("leftMargin", settings, defaultsettings)
@@ -870,4 +884,20 @@ writeIniVar(valname, settings, defaultsettings) {
     } else {
         IniDelete, settings.ini, Settings , %valname%
     }
+}
+
+
+GetVoiceList() {
+    nVoices := oSPVoice.GetVoices.Count
+    voiceList := ""
+    if (nVoices > 1) {
+        Loop, % nVoices
+        {
+            voiceList := voiceList "" oSPVoice.GetVoices.Item(A_Index-1).GetAttribute("Name") "|"
+        }
+        StringTrimRight, voiceList, voiceList, 1
+    } else {
+        voiceList := oSPVoice.GetVoices.Item(0).GetAttribute("Name")
+    }
+    return voiceList
 }

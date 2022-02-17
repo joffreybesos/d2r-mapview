@@ -5,9 +5,12 @@ All notable changes to this project will be documented in this file.
 ## [2.6.1] - 2021-02-14 - Localization
 
 - Localization is here! Supported languages:
-  English (duh), 中文, 福佬話, français, Deutsch,español, italiano, 한국어, polski, 日本語, português, Русский язык
-- Localization only applies to items and item alerts
-- Your locale will be autodetected, but can still be manually configured in the settings panel
+  English, 中文, 福佬話, français, Deutsch,español, italiano, 한국어, polski, 日本語, português, Русский язык
+- Localization only applies to item speech, item alerts, and the settings UI
+- It does not apply to shrines, objects, npcs, or exits
+- Your locale will be autodetected, but can still be manually configured in settings
+- The `itemfilter.yml` is still in English only
+- You can now choose which _voice_ you hear under 'Item Filter' tab
 - Map prefetching is now turned off by default, you can turn it on in Advanced settings
 
 ## [2.6.0] - 2021-02-13 - Map server improvements

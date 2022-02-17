@@ -11,6 +11,7 @@ readSettings(settingsFile, ByRef settings) {
     ; these are the default values
     settings := []
     settings["settingsFile"] := settingsFile
+    settings["locale"] := ""
     settings["baseUrl"] := "http://localhost:3002"
     settings["scale"] := "1.000000"
     settings["leftMargin"] := "20"

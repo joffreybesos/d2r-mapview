@@ -3,262 +3,374 @@
 CreateSettingsGUI(ByRef settings, ByRef localizedStrings) {
     global
     tabtitles = Info|General|Map Items|Game History|Monsters|Immunities|Item Filter|Hotkeys|Other|Advanced
-    Gui, Settings:Add, Button, x240 y445 w115 h30 gUpdate vUpdateBtn Disabled, Save && Apply
+    s1 := localizedStrings["s1"]
+    s2 := localizedStrings["s2"]
+    s3 := localizedStrings["s3"]
+    s4 := localizedStrings["s4"]
+    s5 := localizedStrings["s5"]
+    s6 := localizedStrings["s6"]
+    s7 := localizedStrings["s7"]
+    s8 := localizedStrings["s8"]
+    s9 := localizedStrings["s9"]
+    s10 := localizedStrings["s10"]
+    s11 := localizedStrings["s11"]
+    s12 := localizedStrings["s12"]
+    s13 := localizedStrings["s13"]
+    s14 := localizedStrings["s14"]
+    s15 := localizedStrings["s15"]
+    s16 := localizedStrings["s16"]
+    s17 := localizedStrings["s17"]
+    s18 := localizedStrings["s18"]
+    s19 := localizedStrings["s19"]
+    s20 := localizedStrings["s20"]
+    s21 := localizedStrings["s21"]
+    s22 := localizedStrings["s22"]
+    s23 := localizedStrings["s23"]
+    s24 := "Map Items" ;localizedStrings["s24"]
+    s25 := localizedStrings["s25"]
+    s26 := localizedStrings["s26"]
+    s27 := localizedStrings["s27"]
+    s28 := localizedStrings["s28"]
+    s29 := localizedStrings["s29"]
+    s30 := localizedStrings["s30"]
+    s31 := localizedStrings["s31"]
+    s32 := localizedStrings["s32"]
+    s33 := localizedStrings["s33"]
+    s34 := localizedStrings["s34"]
+    s35 := localizedStrings["s35"]
+    t1 := localizedStrings["t1"]
+    t2 := localizedStrings["t2"]
+    t3 := localizedStrings["t3"]
+    t4 := localizedStrings["t4"]
+    t5 := localizedStrings["t5"]
+    t6 := localizedStrings["t6"]
+    t7 := localizedStrings["t7"]
+    t8 := localizedStrings["t8"]
+    t9 := localizedStrings["t9"]
+    t10 := localizedStrings["t10"]
+    t11 := localizedStrings["t11"]
+    t12 := localizedStrings["t12"]
+    t13 := localizedStrings["t13"]
+    t14 := localizedStrings["t14"]
+    t15 := localizedStrings["t15"]
+    t16 := localizedStrings["t16"]
+    t17 := localizedStrings["t17"]
+    t18 := localizedStrings["t18"]
+    t19 := localizedStrings["t19"]
+    t20 := localizedStrings["t20"]
+    t21 := localizedStrings["t21"]
+    t22 := localizedStrings["t22"]
+    t23 := localizedStrings["t23"]
+    t24 := localizedStrings["t24"]
+    t25 := localizedStrings["t25"]
+    t26 := localizedStrings["t26"]
+    t27 := localizedStrings["t27"]
+    t28 := localizedStrings["t28"]
+    t29 := localizedStrings["t29"]
+    t30 := localizedStrings["t30"]
+    t31 := localizedStrings["t31"]
+    t32 := localizedStrings["t32"]
+    t33 := localizedStrings["t33"]
+    t34 := localizedStrings["t34"]
+    t35 := localizedStrings["t35"]
+    t36 := localizedStrings["t36"]
+    t37 := localizedStrings["t37"]
+    t38 := localizedStrings["t38"]
+    t39 := localizedStrings["t39"]
+    t40 := localizedStrings["t40"]
+    t41 := localizedStrings["t41"]
+    t42 := localizedStrings["t42"]
+    t43 := localizedStrings["t43"]
+    t44 := localizedStrings["t44"]
+    cb1 := localizedStrings["cb1"]
+    cb2 := localizedStrings["cb2"]
+    cb3 := localizedStrings["cb3"]
+    cb4 := localizedStrings["cb4"]
+    cb5 := localizedStrings["cb5"]
+    cb6 := localizedStrings["cb6"]
+    cb7 := localizedStrings["cb7"]
+    cb8 := localizedStrings["cb8"]
+    cb9 := localizedStrings["cb9"]
+    cb10 := localizedStrings["cb10"]
+    cb11 := localizedStrings["cb11"]
+    cb12 := localizedStrings["cb12"]
+    cb13 := localizedStrings["cb13"]
+    cb14 := localizedStrings["cb14"]
+    cb15 := localizedStrings["cb15"]
+    cb16 := localizedStrings["cb16"]
+    cb17 := localizedStrings["cb17"]
+    cb18 := localizedStrings["cb18"]
+    cb19 := localizedStrings["cb19"]
+    cb20 := localizedStrings["cb20"]
+    cb21 := localizedStrings["cb21"]
+    gb1 := localizedStrings["gb1"]
+    gb2 := localizedStrings["gb2"]
+    gb3 := localizedStrings["gb3"]
+    gb4 := localizedStrings["gb4"]
+    gb5 := localizedStrings["gb5"]
+    gb6 := localizedStrings["gb6"]
+    gb7 := localizedStrings["gb7"]
+    gb8 := localizedStrings["gb8"]
+    gb9 := localizedStrings["gb9"]
+    gb10 := localizedStrings["gb10"]
+    gb11 := localizedStrings["gb11"]
+    uitext := localizedStrings["uitext"]
+    ; msgbox % t9
+
+    Gui, Settings:Add, Button, x240 y445 w115 h30 gUpdate vUpdateBtn Disabled, %r1%
+
     Gui, Settings: Font, S8 CRed,    
-    Gui, Settings:Add, Text, x120 y453 w115 h17 +Right vUnsaved Hidden gUpdateFlag, Unsaved changes*
+    Gui, Settings:Add, Text, x120 y453 w115 h17 +Right vUnsaved Hidden gUpdateFlag, %s2%
     Gui, Settings: Font, S8 CDefault,    
     Gui, Settings: Add, Tab3, x2 y1 w360 h440 vTabList, %tabtitles%
 
     Gui, Settings: Tab, General
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y59 w340 h60 , Map Server URL
+    Gui, Settings: Add, GroupBox, x11 y59 w340 h60 , %s3%
     Gui, Settings: Font, S8 CDefault, 
     Gui, Settings: Add, Edit, x29 y77 w250 h22 vBaseUrl gUpdateFlag
     
     Gui, Settings: Font, S7 CGray, 
     Gui, Settings: Add, Text, x30 y100 w180 h17 , Ex: http://localhost:3002
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y129 w340 h140 , Map Overlay
+    Gui, Settings: Add, GroupBox, x11 y129 w340 h140 , %s4%
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, Text, x53 y152 w90 h20 , Global scale
+    Gui, Settings: Add, Text, x53 y152 w90 h20 , Global %s5%
     Gui, Settings: Add, Edit, x22 y149 w28 h20 vScale gUpdateFlag
-    Gui, Settings: Add, Text, x53 y172 w50 h20 , Opacity
+    Gui, Settings: Add, Text, x53 y172 w50 h20 , %s6%
     Gui, Settings: Add, Edit, x22 y169 w28 h20 vOpacity gUpdateFlag
-    Gui, Settings: Add, Text, x53 y192 w120 h20 , Server Render Scale
+    Gui, Settings: Add, Text, x53 y192 w120 h20 , %s7%
     Gui, Settings: Add, Edit, x22 y189 w28 h20 vServerScale gUpdateFlag
-    Gui, Settings: Add, Text, x253 y154 w72 h17 , Left Margin
+    Gui, Settings: Add, Text, x253 y154 w72 h17 , %s8%
     Gui, Settings: Add, Edit, x222 y149 w28 h20 vLeftMargin gUpdateFlag
-    Gui, Settings: Add, Text, x253 y174 w74 h17 , Top Margin
+    Gui, Settings: Add, Text, x253 y174 w74 h17 , %s9%
     Gui, Settings: Add, Edit, x222 y169 w28 h20 vTopMargin gUpdateFlag
-    Gui, Settings: Add, Text, x253 y194 w91 h17 , Wall Thickness
+    Gui, Settings: Add, Text, x253 y194 w91 h17 , %s10%
     Gui, Settings: Add, Edit, x222 y189 w28 h20 vWallThickness gUpdateFlag
-    Gui, Settings: Add, CheckBox, x22 y219 w130 h20 vAlwaysShowMap gUpdateFlag, Always Show Map ;" settings["alwaysShowMap"]
-    Gui, Settings: Add, CheckBox, x22 y239 w130 h20 vHideTown gUpdateFlag, Hide Map in Town ;False
-    Gui, Settings: Add, CheckBox, x222 y219 w100 h20 vEdges gUpdateFlag, Edges ;True
+    Gui, Settings: Add, CheckBox, x22 y219 w150 h20 vAlwaysShowMap gUpdateFlag, %s11% ;" settings["alwaysShowMap"]
+    Gui, Settings: Add, CheckBox, x22 y239 w180 h20 vHideTown gUpdateFlag, %s12% ;False
+    Gui, Settings: Add, CheckBox, x222 y219 w100 h20 vEdges gUpdateFlag, %s13% ;True
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y279 w340 h130 , Map Center Mode
+    Gui, Settings: Add, GroupBox, x11 y279 w340 h130 , %s14%
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, CheckBox, x22 y299 w110 h20 vCenterMode gUpdateFlag, Center Mode ;False
-    Gui, Settings: Add, CheckBox, x222 y299 w120 h20 vShowPlayerDotCenter gUpdateFlag, Mark player position ;True
-    Gui, Settings: Add, CheckBox, x222 y319 w120 h20 vplayerAsCross gUpdateFlag, Show Player as cross ;True
-    Gui, Settings: Add, Text, x54 y322 w90 h20 , X Offset (Map)
+    Gui, Settings: Add, CheckBox, x22 y299 w110 h20 vCenterMode gUpdateFlag, %s15% ;False
+    Gui, Settings: Add, CheckBox, x222 y299 w130 h20 vShowPlayerDotCenter gUpdateFlag, %s16% ;True
+    Gui, Settings: Add, CheckBox, x222 y319 w130 h20 vplayerAsCross gUpdateFlag, %s17% ;True
+    Gui, Settings: Add, Text, x54 y322 w150 h20 , %s18%
     Gui, Settings: Add, Edit, x22 y319 w30 h20 vCenterModeXoffset gUpdateFlag, 0
-    Gui, Settings: Add, Text, x54 y342 w90 h20 , Y Offset (Map)
+    Gui, Settings: Add, Text, x54 y342 w180 h20 , %s19%
     Gui, Settings: Add, Edit, x22 y339 w30 h20 vCenterModeYoffset gUpdateFlag, -56
-    Gui, Settings: Add, Text, x54 y362 w160 h20 , X Offset (Players/Monsters)
+    Gui, Settings: Add, Text, x54 y362 w180 h20 , %s20%
     Gui, Settings: Add, Edit, x22 y359 w30 h20 vCenterModeXUnitoffset gUpdateFlag, 1
-    Gui, Settings: Add, Text, x54 y382 w160 h20 , Y Offset (Players/Monsters)
+    Gui, Settings: Add, Text, x54 y382 w180 h20 , %s21%
     Gui, Settings: Add, Edit, x22 y379 w30 h20 vCenterModeYUnitoffset gUpdateFlag, 16
-    Gui, Settings: Add, Text, x253 y342 w40 h20 , Scale
+    Gui, Settings: Add, Text, x253 y342 w40 h20 , %s22%
     Gui, Settings: Add, Edit, x222 y339 w28 h20 vCenterModeScale gUpdateFlag, 1.7
-    Gui, Settings: Add, Text, x253 y362 w50 h20 , Opacity
+    Gui, Settings: Add, Text, x253 y362 w50 h20 , %s23%
     Gui, Settings: Add, Edit, x222 y359 w28 h20 vCenterModeOpacity gUpdateFlag, 0.7
 
     Gui, Settings: Tab, Map Items
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y59 w340 h70 , Portals
+    Gui, Settings: Add, GroupBox, x11 y59 w340 h70 , %s25%
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, CheckBox, x22 y79 w110 h20 vShowPortals gUpdateFlag, Show Portals ;True
-    Gui, Settings: Add, Text, x215 y82 w130 h20 , Town Portal Color
+    Gui, Settings: Add, CheckBox, x22 y79 w140 h20 vShowPortals gUpdateFlag, %s26% ;True
+    Gui, Settings: Add, Text, x215 y82 w130 h20 , %s27%
     Gui, Settings: Add, Edit, x162 y79 w50 h20 vPortalColor gUpdateFlag, 00AAFF
-    Gui, Settings: Add, Text, x215 y102 w130 h20 , Red Portal Color
+    Gui, Settings: Add, Text, x215 y102 w130 h20 , %s28%
     Gui, Settings: Add, Edit, x162 y99 w50 h20 vRedPortalColor gUpdateFlag, FF0000
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y139 w340 h70 , Shrines
+    Gui, Settings: Add, GroupBox, x11 y139 w340 h70 , %s29%
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, CheckBox, x22 y159 w100 h20 vShowShrines gUpdateFlag, Show Shrines ;True
-    Gui, Settings: Add, Text, x215 y162 w100 h20 , Shrine Text Color
+    Gui, Settings: Add, CheckBox, x22 y159 w140 h20 vShowShrines gUpdateFlag, %s30% ;True
+    Gui, Settings: Add, Text, x215 y162 w100 h20 , %s31%
     Gui, Settings: Add, Edit, x162 y159 w50 h20 vShrineColor gUpdateFlag, FFD700
-    Gui, Settings: Add, Text, x215 y182 w90 h20 , Shrine Text Size
+    Gui, Settings: Add, Text, x215 y182 w90 h20 , %s32%
     Gui, Settings: Add, Edit, x192 y179 w20 h20 vShrineTextSize gUpdateFlag, 14
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y219 w340 h70 , Other Players
+    Gui, Settings: Add, GroupBox, x11 y219 w340 h70 , %s33%
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, CheckBox, x22 y239 w120 h20 vShowOtherPlayers gUpdateFlag, Show Other Players ;True
-    Gui, Settings: Add, CheckBox, x22 y259 w170 h20 vShowOtherPlayerNames gUpdateFlag, Show names above player dots ;False
+    Gui, Settings: Add, CheckBox, x22 y239 w250 h20 vShowOtherPlayers gUpdateFlag, %s34% ;True
+    Gui, Settings: Add, CheckBox, x22 y259 w270 h20 vShowOtherPlayerNames gUpdateFlag, %s35% ;False
+
 
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y299 w340 h50 , Chests
+    Gui, Settings: Add, GroupBox, x11 y299 w340 h50 ,  %gb1%
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, CheckBox, x22 y319 w120 h20 vShowChests gUpdateFlag, Show Chests ;True
+    Gui, Settings: Add, CheckBox, x22 y319 w120 h20 vShowChests gUpdateFlag, %cb1%
     
     
     Gui, Settings: Add, Link, x95 y418 w200 h20 , Click <a href="https://htmlcolorcodes.com">here</a> for a HEX color chart
 
     Gui, Settings: Tab, Game History
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y59 w340 h210 , Info
+    Gui, Settings: Add, GroupBox, x11 y59 w340 h210 ,  %gb2%
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, CheckBox, x22 y79 w270 h20 vshowGameInfo  gUpdateFlag, Show Game History in menu (requires restart) ;True
-    Gui, Settings: Add, CheckBox, x22 y99 w270 h20 vshowAllHistory gUpdateFlag, Show All History (load from CSV) ;False
-    Gui, Settings: Add, CheckBox, x22 y119 w270 h20 vshowIPtext gUpdateFlag, Show server IP in game (requires restart) ;True
-    Gui, Settings: Add, Text, x85 y152 w150 h20 , Align Game History
+    Gui, Settings: Add, CheckBox, x22 y79 w270 h20 vshowGameInfo  gUpdateFlag, %cb2%
+    Gui, Settings: Add, CheckBox, x22 y99 w270 h20 vshowAllHistory gUpdateFlag, %cb3%
+    Gui, Settings: Add, CheckBox, x22 y119 w270 h20 vshowIPtext gUpdateFlag, %cb4%
+    Gui, Settings: Add, Text, x85 y152 w150 h20 , %t1%
     Gui, Settings: Add, DropDownList, x22 y149 w60 h80 vtextAlignment gUpdateFlag, LEFT||RIGHT
-    Gui, Settings: Add, Text, x85 y172 w150 h20 , Align IP Address
+    Gui, Settings: Add, Text, x85 y172 w150 h20 , %t2%
     Gui, Settings: Add, DropDownList, x22 y169 w60 h80 vtextIPalignment gUpdateFlag, RIGHT||LEFT
-    Gui, Settings: Add, Text, x65 y202 w200 h20 , Pixels width of game history
+    Gui, Settings: Add, Text, x65 y202 w250 h20 , %t3%
     Gui, Settings: Add, Edit, x22 y199 w40 h20 vtextSectionWidth gUpdateFlag, 700
-    Gui, Settings: Add, Text, x65 y222 w200 h20 , Game History font size
+    Gui, Settings: Add, Text, x65 y222 w250 h20 , %t4%
     Gui, Settings: Add, Edit, x22 y219 w40 h20 vtextSize gUpdateFlag, 20
-    Gui, Settings: Add, Text, x65 y242 w200 h20 , IP Address font size
+    Gui, Settings: Add, Text, x65 y242 w250 h20 , %t5%
     Gui, Settings: Add, Edit, x22 y239 w40 h20 vtextIPfontSize gUpdateFlag, 18
 
     Gui, Settings: Tab, Monsters
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y59 w340 h250 , Monsters Dots
+    Gui, Settings: Add, GroupBox, x11 y59 w340 h250 ,  %gb3%
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, CheckBox, x22 y79 w140 h20 vshowNormalMobs gUpdateFlag, Show Normal Mobs ;True
-    Gui, Settings: Add, CheckBox, x22 y99 w140 h20 vshowUniqueMobs gUpdateFlag, Show Unique Mobs ;True
-    Gui, Settings: Add, CheckBox, x22 y119 w140 h20 vshowBosses gUpdateFlag, Show Bosses ;True
-    Gui, Settings: Add, CheckBox, x22 y139 w140 h20 vshowDeadMobs gUpdateFlag, Show Dead Mobs ;True
-    Gui, Settings: Add, Text, x215 y82 w110 h20 , Dot Size Normal
+    Gui, Settings: Add, CheckBox, x22 y79 w160 h20 vshowNormalMobs gUpdateFlag, %cb5%
+    Gui, Settings: Add, CheckBox, x22 y99 w160 h20 vshowUniqueMobs gUpdateFlag, %cb6%
+    Gui, Settings: Add, CheckBox, x22 y119 w160 h20 vshowBosses gUpdateFlag, %cb7%
+    Gui, Settings: Add, CheckBox, x22 y139 w160 h20 vshowDeadMobs gUpdateFlag, %cb8%
+    Gui, Settings: Add, Text, x215 y82 w110 h20 , %t6%
     Gui, Settings: Add, Edit, x182 y79 w30 h20 vnormalDotSize gUpdateFlag, 2.5
-    Gui, Settings: Add, Text, x215 y102 w110 h20 , Dot Size Unique
+    Gui, Settings: Add, Text, x215 y102 w110 h20 , %t7%
     Gui, Settings: Add, Edit, x182 y99 w30 h20 vuniqueDotSize gUpdateFlag, 5
-    Gui, Settings: Add, Text, x215 y122 w110 h20 , Dot Size Bosses
+    Gui, Settings: Add, Text, x215 y122 w110 h20 , %t8%
     Gui, Settings: Add, Edit, x182 y119 w30 h20 vbossDotSize gUpdateFlag, 5
-    Gui, Settings: Add, Text, x215 y142 w110 h20 , Dot Size Dead
+    Gui, Settings: Add, Text, x215 y142 w110 h20 , %t9%
     Gui, Settings: Add, Edit, x182 y139 w30 h20 vdeadDotSize gUpdateFlag, 2
-    Gui, Settings: Add, Text, x95 y172 w160 h20 , Dot Color Normal Mobs
+    Gui, Settings: Add, Text, x95 y172 w160 h20 , %t10%
     Gui, Settings: Add, Edit, x22 y169 w70 h20 vnormalMobColor gUpdateFlag, FFFFFF
-    Gui, Settings: Add, Text, x95 y192 w160 h20 , Dot Color Unique Mobs
+    Gui, Settings: Add, Text, x95 y192 w160 h20 , %t11%
     Gui, Settings: Add, Edit, x22 y189 w70 h20 vuniqueMobColor gUpdateFlag, D4AF37
-    Gui, Settings: Add, Text, x95 y212 w160 h20 , Dot Color Boss Mobs
+    Gui, Settings: Add, Text, x95 y212 w160 h20 , %t12%
     Gui, Settings: Add, Edit, x22 y209 w70 h20 vbossColor gUpdateFlag, FF0000
-    Gui, Settings: Add, Text, x95 y232 w160 h20 , Dot Color Dead Mobs
+    Gui, Settings: Add, Text, x95 y232 w160 h20 , %t13%
     Gui, Settings: Add, Edit, x22 y229 w70 h20 vdeadColor gUpdateFlag, 000000
-    Gui, Settings: Add, Text, x55 y262 w190 h20 , Normal Immunity Circle Size
+    Gui, Settings: Add, Text, x55 y262 w190 h20 , %t14%
     Gui, Settings: Add, Edit, x22 y259 w30 h20 vnormalImmunitySize gUpdateFlag, 4
-    Gui, Settings: Add, Text, x55 y282 w190 h20 , Unique Immunity Circle Size
+    Gui, Settings: Add, Text, x55 y282 w190 h20 , %t15%
     Gui, Settings: Add, Edit, x22 y279 w30 h20 vuniqueImmunitySize gUpdateFlag, 11
     Gui, Settings: Add, Link, x95 y418 w200 h20 , Click <a href="https://htmlcolorcodes.com">here</a> for a HEX color chart
 
     Gui, Settings: Tab, Immunities
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y59 w340 h170 , Monsters Immunities
+    Gui, Settings: Add, GroupBox, x11 y59 w340 h170 ,  %gb4%
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, CheckBox, x22 y79 w210 h20 vshowImmunities gUpdateFlag, Show monster immunities
-    Gui, Settings: Add, Text, x95 y102 w140 h20 , Physical Immune Color
+    Gui, Settings: Add, CheckBox, x22 y79 w210 h20 vshowImmunities gUpdateFlag, %cb9%
+    Gui, Settings: Add, Text, x95 y102 w140 h20 , %t16%
     Gui, Settings: Add, Edit, x22 y99 w70 h20 vphysicalImmuneColor gUpdateFlag, CD853F
-    Gui, Settings: Add, Text, x95 y122 w140 h20 , Magic Immune Color
+    Gui, Settings: Add, Text, x95 y122 w140 h20 , %t17%
     Gui, Settings: Add, Edit, x22 y119 w70 h20 vmagicImmuneColor gUpdateFlag, FF8800
-    Gui, Settings: Add, Text, x95 y142 w140 h20 , Fire Immune Color
+    Gui, Settings: Add, Text, x95 y142 w140 h20 , %t18%
     Gui, Settings: Add, Edit, x22 y139 w70 h20 vfireImmuneColor gUpdateFlag, FF0000
-    Gui, Settings: Add, Text, x95 y162 w140 h20 , Lightning Immune Color
+    Gui, Settings: Add, Text, x95 y162 w140 h20 , %t19%
     Gui, Settings: Add, Edit, x22 y159 w70 h20 vlightImmuneColor gUpdateFlag, FFFF00
-    Gui, Settings: Add, Text, x95 y182 w140 h20 , Cold Immune Color
+    Gui, Settings: Add, Text, x95 y182 w140 h20 , %t20%
     Gui, Settings: Add, Edit, x22 y179 w70 h20 vcoldImmuneColor gUpdateFlag, 0000FF
-    Gui, Settings: Add, Text, x95 y202 w140 h20 , Poison Immune Color
+    Gui, Settings: Add, Text, x95 y202 w140 h20 , %t21%
     Gui, Settings: Add, Edit, x22 y199 w70 h20 vpoisonImmuneColor gUpdateFlag, 32CD32
     Gui, Settings: Add, Link, x95 y418 w200 h20 , Click <a href="https://htmlcolorcodes.com">here</a> for a HEX color chart
 
     Gui, Settings: Tab, Item Filter
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y59 w340 h90 , Ground Item Alerts
+    Gui, Settings: Add, GroupBox, x11 y59 w340 h90 ,  %gb5%
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, CheckBox, x22 y79 w200 h20 vEnableItemFilter gUpdateFlag, Enable item filter alerts
-    Gui, Settings: Add, CheckBox, x22 y99 w200 h20 vallowItemDropSounds gUpdateFlag, Enable sound effects in itemfilter.yaml
-    Gui, Settings: Add, CheckBox, x22 y119 w190 h20 vallowTextToSpeech gUpdateFlag, Enable item drop Text-To-Speech
+    Gui, Settings: Add, CheckBox, x22 y79 w270 h20 vEnableItemFilter gUpdateFlag, %cb10%
+    Gui, Settings: Add, CheckBox, x22 y99 w270 h20 vallowItemDropSounds gUpdateFlag, %cb11%
+    Gui, Settings: Add, CheckBox, x22 y119 w270 h20 vallowTextToSpeech gUpdateFlag, %cb12%
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y159 w340 h90 , Text to Speech
+    Gui, Settings: Add, GroupBox, x11 y159 w340 h90 ,  %gb6%
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, Text, x55 y200 w170 h20 , Voice Pitch
+    Gui, Settings: Add, Text, x55 y200 w200 h20 , %t22%
     Gui, Settings: Add, Edit, x22 y197 w30 h20 vtextToSpeechPitch gUpdateFlag, 1
-    Gui, Settings: Add, Text, x55 y180 w170 h20 , Text-to-Speech Volume (1-100)
+    Gui, Settings: Add, Text, x55 y180 w200 h20 , %t23%
     Gui, Settings: Add, Edit, x22 y177 w30 h20 vtextToSpeechVolume gUpdateFlag, 50
-    Gui, Settings: Add, Text, x55 y220 w170 h20 , Speaking Speed
+    Gui, Settings: Add, Text, x55 y220 w200 h20 , %t24%
     Gui, Settings: Add, Edit, x22 y217 w30 h20 vtextToSpeechSpeed gUpdateFlag, 1
-    Gui, Settings:Add, Edit, x11 y263 w340 h130 vAlertListText ReadOnly gUpdateFlag, Alerts
+    Gui, Settings: Add, Edit, x11 y263 w340 h130 vAlertListText ReadOnly gUpdateFlag, %t44%
     Gui, Settings: Add, Link, x95 y418 w200 h20 , Click <a href="https://github.com/joffreybesos/d2r-mapview/wiki/Item-filter-configuration">here</a> for the wiki on item filter
 
     Gui, Settings: Tab, Other
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y59 w340 h110 , Guide Lines
+    Gui, Settings: Add, GroupBox, x11 y59 w340 h110 ,  %gb7%
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, CheckBox, x22 y79 w190 h20 vshowWaypointLine gUpdateFlag, Yellow Line to Nearest Waypoint ;False
-    Gui, Settings: Add, CheckBox, x22 y99 w190 h20 vshowNextExitLine gUpdateFlag, Purple Line to Next Relevant Exit ;True
-    Gui, Settings: Add, CheckBox, x22 y119 w190 h20 vshowBossLine gUpdateFlag, Red Line to Boss in that Level ;True
-    Gui, Settings: Add, CheckBox, x22 y139 w260 h20 vshowQuestLine gUpdateFlag, Green Line to the relevant quest item in that level ;True
+    Gui, Settings: Add, CheckBox, x22 y79 w270 h20 vshowWaypointLine gUpdateFlag, %cb13%
+    Gui, Settings: Add, CheckBox, x22 y99 w270 h20 vshowNextExitLine gUpdateFlag, %cb14%
+    Gui, Settings: Add, CheckBox, x22 y119 w270 h20 vshowBossLine gUpdateFlag, %cb15%
+    Gui, Settings: Add, CheckBox, x22 y139 w270 h20 vshowQuestLine gUpdateFlag, %cb16%
     
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y175 w340 h90, Projectiles
+    Gui, Settings: Add, GroupBox, x11 y175 w340 h90,  %gb8%
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, CheckBox, x22 y215 w110 h20 vshowEnemyMissiles gUpdateFlag, Enemy Missiles ;True
-    Gui, Settings: Add, CheckBox, x22 y195 w110 h20 vshowPlayerMissiles gUpdateFlag, Player Missiles ;True
-    Gui, Settings: Add, Text, x195 y198 w110 h20 , Large Missile Dot Size
+    Gui, Settings: Add, CheckBox, x22 y215 w110 h20 vshowEnemyMissiles gUpdateFlag, %cb17%
+    Gui, Settings: Add, CheckBox, x22 y195 w110 h20 vshowPlayerMissiles gUpdateFlag, %cb18%
+    Gui, Settings: Add, Text, x195 y198 w140 h20 , %t25%
     Gui, Settings: Add, Edit, x162 y195 w30 h20 vmissileMajorDotSize gUpdateFlag, 4
-    Gui, Settings: Add, Text, x195 y218 w110 h20 , Small Missile Dot Size
+    Gui, Settings: Add, Text, x195 y218 w140 h20 , %t26%
     Gui, Settings: Add, Edit, x162 y215 w30 h20 vmissileMinorDotSize gUpdateFlag, 2
-    Gui, Settings: Add, Text, x197 y238 w140 h20 , Missile Opacity (Hex Value)
+    Gui, Settings: Add, Text, x197 y238 w140 h25 , %t27%
     Gui, Settings: Add, Edit, x162 y235 w32 h20 vmissileOpacity gUpdateFlag, 0x77
 
     Gui, Settings: Tab, Advanced
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y59 w340 h200 , Advanced Settings
+    Gui, Settings: Add, GroupBox, x11 y59 w340 h200 ,  %gb9%
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, Text, x65 y82 w110 h18 , Performance Mode
+    Gui, Settings: Add, Text, x65 y82 w250 h18 , %t28%
     Gui, Settings: Add, Edit, x22 y79 w40 h20 vperformanceMode gUpdateFlag, 50ms
     Gui, Settings: Font, S7 CGray, 
-    Gui, Settings: Add, Text, x22 y99 w320 h20 , Experimental`, set to -1 to max out performance.
+    Gui, Settings: Add, Text, x22 y99 w320 h40 , %t29%
 
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, CheckBox, x22 y124 w100 h20 venablePrefetch gUpdateFlag, Map prefetching ;False
+    Gui, Settings: Add, CheckBox, x22 y128 w250 h20 venablePrefetch gUpdateFlag, %cb19%
     Gui, Settings: Font, S7 CGray, 
-    Gui, Settings: Add, Text, x22 y144 w320 h20 , May lead to timeout issues
+    Gui, Settings: Add, Text, x22 y148 w320 h20 , %t30%
 
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, CheckBox, x22 y169 w100 h20 venableD2ML gUpdateFlag, Enable D2ML ;False
-    Gui, Settings: Add, Text, x145 y192 w100 h18 , Window Title
+    Gui, Settings: Add, CheckBox, x22 y169 w250 h20 venableD2ML gUpdateFlag, %cb20%
+    Gui, Settings: Add, Text, x145 y192 w250 h18 , %t31%
     Gui, Settings: Add, Edit, x22 y189 w120 h20 vwindowTitle gUpdateFlag, D2R:main
     Gui, Settings: Font, S7 CGray, 
-    Gui, Settings: Add, Text, x22 y209 w320 h30 , This is ignored unless Enable D2ML is turned on. It is used for D2R Multi-session
-
+    Gui, Settings: Add, Text, x22 y209 w320 h30 , %t32%
 
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y269 w340 h80 , Debugging
+    Gui, Settings: Add, GroupBox, x11 y269 w340 h80 ,  %gb10%
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, CheckBox, x22 y289 w60 h20 vdebug gUpdateFlag, Debug ;False
+    Gui, Settings: Add, CheckBox, x22 y289 w200 h20 vdebug gUpdateFlag, %cb21%
     Gui, Settings: Font, S7 CGray, 
-    Gui, Settings: Add, Text, x22 y309 w320 h30 , Turn this on to increase the level of the logging`, note this will create huge log.txt files. Can be toggled in-game with Shift+F9
+    Gui, Settings: Add, Text, x22 y309 w320 h30 , %t33%
     Gui, Settings: Font, S8 CDefault,
     
     Gui, Settings: Tab, Hotkeys
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y59 w340 h220 , Shortcut Keys
+    Gui, Settings: Add, GroupBox, x11 y59 w340 h220 ,  %gb11%
     Gui, Settings: Font, S8 CDefault, 
     Gui, Settings: Tab, Hotkeys
-    Gui, Settings: Add, Text, x115 y82 w200 h20 , Increase Size of Map
+    Gui, Settings: Add, Text, x115 y82 w200 h20 , %t34%
     Gui, Settings: Add, Edit, x22 y79 w90 h20 vincreaseMapSizeKey gUpdateFlag, 
-    Gui, Settings: Add, Text, x115 y102 w200 h20 , Decrease Size of Map
+    Gui, Settings: Add, Text, x115 y102 w200 h20 , %t35%
     Gui, Settings: Add, Edit, x22 y99 w90 h20 vdecreaseMapSizeKey gUpdateFlag, 
-    Gui, Settings: Add, Text, x115 y122 w200 h20 , Move Map Left
+    Gui, Settings: Add, Text, x115 y122 w200 h20 , %t36%
     Gui, Settings: Add, Edit, x22 y119 w90 h20 vmoveMapLeft gUpdateFlag, 
-    Gui, Settings: Add, Text, x115 y142 w200 h20 , Move Map Right
+    Gui, Settings: Add, Text, x115 y142 w200 h20 , %t37%
     Gui, Settings: Add, Edit, x22 y139 w90 h20 vmoveMapRight gUpdateFlag, 
-    Gui, Settings: Add, Text, x115 y162 w200 h20 , Move Map Up
+    Gui, Settings: Add, Text, x115 y162 w200 h20 , %t38%
     Gui, Settings: Add, Edit, x22 y159 w90 h20 vmoveMapUp gUpdateFlag, 
-    Gui, Settings: Add, Text, x115 y182 w200 h20 , Move Map Down
+    Gui, Settings: Add, Text, x115 y182 w200 h20 , %t39%
     Gui, Settings: Add, Edit, x22 y179 w90 h20 vmoveMapDown gUpdateFlag, 
-    Gui, Settings: Add, Text, x115 y202 w200 h20 , Hide Game History in Menu
+    Gui, Settings: Add, Text, x115 y202 w200 h20 , %t40%
     Gui, Settings: Add, Edit, x22 y199 w90 h20 vhistoryToggleKey gUpdateFlag, 
-    Gui, Settings: Add, Text, x115 y222 w200 h20 , Always Show Map (Toggle)
+    Gui, Settings: Add, Text, x115 y222 w200 h20 , %t41%
     Gui, Settings: Add, Edit, x22 y219 w90 h20 valwaysShowKey gUpdateFlag, 
-    Gui, Settings: Add, Text, x115 y242 w200 h20 , Center Map Mode (Toggle)
+    Gui, Settings: Add, Text, x115 y242 w200 h20 , %t42%
     Gui, Settings: Add, Edit, x22 y239 w90 h20 vswitchMapMode gUpdateFlag, 
 
-    Gui, Settings: Add, Text, x22 y282 w300 h20 , NOTE: Any hotkey changes requires a restart of the MH
+    Gui, Settings: Add, Text, x22 y282 w300 h20 , %t43%
     Gui, Settings: Add, Link, x95 y418 w200 h20 , Click <a href="https://www.autohotkey.com/docs/KeyList.htm">here</a> for possible key combos
 
     Gui, Settings: Tab, Info
     Gui, Settings: Font, S26 CRed,    
     Gui, Settings:Add, Text, x30 y75 w300 h50 +Center, d2r-mapview
     Gui, Settings:Font, S12 CDefault
-    if (settings["baseUrl"] == "http://map.d2r-mapview.xyz") {
-        Gui, Settings:Add, Text, x30 y135 w300 h90 +Center, Please note that the public map server is shutting down soon. However you can set up your own easily and free.
-        Gui, Settings:Add, Link, x90 y220 w300 h25 +Center, <a href="https://github.com/joffreybesos/d2-mapserver/blob/master/INSTALLATION.md">Please follow this guide</a>
-    } else {
-        Gui, Settings:Add, Text, x30 y135 w300 h90 +Center, Thank you for running your own map server. I'd appreciate it if you helped others in discord set up theirs as well
-    }
+    
+    Gui, Settings:Add, Text, x25 y135 w300 h120 +Center, %uitext%
+    
     Gui, Settings:Font, S16 CDefault
     Gui, Settings:Add, Link, x70 y380 w120 h30 +Center, <a href="https://github.com/joffreybesos/d2r-mapview#readme">GitHub</a>
     Gui, Settings:Add, Link, x240 y380 w120 h30 +Center, <a href="https://discord.com/invite/qEgqyVW3uj">Discord</a>
@@ -632,6 +744,7 @@ saveSettings(settings, defaultSettings) {
     writeIniVar("settingsUIX", settings, defaultsettings)
     writeIniVar("settingsUIY", settings, defaultsettings)
     writeIniVar("lastActiveGUITab", settings, defaultsettings)
+    writeIniVar("locale", settings, defaultsettings)
     writeIniVar("baseUrl", settings, defaultsettings)
     writeIniVar("scale", settings, defaultsettings)
     writeIniVar("leftMargin", settings, defaultsettings)

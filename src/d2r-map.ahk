@@ -45,13 +45,9 @@ WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyV
 ClearCache(A_Temp)
 global settings
 global defaultSettings
-global localizedStrings = []
 readSettings("settings.ini", settings)
-LoadLocalization(localizedStrings, settings)
-
-
+global localizedStrings := LoadLocalization(settings)
 checkServer(settings)
-
 lastlevel:=""
 lastSeed:=""
 session :=

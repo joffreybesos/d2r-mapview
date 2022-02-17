@@ -63,7 +63,6 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
     if (imageData["prerotated"]) {
         RWidth := Width
         RHeight := Height
-        WriteLog( imageData["originalWidth"] " "  imageData["originalHeight"])
         Width := imageData["originalWidth"]
         Height := imageData["originalHeight"]
     } else {

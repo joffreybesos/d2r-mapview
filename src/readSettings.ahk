@@ -51,6 +51,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["lastActiveGUITab"] := "Info"
     settings["settingsUIX"] := 100
     settings["settingsUIX"] := 100
+    settings["enablePrefetch"] := 0
 
     settings["enableItemFilter"] := 1
     settings["allowTextToSpeech"] := 1

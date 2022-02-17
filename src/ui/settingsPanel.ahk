@@ -1,6 +1,6 @@
 
 
-CreateSettingsGUI(settings) {
+CreateSettingsGUI(ByRef settings, ByRef localizedStrings) {
     global
     tabtitles = Info|General|Map Items|Game History|Monsters|Immunities|Item Filter|Hotkeys|Other|Advanced
     Gui, Settings:Add, Button, x240 y445 w115 h30 gUpdate vUpdateBtn Disabled, Save && Apply
@@ -194,24 +194,32 @@ CreateSettingsGUI(settings) {
 
     Gui, Settings: Tab, Advanced
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y59 w340 h160 , Advanced Settings
+    Gui, Settings: Add, GroupBox, x11 y59 w340 h200 , Advanced Settings
     Gui, Settings: Font, S8 CDefault, 
     Gui, Settings: Add, Text, x65 y82 w110 h18 , Performance Mode
     Gui, Settings: Add, Edit, x22 y79 w40 h20 vperformanceMode gUpdateFlag, 50ms
     Gui, Settings: Font, S7 CGray, 
     Gui, Settings: Add, Text, x22 y99 w320 h20 , Experimental`, set to -1 to max out performance.
+
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, CheckBox, x22 y129 w100 h20 venableD2ML gUpdateFlag, Enable D2ML ;False
-    Gui, Settings: Add, Text, x145 y152 w100 h18 , Window Title
-    Gui, Settings: Add, Edit, x22 y149 w120 h20 vwindowTitle gUpdateFlag, D2R:main
+    Gui, Settings: Add, CheckBox, x22 y124 w100 h20 venablePrefetch gUpdateFlag, Map prefetching ;False
     Gui, Settings: Font, S7 CGray, 
-    Gui, Settings: Add, Text, x22 y169 w320 h30 , This is ignored unless Enable D2ML is turned on. It is used for D2R Multi-session
+    Gui, Settings: Add, Text, x22 y144 w320 h20 , May lead to timeout issues
+
+    Gui, Settings: Font, S8 CDefault, 
+    Gui, Settings: Add, CheckBox, x22 y169 w100 h20 venableD2ML gUpdateFlag, Enable D2ML ;False
+    Gui, Settings: Add, Text, x145 y192 w100 h18 , Window Title
+    Gui, Settings: Add, Edit, x22 y189 w120 h20 vwindowTitle gUpdateFlag, D2R:main
+    Gui, Settings: Font, S7 CGray, 
+    Gui, Settings: Add, Text, x22 y209 w320 h30 , This is ignored unless Enable D2ML is turned on. It is used for D2R Multi-session
+
+
     Gui, Settings: Font, S8 CGray, 
-    Gui, Settings: Add, GroupBox, x11 y229 w340 h100 , Debugging
+    Gui, Settings: Add, GroupBox, x11 y269 w340 h80 , Debugging
     Gui, Settings: Font, S8 CDefault, 
-    Gui, Settings: Add, CheckBox, x22 y249 w60 h20 vdebug gUpdateFlag, Debug ;False
+    Gui, Settings: Add, CheckBox, x22 y289 w60 h20 vdebug gUpdateFlag, Debug ;False
     Gui, Settings: Font, S7 CGray, 
-    Gui, Settings: Add, Text, x22 y269 w320 h30 , Turn this on to increase the level of the logging`, note this will create huge log.txt files. Can be toggled in-game with Shift+F9
+    Gui, Settings: Add, Text, x22 y309 w320 h30 , Turn this on to increase the level of the logging`, note this will create huge log.txt files. Can be toggled in-game with Shift+F9
     Gui, Settings: Font, S8 CDefault,
     
     Gui, Settings: Tab, Hotkeys
@@ -355,7 +363,9 @@ CreateSettingsGUI(settings) {
     GuiControl, Settings:, moveMapDown, % settings["moveMapDown"]
     GuiControl, Settings:, switchMapMode, % settings["switchMapMode"]
     GuiControl, Settings:, historyToggleKey, % settings["historyToggleKey"]
+
     GuiControl, Settings:, performanceMode, % settings["performanceMode"]
+    GuiControl, Settings:, enablePrefetch, % settings["enablePrefetch"]
     GuiControl, Settings:, enableD2ML, % settings["enableD2ML"]
     GuiControl, Settings:, windowTitle, % settings["windowTitle"]
     GuiControl, Settings:, debug, % settings["debug"]
@@ -475,7 +485,9 @@ UpdateSettings(ByRef settings, defaultSettings) {
     GuiControlGet, moveMapDown, ,moveMapDown
     GuiControlGet, switchMapMode, ,switchMapMode
     GuiControlGet, historyToggleKey, ,historyToggleKey
+
     GuiControlGet, performanceMode, ,performanceMode
+    GuiControlGet, enablePrefetch, ,enablePrefetch
     GuiControlGet, enableD2ML, ,enableD2ML
     GuiControlGet, windowTitle, ,windowTitle
     GuiControlGet, debug, ,debug
@@ -584,7 +596,9 @@ UpdateSettings(ByRef settings, defaultSettings) {
     settings["moveMapDown"] := moveMapDown
     settings["switchMapMode"] := switchMapMode
     settings["historyToggleKey"] := historyToggleKey
+
     settings["performanceMode"] := performanceMode
+    settings["enablePrefetch"] := enablePrefetch
     settings["enableD2ML"] := enableD2ML
     settings["windowTitle"] := windowTitle
     settings["debug"] := debug
@@ -710,6 +724,7 @@ saveSettings(settings, defaultSettings) {
     writeIniVar("moveMapDown", settings, defaultsettings)
     writeIniVar("switchMapMode", settings, defaultsettings)
     writeIniVar("historyToggleKey", settings, defaultsettings)
+    writeIniVar("enablePrefetch", settings, defaultsettings)
     writeIniVar("performanceMode", settings, defaultsettings)
     writeIniVar("enableD2ML", settings, defaultsettings)
     writeIniVar("windowTitle", settings, defaultsettings)

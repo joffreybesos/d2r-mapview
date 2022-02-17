@@ -25,6 +25,7 @@ This tool is licenced under GPLv3.
 | ![](darkwood.png) | ![](hallsofpain.png) | ![](canyonofthemagi.png) |
 
 ## Setup
+<<<<<<< HEAD
 1. Setup a map server by following this guide: https://github.com/joffreybesos/d2-mapserver/blob/master/INSTALLATION.md
 2. Download the latest `d2rmap-vx.x.x.exe` (found on the [releases page](https://github.com/joffreybesos/d2r-mapview/releases))
 3. Save the d2rmap.exe in the same folder as your map server
@@ -37,6 +38,10 @@ This tool is licenced under GPLv3.
 
 The executable does _not_ require administrator privileges unless you are running the game as administrator. Refer to troubleshooting below if you have issues.  
 Sometimes windows defender can intercept the download, try a different browser if this happens.
+=======
+
+Please read the wiki https://github.com/joffreybesos/d2r-mapview/wiki/Setup-guide
+>>>>>>> c09b0bb0349626b1173f9d2b80fa03e317670295
 
 ### Virustotal gave me an alert
 
@@ -267,15 +272,8 @@ To better understand the keyboard shortcut format, refer to <https://www.autohot
 
 ### Use the hosted free map server
 
-I offer a free to use map server. If you use this server please consider donating to help with server costs.
-This free server comes preconfigured, simply use the default configuration in `settings.ini`
-
-**NOTE**: I'll be taking this server offline in the coming weeks, please get your own map server running to avoid disappointment.
-
-### Run your own map server
-
-There have been a lot of changes and it's now very easy to setup your own map server.
-Please refer to [INSTALLATION.md](https://github.com/joffreybesos/d2-mapserver/blob/master/INSTALLATION.md) for a full guide.
+I offer a free to use map server but it is shutting down Feb 14.
+Please run your own, it's very easy and I've created this guide: [INSTALLATION.md](https://github.com/joffreybesos/d2-mapserver/blob/master/INSTALLATION.md)
 
 ## Is it safe?
 

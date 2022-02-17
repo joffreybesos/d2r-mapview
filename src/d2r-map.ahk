@@ -26,6 +26,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\movePlayerMap.ahk
 #Include %A_ScriptDir%\stats\GameSession.ahk
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
+#Include %A_ScriptDir%\localization.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 #Include %A_ScriptDir%\serverHealthCheck.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
@@ -44,7 +45,11 @@ WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyV
 ClearCache(A_Temp)
 global settings
 global defaultSettings
+global localizedStrings = []
 readSettings("settings.ini", settings)
+LoadLocalization(localizedStrings, settings)
+
+
 checkServer(settings)
 
 lastlevel:=""
@@ -71,7 +76,9 @@ global centerLeftOffset := 0
 global centerTopOffset := 0
 global redrawMap := 1
 
-CreateSettingsGUI(settings)
+
+CreateSettingsGUI(settings, localizedStrings)
+
 
 switchMapModeKey := settings["switchMapMode"]
 Hotkey, IfWinActive, % gameWindowId
@@ -231,7 +238,9 @@ While 1 {
                     Gui, Units: Show, NA
                 }
                 
-                prefetchMaps(settings, gameMemoryData)
+                if (settings["enablePrefetch"]) {
+                    prefetchMaps(settings, gameMemoryData)
+                }
                 mapLoading := 0
                 Gui, LoadingText: Destroy ; remove loading text
                 redrawMap := 1

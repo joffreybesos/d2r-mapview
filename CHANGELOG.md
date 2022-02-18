@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.2] - 2021-02-14 - More Localization
+
+- You can now select the language in the settings UI
+- Error messages now support different languages
+- Shrine names now support different languages
+- Fix: Increased map image download timeout and introduced auto-retry
+- Fix: chTW is now Traditional rather than Chinese Simplified for UI elements
+- Fix: esMX is now proper esMX rather than esES
+- Fix: 'Show chests' setting will now be saved correctly
+
 ## [2.6.1] - 2021-02-14 - Localization
 
 - Localization is here (mostly)! Supported languages:

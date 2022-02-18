@@ -912,28 +912,28 @@ chestState(interactType) {
 
 shrineType(interactType) {
     switch (interactType) {
-        case 1: return "Refill"
-        case 2: return "Health"
-        case 3: return "Mana"
-        case 4: return "HPXChange"
-        case 5: return "ManaXChange"
-        case 6: return "Armor"
-        case 7: return "Combat"
-        case 8: return "ResistFire"
-        case 9: return "ResistCold"
-        case 10: return "ResistLight"
-        case 11: return "ResistPoison"
-        case 12: return "Skill"
-        case 13: return "ManaRegen"
-        case 14: return "Stamina"
-        case 15: return "Experience"
-        case 16: return "Shrine"
-        case 17: return "Portal"
-        case 18: return "Gem"
-        case 19: return "Fire"
-        case 20: return "Monster"
-        case 21: return "Explosive"
-        case 22: return "Poison"
+        case 1: return localizedStrings["ShrId1"]
+        case 2: return localizedStrings["ShrId2"]
+        case 3: return localizedStrings["ShrId3"]
+        case 4: return localizedStrings["ShrId4"]
+        case 5: return localizedStrings["ShrId5"]
+        case 6: return localizedStrings["ShrId6"]
+        case 7: return localizedStrings["ShrId7"]
+        case 8: return localizedStrings["ShrId8"]
+        case 9: return localizedStrings["ShrId9"]
+        case 10: return localizedStrings["ShrId10"]
+        case 11: return localizedStrings["ShrId11"]
+        case 12: return localizedStrings["ShrId12"]
+        case 13: return localizedStrings["ShrId13"]
+        case 14: return localizedStrings["ShrId14"]
+        case 15: return localizedStrings["ShrId15"]
+        case 16: return localizedStrings["ShrId16"]
+        case 17: return localizedStrings["ShrId17"]
+        case 18: return localizedStrings["ShrId18"]
+        case 19: return localizedStrings["ShrId19"]
+        case 20: return localizedStrings["ShrId20"]
+        case 21: return localizedStrings["ShrId21"]
+        case 22: return localizedStrings["ShrId22"]
     }
     return ""
 }

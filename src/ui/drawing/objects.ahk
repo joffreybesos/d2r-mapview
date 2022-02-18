@@ -99,14 +99,14 @@ drawObjects(G, settings, gameMemoryData, imageData, serverScale, scale, padding,
                 objectx := correctedPos["x"] + centerLeftOffset
                 objecty := correctedPos["y"] + centerTopOffset
                 shrineType := object["shrineType"]
-                textx := objectx - 100
+                textx := objectx - 150
                 texty := objecty - 110
                 Options = x%textx% y%texty% Center Bold vBottom c%shrineColor% r8 s%shrineTextSize%
                 textx := textx + 2
                 texty := texty + 2
                 Options2 = x%textx% y%texty% Center Bold vBottom cff000000 r8 s%shrineTextSize%
-                Gdip_TextToGraphics(G,shrineType, Options2, diabloFont, 200, 100)
-                Gdip_TextToGraphics(G,shrineType, Options, diabloFont, 200, 100)
+                Gdip_TextToGraphics(G,shrineType, Options2, diabloFont, 300, 100)
+                Gdip_TextToGraphics(G,shrineType, Options, diabloFont, 300, 100)
 
                 xscale := 3 * scale
                 yscale := 5 * scale

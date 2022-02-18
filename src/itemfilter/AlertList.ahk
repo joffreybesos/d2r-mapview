@@ -177,10 +177,14 @@ class AlertList {
 
 
 validate(yamlAlert, name) {
+    errormsg21 := localizedStrings["errormsg21"]
+    errormsg22 := localizedStrings["errormsg22"]
+    errormsg23 := localizedStrings["errormsg23"]
+    errormsg24 := localizedStrings["errormsg24"]
     rawAlert := yamlAlert.Dump(0)
     WriteLog(name " alert config: " rawAlert)
     if (rawAlert == "") {
         WriteLog("ERROR: Alert '" name "' in enabled list but missing in config, check formatting of itemfilter.yaml")
-        Msgbox, 48, Item Filter, Item filter alert '%name%' is in enabledAlerts but not found in config`n`nCheck the format of your itemfilter.yaml
+        Msgbox, 48, %errormsg21% %version%, %errormsg22% '%name%' %errormsg23%`n`n%errormsg24%
     }
 }

@@ -31,7 +31,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\serverHealthCheck.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
 
-expectedVersion := "2.6.1"
+global version := "2.6.1"
 
 lastMap := ""
 exitArray := []
@@ -40,7 +40,7 @@ historyToggle := true
 WriteLog("*******************************************************************")
 WriteLog("* Map overlay started https://github.com/joffreybesos/d2r-mapview *")
 WriteLog("*******************************************************************")
-WriteLog("Version: " expectedVersion)
+WriteLog("Version: " version)
 WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyVW3uj")
 ClearCache(A_Temp)
 global settings
@@ -109,10 +109,15 @@ Hotkey, IfWinActive, % gameWindowId
 Hotkey, %moveMapUpKey%, MoveMapUp
 Hotkey, IfWinActive, % gameWindowId
 Hotkey, %moveMapDownKey%, MoveMapDown
+errormsg3 := localizedStrings["errormsg3"]
+errormsg10:= localizedStrings["errormsg10"]
+errormsg11 := localizedStrings["errormsg11"]
+errormsg12 := localizedStrings["errormsg12"]
+
 
 if (not WinExist(gameWindowId)) {
     WriteLog(gameWindowId " not found, please make sure game is running, try running in admin if still having issues")
-    Msgbox, 48, d2r-mapview, Did not find D2R game window`nGame must be started before running this program`n`nOtherwise check for errors in log.txt`nAlso try running both D2R and this program as admin`n`nExiting....
+    Msgbox, 48, d2r-mapview %version%, %errormsg10%`n`n%errormsg11%`n%errormsg12%`n`n%errormsg3%
     ExitApp
 }
 
@@ -226,7 +231,7 @@ While 1 {
                 Gui, Units: Hide ; hide player dot
                 ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 22 is opacity
                 ; Download map
-                downloadMapImage(settings, gameMemoryData, imageData)
+                downloadMapImage(settings, gameMemoryData, imageData, 0)
 
                 ; Show Map
                 if (lastlevel == "") {

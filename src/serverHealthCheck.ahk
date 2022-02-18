@@ -1,8 +1,14 @@
 
 checkServer(ByRef settings) {
+    errormsg3 := localizedStrings["errormsg3"]
+    errormsg13 := localizedStrings["errormsg13"]
+    errormsg14 := localizedStrings["errormsg14"]
+    errormsg15 := localizedStrings["errormsg15"]
+    errormsg16 := localizedStrings["errormsg16"]
     ;health check
     baseUrl := settings["baseUrl"]
     testUrl := baseUrl "/health"
+    
     try {
         healthCheck(testUrl)
     } catch e {
@@ -10,12 +16,21 @@ checkServer(ByRef settings) {
             startMapServer("d2-mapserver.exe", settings)
         } else {
             emsg := e.message
-            Msgbox, 48, d2r-mapview, Could not connect to %baseUrl%`n`nMake sure the server is running`nCould also not find d2-mapserver.exe to launch server`nYou need to place d2r-map.exe in the same folder as your d2-mapserver.exe`n%emsg%`n`nExiting...
+            Msgbox, 48, d2r-mapview %version%, %errormsg13% %baseUrl%`n`n%errormsg14%`n%errormsg15%`n%errormsg16%`n%emsg%`n`n%errormsg3%
             ExitApp
         }
     }
 }
 startMapServer(serverExe, ByRef settings) {
+    errormsg3 := localizedStrings["errormsg3"]
+    errormsg13 := localizedStrings["errormsg13"]
+    errormsg14 := localizedStrings["errormsg14"]
+    errormsg15 := localizedStrings["errormsg15"]
+    errormsg16 := localizedStrings["errormsg16"]
+    errormsg17 := localizedStrings["errormsg17"]
+    errormsg18 := localizedStrings["errormsg18"]
+    errormsg19 := localizedStrings["errormsg19"]
+    errormsg20 := localizedStrings["errormsg20"]
     WriteLog("Starting map server...")
     Runwait, taskkill /im %serverExe% /f
     Runwait, taskkill /im node.exe /f
@@ -42,7 +57,7 @@ startMapServer(serverExe, ByRef settings) {
 
     if (!serverStarted) {
         WriteLog("ERROR: Map server failed to start, check serverlog.txt")
-        Msgbox, 48, d2r-mapview, Could not start d2-mapserver.exe!`nTry running serversetup.bat and try again`nAlso check serverlog.txt for errors`n`nExiting...
+        Msgbox, 48, d2r-mapview %version%, %errormsg17%`n%errormsg18%`n%errormsg19%`n`n%errormsg3%
         ExitApp
     }
 
@@ -53,7 +68,7 @@ startMapServer(serverExe, ByRef settings) {
         healthCheck(newTestUrl)
     } catch e {
         emsg := e.message
-        Msgbox, 48, d2r-mapview, Could not connect to %newBaseUrl1%`n`nMake sure the server is running`nDouble check your baseUrl in settings.ini`n`n%emsg%`n`nExiting...
+        Msgbox, 48, d2r-mapview %version%, %errormsg13% %newBaseUrl1%`n`n%errormsg14%`n%errormsg20%`n`n%emsg%`n`n%errormsg3%
         ExitApp
     }
     WriteLog("Started and using server on " newBaseUrl1)

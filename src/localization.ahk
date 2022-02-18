@@ -36,6 +36,7 @@ LoadLocalization(ByRef settings) {
     localizedStringsUI := ReadSection(locale, "UI")
     localizedStringsQuality := ReadSection(locale, "Quality")
     localizedStringsSockets := ReadSection(locale, "Sockets")
+    localizedStringsErrors := ReadSection(locale, "Errors")
     localizedStrings := []
     for k, v in localizedStringsNPCS
         localizedStrings[k]:=v
@@ -54,6 +55,8 @@ LoadLocalization(ByRef settings) {
     for k, v in localizedStringsQuality
         localizedStrings[k]:=v
     for k, v in localizedStringsSockets
+        localizedStrings[k]:=v
+    for k, v in localizedStringsErrors
         localizedStrings[k]:=v
     return localizedStrings
 }

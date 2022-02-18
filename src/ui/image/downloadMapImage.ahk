@@ -3,7 +3,18 @@ SendMode Input
 SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\logging.ahk
 
-downloadMapImage(settings, gameMemoryData, ByRef mapData) {
+downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
+
+    errormsg1 := localizedStrings["errormsg1"]
+    errormsg2 := localizedStrings["errormsg2"]
+    errormsg3 := localizedStrings["errormsg3"]
+    errormsg4 := localizedStrings["errormsg4"]
+    errormsg5 := localizedStrings["errormsg5"]
+    errormsg6 := localizedStrings["errormsg6"]
+    errormsg7 := localizedStrings["errormsg7"]
+    errormsg8 := localizedStrings["errormsg8"]
+    errormsg9 := localizedStrings["errormsg9"]
+
     baseUrl:= settings["baseUrl"]
     t := settings["wallThickness"] + 0.0
     if (t > 5)
@@ -41,7 +52,7 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
 
         try {
             whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-            WinHttpReq.SetTimeouts("60000", "60000", "60000", "60000")
+            whr.SetTimeouts("45000", "45000", "45000", "45000")
             whr.Open("GET", imageUrl, true)
             whr.Send()
             whr.WaitForResponse()
@@ -71,7 +82,15 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
             if (Instr(errMsg, "The operation timed out")) {
                 WriteLog("ERROR: Timeout downloading image from " imageUrl)
                 WriteLog("You can try opening the above URL in your browser to test connectivity")
-                Msgbox, 48, d2r-mapview, Timed out reading map from map server`nCheck baseUrl in settings.ini`n`nExiting....
+                if (settings["enablePrefetch"]) {
+                    WriteLog("Prefetching was enabled")
+                }
+                if (tries == 0) {
+                    WriteLog("Retrying...")
+                    downloadMapImage(settings, gameMemoryData, ByRef mapData, 1)
+                } else {
+                    Msgbox, 48, d2r-mapview %version%, %errormsg8%`n%errormsg9%`n`n%errormsg3%
+                }
             } else if (Instr(errMsg, "The requested header was not found")) {
                 Loop, Parse, respHeaders, `n
                 {
@@ -79,7 +98,7 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
                 }
                 WriteLog("ERROR: Did not find an expected header " imageUrl)
                 WriteLog("If it didn't find the correct headers, you likely need to update your server docker image")
-                Msgbox, 48, d2r-mapview, Error downloading map image.`nEnsure you are using latest version of map server`n`nExiting....
+                Msgbox, 48, d2r-mapview %version%, %errormsg1%`n%errormsg7%`n`n%errormsg3%
             } else {
                 WriteLog(errMsg)
                 Loop, Parse, respHeaders, `n
@@ -91,9 +110,9 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData) {
                     WriteLog("Downloaded image to file, but something else went wrong " sFile)
                 }
                 If InStr(baseUrl, "map.d2r-mapview.xyz")
-                    Msgbox, 48, d2r-mapview, Error downloading map image.`nPublic map server may be down`nConsider running your own map server, it's easy to setup now and much faster`n`nCheck map server baseUrl in settings.ini or errors in log.txt`n`nExiting....
+                    Msgbox, 48, d2r-mapview %version%, %errormsg1%`n%errormsg2%`n`n%errormsg3%
                 Else
-                    Msgbox, 48, d2r-mapview, Error downloading map image from %baseUrl%.`nCheck that map server is running`nCheck baseUrl in settings.ini or errors in log.txt`n`nExiting....
+                    Msgbox, 48, d2r-mapview %version%, %errormsg4% %baseUrl%.`n%errormsg5%`n%errormsg6%`n`n%errMsg%`n%errormsg3%
             }
         }
         FileAppend, %respHeaders%, %sFileTxt%

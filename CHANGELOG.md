@@ -2,9 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.6.2] - 2021-02-14 - More Localization
+## [2.6.2] - 2021-02-18 - More Localization
 
 - You can now select the language in the settings UI
+- Level exits now support different languages
 - Error messages now support different languages
 - Shrine names now support different languages
 - Fix: chTW is now Traditional rather than Chinese Simplified for UI elements
@@ -12,7 +13,7 @@ All notable changes to this project will be documented in this file.
 - Fix: Increased map image download timeout and introduced auto-retry
 - Fix: 'Show chests' setting will now be saved correctly
 
-## [2.6.1] - 2021-02-14 - Localization
+## [2.6.1] - 2021-02-17 - Localization
 
 - Localization is here (mostly)! Supported languages:
   English, 中文, 福佬話, français, Deutsch,español, italiano, 한국어, polski, 日本語, português, Русский язык

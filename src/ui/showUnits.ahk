@@ -1,6 +1,7 @@
 #SingleInstance, Force
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
+#Include %A_ScriptDir%\ui\drawing\exits.ahk
 #Include %A_ScriptDir%\ui\drawing\items.ahk
 #Include %A_ScriptDir%\ui\drawing\lines.ahk
 #Include %A_ScriptDir%\ui\drawing\missiles.ahk
@@ -98,6 +99,8 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
     if (settings["showWaypointLine"] or settings["showNextExitLine"] or settings["showBossLine"]) {
         drawLines(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset, xPosDot, yPosDot)
     }
+
+    drawExits(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset, xPosDot, yPosDot)
 
     ; draw other players
     if (settings["showOtherPlayers"]) {

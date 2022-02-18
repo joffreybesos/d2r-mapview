@@ -25,7 +25,7 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
     imageUrl := baseUrl . "/v1/map/" . gameMemoryData["mapSeed"] . "/" . gameMemoryData["difficulty"] . "/" . gameMemoryData["levelNo"] . "/image?wallthickness=" . t
     sFile := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . gameMemoryData["levelNo"]
     sFileTxt := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . gameMemoryData["levelNo"]
-    imageUrl := imageUrl . "&rotate=true"
+    imageUrl := imageUrl . "&rotate=true&showTextLabels=false"
 
     if (settings["edges"]) {
         imageUrl := imageUrl . "&edge=true"

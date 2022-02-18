@@ -60,7 +60,13 @@ announceItem(settings, item, alert) {
                 volume := settings["textToSpeechVolume"]
                 pitch := settings["textToSpeechPitch"]
                 speed := settings["textToSpeechSpeed"]
-                oSpVoice.Speak("<pitch absmiddle=""" pitch """><rate absspeed=""" speed """><volume level=""" volume """>" item.getTextToSpeech() "</volume></rate></pitch>", 1)
+                try {
+                    speech := "<pitch absmiddle=""" pitch """><rate absspeed=""" speed """><volume level=""" volume """>" item.getTextToSpeech() "</volume></rate></pitch>"
+                    oSpVoice.Speak(speech, 1)
+                } catch e {
+                    WriteLog("Error with text to speech, try changing voice " speech)   
+                    WriteLog(e.message)
+                }
             }
             if (settings["allowItemDropSounds"]) {
                 if (alert.soundfile) {

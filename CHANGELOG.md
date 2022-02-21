@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.6.3] - 2021-02-20 - Voice bug fixes
+## [2.6.3] - 2021-02-21 - Voice bug fixes
 
 - Fixed issue where the text to speech voice would stop working
 - Fixed issue with localization for zhTW in the UI

@@ -1,23 +1,19 @@
-#SingleInstance, Force
 
-SetWorkingDir, %A_ScriptDir%
-#Include %A_ScriptDir%\include\Gdip_All.ahk
-
-ShowIPText(hwnd1, gameWindowId, ipaddress, position = "LEFT", fontSize = 26) {
+ShowInfoText(hwnd1, gameWindowId, ipaddress, currentFPS, position = "LEFT", fontSize = 26) {
     
-    WinGetPos, , , Width, Height, %gameWindowId%
+    WinGetPos, winx, winy, Width, Height, %gameWindowId%
     StringUpper, position, position
     textBoxWidth := 200
-    topMargin := 20
+    topMargin := 40 + winy
     if (position == "RIGHT") {
-        leftMargin := Width - textBoxWidth - 20
+        leftMargin := Width - textBoxWidth - 20 + winx
         align = "Right"
-        topMargin := 160
+        topMargin := 160 + winy
     } else if (position == "LEFT") {
-        leftMargin := 20
+        leftMargin := 20 + winx
         align = "Left"
     } else {
-        leftMargin := 20
+        leftMargin := 20 + winx
         align = "Left"
     }
     
@@ -35,10 +31,17 @@ ShowIPText(hwnd1, gameWindowId, ipaddress, position = "LEFT", fontSize = 26) {
         Gdip_SetSmoothingMode(G, 4)
         Gdip_SetInterpolationMode(G, 7)
 
-        Options = x0 y0 %align% vTop cffAAAAAA r4 s%fontSize% Bold
+        Options = x0 y0 %align% vTop cffAAAAAA r4 s%fontSize%
+        Options2 = x0 y20 %align% vTop cffAAAAAA r4 s%fontSize%
         
-        Gdip_TextToGraphics(G, ipaddress, Options, diablofont, textBoxWidth, 50)
-        ;msgbox % leftMargin " " topMargin " " position " " textBoxWidth
+        
+        if (settings["showIPtext"]) {
+            Gdip_TextToGraphics(G, ipaddress, Options, diablofont, textBoxWidth, 50)
+        }
+        if (settings["showFPS"]) {
+            currentFPS := currentFPS " FPS"
+            Gdip_TextToGraphics(G, currentFPS, Options2, diablofont, textBoxWidth, 50)
+        }
         UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, textBoxWidth, 50)
         SelectObject(hdc, obm)
         DeleteObject(hbm)

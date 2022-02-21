@@ -20,7 +20,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
-#Include %A_ScriptDir%\ui\showIP.ahk
+#Include %A_ScriptDir%\ui\showInfo.ahk
 #Include %A_ScriptDir%\ui\showUnits.ahk
 #Include %A_ScriptDir%\ui\showSessions.ahk
 #Include %A_ScriptDir%\ui\movePlayerMap.ahk
@@ -145,8 +145,17 @@ sessionList := []
 offsetAttempts := 6
 settingupGUI := false
 
+; performance counters
 global ticktock := 0
+maxfps := 30
+tickCount := 0
+ticksPerFrame := 1000 / maxfps
+frameCount := 0
+fpsTimer := A_TickCount
+currentFPS := 0
+
 While 1 {
+    frameStart:=A_TickCount
     ; scan for the player offset
     playerOffset := scanForPlayer(d2rprocess, playerOffset, startingOffset, settings)
 
@@ -213,10 +222,8 @@ While 1 {
                 session.startingPlayerLevel := gameMemoryData["playerLevel"]
                 session.startingExperience := gameMemoryData["experience"]
                 lastSeed := gameMemoryData["mapSeed"]
-                if (settings["showIPtext"]) {
-                    ipAddress := readIPAddress(d2rprocess, gameWindowId, settings, session)
-                    ShowIPText(ipHwnd1, gameWindowId, ipAddress, settings["textIPalignment"], settings["textIPfontSize"])
-                }
+                ipAddress := readIPAddress(d2rprocess, gameWindowId, settings, session)
+                    
                 shrines := []
                 seenItems := []
             }
@@ -284,7 +291,6 @@ While 1 {
                 MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData, uiData)
             }
             checkAutomapVisibility(d2rprocess, settings, gameMemoryData)
-
             lastlevel := gameMemoryData["levelNo"]
         } else {
             WriteLog("In Menu - no valid difficulty, levelno, or mapseed found '" gameMemoryData["difficulty"] "' '" gameMemoryData["levelNo"] "' '" gameMemoryData["mapSeed"] "'")
@@ -300,6 +306,25 @@ While 1 {
     ticktock := ticktock + 1
     if (ticktock > 6)
         ticktock := 0
+
+    frameDuration:=A_TickCount-frameStart
+    frameCount++
+    
+    if ((A_TickCount-fpsTimer) >= 1000) {
+        SetFormat Integer, D
+        frameCount += 0
+        currentFPS := frameCount / (((A_TickCount-fpsTimer) / 1000))
+        currentFPS := Round(currentFPS, 1)
+        ;ToolTip, % "`n`n`n`n`n" frameCount
+        frameCount := 0
+        fpsTimer := A_TickCount
+        if (isMapShowing) {
+            ShowInfoText(ipHwnd1, gameWindowId, ipAddress, currentFPS, settings["textIPalignment"], settings["textIPfontSize"])
+        }
+    }
+    if (frameDuration < ticksPerFrame) {
+        Sleep, ticksPerFrame - frameDuration
+    }
 }
 
 checkAutomapVisibility(d2rprocess, settings, gameMemoryData) {

@@ -36,6 +36,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["textAlignment"] := "LEFT"
     settings["showAllHistory"] := 0
     settings["showIPtext"] := 1
+    settings["showFPS"] := 0
     settings["textIPfontSize"] := "18"
     settings["textIPalignment"] := "LEFT"
     settings["showNormalMobs"] := 1
@@ -102,7 +103,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["moveMapDown"] := "#Down"
     settings["switchMapMode"] := "~/"
     settings["historyToggleKey"] := "^g"
-    settings["performanceMode"] := "50ms"
+    settings["performanceMode"] := "-1"
     settings["enableD2ML"] := 0
     settings["windowTitle"] := "D2R:main"
     settings["debug"] := 0

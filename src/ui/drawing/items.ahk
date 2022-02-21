@@ -62,9 +62,10 @@ announceItem(settings, item, alert) {
             ; seen item for the first time
             WriteLog("ITEMLOG: Found item '" item.quality " " item.name "' matched to alert '" alert.name "'")
             if (settings["allowTextToSpeech"]) {
-                volume := settings["textToSpeechVolume"]
-                pitch := settings["textToSpeechPitch"]
-                speed := settings["textToSpeechSpeed"]
+                SetFormat Integer, D
+                volume := Round(settings["textToSpeechVolume"] + 0)
+                pitch := Round(settings["textToSpeechPitch"] + 0)
+                speed := Round(settings["textToSpeechSpeed"] + 0)
                 try {
                     speech := "<pitch absmiddle=""" pitch """><rate absspeed=""" speed """><volume level=""" volume """>" item.getTextToSpeech() "</volume></rate></pitch>"
                     oSpVoice.Speak(speech, 1)

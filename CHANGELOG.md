@@ -2,10 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.6.3] - 2021-02-20 - Features
+## [2.6.3] - 2021-02-20 - Voice bug fixes
 
-- Items with sockets on the ground will show a number. e.g. `Thresher [4]`
+- Fixed issue where the text to speech voice would stop working
 - Fixed issue with localization for zhTW in the UI
+- Items with sockets on the ground will show a number. e.g. `Thresher [4]`
+- Added FPS counter, you can now turn it on in the Advanced tab
+- Performance mode is now -1 by default (maximum), but an FPS cap of 30
+- If you run into any performance issues with this release, set `performanceMode` to `50ms`
 
 ## [2.6.2] - 2021-02-18 - More Localization
 

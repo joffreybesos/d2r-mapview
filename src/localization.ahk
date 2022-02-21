@@ -15,7 +15,7 @@
 ; zhCN
 
 LoadLocalization(ByRef settings) {
-    FileInstall, localization.ini, localization.ini, 0
+    FileInstall, localization.ini, localization.ini, 1
     
     if (settings["locale"] == "") {
         locale := GetLocale()

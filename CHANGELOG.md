@@ -2,13 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.3] - 2021-02-20 - Features
+
+- Items with sockets on the ground will show a number. e.g. `Thresher [4]`
+- Fixed issue with localization for zhTW in the UI
+
 ## [2.6.2] - 2021-02-18 - More Localization
 
 - You can now select the language in the settings UI
 - Level exits now support different languages
 - Error messages now support different languages
 - Shrine names now support different languages
-- Fix: chTW is now Traditional rather than Chinese Simplified for UI elements
+- Fix: zhTW is now Traditional rather than Chinese Simplified for UI elements
 - Fix: esMX is now proper esMX rather than esES
 - Fix: Increased map image download timeout and introduced auto-retry
 - Fix: 'Show chests' setting will now be saved correctly

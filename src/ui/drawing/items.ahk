@@ -24,15 +24,20 @@ drawItemAlerts(G, settings, gameMemoryData, imageData, serverScale, scale, paddi
             pBrush4 := Gdip_BrushCreateSolid("0xaa" . alert.color)
             pBrush5 := Gdip_BrushCreateSolid("0x55" . alert.color)
             pBrush6 := Gdip_BrushCreateSolid("0x33" . alert.color)
-            textx := itemx - 100
+            fontSize := 12 * scale
+            itemText := item.localizedName
+            if (item.numSockets > 0) {
+                itemText := itemText " [" item.numSockets "]"
+            }
+            textx := itemx - 250
             texty := itemy - 107
             acolor := "cc" . alert.color
-            Options = x%textx% y%texty% Center Bold vBottom c%acolor% r8 s18
+            Options = x%textx% y%texty% Center vBottom c%acolor% r8 s%fontSize%
             textx := textx + 1.5
             texty := texty + 1.5
-            Options2 = x%textx% y%texty% Center Bold vBottom cff000000 r8 s18
-            Gdip_TextToGraphics(G, item.localizedName, Options2, diabloFont, 200, 100)
-            Gdip_TextToGraphics(G, item.localizedName, Options, diabloFont, 200, 100)
+            Options2 = x%textx% y%texty% Center vBottom cff000000 r8 s%fontSize%
+            Gdip_TextToGraphics(G, itemText, Options2, diabloFont, 500, 100)
+            Gdip_TextToGraphics(G, itemText, Options, diabloFont, 500, 100)
             switch (ticktock) {
                 case 1: Gdip_FillEllipse(G, pBrush1, itemx-5, itemy-5, 10, 10)
                 case 2: Gdip_FillEllipse(G, pBrush2, itemx-6, itemy-6, 12, 12)

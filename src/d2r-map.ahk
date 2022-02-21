@@ -75,7 +75,6 @@ global redrawMap := 1
 
 CreateSettingsGUI(settings, localizedStrings)
 
-
 switchMapModeKey := settings["switchMapMode"]
 Hotkey, IfWinActive, % gameWindowId
 Hotkey, %switchMapModeKey%, SwitchMapMode

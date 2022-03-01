@@ -13,7 +13,7 @@ This tool is licenced under GPLv3.
 
 ## Demonstration
 
-<https://youtu.be/-tezpjrZwEI>
+<https://youtu.be/tSDmgh0ceXk>
 
 ## Map examples
 

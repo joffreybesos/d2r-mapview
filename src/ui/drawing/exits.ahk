@@ -28,16 +28,16 @@ drawExits(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, padd
             ;exitArray[1] ; id of exit
             ;exitArray[2] ; name of exit
             exitName := localizedStrings[exitArray[2]]
-            exitX := (exitArray[3] * serverScale) + padding
-            exitY := (exitArray[4] * serverScale) + padding
-            correctedPos := correctPos(settings, exitX, exitY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+            ,exitX := (exitArray[3] * serverScale) + padding
+            ,exitY := (exitArray[4] * serverScale) + padding
+            ,correctedPos := correctPos(settings, exitX, exitY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             exitX := correctedPos["x"] + centerLeftOffset
-            exitY := correctedPos["y"] + centerTopOffset
-            textx := exitX - 400
-            texty := exitY - 110
+            ,exitY := correctedPos["y"] + centerTopOffset
+            ,textx := exitX - 400
+            ,texty := exitY - 110
             Options = x%textx% y%texty% Center Bold vBottom c%exitTextColor% r8 s%exitTextSize%
             textx := textx + 2
-            texty := texty + 2
+            ,texty := texty + 2
             Options2 = x%textx% y%texty% Center Bold vBottom cff000000 r8 s%exitTextSize%
             Gdip_TextToGraphics(G, exitName, Options2, diabloFont, 800, 100)
             Gdip_TextToGraphics(G, exitName, Options, diabloFont, 800, 100)

@@ -5,8 +5,8 @@ SetWorkingDir, %A_ScriptDir%
 drawObjects(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, shrines, centerLeftOffset, centerTopOffset) {
     if (settings["showPortals"] or settings["showChests"]) {
         gameObjects := gameMemoryData["objects"]
-        portalColor := "ff" . settings["portalColor"]
-        portalColor := "ff" . settings["redPortalColor"]
+        , portalColor := "ff" . settings["portalColor"]
+        , portalColor := "ff" . settings["redPortalColor"]
         if (settings["centerMode"]) {
             pPen := Gdip_CreatePen("0xff" . settings["portalColor"], 5)
             pPenRed := Gdip_CreatePen("0xff" . settings["redPortalColor"], 5)
@@ -20,10 +20,10 @@ drawObjects(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, pa
                 ;WriteLog(object["txtFileNo"] " " object["isRedPortal"])
                 if (object["isPortal"]) {
                     objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
-                    objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
-                    correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-                    objectx := correctedPos["x"] + centerLeftOffset
-                    objecty := correctedPos["y"] + centerTopOffset
+                    , objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
+                    , correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                    , objectx := correctedPos["x"] + centerLeftOffset
+                    , objecty := correctedPos["y"] + centerTopOffset
                     
                     ;Gdip_DrawString(G, text, hFont, hFormat, pBrush2, RectF)
                     if (settings["centerMode"]) {
@@ -34,10 +34,10 @@ drawObjects(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, pa
                 }
                 if (object["isRedPortal"]) {
                     objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
-                    objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
-                    correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-                    objectx := correctedPos["x"] + centerLeftOffset
-                    objecty := correctedPos["y"] + centerTopOffset
+                    , objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
+                    , correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                    , objectx := correctedPos["x"] + centerLeftOffset
+                    , objecty := correctedPos["y"] + centerTopOffset
                     if (settings["centerMode"]) {
                         ;Gdip_DrawString(G, text, hFont, hFormat, pBrush2, RectF)
                         Gdip_DrawEllipse(G, pPenRed, objectx-8, objecty-25, 16, 32)
@@ -50,10 +50,10 @@ drawObjects(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, pa
                 if (object["isChest"]) {
                     if (object["mode"] == 0) {
                         objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
-                        objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
-                        correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-                        objectx := correctedPos["x"] + centerLeftOffset
-                        objecty := correctedPos["y"] + centerTopOffset
+                        , objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
+                        , correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                        , objectx := correctedPos["x"] + centerLeftOffset
+                        , objecty := correctedPos["y"] + centerTopOffset
                         if (settings["centerMode"]) {
                             drawChest(G, objectx, objecty, 0.5, object["chestState"])
                         } else {
@@ -70,9 +70,9 @@ drawObjects(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, pa
     ; draw Shrines
     if (settings["showShrines"]) {
         gameObjects := gameMemoryData["objects"]
-        shrineColor := "ff" . settings["shrineColor"]
-        shrineTextSize := settings["shrineTextSize"]
-        pBrush := Gdip_BrushCreateSolid("0xff" . settings["shrineColor"])
+        , shrineColor := "ff" . settings["shrineColor"]
+        , shrineTextSize := settings["shrineTextSize"]
+        , pBrush := Gdip_BrushCreateSolid("0xff" . settings["shrineColor"])
         for index, object in gameObjects
         {
             if (object["isShrine"]) {
@@ -94,28 +94,28 @@ drawObjects(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, pa
             if (object["levelNo"] == gameMemoryData["levelNo"]) {
                 
                 objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
-                objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
-                correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-                objectx := correctedPos["x"] + centerLeftOffset
-                objecty := correctedPos["y"] + centerTopOffset
-                shrineType := object["shrineType"]
-                textx := objectx - 150
-                texty := objecty - 110
+                , objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
+                , correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                , objectx := correctedPos["x"] + centerLeftOffset
+                , objecty := correctedPos["y"] + centerTopOffset
+                , shrineType := object["shrineType"]
+                , textx := objectx - 150
+                , texty := objecty - 110
                 Options = x%textx% y%texty% Center Bold vBottom c%shrineColor% r8 s%shrineTextSize%
                 textx := textx + 2
-                texty := texty + 2
+                , texty := texty + 2
                 Options2 = x%textx% y%texty% Center Bold vBottom cff000000 r8 s%shrineTextSize%
                 Gdip_TextToGraphics(G,shrineType, Options2, diabloFont, 300, 100)
                 Gdip_TextToGraphics(G,shrineType, Options, diabloFont, 300, 100)
 
                 xscale := 3 * scale
-                yscale := 5 * scale
-                x1 := objectx - xscale
-                x2 := objectx
-                x3 := objectx + xscale
-                y1 := objecty - yscale + 1
-                y2 := objecty + 1
-                y3 := objecty + yscale + 1
+                , yscale := 5 * scale
+                , x1 := objectx - xscale
+                , x2 := objectx
+                , x3 := objectx + xscale
+                , y1 := objecty - yscale + 1
+                , y2 := objecty + 1
+                , y3 := objecty + yscale + 1
 
                 points = %x1%,%y2%|%x2%,%y1%|%x3%,%y2%|%x2%,%y3%
                 Gdip_FillPolygon(G, pBrush, points)

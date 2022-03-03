@@ -28,13 +28,13 @@ drawPlayers(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, pa
             }
             ; draw a square dot, but angled along the map Gdip_PathOutline()
             xscale := 5 * scale
-            yscale := 2.5 * scale
-            x1 := playerx - xscale
-            x2 := playerx
-            x3 := playerx + xscale
-            y1 := playery - yscale
-            y2 := playery
-            y3 := playery + yscale
+            , yscale := 2.5 * scale
+            , x1 := playerx - xscale
+            , x2 := playerx
+            , x3 := playerx + xscale
+            , y1 := playery - yscale
+            , y2 := playery
+            , y3 := playery + yscale
 
             points = %x1%,%y2%|%x2%,%y1%|%x3%,%y2%|%x2%,%y3%
             Gdip_FillPolygon(G, pBrush, points)

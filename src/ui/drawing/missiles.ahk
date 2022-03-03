@@ -4,40 +4,39 @@ SetWorkingDir, %A_ScriptDir%
 
 drawMissiles(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset) {
     missileOpacity := settings["missileOpacity"]
-    physicalMajorColor := missileOpacity . settings["missileColorPhysicalMajor"]
-    physicalMinorColor := missileOpacity . settings["missileColorPhysicalMinor"]
-    fireMajorColor := missileOpacity . settings["missileFireMajorColor"]
-    fireMinorColor := missileOpacity . settings["missileFireMinorColor"]
-    iceMajorColor := missileOpacity . settings["missileIceMajorColor"]
-    iceMinorColor := missileOpacity . settings["missileIceMinorColor"]
-    lightMajorColor := missileOpacity . settings["missileLightMajorColor"]
-    lightMinorColor := missileOpacity . settings["missileLightMinorColor"]
-    poisonMajorColor := missileOpacity . settings["missilePoisonMajorColor"]
-    poisonMinorColor := missileOpacity . settings["missilePoisonMinorColor"]
-    magicMajorColor := missileOpacity . settings["missileMagicMajorColor"]
-    magicMinorColor := missileOpacity . settings["missileMagicMinorColor"]
-    
-    penSize:=2
-    majorDotSize := settings["missileMajorDotSize"]
-    minorDotSize := settings["missileMinorDotSize"]
+    , physicalMajorColor := missileOpacity . settings["missileColorPhysicalMajor"]
+    , physicalMinorColor := missileOpacity . settings["missileColorPhysicalMinor"]
+    , fireMajorColor := missileOpacity . settings["missileFireMajorColor"]
+    , fireMinorColor := missileOpacity . settings["missileFireMinorColor"]
+    , iceMajorColor := missileOpacity . settings["missileIceMajorColor"]
+    , iceMinorColor := missileOpacity . settings["missileIceMinorColor"]
+    , lightMajorColor := missileOpacity . settings["missileLightMajorColor"]
+    , lightMinorColor := missileOpacity . settings["missileLightMinorColor"]
+    , poisonMajorColor := missileOpacity . settings["missilePoisonMajorColor"]
+    , poisonMinorColor := missileOpacity . settings["missilePoisonMinorColor"]
+    , magicMajorColor := missileOpacity . settings["missileMagicMajorColor"]
+    , magicMinorColor := missileOpacity . settings["missileMagicMinorColor"]
+    , penSize:=2
+    , majorDotSize := settings["missileMajorDotSize"]
+    , minorDotSize := settings["missileMinorDotSize"]
     if (settings["centerMode"]) {
         penSize := penSize * (scale / 1.2)
-        majorDotSize := majorDotSize * (scale / 1.1)
-        minorDotSize := minorDotSize * (scale / 1.1)
+        , majorDotSize := majorDotSize * (scale / 1.1)
+        , minorDotSize := minorDotSize * (scale / 1.1)
     }
     
     pPenPhysicalMajor := Gdip_CreatePen(physicalMajorColor, penSize)
-    pPenPhysicalMinor := Gdip_CreatePen(physicalMinorColor, penSize)
-    pPenFireMajor := Gdip_CreatePen(fireMajorColor, penSize)
-    pPenFireMinor := Gdip_CreatePen(fireMajorColor, penSize)
-    pPenIceMajor := Gdip_CreatePen(iceMajorColor, penSize)
-    pPenIceMinor := Gdip_CreatePen(iceMinorColor, penSize)
-    pPenLightMajor := Gdip_CreatePen(lightMajorColor, penSize)
-    pPenLightMinor := Gdip_CreatePen(lightMinorColor, penSize)
-    pPenPoisonMajor := Gdip_CreatePen(poisonMajorColor, penSize)
-    pPenPoisonMinor := Gdip_CreatePen(poisonMinorColor, penSize)
-    pPenMagicMajor := Gdip_CreatePen(magicMajorColor, penSize)
-    pPenMagicMinor := Gdip_CreatePen(magicMinorColor, penSize)
+    , pPenPhysicalMinor := Gdip_CreatePen(physicalMinorColor, penSize)
+    , pPenFireMajor := Gdip_CreatePen(fireMajorColor, penSize)
+    , pPenFireMinor := Gdip_CreatePen(fireMajorColor, penSize)
+    , pPenIceMajor := Gdip_CreatePen(iceMajorColor, penSize)
+    , pPenIceMinor := Gdip_CreatePen(iceMinorColor, penSize)
+    , pPenLightMajor := Gdip_CreatePen(lightMajorColor, penSize)
+    , pPenLightMinor := Gdip_CreatePen(lightMinorColor, penSize)
+    , pPenPoisonMajor := Gdip_CreatePen(poisonMajorColor, penSize)
+    , pPenPoisonMinor := Gdip_CreatePen(poisonMinorColor, penSize)
+    , pPenMagicMajor := Gdip_CreatePen(magicMajorColor, penSize)
+    , pPenMagicMinor := Gdip_CreatePen(magicMinorColor, penSize)
     
     static oldMissilex
     static oldMissiley
@@ -74,15 +73,15 @@ drawMissiles(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, p
     }
     
     Gdip_DeletePen(pPenPhysicalMajor)
-    Gdip_DeletePen(pPenPhysicalMinor)
-    Gdip_DeletePen(pPenFireMajor)
-    Gdip_DeletePen(pPenFireMinor)
-    Gdip_DeletePen(pPenIceMajor)
-    Gdip_DeletePen(pPenIceMinor)
-    Gdip_DeletePen(pPenLightMajor)
-    Gdip_DeletePen(pPenLightMinor)
-    Gdip_DeletePen(pPenPoisonMajor)
-    Gdip_DeletePen(pPenPoisonMinor)
-    Gdip_DeletePen(pPenMagicMajor)
-    Gdip_DeletePen(pPenMagicMinor)
+    , Gdip_DeletePen(pPenPhysicalMinor)
+    , Gdip_DeletePen(pPenFireMajor)
+    , Gdip_DeletePen(pPenFireMinor)
+    , Gdip_DeletePen(pPenIceMajor)
+    , Gdip_DeletePen(pPenIceMinor)
+    , Gdip_DeletePen(pPenLightMajor)
+    , Gdip_DeletePen(pPenLightMinor)
+    , Gdip_DeletePen(pPenPoisonMajor)
+    , Gdip_DeletePen(pPenPoisonMinor)
+    , Gdip_DeletePen(pPenMagicMajor)
+    , Gdip_DeletePen(pPenMagicMinor)
 }

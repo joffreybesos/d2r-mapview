@@ -4,46 +4,46 @@ SetWorkingDir, %A_ScriptDir%
 
 drawMonsters(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset) {
     mobs := gameMemoryData["mobs"]
-    normalMobColor := 0xff . settings["normalMobColor"] 
-    uniqueMobColor := 0xff . settings["uniqueMobColor"] 
-    bossColor := 0xff . settings["bossColor"] 
-    deadColor := 0x44 . settings["deadColor"] 
-    mercColor := 0xcc . settings["mercColor"]
-    deadDotSize := settings["deadDotSize"]     ; 2
-    normalDotSize := settings["normalDotSize"] ; 5
-    normalImmunitySize := settings["normalImmunitySize"]  ; 8
-    uniqueDotSize := settings["uniqueDotSize"] ; 8
-    uniqueImmunitySize := settings["uniqueImmunitySize"] ; 14
-    bossDotSize := settings["bossDotSize"]     ; 5
+    , normalMobColor := 0xff . settings["normalMobColor"] 
+    , uniqueMobColor := 0xff . settings["uniqueMobColor"] 
+    , bossColor := 0xff . settings["bossColor"] 
+    , deadColor := 0x44 . settings["deadColor"] 
+    , mercColor := 0xcc . settings["mercColor"]
+    , deadDotSize := settings["deadDotSize"]     ; 2
+    , normalDotSize := settings["normalDotSize"] ; 5
+    , normalImmunitySize := settings["normalImmunitySize"]  ; 8
+    , uniqueDotSize := settings["uniqueDotSize"] ; 8
+    , uniqueImmunitySize := settings["uniqueImmunitySize"] ; 14
+    , bossDotSize := settings["bossDotSize"]     ; 5
 
     if (settings["centerMode"]) {
         deadDotSize := deadDotSize * (scale / 1.2)
-        normalDotSize := normalDotSize * (scale / 1.2)
-        normalImmunitySize := normalImmunitySize * (scale / 1.2)
-        uniqueDotSize := uniqueDotSize * (scale / 1.2)
-        uniqueImmunitySize := uniqueImmunitySize * (scale / 1.2)
-        bossDotSize := bossDotSize * (scale / 1.2)
+        , normalDotSize := normalDotSize * (scale / 1.2)
+        , normalImmunitySize := normalImmunitySize * (scale / 1.2)
+        , uniqueDotSize := uniqueDotSize * (scale / 1.2)
+        , uniqueImmunitySize := uniqueImmunitySize * (scale / 1.2)
+        , bossDotSize := bossDotSize * (scale / 1.2)
     }
 
     pPenNormal := Gdip_CreatePen(normalMobColor, normalDotSize * 0.7)
-    pPenUnique := Gdip_CreatePen(uniqueMobColor, uniqueDotSize * 0.7)
-    pPenBoss := Gdip_CreatePen(bossColor, bossDotSize)
-    pPenDead := Gdip_CreatePen(deadColor, deadDotSize)
-    pPenMerc := Gdip_CreatePen(mercColor, normalDotSize * 0.7)
+    , pPenUnique := Gdip_CreatePen(uniqueMobColor, uniqueDotSize * 0.7)
+    , pPenBoss := Gdip_CreatePen(bossColor, bossDotSize)
+    , pPenDead := Gdip_CreatePen(deadColor, deadDotSize)
+    , pPenMerc := Gdip_CreatePen(mercColor, normalDotSize * 0.7)
 
-    physicalImmuneColor := 0xff . settings["physicalImmuneColor"] 
-    magicImmuneColor := 0xff . settings["magicImmuneColor"] 
-    fireImmuneColor := 0xff . settings["fireImmuneColor"] 
-    lightImmuneColor := 0xff . settings["lightImmuneColor"] 
-    coldImmuneColor := 0xff . settings["coldImmuneColor"] 
-    poisonImmuneColor := 0xff . settings["poisonImmuneColor"] 
+    , physicalImmuneColor := 0xff . settings["physicalImmuneColor"] 
+    , magicImmuneColor := 0xff . settings["magicImmuneColor"] 
+    , fireImmuneColor := 0xff . settings["fireImmuneColor"] 
+    , lightImmuneColor := 0xff . settings["lightImmuneColor"] 
+    , coldImmuneColor := 0xff . settings["coldImmuneColor"] 
+    , poisonImmuneColor := 0xff . settings["poisonImmuneColor"] 
 
-    pPenPhysical := Gdip_CreatePen(physicalImmuneColor, normalDotSize)
-    pPenMagic := Gdip_CreatePen(magicImmuneColor, normalDotSize)
-    pPenFire := Gdip_CreatePen(fireImmuneColor, normalDotSize)
-    pPenLight := Gdip_CreatePen(lightImmuneColor, normalDotSize)
-    pPenCold := Gdip_CreatePen(coldImmuneColor, normalDotSize)
-    pPenPoison := Gdip_CreatePen(poisonImmuneColor, normalDotSize)
+    , pPenPhysical := Gdip_CreatePen(physicalImmuneColor, normalDotSize)
+    , pPenMagic := Gdip_CreatePen(magicImmuneColor, normalDotSize)
+    , pPenFire := Gdip_CreatePen(fireImmuneColor, normalDotSize)
+    , pPenLight := Gdip_CreatePen(lightImmuneColor, normalDotSize)
+    , pPenCold := Gdip_CreatePen(coldImmuneColor, normalDotSize)
+    , pPenPoison := Gdip_CreatePen(poisonImmuneColor, normalDotSize)
 
 
 
@@ -187,15 +187,14 @@ drawMonsters(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, p
         }
     }
     Gdip_DeletePen(pPenPhysical)
-    Gdip_DeletePen(pPenMagic)
-    Gdip_DeletePen(pPenFire)
-    Gdip_DeletePen(pPenLight)
-    Gdip_DeletePen(pPenCold)
-    Gdip_DeletePen(pPenPoison)
-
-    Gdip_DeletePen(pPenBoss)
-    Gdip_DeletePen(pPenNormal)
-    Gdip_DeletePen(pPenUnique)
-    Gdip_DeletePen(pPenDead)
-    Gdip_DeletePen(pPenMerc)
+    , Gdip_DeletePen(pPenMagic)
+    , Gdip_DeletePen(pPenFire)
+    , Gdip_DeletePen(pPenLight)
+    , Gdip_DeletePen(pPenCold)
+    , Gdip_DeletePen(pPenPoison)
+    , Gdip_DeletePen(pPenBoss)
+    , Gdip_DeletePen(pPenNormal)
+    , Gdip_DeletePen(pPenUnique)
+    , Gdip_DeletePen(pPenDead)
+    , Gdip_DeletePen(pPenMerc)
 }

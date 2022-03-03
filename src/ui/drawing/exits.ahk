@@ -2,7 +2,7 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-drawExits(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset, xPosDot, yPosDot) {
+drawExits(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset, xPosDot, yPosDot) {
 
     ; ;draw exit lines
     exitsHeader := imageData["exits"]
@@ -18,7 +18,6 @@ drawExits(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, padd
         hexOpacity += 0
         StringTrimLeft, hexOpacity, hexOpacity, 2
     }
-    
     exitTextColor := hexOpacity . "ffffff"
     exitTextSize := 15 * scale
     if (exitsHeader) {
@@ -39,8 +38,8 @@ drawExits(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, padd
             textx := textx + 2
             ,texty := texty + 2
             Options2 = x%textx% y%texty% Center Bold vBottom cff000000 r8 s%exitTextSize%
-            Gdip_TextToGraphics(G, exitName, Options2, diabloFont, 800, 100)
-            Gdip_TextToGraphics(G, exitName, Options, diabloFont, 800, 100)
+            Gdip_TextToGraphics(unitsLayer.G, exitName, Options2, diabloFont, 800, 100)
+            Gdip_TextToGraphics(unitsLayer.G, exitName, Options, diabloFont, 800, 100)
         }
     }
 }

@@ -2,15 +2,13 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-drawPlayers(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset) {
+drawPlayers(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset) {
     otherPlayers := gameMemoryData["otherPlayers"]
-        
-    pBrush := Gdip_BrushCreateSolid(0xff00aA00)
     for index, player in otherPlayers
     {
         
-        if (gameMemoryData["playerName"] != player["playerName"]) {
-            ;WriteLog(gameMemoryData["playerName"] " " player["playerName"])
+        if (unitsLayer.GameMemoryData["playerName"] != player["playerName"]) {
+            ;WriteLog(unitsLayer.GameMemoryData["playerName"] " " player["playerName"])
             playerx := ((player["x"] - imageData["mapOffsetX"]) * serverScale) + padding
             playery := ((player["y"] - imageData["mapOffsetY"]) * serverScale) + padding
             correctedPos := correctPos(settings, playerx, playery, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
@@ -23,8 +21,8 @@ drawPlayers(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, pa
                 textx := textx + 1.5
                 texty := texty + 1.5
                 Options2 = x%textx% y%texty% Center Bold vBottom cff000000 r8 s24
-                Gdip_TextToGraphics(G, player["playerName"], Options2, diabloFont, 320, 100)
-                Gdip_TextToGraphics(G, player["playerName"], Options, diabloFont, 320, 100)
+                Gdip_TextToGraphics(unitsLayer.G, player["playerName"], Options2, diabloFont, 320, 100)
+                Gdip_TextToGraphics(unitsLayer.G, player["playerName"], Options, diabloFont, 320, 100)
             }
             ; draw a square dot, but angled along the map Gdip_PathOutline()
             xscale := 5 * scale
@@ -37,12 +35,9 @@ drawPlayers(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, pa
             , y3 := playery + yscale
 
             points = %x1%,%y2%|%x2%,%y1%|%x3%,%y2%|%x2%,%y3%
-            Gdip_FillPolygon(G, pBrush, points)
-            pPen := Gdip_CreatePen(0xff000000, 1)
-            Gdip_DrawPolygon(g, pPen, Points)
-            Gdip_DeletePen(pPen)
-            ;Gdip_DrawRectangle(G, pPen, playerx-3, playery-3, 6, 6)
+            Gdip_FillPolygon(unitsLayer.G, unitsLayer.pBrushGreen, points)
+            Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenBlack, Points)
+            ;Gdip_DrawRectangle(unitsLayer.G, pPen, playerx-3, playery-3, 6, 6)
         }
     }
-    Gdip_DeleteBrush(pBrush)
 }

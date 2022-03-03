@@ -2,7 +2,7 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-drawItemAlerts(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset) {
+drawItemAlerts(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset) {
     ; draw item alerts
     items := gameMemoryData["items"]
     for index, item in items
@@ -36,24 +36,23 @@ drawItemAlerts(ByRef G, settings, gameMemoryData, imageData, serverScale, scale,
             textx := textx + 1.5
             texty := texty + 1.5
             Options2 = x%textx% y%texty% Center vBottom cff000000 r8 s%fontSize%
-            Gdip_TextToGraphics(G, itemText, Options2, diabloFont, 500, 100)
-            Gdip_TextToGraphics(G, itemText, Options, diabloFont, 500, 100)
+            Gdip_TextToGraphics(unitsLayer.G, itemText, Options2, diabloFont, 500, 100)
+            Gdip_TextToGraphics(unitsLayer.G, itemText, Options, diabloFont, 500, 100)
             switch (ticktock) {
-                case 1: Gdip_FillEllipse(G, pBrush1, itemx-5, itemy-5, 10, 10)
-                case 2: Gdip_FillEllipse(G, pBrush2, itemx-6, itemy-6, 12, 12)
-                case 3: Gdip_FillEllipse(G, pBrush3, itemx-8, itemy-8, 16, 16)
-                case 4: Gdip_FillEllipse(G, pBrush4, itemx-10, itemy-10, 20, 20)
-                case 5: Gdip_FillEllipse(G, pBrush5, itemx-14, itemy-14, 28, 28)
-                case 6: Gdip_FillEllipse(G, pBrush6, itemx-16, itemy-16, 32, 32)
+                case 1: Gdip_FillEllipse(unitsLayer.G, pBrush1, itemx-5, itemy-5, 10, 10)
+                case 2: Gdip_FillEllipse(unitsLayer.G, pBrush2, itemx-6, itemy-6, 12, 12)
+                case 3: Gdip_FillEllipse(unitsLayer.G, pBrush3, itemx-8, itemy-8, 16, 16)
+                case 4: Gdip_FillEllipse(unitsLayer.G, pBrush4, itemx-10, itemy-10, 20, 20)
+                case 5: Gdip_FillEllipse(unitsLayer.G, pBrush5, itemx-14, itemy-14, 28, 28)
+                case 6: Gdip_FillEllipse(unitsLayer.G, pBrush6, itemx-16, itemy-16, 32, 32)
             }
-            Gdip_FillEllipse(G, pBrush2, itemx-2.5, itemy-2.5, 5, 5)
+            Gdip_FillEllipse(unitsLayer.G, pBrush2, itemx-2.5, itemy-2.5, 5, 5)
             
             Gdip_DeletePen(pItemPen)
         }
     }
     Gdip_DeletePen(pItemPen2)
 }
-
 
 
 announceItem(settings, item, alert) {

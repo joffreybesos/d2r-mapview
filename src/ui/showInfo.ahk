@@ -31,9 +31,8 @@ ShowInfoText(hwnd1, gameWindowId, ipaddress, currentFPS, position = "LEFT", font
         Gdip_SetSmoothingMode(G, 4)
         Gdip_SetInterpolationMode(G, 7)
 
-        Options = x0 y0 %align% vTop cffAAAAAA r4 s%fontSize%
-        Options2 = x0 y20 %align% vTop cffAAAAAA r4 s%fontSize%
-        
+        Options = x0 y0 %align% vTop cffc6b276 r4 s%fontSize%
+        Options2 = x0 y20 %align% vTop cffc6b276 r4 s%fontSize%
         
         if (settings["showIPtext"]) {
             Gdip_TextToGraphics(G, ipaddress, Options, diablofont, textBoxWidth, 50)

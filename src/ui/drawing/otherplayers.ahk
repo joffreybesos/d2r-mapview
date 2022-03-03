@@ -7,7 +7,7 @@ drawPlayers(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScale, 
     for index, player in otherPlayers
     {
         
-        if (unitsLayer.GameMemoryData["playerName"] != player["playerName"]) {
+        if (GameMemoryData["playerName"] != player["playerName"]) {
             ;WriteLog(unitsLayer.GameMemoryData["playerName"] " " player["playerName"])
             playerx := ((player["x"] - imageData["mapOffsetX"]) * serverScale) + padding
             playery := ((player["y"] - imageData["mapOffsetY"]) * serverScale) + padding
@@ -24,7 +24,7 @@ drawPlayers(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScale, 
                 Gdip_TextToGraphics(unitsLayer.G, player["playerName"], Options2, diabloFont, 320, 100)
                 Gdip_TextToGraphics(unitsLayer.G, player["playerName"], Options, diabloFont, 320, 100)
             }
-            ; draw a square dot, but angled along the map Gdip_PathOutline()
+            ;draw a square dot, but angled along the map Gdip_PathOutline()
             xscale := 5 * scale
             , yscale := 2.5 * scale
             , x1 := playerx - xscale
@@ -35,9 +35,12 @@ drawPlayers(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScale, 
             , y3 := playery + yscale
 
             points = %x1%,%y2%|%x2%,%y1%|%x3%,%y2%|%x2%,%y3%
-            Gdip_FillPolygon(unitsLayer.G, unitsLayer.pBrushGreen, points)
+            Gdip_FillPolygon(unitsLayer.G, unitsLayer.pBrushDarkGreen, points)
             Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenBlack, Points)
             ;Gdip_DrawRectangle(unitsLayer.G, pPen, playerx-3, playery-3, 6, 6)
+            ; dotSize := 15
+            ; Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenBlack, playerx-(dotSize/2), playery-(dotSize/4), dotSize, dotSize/2)
+            ; Gdip_FillEllipse(unitsLayer.G, unitsLayer.pBrushDarkGreen, playerx-(dotSize/2), playery-(dotSize/4), dotSize, dotSize/2)
         }
     }
 }

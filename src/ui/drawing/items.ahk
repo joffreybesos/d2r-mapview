@@ -24,7 +24,7 @@ drawItemAlerts(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScal
             pBrush4 := Gdip_BrushCreateSolid("0xaa" . alert.color)
             pBrush5 := Gdip_BrushCreateSolid("0x55" . alert.color)
             pBrush6 := Gdip_BrushCreateSolid("0x33" . alert.color)
-            fontSize := 12 * scale
+            fontSize := settings["itemFontSize"] * scale
             itemText := item.localizedName
             if (item.numSockets > 0) {
                 itemText := itemText " [" item.numSockets "]"
@@ -32,7 +32,7 @@ drawItemAlerts(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScal
             textx := itemx - 250
             texty := itemy - 107
             acolor := "cc" . alert.color
-            Options = x%textx% y%texty% Center vBottom c%acolor% r8 s%fontSize%
+            Options = x%textx% y%texty% Center vBottom c%acolor% r8 s%fontSize% 
             textx := textx + 1.5
             texty := texty + 1.5
             Options2 = x%textx% y%texty% Center vBottom cff000000 r8 s%fontSize%

@@ -28,6 +28,7 @@ class UnitsLayer {
     createPens(ByRef settings) {
         this.pPenGreen := Gdip_CreatePen(0xff00FF00, 2)
         this.pBrushGreen := Gdip_BrushCreateSolid(0xff00FF00)
+        this.pBrushDarkGreen := Gdip_BrushCreateSolid(0xff00aa00)
         this.pPenBlack := Gdip_CreatePen(0xff000000, 1)
 
         ; lines
@@ -126,13 +127,6 @@ class UnitsLayer {
         }
 
         ; chests
-        if (state == "trap") {
-            this.pBrushChestTrap := Gdip_BrushCreateSolid(0xccff0000)
-        } else if (state == "locked") {
-            this.pBrushChestLocked := Gdip_BrushCreateSolid(0xccffff00)
-        } else {
-            this.pBrushChest := Gdip_BrushCreateSolid(0xcc542a00)
-        }
         this.pChest := Gdip_CreatePen(0xcc111111, 2)
     }
 
@@ -144,6 +138,7 @@ class UnitsLayer {
         Gdip_DeleteGraphics(this.G)
         
         Gdip_DeleteBrush(this.pBrushGreen)    
+        , Gdip_DeleteBrush(this.pBrushDarkGreen)    
         , Gdip_DeletePen(this.pPenGreen)
         , Gdip_DeletePen(this.pPenBlack)
         , Gdip_DeletePen(this.pLineWP)
@@ -173,5 +168,8 @@ class UnitsLayer {
         , Gdip_DeletePen(this.pPenLight)
         , Gdip_DeletePen(this.pPenCold)
         , Gdip_DeletePen(this.pPenPoison)
+        , Gdip_DeletePen(this.pPortal)
+        , Gdip_DeletePen(this.pRedPortal)
+        , Gdip_DeletePen(this.pChest)
     }
 }

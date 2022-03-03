@@ -57,6 +57,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["enablePrefetch"] := 0
 
     settings["enableItemFilter"] := 1
+    settings["itemFontSize"] := 12
     settings["allowTextToSpeech"] := 1
     settings["textToSpeechVolume"] := 50
     settings["textToSpeechPitch"] := 4

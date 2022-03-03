@@ -144,7 +144,9 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
             , y3 := playerCrossYoffset + yscale
 
             points = %x1%,%y2%|%x2%,%y1%|%x3%,%y2%|%x2%,%y3%
-            Gdip_FillPolygon(unitsLayer.G, unitsLayer.pBrushGreen, points)
+            Gdip_FillPolygon(unitsLayer.G, unitsLayer.pBrushGreen, points)    
+            ; Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenBlack, playerCrossXoffset-(dotSize/2), playerCrossYoffset-(dotSize/4), dotSize, dotSize/2)
+            ; Gdip_FillEllipse(unitsLayer.G, unitsLayer.pBrushGreen, playerCrossXoffset-(dotSize/2), playerCrossYoffset-(dotSize/4), dotSize, dotSize/2)
             
         }       
     }

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.4] - 2021-03-03 - Minor improvements
+
+- Performance improvements from lots of refactoring
+- You can now configure the font size for item text on the ground
+- Purple exit line at Ancients Way now points to Arreat Summit
+- Fixed a few exit names that weren't showing
+- Fixed instance where physical immunity was using magic immunity color (who could even tell)
+
 ## [2.6.3] - 2021-02-21 - Voice bug fixes
 
 - Fixed issue where the text to speech voice would stop working

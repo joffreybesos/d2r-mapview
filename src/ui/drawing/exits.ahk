@@ -26,6 +26,13 @@ drawExits(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScale, sc
             exitArray := StrSplit(A_LoopField, ",")
             ;exitArray[1] ; id of exit
             ;exitArray[2] ; name of exit
+            if (exitArray[2] == "Ancient Summit") {
+                exitArray[2] := "Arreat Summit"
+            }
+            if (exitArray[2] == "The Ancients Way") {
+                exitArray[2] := "Ancients' Way"
+            }
+
             exitName := localizedStrings[exitArray[2]]
             ,exitX := (exitArray[3] * serverScale) + padding
             ,exitY := (exitArray[4] * serverScale) + padding

@@ -11,71 +11,69 @@ SetWorkingDir, %A_ScriptDir%
 
 ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData) {
     scale:= settings["scale"]
-    leftMargin:= settings["leftMargin"]
-    topMargin:= settings["topMargin"]
-    Width := uiData["sizeWidth"]
-    Height := uiData["sizeHeight"]
-    levelNo:= gameMemoryData["levelNo"]
-    levelScale := imageData["levelScale"]
-    levelxmargin := imageData["levelxmargin"]
-    levelymargin := imageData["levelymargin"]
-    scale := levelScale * scale
-    leftMargin := leftMargin + levelxmargin
-    topMargin := topMargin + levelymargin
+    , leftMargin:= settings["leftMargin"]
+    , topMargin:= settings["topMargin"]
+    , Width := uiData["sizeWidth"]
+    , Height := uiData["sizeHeight"]
+    , levelNo:= gameMemoryData["levelNo"]
+    , levelScale := imageData["levelScale"]
+    , levelxmargin := imageData["levelxmargin"]
+    , levelymargin := imageData["levelymargin"]
+    , scale := levelScale * scale
+    , leftMargin := leftMargin + levelxmargin
+    , topMargin := topMargin + levelymargin
 
     if (settings["centerMode"]) {
         scale:= settings["centerModeScale"]
-        serverScale := settings["serverScale"]
-        opacity:= settings["centerModeOpacity"]
+        , serverScale := settings["serverScale"]
+        , opacity:= settings["centerModeOpacity"]
     } else {
         serverScale := 2 
     }
     
     StartTime := A_TickCount
-    Angle := 45
-    opacity := 1.0
-    padding := 150
-
-    scaledWidth := uiData["scaledWidth"]
-    scaledHeight := uiData["scaledHeight"]
-    rotatedWidth := uiData["rotatedWidth"]
-    rotatedHeight := uiData["rotatedHeight"]
-
-    centerLeftOffset := 0
-    centerTopOffset := 0
+    , Angle := 45
+    , opacity := 1.0
+    , padding := 150
+    , scaledWidth := uiData["scaledWidth"]
+    , scaledHeight := uiData["scaledHeight"]
+    , rotatedWidth := uiData["rotatedWidth"]
+    , rotatedHeight := uiData["rotatedHeight"]
+    , centerLeftOffset := 0
+    , centerTopOffset := 0
     ; get relative position of player in world
     ; xpos is absolute world pos in game
     ; each map has offset x and y which is absolute world position
-    xPosDot := ((gameMemoryData["xPos"] - imageData["mapOffsetX"]) * serverScale) + padding
-    yPosDot := ((gameMemoryData["yPos"] - imageData["mapOffsetY"]) * serverScale) + padding
-    correctedPos := correctPos(settings, xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-    xPosDot := correctedPos["x"]
-    yPosDot := correctedPos["y"]
+    , xPosDot := ((gameMemoryData["xPos"] - imageData["mapOffsetX"]) * serverScale) + padding
+    , yPosDot := ((gameMemoryData["yPos"] - imageData["mapOffsetY"]) * serverScale) + padding
+    , correctedPos := correctPos(settings, xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+    , xPosDot := correctedPos["x"]
+    , yPosDot := correctedPos["y"]
 
     
     if (settings["centerMode"]) {
         WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
         leftMargin := (gameWidth/2) - xPosDot + (settings["centerModeXoffset"] /2) + windowLeftMargin
-        topMargin := (gameHeight/2) - yPosDot + (settings["centerModeYoffset"] /2) + windowTopMargin
-        regionWidth := gameWidth
-        regionHeight := gameHeight
-        regionX := 0 - leftMargin
-        regionY := 0 - topMargin
+        , topMargin := (gameHeight/2) - yPosDot + (settings["centerModeYoffset"] /2) + windowTopMargin
+        , regionWidth := gameWidth
+        , regionHeight := gameHeight
+        , regionX := 0 - leftMargin
+        , regionY := 0 - topMargin
         if (leftMargin > 0) {
             regionX := windowLeftMargin
-            regionWidth := gameWidth - leftMargin
+            , regionWidth := gameWidth - leftMargin
         }
         if (topMargin > 0) {
             regionY := windowTopMargin
-            regionHeight := gameHeight - topMargin
+            , regionHeight := gameHeight - topMargin
         }
 
         leftDiff :=  lastLeftMargin - leftMargin
-        topDiff :=  lastTopMargin - topMargin
+        , topDiff :=  lastTopMargin - topMargin
         ; leftDiff := 0
         ; topDiff :=  0
-        centerLeftOffset := leftMargin + (leftDiff/2)
-        centerTopOffset := topMargin + (topDiff/2)
+        , centerLeftOffset := leftMargin + (leftDiff/2)
+        , centerTopOffset := topMargin + (topDiff/2)
 
         ;ToolTip % centerLeftOffset " " centerTopOffset
     }
@@ -119,33 +117,32 @@ ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, 
         if (settings["playerAsCross"]) {
             ; draw a gress cross to represent the player
             pPen := Gdip_CreatePen(0xff00FF00, 2)
-            xscale := 10
-            yscale := 5
-
-            x1 := playerCrossXoffset - xscale - xscale
-            x2 := playerCrossXoffset - xscale
-            x3 := playerCrossXoffset
-            x4 := playerCrossXoffset + xscale
-            x5 := playerCrossXoffset + xscale + xscale
-            y1 := playerCrossYoffset - yscale - yscale
-            y2 := playerCrossYoffset - yscale
-            y3 := playerCrossYoffset
-            y4 := playerCrossYoffset + yscale
-            y5 := playerCrossYoffset + yscale + yscale
+            , xscale := 10
+            , yscale := 5
+            , x1 := playerCrossXoffset - xscale - xscale
+            , x2 := playerCrossXoffset - xscale
+            , x3 := playerCrossXoffset
+            , x4 := playerCrossXoffset + xscale
+            , x5 := playerCrossXoffset + xscale + xscale
+            , y1 := playerCrossYoffset - yscale - yscale
+            , y2 := playerCrossYoffset - yscale
+            , y3 := playerCrossYoffset
+            , y4 := playerCrossYoffset + yscale
+            , y5 := playerCrossYoffset + yscale + yscale
             points = %x1%,%y2%|%x2%,%y3%|%x1%,%y4%|%x2%,%y5%|%x3%,%y4%|%x4%,%y5%|%x5%,%y4%|%x4%,%y3%|%x5%,%y2%|%x4%,%y1%|%x3%,%y2%|%x2%,%y1%
             Gdip_DrawPolygon(unitsLayer.G, pPen, points)
             Gdip_DeletePen(pPen)
         } else {
             ; draw a square dot, but angled along the map Gdip_PathOutline()
             pBrush := Gdip_BrushCreateSolid(0xff00FF00)
-            xscale := 7 * scale
-            yscale := 3.5 * scale
-            x1 := playerCrossXoffset - xscale
-            x2 := playerCrossXoffset
-            x3 := playerCrossXoffset + xscale
-            y1 := playerCrossYoffset - yscale
-            y2 := playerCrossYoffset
-            y3 := playerCrossYoffset + yscale
+            , xscale := 7 * scale
+            , yscale := 3.5 * scale
+            , x1 := playerCrossXoffset - xscale
+            , x2 := playerCrossXoffset
+            , x3 := playerCrossXoffset + xscale
+            , y1 := playerCrossYoffset - yscale
+            , y2 := playerCrossYoffset
+            , y3 := playerCrossYoffset + yscale
 
             points = %x1%,%y2%|%x2%,%y1%|%x3%,%y2%|%x2%,%y3%
             Gdip_FillPolygon(unitsLayer.G, pBrush, points)
@@ -156,18 +153,18 @@ ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, 
     if (settings["centerMode"]) {
         WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
         leftMargin := (gameWidth/2) - xPosDot + (settings["centerModeXoffset"] /2)
-        topMargin := (gameHeight/2) - yPosDot + (settings["centerModeYoffset"] /2)
-        regionWidth := gameWidth
-        regionHeight := gameHeight
-        regionX := 0 - leftMargin
-        regionY := 0 - topMargin
+        , topMargin := (gameHeight/2) - yPosDot + (settings["centerModeYoffset"] /2)
+        , regionWidth := gameWidth
+        , regionHeight := gameHeight
+        , regionX := 0 - leftMargin
+        , regionY := 0 - topMargin
         if (leftMargin > 0) {
             regionX := windowLeftMargin
-            regionWidth := gameWidth - leftMargin + windowLeftMargin
+            , regionWidth := gameWidth - leftMargin + windowLeftMargin
         }
         if (topMargin > 0) {
             regionY := windowTopMargin
-            regionHeight := gameHeight - topMargin + windowTopMargin
+            , regionHeight := gameHeight - topMargin + windowTopMargin
         }
         ;ToolTip % "`n`n`n`n" regionX " " regionY " " regionWidth " " regionHeight
         WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapHwnd1%

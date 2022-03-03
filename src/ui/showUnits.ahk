@@ -9,7 +9,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\drawing\objects.ahk
 #Include %A_ScriptDir%\ui\drawing\otherplayers.ahk
 
-ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData) {
+ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData) {
     scale:= settings["scale"]
     leftMargin:= settings["leftMargin"]
     topMargin:= settings["topMargin"]
@@ -82,34 +82,34 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
     
     ;Missiles
     if (settings["showPlayerMissiles"] or settings["showEnemyMissiles"]) {
-        drawMissiles(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
+        drawMissiles(unitsLayer.G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
     }
 
     ; draw monsters
     if (settings["showNormalMobs"] or settings["showDeadMobs"] or settings["showUniqueMobs"] or settings["showBosses"]) {
-        drawMonsters(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
+        drawMonsters(unitsLayer.G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
     }
 
     ; draw portals
     if (settings["showPortals"] or settings["showChests"] or settings["showShrines"]) {
-        drawObjects(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, shrines, centerLeftOffset, centerTopOffset)
+        drawObjects(unitsLayer.G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, shrines, centerLeftOffset, centerTopOffset)
     }
 
     ; draw lines
     if (settings["showWaypointLine"] or settings["showNextExitLine"] or settings["showBossLine"]) {
-        drawLines(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset, xPosDot, yPosDot)
+        drawLines(unitsLayer.G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset, xPosDot, yPosDot)
     }
 
-    drawExits(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset, xPosDot, yPosDot)
+    drawExits(unitsLayer.G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset, xPosDot, yPosDot)
 
     ; draw other players
     if (settings["showOtherPlayers"]) {
-        drawPlayers(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
+        drawPlayers(unitsLayer.G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
      }
 
     ; show item alerts
     if (settings["enableItemFilter"]) {
-        drawItemAlerts(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
+        drawItemAlerts(unitsLayer.G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
     }
 
     if (!settings["centerMode"] or settings["showPlayerDotCenter"]) {
@@ -133,7 +133,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
             y4 := playerCrossYoffset + yscale
             y5 := playerCrossYoffset + yscale + yscale
             points = %x1%,%y2%|%x2%,%y3%|%x1%,%y4%|%x2%,%y5%|%x3%,%y4%|%x4%,%y5%|%x5%,%y4%|%x4%,%y3%|%x5%,%y2%|%x4%,%y1%|%x3%,%y2%|%x2%,%y1%
-            Gdip_DrawPolygon(G, pPen, points)
+            Gdip_DrawPolygon(unitsLayer.G, pPen, points)
             Gdip_DeletePen(pPen)
         } else {
             ; draw a square dot, but angled along the map Gdip_PathOutline()
@@ -148,7 +148,7 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
             y3 := playerCrossYoffset + yscale
 
             points = %x1%,%y2%|%x2%,%y1%|%x3%,%y2%|%x2%,%y3%
-            Gdip_FillPolygon(G, pBrush, points)
+            Gdip_FillPolygon(unitsLayer.G, pBrush, points)
             Gdip_DeleteBrush(pBrush)    
         }       
     }
@@ -172,16 +172,16 @@ ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shri
         ;ToolTip % "`n`n`n`n" regionX " " regionY " " regionWidth " " regionHeight
         WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapHwnd1%
         ;WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %unitHwnd1%
-        UpdateLayeredWindow(unitHwnd1, hdc, 0, 0, gameWidth, gameHeight)
-        Gdip_GraphicsClear( G )
+        UpdateLayeredWindow(unitHwnd1, unitsLayer.hdc, 0, 0, gameWidth, gameHeight)
+        Gdip_GraphicsClear( unitsLayer.G )
     } else {
         WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
         WinMove, ahk_id %mapHwnd1%,, windowLeftMargin+leftMargin, windowTopMargin+topMargin
         WinMove, ahk_id %unitHwnd1%,, windowLeftMargin+leftMargin, windowTopMargin+topMargin
         WinSet, Region, , ahk_id %mapHwnd1%
         WinSet, Region, , ahk_id %unitHwnd1%
-        UpdateLayeredWindow(unitHwnd1, hdc, , , scaledWidth, scaledHeight)
-        Gdip_GraphicsClear( G )
+        UpdateLayeredWindow(unitHwnd1, unitsLayer.hdc, , , scaledWidth, scaledHeight)
+        Gdip_GraphicsClear( unitsLayer.G )
     }
 
     ElapsedTime := A_TickCount - StartTime

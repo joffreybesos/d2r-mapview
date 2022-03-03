@@ -2,7 +2,7 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-drawMissiles(G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset) {
+drawMissiles(ByRef G, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset) {
     missileOpacity := settings["missileOpacity"]
     physicalMajorColor := missileOpacity . settings["missileColorPhysicalMajor"]
     physicalMinorColor := missileOpacity . settings["missileColorPhysicalMinor"]

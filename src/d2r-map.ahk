@@ -1,7 +1,19 @@
 #SingleInstance, Force
 #Persistent
+#NoEnv
+#MaxHotkeysPerInterval 99000000
+#HotkeyInterval 99000000
+#KeyHistory 0
+ListLines Off
+Process, Priority, , A
+SetBatchLines, -1
+SetKeyDelay, -1, -1
+SetMouseDelay, -1
+SetDefaultMouseSpeed, 0
+SetWinDelay, -1
+SetControlDelay, -1
 SendMode Input
-SetWinDelay, 0
+
 SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\logging.ahk
 #Include %A_ScriptDir%\include\Yaml.ahk
@@ -30,6 +42,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\readSettings.ahk
 #Include %A_ScriptDir%\serverHealthCheck.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
+#Include %A_ScriptDir%\ui\gdip\unitsLayer.ahk
 
 global version := "2.6.3"
 
@@ -147,7 +160,7 @@ settingupGUI := false
 
 ; performance counters
 global ticktock := 0
-maxfps := 30
+maxfps := 45
 tickCount := 0
 ticksPerFrame := 1000 / maxfps
 frameCount := 0
@@ -263,29 +276,13 @@ While 1 {
                 imageData["levelymargin"] := levelymargin
                 ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
 
-                scaledWidth := uiData["scaledWidth"]
-                scaledHeight := uiData["scaledHeight"]
-
-                SelectObject(hdc, obm)
-                DeleteObject(hbm)
-                DeleteDC(hdc)
-                Gdip_DeleteGraphics(G)
-                if (settings["centerMode"]) {
-                    WinGetPos, ,  , gameWidth, gameHeight, %gameWindowId% 
-                    hbm := CreateDIBSection(gameWidth, gameHeight)
-                } else {
-                    hbm := CreateDIBSection(scaledWidth, scaledHeight)
-                }
-                hdc := CreateCompatibleDC()
-                obm := SelectObject(hdc, hbm)
+                unitsLayer.delete()
+                unitsLayer := new UnitsLayer(uiData)
                 
-                G := Gdip_GraphicsFromHDC(hdc)
-                Gdip_SetSmoothingMode(G, 4)
-                Gdip_SetInterpolationMode(G, 7)
                 redrawMap := 0
             }
             
-            ShowUnits(G, hdc, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
+            ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
 
             if (settings["centerMode"]) {
                 MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData, uiData)

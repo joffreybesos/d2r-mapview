@@ -11,5 +11,5 @@ currentmap.png
 /src/debug.ahk
 /src/mapconfig.ini
 /src/GameSessionLog.csv
-
+/src/d2r-map3.ahk
 /src/*.wav

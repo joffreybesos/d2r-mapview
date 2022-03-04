@@ -287,7 +287,9 @@ While 1 {
             if (settings["centerMode"]) {
                 MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData, uiData)
             }
-            checkAutomapVisibility(d2rprocess, settings, gameMemoryData)
+            if (Mod(ticktock, 3)) {
+                checkAutomapVisibility(d2rprocess, gameMemoryData)
+            }
             lastlevel := gameMemoryData["levelNo"]
         } else {
             WriteLog("In Menu - no valid difficulty, levelno, or mapseed found '" gameMemoryData["difficulty"] "' '" gameMemoryData["levelNo"] "' '" gameMemoryData["mapSeed"] "'")
@@ -305,16 +307,16 @@ While 1 {
         ticktock := 0
 
     frameDuration:=A_TickCount-frameStart
-    frameCount++
+    , frameCount++
     
     if ((A_TickCount-fpsTimer) >= 1000) {
         SetFormat Integer, D
         frameCount += 0
-        currentFPS := frameCount / (((A_TickCount-fpsTimer) / 1000))
-        currentFPS := Round(currentFPS, 1)
+        , currentFPS := frameCount / (((A_TickCount-fpsTimer) / 1000))
+        , currentFPS := Round(currentFPS, 1)
         ;ToolTip, % "`n`n`n`n`n" frameCount
-        frameCount := 0
-        fpsTimer := A_TickCount
+        , frameCount := 0
+        , fpsTimer := A_TickCount
         if (isMapShowing) {
             ShowInfoText(ipHwnd1, gameWindowId, ipAddress, currentFPS, settings["textIPalignment"], settings["textIPfontSize"])
         }
@@ -324,12 +326,12 @@ While 1 {
     }
 }
 
-checkAutomapVisibility(d2rprocess, settings, gameMemoryData) {
+checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
     uiOffset:= settings["uiOffset"]
-    alwaysShowMap:= settings["alwaysShowMap"]
-    hideTown:= settings["hideTown"]
-    levelNo:= gameMemoryData["levelNo"]
-    isMenuShown:= gameMemoryData["menuShown"]
+    , alwaysShowMap:= settings["alwaysShowMap"]
+    , hideTown:= settings["hideTown"]
+    , levelNo:= gameMemoryData["levelNo"]
+    , isMenuShown:= gameMemoryData["menuShown"]
     ;WriteLogDebug("Checking visibility, hideTown: " hideTown " alwaysShowMap: " alwaysShowMap)
     if ((levelNo == 1 or levelNo == 40 or levelNo == 75 or levelNo == 103 or levelNo == 109) and hideTown) {
         if (isMapShowing) {
@@ -397,7 +399,7 @@ MapAlwaysShow:
 {
     SetFormat Integer, D
     settings["alwaysShowMap"] := !settings["alwaysShowMap"]
-    checkAutomapVisibility(d2rprocess, settings, gameMemoryData)
+    checkAutomapVisibility(d2rprocess, gameMemoryData)
     if (settings["alwaysShowMap"]) {
         unHideMap()
         IniWrite, true, settings.ini, Settings, alwaysShowMap
@@ -550,7 +552,7 @@ HistoryToggle:
 ~Space::
 {
     WriteLogDebug("TAB or Space pressed")
-    checkAutomapVisibility(d2rprocess, settings, gameMemoryData)
+    checkAutomapVisibility(d2rprocess, gameMemoryData)
     return
 }
 ~Esc::

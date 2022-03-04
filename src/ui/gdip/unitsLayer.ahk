@@ -30,6 +30,8 @@ class UnitsLayer {
         this.pBrushGreen := Gdip_BrushCreateSolid(0xff00FF00)
         this.pBrushDarkGreen := Gdip_BrushCreateSolid(0xff00aa00)
         this.pPenBlack := Gdip_CreatePen(0xff000000, 1)
+        this.pPenHealth := Gdip_CreatePen(0xccdd0000, 1)
+        this.pBrushHealth := Gdip_BrushCreateSolid(0x44dd0000)
 
         ; lines
         this.pLineWP := Gdip_CreatePen(0x55ffFF00, 3)

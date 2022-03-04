@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.5] - 2021-03-04 - Boss health bars
+
+- Bosses now have health bars behind their name
+- 
+
 ## [2.6.4] - 2021-03-03 - Minor improvements
 
 - Performance improvements from lots of refactoring

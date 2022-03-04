@@ -44,7 +44,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
 #Include %A_ScriptDir%\ui\gdip\unitsLayer.ahk
 
-global version := "2.6.3"
+global version := "2.6.5"
 
 lastMap := ""
 exitArray := []

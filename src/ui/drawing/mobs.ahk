@@ -5,7 +5,6 @@ SetWorkingDir, %A_ScriptDir%
 drawMonsters(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset) {
     mobs := gameMemoryData["mobs"]
 
-
     if (settings["showDeadMobs"]) {
         for index, mob in mobs
         {
@@ -89,13 +88,26 @@ drawMonsters(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScale,
                 if (mob["mode"] != 0 and mob["mode"] != 12) {
                     ;WriteLog("Boss: " mob["textTitle"])
                     textx := mobx-(unitsLayer.bossDotSize/2) - 75
-                    texty := moby-(unitsLayer.bossDotSize/2) - 100
+                    texty := moby-(unitsLayer.bossDotSize/2) - 105
                     bossTextColor := "ff" . settings["bossColor"] 
                     Options = x%textx% y%texty% Center vBottom cffff0000 r8 s24
                     textx := textx + 2
                     texty := texty + 2
                     Options2 = x%textx% y%texty% Center vBottom cff000000 r8 s24
-                    Gdip_TextToGraphics(unitsLayer.G, mob["textTitle"], Options2, diabloFont, 160, 100)
+                    
+                    measuredString := Gdip_TextToGraphics(unitsLayer.G, mob["textTitle"], Options2, diabloFont, 160, 100)
+                    ;x|y|width|height|chars|lines
+                    ms := StrSplit(measuredString , "|")
+                    ;WriteLog((ms[1]-5) " " (ms[2]-5) " " (ms[3]+10) " " (ms[4]+10))
+                    healthbarx := ms[1] - 5
+                    healthbary := ms[2] - 5
+                    healthbarwidth := ms[3] + 3
+                    healthbarheight := ms[4] + 1
+                    healthpc := mob["hp"] / mob["maxhp"]
+                    ;msgbox % mob["maxhp"]
+                    
+                    Gdip_FillRectangle(unitsLayer.G, unitsLayer.pBrushHealth, healthbarx, healthbary, healthbarwidth * healthpc, healthbarheight)
+                    
                     Gdip_TextToGraphics(unitsLayer.G, mob["textTitle"], Options, diabloFont, 160, 100)
                     Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenBoss, mobx-(unitsLayer.bossDotSize/2), moby-(unitsLayer.bossDotSize/2), unitsLayer.bossDotSize, unitsLayer.bossDotSize/2)
                 }

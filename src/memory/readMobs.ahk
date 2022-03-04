@@ -48,6 +48,8 @@ ReadMobs(d2rprocess, startingOffset, ByRef mobs) {
                 statPtr := d2rprocess.read(pStatsListEx + 0x30, "Int64")
                 statCount := d2rprocess.read(pStatsListEx + 0x38, "Int64")
 
+                hp := 0
+                maxhp := 0
                 immunities := { physical: 0, magic: 0, fire: 0, light: 0, cold: 0, poison: 0 }
                 Loop, %statCount%
                 {
@@ -58,6 +60,7 @@ ReadMobs(d2rprocess, startingOffset, ByRef mobs) {
                     ;statParam := d2rprocess.read(statPtr + offset, "UShort")
                     statEnum := d2rprocess.read(statPtr + 0x2 + offset, "UShort")
                     statValue := d2rprocess.read(statPtr + 0x4 + offset, "UInt")
+                    ;WriteLog(statEnum " " statValue)
                     if (statValue >= 100) {
                         switch (statEnum) {
                             ; no enums here, just bad practices instead
@@ -69,11 +72,22 @@ ReadMobs(d2rprocess, startingOffset, ByRef mobs) {
                             case 45: immunities["poison"] := 1   ;poison resist
                         }
                     }
+                    if (isBoss) {
+                        if (statEnum == 6) {
+                            hp := d2rprocess.read(statPtr + 0x4 + offset, "UInt")
+                            hp := hp >> 8
+                            ; 'hp' will now have correct value
+                        }
+                        if (statEnum == 7) {
+                            maxhp := d2rprocess.read(statPtr + 0x4 + offset, "UInt")
+                            maxhp := maxhp >> 8
+                            ; maxhp is the max hp WITHOUT any item/charm/skill boosts applied!
+                        }
+                    }
                 }
-                mob := {"txtFileNo": txtFileNo, "mode": mode, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "isMerc": isMerc, "textTitle": textTitle, "immunities": immunities }
+                mob := {"txtFileNo": txtFileNo, "mode": mode, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "isMerc": isMerc, "textTitle": textTitle, "immunities": immunities, "hp": hp, "maxhp": maxhp }
                 mobs.push(mob)
             }
-            
             mobUnit := d2rprocess.read(mobUnit + 0x150, "Int64")  ; get next mob
         }
     } 
@@ -176,7 +190,6 @@ getSuperUniqueName(txtFileNo) {
     }
     return ""
 }
-
 ; certain NPCs we don't want to see such as mercs
 HideNPC(txtFileNo) {
     switch (txtFileNo) {

@@ -5,7 +5,9 @@ All notable changes to this project will be documented in this file.
 ## [2.6.5] - 2021-03-04 - Boss health bars
 
 - Bosses now have health bars behind their name
-- 
+- Fixed bug where portals weren't showing in certain cases
+- Map hidden state is checked less frequently which should help performance
+- Refactored Settings UI code to be prettier garbage
 
 ## [2.6.4] - 2021-03-03 - Minor improvements
 

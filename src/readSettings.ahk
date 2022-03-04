@@ -10,7 +10,6 @@ readSettings(settingsFile, ByRef settings) {
 
     ; these are the default values
     settings := []
-    settings["settingsFile"] := settingsFile
     settings["locale"] := ""
     settings["chosenVoice"] := 1
     settings["baseUrl"] := "http://localhost:3002"
@@ -53,7 +52,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["showChests"] := 1
     settings["lastActiveGUITab"] := "Info"
     settings["settingsUIX"] := 100
-    settings["settingsUIX"] := 100
+    settings["settingsUIY"] := 100
     settings["enablePrefetch"] := 0
 
     settings["enableItemFilter"] := 1

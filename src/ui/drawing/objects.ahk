@@ -19,9 +19,9 @@ drawObjects(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScale, 
 
                     ;Gdip_DrawString(unitsLayer.G, text, hFont, hFormat, pBrush2, RectF)
                     if (settings["centerMode"]) {
-                        Gdip_DrawEllipse(unitsLayer.G, unitsLatyer.pPortal, objectx-8, objecty-25, 16, 32)
+                        Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPortal, objectx-8, objecty-25, 16, 32)
                     } else {
-                        Gdip_DrawEllipse(unitsLayer.G, unitsLatyer.pPortal, objectx-8, objecty-14, 9, 16)
+                        Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPortal, objectx-8, objecty-14, 9, 16)
                     }
                 }
                 if (object["isRedPortal"]) {
@@ -32,9 +32,9 @@ drawObjects(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScale, 
                     , objecty := correctedPos["y"] + centerTopOffset
                     if (settings["centerMode"]) {
                         ;Gdip_DrawString(unitsLayer.G, text, hFont, hFormat, pBrush2, RectF)
-                        Gdip_DrawEllipse(unitsLayer.G, unitsLatyer.pRedPortal, objectx-8, objecty-25, 16, 32)
+                        Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pRedPortal, objectx-8, objecty-25, 16, 32)
                     } else {
-                        Gdip_DrawEllipse(unitsLayer.G, unitsLatyer.pRedPortal, objectx-8, objecty-14, 9, 16)
+                        Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pRedPortal, objectx-8, objecty-14, 9, 16)
                     }
                 }
             }

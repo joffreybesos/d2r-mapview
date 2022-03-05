@@ -1,13 +1,10 @@
-#SingleInstance, Force
-SendMode Input
-SetWorkingDir, %A_ScriptDir%
 
-drawPlayers(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset) {
+drawPlayers(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageData, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset) {
     otherPlayers := gameMemoryData["otherPlayers"]
     for index, player in otherPlayers
     {
         
-        if (GameMemoryData["playerName"] != player["playerName"]) {
+        if (gameMemoryData["playerName"] != player["playerName"]) {
             ;WriteLog(unitsLayer.GameMemoryData["playerName"] " " player["playerName"])
             playerx := ((player["x"] - imageData["mapOffsetX"]) * serverScale) + padding
             playery := ((player["y"] - imageData["mapOffsetY"]) * serverScale) + padding

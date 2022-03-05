@@ -203,17 +203,17 @@ correctPos(settings, xPosDot, yPosDot, centerX, centerY, RWidth, RHeight, scale)
 ; I wish my matrix transformations worked
 findNewPos(xPosDot, yPosDot, centerX, centerY, RWidth, RHeight, scale) {
     newAngle := findAngle(xPosDot, yPosDot, centerX, centerY) + 45
-    distance := getDistanceFromCoords(xPosDot, yPosDot, centerX, centerY) * scale
-    newPos := getPosFromAngle((RWidth/2),(RHeight/2),distance,newAngle)
-    newPos["y"] := (RHeight/2) + ((RHeight/2) - newPos["y"]) /2
+    , distance := getDistanceFromCoords(xPosDot, yPosDot, centerX, centerY) * scale
+    , newPos := getPosFromAngle((RWidth/2),(RHeight/2),distance,newAngle)
+    , newPos["y"] := (RHeight/2) + ((RHeight/2) - newPos["y"]) /2
     return newPos
 }
 
 
 findAngle(xPosDot, yPosDot, midW, midH) {
     Pi := 4 * ATan(1)
-    Conversion := -180 / Pi  ; Radians to deg.
-    Angle2 := DllCall("msvcrt.dll\atan2", "Double", yPosDot-midH, "Double", xPosDot-midW, "CDECL Double") * Conversion
+    , Conversion := -180 / Pi  ; Radians to deg.
+    , Angle2 := DllCall("msvcrt.dll\atan2", "Double", yPosDot-midH, "Double", xPosDot-midW, "CDECL Double") * Conversion
     if (Angle2 < 0)
         Angle2 += 360
     return Angle2

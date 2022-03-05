@@ -40,6 +40,11 @@ class UnitsLayer {
         this.pLineBoss := Gdip_CreatePen(0x55FF0000, 3)
         this.pLineQuest := Gdip_CreatePen(0x5500FF00, 3)
 
+        this.pBrushLineWP := Gdip_BrushCreateSolid(0x55ffFF00)
+        this.pBrushLineExit := Gdip_BrushCreateSolid(0x55FF00FF)
+        this.pBrushLineBoss := Gdip_BrushCreateSolid(0x55FF0000)
+        this.pBrushLineQuest := Gdip_BrushCreateSolid(0x5500FF00)
+
         ; missiles
         missileOpacity := settings["missileOpacity"]
         , physicalMajorColor := missileOpacity . settings["missileColorPhysicalMajor"]
@@ -150,6 +155,10 @@ class UnitsLayer {
         , Gdip_DeletePen(this.pLineExit)
         , Gdip_DeletePen(this.pLineBoss)
         , Gdip_DeletePen(this.pLineQuest)
+        , Gdip_DeleteBrush(this.pBrushLineWP)
+        , Gdip_DeleteBrush(this.pBrushLineExit)
+        , Gdip_DeleteBrush(this.pBrushLineBoss)
+        , Gdip_DeleteBrush(this.pBrushLineQuest)
         , Gdip_DeletePen(this.pPenPhysicalMajor)
         , Gdip_DeletePen(this.pPenPhysicalMinor)
         , Gdip_DeletePen(this.pPenFireMajor)

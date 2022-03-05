@@ -2,7 +2,8 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-drawLines(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset, xPosDot, yPosDot) {
+drawLines(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageData, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset, xPosDot, yPosDot) {
+    
     ; draw way point line
     if (settings["showWaypointLine"]) {
         ;WriteLog(settings["showWaypointLine"])
@@ -14,7 +15,8 @@ drawLines(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScale, sc
             , correctedPos := correctPos(settings, waypointX, wayPointY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             , waypointX := correctedPos["x"] + centerLeftOffset
             , wayPointY := correctedPos["y"] + centerTopOffset
-            Gdip_DrawLine(unitsLayer.G, unitsLayer.pLineWP, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, waypointX, wayPointY)
+            drawLineWithArrow(unitsLayer, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, waypointX, wayPointY, scale, unitsLayer.pLineWP, unitsLayer.pBrushLineWP)
+            ;Gdip_DrawLine(unitsLayer.G, unitsLayer.pLineWP, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, waypointX, wayPointY)
         }
     }
 
@@ -35,7 +37,9 @@ drawLines(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScale, sc
                     , correctedPos := correctPos(settings, exitX, exitY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                     , exitX := correctedPos["x"] + centerLeftOffset
                     , exitY := correctedPos["y"] + centerTopOffset
-                    Gdip_DrawLine(unitsLayer.G, unitsLayer.pLineExit, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, exitX, exitY)
+
+                    drawLineWithArrow(unitsLayer, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, exitX, exitY, scale, unitsLayer.pLineExit, unitsLayer.pBrushLineExit)
+                    ;Gdip_DrawLine(unitsLayer.G, unitsLayer.pLineExit, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, exitX, exitY)
                 }
             }
         }
@@ -52,7 +56,8 @@ drawLines(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScale, sc
             , correctedPos := correctPos(settings, bossX, bossY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             , bossX := correctedPos["x"] + centerLeftOffset
             , bossY := correctedPos["y"] + centerTopOffset
-            Gdip_DrawLine(unitsLayer.G, unitsLayer.pLineBoss, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, bossX, bossY)
+            drawLineWithArrow(unitsLayer, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, bossX, bossY, scale, unitsLayer.pLineBoss, unitsLayer.pBrushLineBoss)
+            ;Gdip_DrawLine(unitsLayer.G, unitsLayer.pLineBoss, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, bossX, bossY)
         }
     }
 
@@ -71,12 +76,78 @@ drawLines(ByRef unitsLayer, settings, gameMemoryData, imageData, serverScale, sc
                 , correctedPos := correctPos(settings, questX, questY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 , questX := correctedPos["x"] + centerLeftOffset
                 , questY := correctedPos["y"] + centerTopOffset
-                Gdip_DrawLine(unitsLayer.G, unitsLayer.pLineQuest, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, questX, questY)
+                drawLineWithArrow(unitsLayer, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, questX, questY, scale, unitsLayer.pLineQuest, unitsLayer.pBrushLineQuest)
+                ; Gdip_DrawLine(unitsLayer.G, unitsLayer.pLineQuest, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, questX, questY)
             }
         }
     }
 }
 
+
+drawLineWithArrow(ByRef unitsLayer, ByRef xPosDot, ByRef yPosDot, ByRef targetX, ByRef targetY, ByRef scale, ByRef pen, ByRef brush) {
+    newCoords := calculateFixedLength(xPosDot, yPosDot, targetX, targetY, (40 * scale))
+    if (newCoords["x"]) {
+        if (newCoords["lineLength"] > (80 * scale)) {
+            arrowsize := 12 * scale
+            , arrowTip := calculateFixedLength(targetX, targetY, xPosDot, yPosDot, (20 * scale))
+            ;, arrowTip := calculatePercentage(xPosDot, yPosDot, targetX, targetY, 0.8)
+            , arrowleft := calcThirdPoint(arrowTip["x"], arrowTip["y"], targetX, targetY, 60, arrowsize) 
+            , arrowright := calcThirdPoint(arrowTip["x"], arrowTip["y"], targetX, targetY, 120, arrowsize) 
+            , arrowBase := calculatePercentage(arrowleft["x"], arrowleft["y"], arrowright["x"], arrowright["y"], 0.5)
+            , arrowPoints := arrowTip["x"] "," arrowTip["y"] "|"  arrowleft["x"] "," arrowleft["y"] "|" arrowright["x"] "," arrowright["y"]
+            Gdip_FillPolygon(unitsLayer.G, brush, arrowPoints)
+            Gdip_DrawLine(unitsLayer.G, pen, newCoords["x"], newCoords["y"], arrowBase["x"], arrowBase["y"])
+            ;Gdip_DrawLine(unitsLayer.G, unitsLayer.pLineExit, arrowTip["x"], arrowTip["y"], targetX, targetY)
+        }
+    }
+}
+
+calculateFixedLength(ByRef x1,ByRef y1,ByRef x2,ByRef y2, ByRef linegap)
+{
+    lineLength := Sqrt((Abs(x1 - x2) ** 2) + (Abs(y1 - y2) ** 2))
+    newPc := 1 - ((lineLength - linegap) / lineLength)
+    ;WriteLog(lineLength " " newPc)
+    if (x1 > x2) {
+        newx1 := x1 - ((x1 - x2) * newPc)
+    } else {
+        newx1 := x1 + ((x2 - x1) * newPc)
+    }
+
+    if (y1 > y2) {
+        newy1 := y1 - ((y1 - y2) * newPc)
+    } else {
+        newy1 := y1 + ((y2 - y1) * newPc)
+    }
+
+    return {"x": newx1, "y": newy1, "lineLength": lineLength }
+}
+
+calculatePercentage(ByRef x1,ByRef y1,ByRef x2,ByRef y2, ByRef percentage)
+{
+    ;newPc := (ticktock * percentage) / 100
+    if (x1 > x2) {
+        newx1 := x1 - ((x1 - x2) * percentage)
+    } else {
+        newx1 := x1 + ((x2 - x1) * percentage)
+    }
+
+    if (y1 > y2) {
+        newy1 := y1 - ((y1 - y2) * percentage)
+    } else {
+        newy1 := y1 + ((y2 - y1) * percentage)
+    }
+    return {"x": newx1, "y": newy1 }
+} 
+
+calcThirdPoint(x1,y1,x2,y2, ByRef angle, ByRef distance) {
+    y1 := y1 * 2
+    y2 := y2 * 2
+    Angle2 := findAngle(x1, y1, x2, y2)
+    newAngle := angle - Angle2
+    newPos := getPosFromAngle(x1,y1,distance,newAngle)
+    newPos["y"] := newPos["y"] / 2
+    return newPos
+}
 
 
 isNextExit(currentLvl) {

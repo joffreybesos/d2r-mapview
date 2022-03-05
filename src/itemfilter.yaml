@@ -247,7 +247,7 @@ Alerts:
   # note: anything with a # in front of it is ignored
   GemsAmethyst:
     items:
-      - Chipped Amethyst
+      # - Chipped Amethyst
       # - Flawed Amethyst
       # - Amethyst
       # - Flawless Amethyst
@@ -256,7 +256,7 @@ Alerts:
 
   GemsDiamond:
     items:
-      - Chipped Diamond
+      # - Chipped Diamond
       # - Flawed Diamond
       # - Diamond
       # - Flawless Diamond
@@ -265,7 +265,7 @@ Alerts:
 
   GemsEmerald:
     items:
-      - Chipped Emerald
+      # - Chipped Emerald
       # - Flawed Emerald
       # - Emerald
       # - Flawless Emerald
@@ -274,7 +274,7 @@ Alerts:
 
   GemsRuby:
     items:
-      - Chipped Ruby
+      # - Chipped Ruby
       # - Flawed Ruby
       # - Ruby
       # - Flawless Ruby
@@ -283,7 +283,7 @@ Alerts:
 
   GemsSapphire:
     items:
-      - Chipped Sapphire
+      # - Chipped Sapphire
       # - Flawed Sapphire
       # - Sapphire
       # - Flawless Sapphire
@@ -292,7 +292,7 @@ Alerts:
 
   GemsTopaz:
     items:
-      - Chipped Topaz
+      # - Chipped Topaz
       # - Flawed Topaz
       # - Topaz
       # - Flawless Topaz

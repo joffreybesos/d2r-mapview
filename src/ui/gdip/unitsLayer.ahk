@@ -39,7 +39,6 @@ class UnitsLayer {
         this.pLineExit := Gdip_CreatePen(0x55FF00FF, 3)
         this.pLineBoss := Gdip_CreatePen(0x55FF0000, 3)
         this.pLineQuest := Gdip_CreatePen(0x5500FF00, 3)
-
         this.pBrushLineWP := Gdip_BrushCreateSolid(0x55ffFF00)
         this.pBrushLineExit := Gdip_BrushCreateSolid(0x55FF00FF)
         this.pBrushLineBoss := Gdip_BrushCreateSolid(0x55FF0000)

@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.6.5] - 2021-03-04 - Boss health bars
+## [2.6.6] - 2021-03-05 - Fix missiles
+
+- Missiles were broken in the last release
+- Removed chipped gems from default itemfilter
+- Other small fixes
+
+## [2.6.5] - 2021-03-05 - Boss health bars
 
 - Bosses now have health bars behind their name
 - Coloured lines drawn to next exit/quests/bosses look nicer now

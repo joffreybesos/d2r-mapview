@@ -5,7 +5,7 @@ SetWorkingDir, %A_ScriptDir%
 global lastLeftMargin := 0
 global lastTopMargin := 0
 
-MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData, uiData) {
+MovePlayerMap(ByRef settings, ByRef d2rprocess, ByRef playerOffset, ByRef mapHwnd1, ByRef unitHwnd1, ByRef imageData, ByRef uiData) {
     
     ; read from memory
     startingAddress := d2rprocess.BaseAddress + playerOffset

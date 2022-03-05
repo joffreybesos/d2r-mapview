@@ -68,7 +68,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["bossColor"] := "FF0000"
     settings["mercColor"] := "00FFFF"
     settings["deadColor"] := "000000"
-    settings["showMercs"] := 1
+    settings["showMercs"] := 0
 
     settings["normalDotSize"] := "4"
     settings["normalImmunitySize"] := "7"

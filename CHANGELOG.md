@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Fixed bug where portals weren't showing in certain cases
 - Map hidden state is checked less frequently which should help performance
 - Refactored Settings UI code to be prettier garbage code
+- Fixed bug saving the position of the Settings UI
 
 ## [2.6.4] - 2021-03-03 - Minor improvements
 

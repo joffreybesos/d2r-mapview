@@ -11,14 +11,14 @@ class UnitsLayer {
         scaledHeight := uiData["scaledHeight"]
 
         if (settings["centerMode"]) {
-            WinGetPos, ,  , gameWidth, gameHeight, %gameWindowId% 
+            WinGetPos, , , gameWidth, gameHeight, %gameWindowId% 
             this.hbm := CreateDIBSection(gameWidth, gameHeight)
         } else {
             this.hbm := CreateDIBSection(scaledWidth, scaledHeight)
         }
         this.hdc := CreateCompatibleDC()
         this.obm := SelectObject(this.hdc, this.hbm)
-        
+
         this.G := Gdip_GraphicsFromHDC(this.hdc)
         Gdip_SetSmoothingMode(this.G, 4)
         Gdip_SetInterpolationMode(this.G, 7)
@@ -32,6 +32,7 @@ class UnitsLayer {
         this.pPenBlack := Gdip_CreatePen(0xff000000, 1)
         this.pPenHealth := Gdip_CreatePen(0xccdd0000, 1)
         this.pBrushHealth := Gdip_BrushCreateSolid(0x44dd0000)
+        this.pBrushNonHealth := Gdip_BrushCreateSolid(0x44000000)
 
         ; lines
         this.pLineWP := Gdip_CreatePen(0x55ffFF00, 3)
@@ -62,7 +63,7 @@ class UnitsLayer {
             , this.majorDotSize := this.majorDotSize * (scale / 1.1)
             , this.minorDotSize := this.minorDotSize * (scale / 1.1)
         }
-        
+
         this.pPenPhysicalMajor := Gdip_CreatePen(physicalMajorColor, penSize)
         , this.pPenPhysicalMinor := Gdip_CreatePen(physicalMinorColor, penSize)
         , this.pPenFireMajor := Gdip_CreatePen(fireMajorColor, penSize)
@@ -82,12 +83,12 @@ class UnitsLayer {
         , bossColor := 0xff . settings["bossColor"] 
         , deadColor := 0x44 . settings["deadColor"] 
         , mercColor := 0xcc . settings["mercColor"]
-        , this.deadDotSize := settings["deadDotSize"]     ; 2
+        , this.deadDotSize := settings["deadDotSize"] ; 2
         , this.normalDotSize := settings["normalDotSize"] ; 5
-        , this.normalImmunitySize := settings["normalImmunitySize"]  ; 8
+        , this.normalImmunitySize := settings["normalImmunitySize"] ; 8
         , this.uniqueDotSize := settings["uniqueDotSize"] ; 8
         , this.uniqueImmunitySize := settings["uniqueImmunitySize"] ; 14
-        , this.bossDotSize := settings["bossDotSize"]     ; 5
+        , this.bossDotSize := settings["bossDotSize"] ; 5
 
         if (settings["centerMode"]) {
             this.deadDotSize := this.deadDotSize * (scale / 1.2)
@@ -132,17 +133,19 @@ class UnitsLayer {
         this.pChest := Gdip_CreatePen(0xcc111111, 2)
     }
 
-
     delete() {
         SelectObject(this.hdc, this.obm)
         DeleteObject(this.hbm)
         DeleteDC(this.hdc)
         Gdip_DeleteGraphics(this.G)
-        
-        Gdip_DeleteBrush(this.pBrushGreen)    
-        , Gdip_DeleteBrush(this.pBrushDarkGreen)    
+
+        Gdip_DeleteBrush(this.pBrushGreen) 
+        , Gdip_DeleteBrush(this.pBrushDarkGreen) 
         , Gdip_DeletePen(this.pPenGreen)
         , Gdip_DeletePen(this.pPenBlack)
+        , Gdip_DeletePen(this.pPenHealth)
+        , Gdip_DeleteBrush(this.pBrushHealth) 
+        , Gdip_DeleteBrush(this.pBrushNonHealth) 
         , Gdip_DeletePen(this.pLineWP)
         , Gdip_DeletePen(this.pLineExit)
         , Gdip_DeletePen(this.pLineBoss)

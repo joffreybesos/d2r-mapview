@@ -3,7 +3,7 @@
 #Include %A_ScriptDir%\include\logging.ahk
 SetWorkingDir, %A_ScriptDir%
 
-isAutomapShown(d2rprocess, uiOffset) {
+isAutomapShown(ByRef d2rprocess, ByRef uiOffset) {
 
     ;WriteLog("Looking for Level No address at player offset " playerOffset)
     startingAddress := d2rprocess.BaseAddress + uiOffset

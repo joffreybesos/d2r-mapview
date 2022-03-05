@@ -1,9 +1,5 @@
-#SingleInstance, Force
-SendMode Input
-SetWorkingDir, %A_ScriptDir%
 
-
-readLastGameName(d2rprocess, gameWindowId, settings, session) {
+readLastGameName(ByRef d2rprocess, ByRef gameWindowId, ByRef settings, session) {
     if (not WinExist(gameWindowId)) {
         WriteLog(gameWindowId " not found, please make sure game is running")
         if (session) {

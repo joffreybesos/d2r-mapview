@@ -1,6 +1,6 @@
 #Include %A_ScriptDir%\types\Item.ahk
 
-ReadItems(d2rprocess, startingOffset, ByRef items) {
+ReadItems(ByRef d2rprocess, startingOffset, ByRef items) {
     ; items
     items := []
     itemsOffset := startingOffset + (4 * 1024)

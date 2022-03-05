@@ -5,7 +5,7 @@
 #Include %A_ScriptDir%\memory\readMissiles.ahk
 #Include %A_ScriptDir%\memory\readUI.ahk
 
-readGameMemory(d2rprocess, settings, playerOffset, ByRef gameMemoryData) {
+readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryData) {
     static items
     static objects
     StartTime := A_TickCount

@@ -1,8 +1,5 @@
-#SingleInstance, Force
-SendMode Input
-SetWorkingDir, %A_ScriptDir%
 
-ReadObjects(d2rprocess, startingOffset, levelNo, ByRef gameObjects) {
+ReadObjects(ByRef d2rprocess, startingOffset, ByRef levelNo, ByRef gameObjects) {
     ; items
     gameObjects := []
     objectOffset := startingOffset + (2 * 1024)

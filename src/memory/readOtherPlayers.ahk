@@ -1,6 +1,6 @@
 
 
-ReadOtherPlayers(d2rprocess, startingOffset, ByRef otherPlayers) {
+ReadOtherPlayers(ByRef d2rprocess, startingOffset, ByRef otherPlayers) {
     otherPlayers := []
     SetFormat Integer, D
 

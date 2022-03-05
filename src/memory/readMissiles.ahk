@@ -1,6 +1,6 @@
 
 
-readMissiles(d2rprocess, startingOffset) {
+readMissiles(ByRef d2rprocess, startingOffset) {
     ;global settings
     array := []
     tableOffset := startingOffset + (3 * 1024)
@@ -208,6 +208,7 @@ getMissileCategory(txtFileNo) {
         case 493: return "IceMinor" ;frozenhorror_arcticblast1
         case 494: return "IceMinor" ;frozenhorror_arcticblast2
         case 662: return "IceMinor" ;skmagecold
+
         case 93: return "LightMajor" ;chainlightning
         case 98: return "LightMajor" ;lightningbolt
         case 97: return "LightMajor" ;teleport
@@ -225,7 +226,6 @@ getMissileCategory(txtFileNo) {
         case 559: return "LightMajor" ;clawsofthundernova
         case 568: return "LightMajor" ;royalstrikechainlightning
         case 574: return "LightMajor" ;highpriestlightning2
-
         case 55: return "LightMinor" ;holybolt
         case 56: return "LightMinor" ;chargedbolt
         case 57: return "LightMinor" ;sanctuarybolt

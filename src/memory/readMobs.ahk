@@ -1,9 +1,5 @@
-#SingleInstance, Force
-SendMode Input
-SetWorkingDir, %A_ScriptDir%
 
-
-ReadMobs(d2rprocess, startingOffset, ByRef mobs) {
+ReadMobs(ByRef d2rprocess, startingOffset, ByRef mobs) {
     ; monsters
     mobs := []
     monstersOffset := startingOffset + 1024

@@ -45,7 +45,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["showDeadMobs"] := 1
     settings["showMerc"] := 1
     settings["showTownNPCs"] := 1
-    settings["NPCsAsCross"] := 1
+    settings["NPCsAsCross"] := 0
     
     settings["showImmunities"] := 1
     settings["showPlayerDotCenter"] := 1
@@ -71,7 +71,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["normalMobColor"] := "FFFFFF"
     settings["uniqueMobColor"] := "D4AF37"
     settings["bossColor"] := "FF0000"
-    settings["mercColor"] := "00FFFF"
+    settings["mercColor"] := "436f73"
     settings["deadColor"] := "000000"
     settings["townNPCColor"] := "FFFFFF"
     

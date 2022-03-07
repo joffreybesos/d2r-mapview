@@ -146,6 +146,7 @@ getPlayerMinion(txtFileNo){
         case "363": return "NecroSkeleton"
         case "364": return "NecroMage"
         case "417": return "ShadowWarrior"
+        case "418": return "ShadowMaster"
         case "419": return "DruidHawk"
         case "420": return "DruidSpiritWolf"
         case "421": return "DruidFenris"

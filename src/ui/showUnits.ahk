@@ -116,19 +116,8 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
         playerCrossYoffset := (yPosDot)+centerTopOffset
         if (settings["playerAsCross"]) {
             ; draw a gress cross to represent the player
-            xscale := 10
-            , yscale := 5
-            , x1 := playerCrossXoffset - xscale - xscale
-            , x2 := playerCrossXoffset - xscale
-            , x3 := playerCrossXoffset
-            , x4 := playerCrossXoffset + xscale
-            , x5 := playerCrossXoffset + xscale + xscale
-            , y1 := playerCrossYoffset - yscale - yscale
-            , y2 := playerCrossYoffset - yscale
-            , y3 := playerCrossYoffset
-            , y4 := playerCrossYoffset + yscale
-            , y5 := playerCrossYoffset + yscale + yscale
-            points = %x1%,%y2%|%x2%,%y3%|%x1%,%y4%|%x2%,%y5%|%x3%,%y4%|%x4%,%y5%|%x5%,%y4%|%x4%,%y3%|%x5%,%y2%|%x4%,%y1%|%x3%,%y2%|%x2%,%y1%
+            points := createCross(playerCrossXoffset, playerCrossYoffset, 5 * scale)
+            
             Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenGreen, points)
             
         } else {
@@ -234,4 +223,22 @@ hasVal(haystack, needle) {
 		if (value == needle)
 			return index
 	return 0
+}
+
+
+createCross(ByRef playerCrossXoffset, ByRef playerCrossYoffset, ByRef scale) {
+    xscale := scale
+    , yscale := scale / 2
+    , x1 := playerCrossXoffset - xscale - xscale
+    , x2 := playerCrossXoffset - xscale
+    , x3 := playerCrossXoffset
+    , x4 := playerCrossXoffset + xscale
+    , x5 := playerCrossXoffset + xscale + xscale
+    , y1 := playerCrossYoffset - yscale - yscale
+    , y2 := playerCrossYoffset - yscale
+    , y3 := playerCrossYoffset
+    , y4 := playerCrossYoffset + yscale
+    , y5 := playerCrossYoffset + yscale + yscale
+    points = %x1%,%y2%|%x2%,%y3%|%x1%,%y4%|%x2%,%y5%|%x3%,%y4%|%x4%,%y5%|%x5%,%y4%|%x4%,%y3%|%x5%,%y2%|%x4%,%y1%|%x3%,%y2%|%x2%,%y1%
+    return points
 }

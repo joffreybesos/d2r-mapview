@@ -62,16 +62,26 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
                             angleDegrees := angleDegrees + sliceSize
                         }
                     }
-                    
-                    if (mob["isPlayerMinion"] and settings["showMerc"]) {
-                        Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenMerc, mobx-(unitsLayer.normalDotSize/2), moby-(unitsLayer.normalDotSize/1.5), unitsLayer.normalDotSize, unitsLayer.normalDotSize/2)
-                    } else if (mob["isTownNPC"] and !mob["isPlayerMinion"] and settings["showTownNPCs"]) {
-                        Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenTownNPC, mobx-(unitsLayer.normalDotSize/2), moby-(unitsLayer.normalDotSize/1.5), unitsLayer.normalDotSize, unitsLayer.normalDotSize/2)
-                    } else if (!mob["isTownNPC"] and !mob["isPlayerMinion"]) {
-                        Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenNormal, mobx-(unitsLayer.normalDotSize/2), moby-(unitsLayer.normalDotSize/1.5), unitsLayer.normalDotSize, unitsLayer.normalDotSize/2)
+                    if (settings["NPCsAsCross"]) {
+                        points := createCross(mobx, moby, 5 * scale)
+                        if (mob["isPlayerMinion"] and settings["showMerc"]) {
+                            Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenMercCross, points)
+                        } else if (mob["isTownNPC"] and !mob["isPlayerMinion"] and settings["showTownNPCs"]) {
+                            Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenTownNPCCross, points)
+                        } else if (!mob["isTownNPC"] and !mob["isPlayerMinion"]) {
+                            ;Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenNormal, points)
+                            Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenNormal, mobx-(unitsLayer.normalDotSize/2), moby-(unitsLayer.normalDotSize/1.5), unitsLayer.normalDotSize, unitsLayer.normalDotSize/2)
+                        }
+                    } else {
+                        if (mob["isPlayerMinion"] and settings["showMerc"]) {
+                            Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenMerc, mobx-(unitsLayer.normalDotSize/2), moby-(unitsLayer.normalDotSize/1.5), unitsLayer.normalDotSize, unitsLayer.normalDotSize/2)
+                        } else if (mob["isTownNPC"] and !mob["isPlayerMinion"] and settings["showTownNPCs"]) {
+                            Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenTownNPC, mobx-(unitsLayer.normalDotSize/2), moby-(unitsLayer.normalDotSize/1.5), unitsLayer.normalDotSize, unitsLayer.normalDotSize/2)
+                        } else if (!mob["isTownNPC"] and !mob["isPlayerMinion"]) {
+                            Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenNormal, mobx-(unitsLayer.normalDotSize/2), moby-(unitsLayer.normalDotSize/1.5), unitsLayer.normalDotSize, unitsLayer.normalDotSize/2)
+                        }
                     }
                 }
-                
             }
         }
     }

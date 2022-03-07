@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.7] - 2021-03-07 - Revived monsters/mercs/summons now appear
+
+- Revived mobs, summoned NPCs, Mercs, etc can be shown on the map in their own color
+- 'Show my merc/pets' setting will show/hide them
+- Town NPCs can now be shown/hidden
+- Town NPCs can also be configured with their own color
+- All of the above NPCs can be displayed as 'crosses' like the normal automap
+- Renamed 'Monsters' tab in settings to 'NPCs'
+
 ## [2.6.6] - 2021-03-05 - Fix missiles
 
 - Missiles were broken in the last release

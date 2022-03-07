@@ -110,6 +110,8 @@ class UnitsLayer {
         , this.pPenDead := Gdip_CreatePen(deadColor, this.deadDotSize)
         , this.pPenMerc := Gdip_CreatePen(mercColor, this.normalDotSize * 0.7)
         , this.pPenTownNPC := Gdip_CreatePen(townNPCColor, this.normalDotSize * 0.7)
+        , this.pPenMercCross := Gdip_CreatePen(mercColor, 2)
+        , this.pPenTownNPCCross := Gdip_CreatePen(townNPCColor, 2)
 
         ; immunities
         , physicalImmuneColor := 0xff . settings["physicalImmuneColor"] 
@@ -178,6 +180,8 @@ class UnitsLayer {
         , Gdip_DeletePen(this.pPenDead)
         , Gdip_DeletePen(this.pPenMerc)
         , Gdip_DeletePen(this.pPenTownNPC)
+        , Gdip_DeletePen(this.pPenMercCross)
+        , Gdip_DeletePen(this.pPenTownNPCCross)
         , Gdip_DeletePen(this.pPenPhysical)
         , Gdip_DeletePen(this.pPenMagic)
         , Gdip_DeletePen(this.pPenFire)

@@ -134,8 +134,6 @@ readSettings(settingsFile, ByRef settings) {
 
     defaultSettings := settings.clone()
 
-    IniDelete, settings.ini, Settings , uiOffset
-    IniDelete, settings.ini, Settings , playerOffset
     ; read from the ini file and overwrite any of the above values
     IniRead, sectionNames, %settingsFile%
     Loop, Parse, sectionNames , `n

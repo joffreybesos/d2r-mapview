@@ -1,5 +1,5 @@
 
-scanForPlayer(d2rprocess, lastOffset, startingOffset, settings) {
+scanForPlayer(ByRef d2rprocess, lastOffset, startingOffset, settings) {
     ; check the one that previously worked, it's likely not checkLastOffset()
     
     playerOffset := checkLastOffset(d2rprocess, lastOffset, settings)
@@ -11,18 +11,18 @@ scanForPlayer(d2rprocess, lastOffset, startingOffset, settings) {
     return scanForPlayerOffset(d2rprocess, startingOffset, settings)
 }
 
-checkLastOffset(d2rprocess, startingOffset, settings) {
+checkLastOffset(ByRef d2rprocess, startingOffset, settings) {
     return getPlayerOffset(d2rprocess, startingOffset, 1, settings)
 }
 
-scanForPlayerOffset(d2rprocess, startingOffset, settings) {
+scanForPlayerOffset(ByRef d2rprocess, startingOffset, settings) {
     WriteLogDebug("Scanning for new player offset address, starting default offset " startingOffset)
     return getPlayerOffset(d2rprocess, startingOffset, 128, settings)
 }
 
-getPlayerOffset(d2r, startingOffset, loops, settings) {
-    uiOffset := settings["uiOffset"]
-    expOffset := settings["expOffset"]
+getPlayerOffset(ByRef d2r, startingOffset, loops, settings) {
+    uiOffset := offsets["uiOffset"]
+    expOffset := offsets["expOffset"]
 
     found := false
     loop, %loops%

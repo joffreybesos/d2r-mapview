@@ -3,14 +3,14 @@ SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
 
-PatternScan(d2r, ByRef settings) {
+PatternScan(ByRef d2r, ByRef offsets) {
     SetFormat, Integer, Hex
     ; unit table
     pattern := d2r.hexStringToPattern("48 8D ?? ?? ?? ?? ?? 8B D1")
     patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
     offsetBuffer := d2r.read(patternAddress + 3, "Int")
     playerOffset := ((patternAddress - d2r.BaseAddress) + 7 + offsetBuffer)
-    settings["playerOffset"] := playerOffset
+    offsets["playerOffset"] := playerOffset
     WriteLog("Scanned and found unitTable offset: " playerOffset)
     
     ; ui
@@ -18,7 +18,7 @@ PatternScan(d2r, ByRef settings) {
     patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
     offsetBuffer := d2r.read(patternAddress + 6, "Int")
     uiOffset := ((patternAddress - d2r.BaseAddress) + 10 + offsetBuffer)
-    settings["uiOffset"] := uiOffset
+    offsets["uiOffset"] := uiOffset
     WriteLog("Scanned and found UI offset: " uiOffset)
 
     ; expansion
@@ -26,7 +26,7 @@ PatternScan(d2r, ByRef settings) {
     patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
     offsetBuffer := d2r.read(patternAddress - 4, "Int")
     expOffset := ((patternAddress - d2r.BaseAddress) + offsetBuffer)
-    settings["expOffset"] := expOffset
+    offsets["expOffset"] := expOffset
     WriteLog("Scanned and found expansion offset: " expOffset)
 
     ; game data (IP and name)
@@ -34,7 +34,7 @@ PatternScan(d2r, ByRef settings) {
     patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
     offsetBuffer := d2r.read(patternAddress + 8, "Int")
     gameDataOffset := ((patternAddress - d2r.BaseAddress) + 7 - 256 + 5 + offsetBuffer)
-    settings["gameDataOffset"] := gameDataOffset
+    offsets["gameDataOffset"] := gameDataOffset
     WriteLog("Scanned and found game data offset: " gameDataOffset)
 
     ; menu visibility    
@@ -42,7 +42,7 @@ PatternScan(d2r, ByRef settings) {
     patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
     offsetBuffer := d2r.read(patternAddress + 2, "Int")
     menuOffset := ((patternAddress - d2r.BaseAddress) + 6 + offsetBuffer)
-    settings["menuOffset"] := menuOffset
+    offsets["menuOffset"] := menuOffset
     WriteLog("Scanned and found menu offset: " menuOffset)
     SetFormat, Integer, D
 }

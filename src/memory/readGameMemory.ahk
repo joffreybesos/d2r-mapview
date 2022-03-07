@@ -9,7 +9,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     static items
     static objects
     StartTime := A_TickCount
-    startingOffset := settings["playerOffset"]  ;default offset
+    startingOffset := offsets["playerOffset"]  ;default offset
     
     ;WriteLog("Looking for Level No address at player offset " playerOffset)
     startingAddress := d2rprocess.BaseAddress + playerOffset

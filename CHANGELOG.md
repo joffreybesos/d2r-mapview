@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Town NPCs can also be configured with their own color
 - All of the above NPCs can be displayed as 'crosses' like the normal automap
 - Renamed 'Monsters' tab in settings to 'NPCs'
+- Fixed bug where incorrect player name was shown in Game History
 
 ## [2.6.6] - 2021-03-05 - Fix missiles
 

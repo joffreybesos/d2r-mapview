@@ -3,7 +3,7 @@ SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
 
-readIPAddress(d2rprocess, gameWindowId, settings, session) {
+readIPAddress(ByRef d2rprocess, ByRef gameWindowId, ByRef offsets, ByRef session) {
     if (not WinExist(gameWindowId)) {
         WriteLog(gameWindowId " not found, please make sure game is running")
         if (session) {
@@ -11,7 +11,7 @@ readIPAddress(d2rprocess, gameWindowId, settings, session) {
         }
         ExitApp
     }
-    ipOffset := settings["gameDataOffset"] + 0x1D0
+    ipOffset := offsets["gameDataOffset"] + 0x1D0
     ipAddressAddress := d2rprocess.BaseAddress + ipOffset
     ipAddress := d2rprocess.readString(ipAddressAddress, length := 0)
     return ipAddress

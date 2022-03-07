@@ -1,5 +1,5 @@
 
-readLastGameName(ByRef d2rprocess, ByRef gameWindowId, ByRef settings, session) {
+readLastGameName(ByRef d2rprocess, ByRef gameWindowId, ByRef offsets, ByRef session) {
     if (not WinExist(gameWindowId)) {
         WriteLog(gameWindowId " not found, please make sure game is running")
         if (session) {
@@ -7,7 +7,7 @@ readLastGameName(ByRef d2rprocess, ByRef gameWindowId, ByRef settings, session) 
         }
         ExitApp
     }
-    gameNameOffset := settings["gameDataOffset"] + 0x48
+    gameNameOffset := offsets["gameDataOffset"] + 0x48
     gameNameAddress := d2rprocess.BaseAddress + gameNameOffset
     gameName := d2rprocess.readString(gameNameAddress, length := 0)
     return gameName

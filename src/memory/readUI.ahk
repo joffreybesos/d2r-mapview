@@ -13,7 +13,7 @@ readUI(d2rprocess, gameWindowId, settings, session) {
     }
 
     ; UI offset 0x21F89AA
-    offset := settings["uiOffset"]
+    offset := offsets["uiOffset"]
     base := d2rprocess.BaseAddress + offset
 
     d2rprocess.readRaw(base - 0x1, buffer, 1)

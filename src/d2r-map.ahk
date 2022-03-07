@@ -84,7 +84,7 @@ global itemAlertList := new AlertList("itemfilter.yaml")
 global centerLeftOffset := 0
 global centerTopOffset := 0
 global redrawMap := 1
-
+global offsets := []
 
 CreateSettingsGUI(settings, localizedStrings)
 
@@ -135,10 +135,11 @@ if (not WinExist(gameWindowId)) {
 
 ; initialise memory reading
 d2rprocess := initMemory(gameWindowId)
-patternScan(d2rprocess, settings)
-playerOffset := settings["playerOffset"]
-startingOffset := settings["playerOffset"]
-uiOffset := settings["uiOffset"]
+
+patternScan(d2rprocess, offsets)
+playerOffset := offsets["playerOffset"]
+startingOffset := offsets["playerOffset"]
+uiOffset := offsets["uiOffset"]
 
 pToken := Gdip_Startup()
 
@@ -218,7 +219,7 @@ While 1 {
         if ((gameMemoryData["difficulty"] == "0" or gameMemoryData["difficulty"] == "1" or gameMemoryData["difficulty"] == "2") and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
             if (gameMemoryData["mapSeed"] != lastSeed) {
                 gameStartTime := A_TickCount    
-                currentGameName := readLastGameName(d2rprocess, gameWindowId, settings, session)
+                currentGameName := readLastGameName(d2rprocess, gameWindowId, offsets, session)
 
                 if (session) {
                     session.setEndTime(gameEndTime)
@@ -235,7 +236,7 @@ While 1 {
                 session.startingPlayerLevel := gameMemoryData["playerLevel"]
                 session.startingExperience := gameMemoryData["experience"]
                 lastSeed := gameMemoryData["mapSeed"]
-                ipAddress := readIPAddress(d2rprocess, gameWindowId, settings, session)
+                ipAddress := readIPAddress(d2rprocess, gameWindowId, offsets, session)
                     
                 shrines := []
                 seenItems := []
@@ -327,7 +328,7 @@ While 1 {
 }
 
 checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
-    uiOffset:= settings["uiOffset"]
+    uiOffset:= offsets["uiOffset"]
     , alwaysShowMap:= settings["alwaysShowMap"]
     , hideTown:= settings["hideTown"]
     , levelNo:= gameMemoryData["levelNo"]

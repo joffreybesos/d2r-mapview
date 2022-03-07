@@ -87,6 +87,7 @@ class UnitsLayer {
         , bossColor := 0xff . settings["bossColor"] 
         , deadColor := 0x44 . settings["deadColor"] 
         , mercColor := 0xcc . settings["mercColor"]
+        , townNPCColor := 0xcc . settings["townNPCColor"]
         , this.deadDotSize := settings["deadDotSize"] ; 2
         , this.normalDotSize := settings["normalDotSize"] ; 5
         , this.normalImmunitySize := settings["normalImmunitySize"] ; 8
@@ -108,6 +109,7 @@ class UnitsLayer {
         , this.pPenBoss := Gdip_CreatePen(bossColor, this.bossDotSize)
         , this.pPenDead := Gdip_CreatePen(deadColor, this.deadDotSize)
         , this.pPenMerc := Gdip_CreatePen(mercColor, this.normalDotSize * 0.7)
+        , this.pPenTownNPC := Gdip_CreatePen(townNPCColor, this.normalDotSize * 0.7)
 
         ; immunities
         , physicalImmuneColor := 0xff . settings["physicalImmuneColor"] 
@@ -175,6 +177,7 @@ class UnitsLayer {
         , Gdip_DeletePen(this.pPenBoss)
         , Gdip_DeletePen(this.pPenDead)
         , Gdip_DeletePen(this.pPenMerc)
+        , Gdip_DeletePen(this.pPenTownNPC)
         , Gdip_DeletePen(this.pPenPhysical)
         , Gdip_DeletePen(this.pPenMagic)
         , Gdip_DeletePen(this.pPenFire)

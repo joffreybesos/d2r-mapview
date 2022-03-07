@@ -38,10 +38,15 @@ readSettings(settingsFile, ByRef settings) {
     settings["showFPS"] := 0
     settings["textIPfontSize"] := "18"
     settings["textIPalignment"] := "LEFT"
+
     settings["showNormalMobs"] := 1
     settings["showUniqueMobs"] := 1
     settings["showBosses"] := 1
     settings["showDeadMobs"] := 1
+    settings["showMerc"] := 1
+    settings["showTownNPCs"] := 1
+    settings["NPCsAsCross"] := 1
+    
     settings["showImmunities"] := 1
     settings["showPlayerDotCenter"] := 1
     settings["playerAsCross"] := 0
@@ -68,8 +73,8 @@ readSettings(settingsFile, ByRef settings) {
     settings["bossColor"] := "FF0000"
     settings["mercColor"] := "00FFFF"
     settings["deadColor"] := "000000"
-    settings["showMercs"] := 0
-
+    settings["townNPCColor"] := "FFFFFF"
+    
     settings["normalDotSize"] := "4"
     settings["normalImmunitySize"] := "7"
     settings["uniqueDotSize"] := "7"
@@ -135,7 +140,6 @@ readSettings(settingsFile, ByRef settings) {
     IniRead, sectionNames, %settingsFile%
     Loop, Parse, sectionNames , `n
     {
-        
         thisSection := A_LoopField
         IniRead, OutputVarSection, %settingsFile%, %thisSection%
         Loop, Parse, OutputVarSection , `n

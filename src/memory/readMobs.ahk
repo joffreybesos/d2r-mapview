@@ -32,31 +32,46 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef mobs) {
                 if (textTitle) {
                     isBoss:= 1
                 }
-                isMerc:= getMerc(txtFileNo)
-                if (isMerc) {
-                    isMerc:= 1
-                }
+                
                 ;get immunities
                 pStatsListEx := d2rprocess.read(mobUnit + 0x88, "Int64")
-                ownerType := d2rprocess.read(pStatsListEx + 0x08, "UInt")
-                ownerId := d2rprocess.read(pStatsListEx + 0x0C, "UInt")
-
                 statPtr := d2rprocess.read(pStatsListEx + 0x30, "Int64")
                 statCount := d2rprocess.read(pStatsListEx + 0x38, "Int64")
+
+                
+                
+
+
+                playerMinion := getPlayerMinion(txtFileNo)
+                if (playerMinion) {
+                    isPlayerMinion:= 1
+                } else {
+                    isPlayerMinion := ((d2rprocess.read(pStatsListEx + 0xAC8 + 0xc, "UInt") & 31) == 1)
+                }
+
+                isTownNPC := isTownNPC(txtFileNo)
 
                 hp := 0
                 maxhp := 0
                 immunities := { physical: 0, magic: 0, fire: 0, light: 0, cold: 0, poison: 0 }
                 Loop, %statCount%
                 {
-                    if (isMerc){
-                        break
-                    }
                     offset := (A_Index -1) * 8
                     ;statParam := d2rprocess.read(statPtr + offset, "UShort")
                     statEnum := d2rprocess.read(statPtr + 0x2 + offset, "UShort")
                     statValue := d2rprocess.read(statPtr + 0x4 + offset, "UInt")
                     ;WriteLog(statEnum " " statValue)
+                    if (isPlayerMinion) {
+                        if (statEnum == 0) {
+                            ;WriteLog(statEnum " " statValue)
+                            
+                            if (statValue == "") {
+                                isPlayerMinion := 0
+                            }
+                            break
+                        }
+                    }
+                    
                     if (statValue >= 100) {
                         switch (statEnum) {
                             ; no enums here, just bad practices instead
@@ -68,20 +83,22 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef mobs) {
                             case 45: immunities["poison"] := 1   ;poison resist
                         }
                     }
+
+                    
                     if (isBoss) {
                         if (statEnum == 6) {
-                            hp := d2rprocess.read(statPtr + 0x4 + offset, "UInt")
+                            hp := statValue
                             hp := hp >> 8
                             ; 'hp' will now have correct value
                         }
                         if (statEnum == 7) {
-                            maxhp := d2rprocess.read(statPtr + 0x4 + offset, "UInt")
+                            maxhp := statValue
                             maxhp := maxhp >> 8
                             ; maxhp is the max hp WITHOUT any item/charm/skill boosts applied!
                         }
                     }
                 }
-                mob := {"txtFileNo": txtFileNo, "mode": mode, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "isMerc": isMerc, "textTitle": textTitle, "immunities": immunities, "hp": hp, "maxhp": maxhp }
+                mob := {"txtFileNo": txtFileNo, "mode": mode, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "isPlayerMinion": isPlayerMinion, "textTitle": textTitle, "immunities": immunities, "hp": hp, "maxhp": maxhp, "isTownNPC": isTownNPC }
                 mobs.push(mob)
             }
             mobUnit := d2rprocess.read(mobUnit + 0x150, "Int64")  ; get next mob
@@ -114,15 +131,31 @@ getBossName(txtFileNo) {
     }
     return ""
 }
-getMerc(txtFileNo){
+
+getPlayerMinion(txtFileNo){
     switch (txtFileNo) {
-            case "271": return "roguehire"
-            case "338": return "act2hire"
-            case "359": return "act3hire"
-            case "560": return "act5hire1"
-            case "561": return "act5hire2"
-        }
-        return ""
+        case "271": return "roguehire"
+        case "338": return "act2hire"
+        case "359": return "act3hire"
+        case "560": return "act5hire1"
+        case "561": return "act5hire2"
+        case "289": return "ClayGolem"
+        case "290": return "BloodGolem"
+        case "291": return "IronGolem"
+        case "292": return "FireGolem"
+        case "363": return "NecroSkeleton"
+        case "364": return "NecroMage"
+        case "417": return "ShadowWarrior"
+        case "419": return "DruidHawk"
+        case "420": return "DruidSpiritWolf"
+        case "421": return "DruidFenris"
+        case "423": return "HeartOfWolverine"
+        case "424": return "OakSage"
+        case "428": return "DruidBear"
+        case "357": return "Valkyrie"
+        case "359": return "IronWolf"
+    }
+    return ""
 }
 getSuperUniqueName(txtFileNo) {
     switch (txtFileNo) {
@@ -186,6 +219,54 @@ getSuperUniqueName(txtFileNo) {
     }
     return ""
 }
+
+isTownNPC(txtFileNo) {
+    switch (txtFileNo) {
+        case 146: return 1 ; DeckardCain,
+        case 154: return 1 ; Charsi,
+        case 147: return 1 ; Gheed, 154
+        case 150: return 1 ; Kashya,
+        case 155: return 1 ; Warriv,
+        case 148: return 1 ; Akara,
+        case 244: return 1 ; DeckardCain2,
+        case 210: return 1 ; Meshif,
+        case 175: return 1 ; Warriv2,
+        case 199: return 1 ; Elzix,
+        case 198: return 1 ; Greiz,
+        case 177: return 1 ; Drognan,
+        case 178: return 1 ; Fara,
+        case 202: return 1 ; Lysander,
+        case 176: return 1 ; Atma,
+        case 200: return 1 ; Geglash,
+        case 331: return 1 ; Kaelan,
+        case 245: return 1 ; DeckardCain3,
+        case 264: return 1 ; Meshif2,
+        case 255: return 1 ; Ormus,
+        case 176: return 1 ; Atma,
+        case 252: return 1 ; Asheara,
+        case 254: return 1 ; Alkor,
+        case 253: return 1 ; Hratli,
+        case 297: return 1 ; Natalya,
+        case 246: return 1 ; DeckardCain4,
+        case 251: return 1 ; Tyrael,
+        case 367: return 1 ; Tyrael2,
+        case 521: return 1 ; Tyrael3,
+        case 257: return 1 ; Halbu,
+        case 405: return 1 ; Jamella,
+        case 265: return 1 ; DeckardCain5,
+        case 520: return 1 ; DeckardCain6,
+        case 512: return 1 ; Drehya,
+        case 527: return 1 ; Drehya2,
+        case 515: return 1 ; QualKehk,
+        case 513: return 1 ; Malah,
+        case 511: return 1 ; Larzuk,
+        case 514: return 1 ; NihlathakTown,
+        case 266: return 1 ; Navi,
+        case 408: return 1 ; Malachai,
+        case 406: return 1 ; Izual2, 
+    }
+}
+
 ; certain NPCs we don't want to see such as mercs
 HideNPC(txtFileNo) {
     switch (txtFileNo) {
@@ -210,10 +291,10 @@ HideNPC(txtFileNo) {
         case 272: return 1
         case 293: return 1
         case 294: return 1
-        case 289: return 1
-        case 290: return 1
-        case 291: return 1
-        case 292: return 1
+        ;case 289: return 1
+        ;case 290: return 1
+        ;case 291: return 1
+        ;case 292: return 1
         case 296: return 1
         case 318: return 1
         case 319: return 1
@@ -229,8 +310,8 @@ HideNPC(txtFileNo) {
         case 344: return 1
         case 355: return 1
         ;case 359: return 1
-        case 363: return 1
-        case 364: return 1
+        ;case 363: return 1
+        ;case 364: return 1
         case 370: return 1
         case 377: return 1
         case 378: return 1

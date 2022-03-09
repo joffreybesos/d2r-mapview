@@ -1,9 +1,5 @@
-#SingleInstance, Force
-SendMode Input
-SetWorkingDir, %A_ScriptDir%
-#Include %A_ScriptDir%\include\logging.ahk
 
-downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
+downloadMapImage(settings, gameMemoryData, ByRef imageData, tries) {
 
     errormsg1 := localizedStrings["errormsg1"]
     errormsg2 := localizedStrings["errormsg2"]
@@ -35,6 +31,7 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
         sFile .= "_Center"
         sFileTxt .= "_Center"
     }
+    ; OutputDebug, % imageUrl
     
     sFile .= ".png"
     sFileTxt .= ".txt"
@@ -87,7 +84,7 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
                 }
                 if (tries == 0) {
                     WriteLog("Retrying...")
-                    downloadMapImage(settings, gameMemoryData, ByRef mapData, 1)
+                    downloadMapImage(settings, gameMemoryData, ByRef imageData, 1)
                 } else {
                     Msgbox, 48, d2r-mapview %version%, %errormsg8%`n%errormsg9%`n`n%errormsg3%
                 }
@@ -149,7 +146,7 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
         }
     }
     ;WriteLog("sFile: " sFile ", leftTrimmed: " leftTrimmed ", topTrimmed: " topTrimmed ", levelScale: " levelScale ", levelxmargin: " levelxmargin ", levelymargin: " levelymargin ", mapOffsetX: " mapOffsetX ", mapOffsety: " mapOffsety ", mapwidth: " mapwidth ", mapheight: " mapheight ", exits: " exits  ", waypoint: " waypoint  ", bosses: " bosses)
-    mapData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "levelScale": levelScale, "levelxmargin": levelxmargin, "levelymargin": levelymargin, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight, "exits": exits, "waypoint": waypoint, "bosses": bosses, "quests": quests, "prerotated": prerotated, "originalwidth": originalwidth, "originalheight": originalheight }
+    imageData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "levelScale": levelScale, "levelxmargin": levelxmargin, "levelymargin": levelymargin, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight, "exits": exits, "waypoint": waypoint, "bosses": bosses, "quests": quests, "prerotated": prerotated, "originalwidth": originalwidth, "originalheight": originalheight }
 } 
 
 

@@ -1,13 +1,13 @@
 #SingleInstance, Force
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
-#Include %A_ScriptDir%\ui\drawing\exits.ahk
-#Include %A_ScriptDir%\ui\drawing\items.ahk
-#Include %A_ScriptDir%\ui\drawing\lines.ahk
-#Include %A_ScriptDir%\ui\drawing\missiles.ahk
-#Include %A_ScriptDir%\ui\drawing\mobs.ahk
-#Include %A_ScriptDir%\ui\drawing\objects.ahk
-#Include %A_ScriptDir%\ui\drawing\otherplayers.ahk
+#Include %A_ScriptDir%\map\drawing\exits.ahk
+#Include %A_ScriptDir%\map\drawing\items.ahk
+#Include %A_ScriptDir%\map\drawing\lines.ahk
+#Include %A_ScriptDir%\map\drawing\missiles.ahk
+#Include %A_ScriptDir%\map\drawing\mobs.ahk
+#Include %A_ScriptDir%\map\drawing\objects.ahk
+#Include %A_ScriptDir%\map\drawing\otherplayers.ahk
 
 ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByRef imageData, ByRef gameMemoryData, ByRef shrines, ByRef uiData) {
     scale:= settings["scale"]

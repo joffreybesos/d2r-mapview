@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [2.6.7] - 2021-03-07 - Revived monsters/mercs/summons now appear
+https://github.com/joffreybesos/d2r-mapview/releases/tag/V2.6.7
 
 - Revived mobs, summoned NPCs, Mercs, etc can be shown on the map in their own color
 - 'Show my merc/pets' setting will show/hide them

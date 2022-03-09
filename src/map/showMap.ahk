@@ -25,23 +25,6 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
         serverScale := 2 
     }
 
-    ; WriteLog("maxGuiWidth := " maxGuiWidth)
-    ; WriteLog("scale := " scale)
-    ; WriteLog("leftMargin := " leftMargin)
-    ; WriteLog("topMargin := " topMargin)
-    ; WriteLog("opacity := " opacity)
-    ; WriteLog(imageData["sFile"])
-    ; WriteLog(imageData["leftTrimmed"])
-    ; WriteLog(imageData["topTrimmed"])
-    ; WriteLog(imageData["mapOffsetX"])
-    ; WriteLog(imageData["mapOffsety"])
-    ; WriteLog(imageData["mapwidth"])
-    ; WriteLog(imageData["mapheight"])
-    ; WriteLog(imageData["prerotated"])
-
-    ; WriteLog(gameMemoryData["xPos"])
-    ; WriteLog(gameMemoryData["yPos"])
-
     StartTime := A_TickCount
     Angle := 45
     padding := 150
@@ -107,11 +90,9 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
         WinMove, ahk_id %unitHwnd1%,, windowLeftMargin+leftMargin, windowTopMargin+topMargin
     }
 
-    ; WriteLog(scaledWidth " " scaledHeight " " RWidth " " RHeight " " xPosDot " " yPosDot)
     ; seed := gameMemoryData["mapSeed"]
     ; sOutput := A_ScriptDir "\" seed "_" levelNo ".png"
     ; Gdip_SaveBitmapToFile(pBitmap, sOutput)
-    ; WriteLog(Width " " Height " " RWidth " " RHeight " " scale)
 
     SelectObject(hdc, obm)
     DeleteObject(hbm)

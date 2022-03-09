@@ -26,23 +26,24 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\memory\readLastGameName.ahk
 #Include %A_ScriptDir%\memory\readIPAddress.ahk
 #Include %A_ScriptDir%\memory\patternScan.ahk
-#Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
-#Include %A_ScriptDir%\ui\image\clearCache.ahk
-#Include %A_ScriptDir%\ui\image\prefetchMaps.ahk
-#Include %A_ScriptDir%\ui\showMap.ahk
+#Include %A_ScriptDir%\map\image\downloadMapImage.ahk
+#Include %A_ScriptDir%\map\image\clearCache.ahk
+#Include %A_ScriptDir%\map\image\prefetchMaps.ahk
+#Include %A_ScriptDir%\map\Map.ahk
+#Include %A_ScriptDir%\map\showMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
 #Include %A_ScriptDir%\ui\showInfo.ahk
-#Include %A_ScriptDir%\ui\showUnits.ahk
+#Include %A_ScriptDir%\map\showUnits.ahk
 #Include %A_ScriptDir%\ui\showSessions.ahk
-#Include %A_ScriptDir%\ui\movePlayerMap.ahk
+#Include %A_ScriptDir%\map\movePlayerMap.ahk
 #Include %A_ScriptDir%\stats\GameSession.ahk
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\localization.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 #Include %A_ScriptDir%\serverHealthCheck.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
-#Include %A_ScriptDir%\ui\gdip\unitsLayer.ahk
+#Include %A_ScriptDir%\map\gdip\unitsLayer.ahk
 
 global version := "2.6.7"
 
@@ -245,7 +246,6 @@ While 1 {
             ; if there's a level num then the player is in a map
             if (gameMemoryData["levelNo"] != lastlevel) { ; only redraw map when it changes
                 ; Show loading text
-                ;Gui, Map: Show, NA
                 mapLoading := 1
                 Gui, Map: Hide ; hide map
                 Gui, Units: Hide ; hide player dot
@@ -272,11 +272,13 @@ While 1 {
                 IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
                 IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
                 IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0
+                ; OutputDebug, % imageData["prerotated"] "`n"
                 imageData["levelScale"] := levelScale
                 imageData["levelxmargin"] := levelxmargin
                 imageData["levelymargin"] := levelymargin
-                ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
-
+                map := new Map(imageData, gameMemoryData, settings, mapHwnd1)
+                ;ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+                uiData := { "scaledWidth": map.scaledWidth, "scaledHeight": map.scaledHeight / 2, "sizeWidth": map.Width, "sizeHeight": map.Height, "rotatedWidth": map.scaledWidth, "rotatedHeight": map.scaledHeight }
                 unitsLayer.delete()
                 unitsLayer := new UnitsLayer(uiData)
                 
@@ -285,9 +287,7 @@ While 1 {
             
             ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
 
-            if (settings["centerMode"]) {
-                MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData, uiData)
-            }
+            MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData, uiData)
             if (Mod(ticktock, 3)) {
                 checkAutomapVisibility(d2rprocess, gameMemoryData)
             }

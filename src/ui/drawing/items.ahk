@@ -11,30 +11,30 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
         ;WriteLog(item.quality " " item.name " matched alert " alert.name)
         if (alert) {
             itemx := ((item.itemx - imageData["mapOffsetX"]) * serverScale) + padding
-            itemy := ((item.itemy - imageData["mapOffsetY"]) * serverScale) + padding
-            correctedPos := correctPos(settings, itemx, itemy, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-            itemx := correctedPos["x"] + centerLeftOffset
-            itemy := correctedPos["y"] + centerTopOffset
+            , itemy := ((item.itemy - imageData["mapOffsetY"]) * serverScale) + padding
+            , correctedPos := correctPos(settings, itemx, itemy, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+            , itemx := correctedPos["x"] + centerLeftOffset
+            , itemy := correctedPos["y"] + centerTopOffset
             if (alert.speak or alert.soundfile) {
                 announceItem(settings, item, alert)
             }
             pBrush1 := Gdip_BrushCreateSolid("0xffffffff")
-            pBrush2 := Gdip_BrushCreateSolid("0xee" . alert.color)
-            pBrush3 := Gdip_BrushCreateSolid("0xdd" . alert.color)
-            pBrush4 := Gdip_BrushCreateSolid("0xaa" . alert.color)
-            pBrush5 := Gdip_BrushCreateSolid("0x55" . alert.color)
-            pBrush6 := Gdip_BrushCreateSolid("0x33" . alert.color)
-            fontSize := settings["itemFontSize"] * scale
-            itemText := item.localizedName
+            , pBrush2 := Gdip_BrushCreateSolid("0xee" . alert.color)
+            , pBrush3 := Gdip_BrushCreateSolid("0xdd" . alert.color)
+            , pBrush4 := Gdip_BrushCreateSolid("0xaa" . alert.color)
+            , pBrush5 := Gdip_BrushCreateSolid("0x55" . alert.color)
+            , pBrush6 := Gdip_BrushCreateSolid("0x33" . alert.color)
+            , fontSize := settings["itemFontSize"] * scale
+            , itemText := item.localizedName
             if (item.numSockets > 0) {
                 itemText := itemText " [" item.numSockets "]"
             }
             textx := itemx - 250
-            texty := itemy - 107
-            acolor := "cc" . alert.color
+            , texty := itemy - 107
+            , acolor := "cc" . alert.color
             Options = x%textx% y%texty% Center vBottom c%acolor% r8 s%fontSize% 
             textx := textx + 1.5
-            texty := texty + 1.5
+            , texty := texty + 1.5
             Options2 = x%textx% y%texty% Center vBottom cff000000 r8 s%fontSize%
             Gdip_TextToGraphics(unitsLayer.G, itemText, Options2, diabloFont, 500, 100)
             Gdip_TextToGraphics(unitsLayer.G, itemText, Options, diabloFont, 500, 100)
@@ -47,7 +47,6 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
                 case 6: Gdip_FillEllipse(unitsLayer.G, pBrush6, itemx-16, itemy-16, 32, 32)
             }
             Gdip_FillEllipse(unitsLayer.G, pBrush2, itemx-2.5, itemy-2.5, 5, 5)
-            
             Gdip_DeletePen(pItemPen)
         }
     }

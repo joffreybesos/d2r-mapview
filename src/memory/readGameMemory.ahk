@@ -42,7 +42,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     , pStatsListEx := d2rprocess.read(playerUnit + 0x88, "Int64")
     , statPtr := d2rprocess.read(pStatsListEx + 0x30, "Int64")
     , statCount := d2rprocess.read(pStatsListEx + 0x38, "Int64")
-    ,  d2rprocess.readRaw(statPtr + 0x2, buffer, statCount*8)
+    , d2rprocess.readRaw(statPtr + 0x2, buffer, statCount*8)
     ; get level and experience
     Loop, %statCount%
     {

@@ -27,6 +27,7 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
             , fontSize := settings["itemFontSize"] * scale
             , itemText := item.localizedName
             if (item.numSockets > 0) {
+                SetFormat Integer, D
                 itemText := itemText " [" item.numSockets "]"
             }
             textx := itemx - 250

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.8] - 2021-03-09 - Exit text size
+
+- You can now change the size of the text for level exits
+- Revives will no longer show immunities
+- Some performance improvements to memory reading
+- Other slight perf improvements in drawing
+
 ## [2.6.7] - 2021-03-07 - Revived monsters/mercs/summons now appear
 
 - Revived mobs, summoned NPCs, Mercs, etc can be shown on the map in their own color

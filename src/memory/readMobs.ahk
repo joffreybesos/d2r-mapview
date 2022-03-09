@@ -52,46 +52,48 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef mobs) {
                 }
 
                 isTownNPC := isTownNPC(txtFileNo)
-                , hp := 0
-                , maxhp := 0
-                , immunities := { physical: 0, magic: 0, fire: 0, light: 0, cold: 0, poison: 0 }
-                ,  d2rprocess.readRaw(statPtr + 0x2, buffer, statCount*8)
-                Loop, %statCount%
-                {
-                    offset := (A_Index -1) * 8
-                    , statEnum := NumGet(&buffer , offset, Type := "UShort")
-                    , statValue := NumGet(&buffer , offset + 0x2, Type := "UInt")
-                    if (isPlayerMinion) {
-                        if (statEnum == 0) {
-                            if (statValue == "") {
-                                isPlayerMinion := 0
+                if (!isPlayerMinion) {
+                    , hp := 0
+                    , maxhp := 0
+                    , immunities := { physical: 0, magic: 0, fire: 0, light: 0, cold: 0, poison: 0 }
+                    , d2rprocess.readRaw(statPtr + 0x2, buffer, statCount*8)
+                    Loop, %statCount%
+                    {
+                        offset := (A_Index -1) * 8
+                        , statEnum := NumGet(&buffer , offset, Type := "UShort")
+                        , statValue := NumGet(&buffer , offset + 0x2, Type := "UInt")
+                        if (isPlayerMinion) {
+                            if (statEnum == 0) {
+                                if (statValue == "") {
+                                    isPlayerMinion := 0
+                                }
+                                break
                             }
-                            break
                         }
-                    }
-                    
-                    if (statValue >= 100) {
-                        switch (statEnum) {
-                            ; no enums here, just bad practices instead
-                            case 36: immunities["physical"] := 1 ;physical immune
-                            case 37: immunities["magic"] := 1    ;magic immune
-                            case 39: immunities["fire"] := 1     ;fire resist
-                            case 41: immunities["light"] := 1    ;light resist
-                            case 43: immunities["cold"] := 1     ;cold resist
-                            case 45: immunities["poison"] := 1   ;poison resist
+                        
+                        if (statValue >= 100) {
+                            switch (statEnum) {
+                                ; no enums here, just bad practices instead
+                                case 36: immunities["physical"] := 1 ;physical immune
+                                case 37: immunities["magic"] := 1    ;magic immune
+                                case 39: immunities["fire"] := 1     ;fire resist
+                                case 41: immunities["light"] := 1    ;light resist
+                                case 43: immunities["cold"] := 1     ;cold resist
+                                case 45: immunities["poison"] := 1   ;poison resist
+                            }
                         }
-                    }
-                    
-                    if (isBoss) {
-                        if (statEnum == 6) {
-                            hp := statValue
-                            hp := hp >> 8
-                            ; 'hp' will now have correct value
-                        }
-                        if (statEnum == 7) {
-                            maxhp := statValue
-                            maxhp := maxhp >> 8
-                            ; maxhp is the max hp WITHOUT any item/charm/skill boosts applied!
+                        
+                        if (isBoss) {
+                            if (statEnum == 6) {
+                                hp := statValue
+                                hp := hp >> 8
+                                ; 'hp' will now have correct value
+                            }
+                            if (statEnum == 7) {
+                                maxhp := statValue
+                                maxhp := maxhp >> 8
+                                ; maxhp is the max hp WITHOUT any item/charm/skill boosts applied!
+                            }
                         }
                     }
                 }

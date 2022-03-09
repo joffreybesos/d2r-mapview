@@ -115,7 +115,7 @@ readSettings(settingsFile, ByRef settings) {
     
     settings["showPlayerMissiles"] := 1
     settings["showEnemyMissiles"] := 1
-    settings["missileOpacity"] := "0x77"
+    settings["missileOpacity"] := "0x66"
     settings["missileColorPhysicalMajor"] := "FFC2C2"
     settings["missileColorPhysicalMinor"] := "C99D9D"
     settings["missileFireMajorColor"] := "FF0000"
@@ -129,8 +129,8 @@ readSettings(settingsFile, ByRef settings) {
     settings["missileMagicMajorColor"] := "FF7300"
     settings["missileMagicMinorColor"] := "B35000"
 
-    settings["missileMajorDotSize"] := "4"
-    settings["missileMinorDotSize"] := "2"
+    settings["missileMajorDotSize"] := "2.5"
+    settings["missileMinorDotSize"] := "1.5"
 
     defaultSettings := settings.clone()
 

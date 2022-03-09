@@ -8,7 +8,7 @@
 readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryData) {
     static items
     static objects
-    StartTime := A_TickCount
+    ;StartTime := A_TickCount
     startingOffset := offsets["playerOffset"] ;default offset
 
     ;WriteLog("Looking for Level No address at player offset " playerOffset)
@@ -89,7 +89,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
 
     ; get objects
     if (settings["showShrines"] or settings["showPortals"] or settings["showChests"]) {
-        if (Mod(ticktock, 6)) {
+        if (Mod(ticktock, 2)) {
             ReadObjects(d2rprocess, startingOffset, levelNo, objects)
         }
     }
@@ -111,7 +111,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
         WriteLog("Did not find player position at player offset " playerOffset) 
     }
     gameMemoryData := {"gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "missiles": missiles, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName, "experience": experience, "playerLevel": playerLevel, "menuShown": menuShown }
-    ElapsedTime := A_TickCount - StartTime
+    ;ElapsedTime := A_TickCount - StartTime
     ;OutputDebug, % ElapsedTime "`n"
     ;ToolTip % "`n`n`n`n" ElapsedTime
 }

@@ -11,11 +11,11 @@ drawMissiles(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
         for each, missile in missilearray
         {
             missilex := ((missile["x"] - imageData["mapOffsetX"]) * serverScale) + padding
-            missiley := ((missile["y"] - imageData["mapOffsetY"]) * serverScale) + padding
-            correctedPos := correctPos(settings, missilex, missiley, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-            missilex := correctedPos["x"] + centerLeftOffset
-            missiley := correctedPos["y"] + centerTopOffset
-            if (oldMissilex = missilex && oldMissiley = missiley){
+            , missiley := ((missile["y"] - imageData["mapOffsetY"]) * serverScale) + padding
+            , correctedPos := correctPos(settings, missilex, missiley, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+            , missilex := correctedPos["x"] + centerLeftOffset
+            , missiley := correctedPos["y"] + centerTopOffset
+            if (oldMissilex == missilex && oldMissiley == missiley){
             } else {
                 switch (missile["UnitType"]) {
                     case "PhysicalMajor": Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenPhysicalMajor, missilex-3, missiley-3, unitsLayer.majorDotSize, unitsLayer.majorDotSize/2)

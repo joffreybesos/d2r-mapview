@@ -30,6 +30,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\map\image\clearCache.ahk
 #Include %A_ScriptDir%\map\image\prefetchMaps.ahk
 #Include %A_ScriptDir%\map\Map.ahk
+#Include %A_ScriptDir%\map\UnitsLayer.ahk
 #Include %A_ScriptDir%\map\showMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
@@ -43,7 +44,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\readSettings.ahk
 #Include %A_ScriptDir%\serverHealthCheck.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
-#Include %A_ScriptDir%\map\gdip\unitsLayer.ahk
+
 
 global version := "2.6.7"
 
@@ -280,14 +281,15 @@ While 1 {
                 ;ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
                 uiData := { "scaledWidth": map.scaledWidth, "scaledHeight": map.scaledHeight / 2, "sizeWidth": map.Width, "sizeHeight": map.Height, "rotatedWidth": map.scaledWidth, "rotatedHeight": map.scaledHeight }
                 unitsLayer.delete()
-                unitsLayer := new UnitsLayer(uiData)
                 
+                unitsLayer := new UnitsLayer(map, settings, imageData, unitHwnd1, mapHwnd1, gameMemoryData, shrines)
                 redrawMap := 0
             }
+            unitsLayer.Update(gameMemoryData, settings)
             
-            ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
+            ;ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
 
-            MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData, uiData)
+            ;MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData, uiData)
             if (Mod(ticktock, 3)) {
                 checkAutomapVisibility(d2rprocess, gameMemoryData)
             }

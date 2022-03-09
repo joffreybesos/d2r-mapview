@@ -24,8 +24,8 @@ class Map {
         this.Height := imageData["originalHeight"]
         this.scaledWidth := RWidth * this.scale
         this.scaledHeight := RHeight * this.scale
-        OutputDebug, % pBitmap
-        OutputDebug, % this.sFile " " this.Width " " this.Height " " this.scaledWidth " " this.scaledHeight "b " this.serverScale
+        
+        ; OutputDebug, % this.sFile " " this.Width " " this.Height " " this.scaledWidth " " this.scaledHeight "b " this.serverScale
 
         hbm := CreateDIBSection(this.scaledWidth, this.scaledHeight)
         hdc := CreateCompatibleDC()

@@ -38,6 +38,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["showFPS"] := 0
     settings["textIPfontSize"] := "18"
     settings["textIPalignment"] := "LEFT"
+    settings["exitTextSize"] := "12"
 
     settings["showNormalMobs"] := 1
     settings["showUniqueMobs"] := 1

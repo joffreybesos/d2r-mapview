@@ -20,7 +20,7 @@ drawExits(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
     }
     exitTextColor := hexOpacity . "ffffff"
     exitTextColorShadow := hexOpacity . "000000"
-    exitTextSize := 15 * scale
+    exitTextSize := settings["exitTextSize"] * scale
     if (exitsHeader) {
         Loop, parse, exitsHeader, `|
         {
@@ -38,7 +38,7 @@ drawExits(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
             ,exitX := (exitArray[3] * serverScale) + padding
             ,exitY := (exitArray[4] * serverScale) + padding
             ,correctedPos := correctPos(settings, exitX, exitY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-            , exitX := correctedPos["x"] + centerLeftOffset
+            ,exitX := correctedPos["x"] + centerLeftOffset
             ,exitY := correctedPos["y"] + centerTopOffset
             ,textx := exitX - 400
             ,texty := exitY - 110

@@ -53,7 +53,7 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef mobs) {
 
                 isTownNPC := isTownNPC(txtFileNo)
                 if (!isPlayerMinion) {
-                    , hp := 0
+                    hp := 0
                     , maxhp := 0
                     , immunities := { physical: 0, magic: 0, fire: 0, light: 0, cold: 0, poison: 0 }
                     , d2rprocess.readRaw(statPtr + 0x2, buffer, statCount*8)

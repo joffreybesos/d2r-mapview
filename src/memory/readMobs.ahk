@@ -7,10 +7,14 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef mobs) {
     monstersOffset := startingOffset + 1024
     Loop, 128
     {
+        
         newOffset := monstersOffset + (8 * (A_Index - 1))
         , mobAddress := d2rprocess.BaseAddress + newOffset
         , mobUnit := d2rprocess.read(mobAddress, "Int64")
         while (mobUnit > 0) { ; keep following the next pointer
+            
+
+
             mobType := d2rprocess.read(mobUnit + 0x00, "UInt")
             , txtFileNo := d2rprocess.read(mobUnit + 0x04, "UInt")
             if (!HideNPC(txtFileNo)) {
@@ -51,17 +55,14 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef mobs) {
                 , hp := 0
                 , maxhp := 0
                 , immunities := { physical: 0, magic: 0, fire: 0, light: 0, cold: 0, poison: 0 }
+                ,  d2rprocess.readRaw(statPtr + 0x2, buffer, statCount*8)
                 Loop, %statCount%
                 {
                     offset := (A_Index -1) * 8
-                    ;statParam := d2rprocess.read(statPtr + offset, "UShort")
-                    , statEnum := d2rprocess.read(statPtr + 0x2 + offset, "UShort")
-                    , statValue := d2rprocess.read(statPtr + 0x4 + offset, "UInt")
-                    ;WriteLog(statEnum " " statValue)
+                    , statEnum := NumGet(&buffer , offset, Type := "UShort")
+                    , statValue := NumGet(&buffer , offset + 0x2, Type := "UInt")
                     if (isPlayerMinion) {
                         if (statEnum == 0) {
-                            ;WriteLog(statEnum " " statValue)
-                            
                             if (statValue == "") {
                                 isPlayerMinion := 0
                             }
@@ -80,7 +81,6 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef mobs) {
                             case 45: immunities["poison"] := 1   ;poison resist
                         }
                     }
-
                     
                     if (isBoss) {
                         if (statEnum == 6) {

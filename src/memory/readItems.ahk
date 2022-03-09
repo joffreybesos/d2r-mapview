@@ -27,18 +27,18 @@ ReadItems(ByRef d2rprocess, startingOffset, ByRef items) {
                     , pPath := d2rprocess.read(itemUnit + 0x38, "Int64")  
                     , itemx := d2rprocess.read(pPath + 0x10, "UShort")
                     , itemy := d2rprocess.read(pPath + 0x14, "UShort")
-
                     , pStatsListEx := d2rprocess.read(itemUnit + 0x88, "Int64")
                     , statPtr := d2rprocess.read(pStatsListEx + 0x30, "Int64")
                     , statCount := d2rprocess.read(pStatsListEx + 0x38, "Int64")
-
+                    , d2rprocess.readRaw(statPtr + 0x2, buffer, statCount*8)
                     , numSockets := 0
                     Loop, %statCount%
                     {
-                        statOffset := (A_Index-1) * 8
-                        statEnum := d2rprocess.read(statPtr + 0x2 + statOffset, "UShort")
+                        offset := (A_Index -1) * 8
+                        , statEnum := NumGet(&buffer , offset, Type := "UShort")
                         if (statEnum == 194) {
-                            numSockets := d2rprocess.read(statPtr + 0x4 + statOffset, "UInt")
+                            statValue := NumGet(&buffer , offset + 0x2, Type := "UInt")
+                            numSockets := statValue
                             break
                         }
                     }

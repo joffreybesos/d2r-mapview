@@ -161,7 +161,7 @@ settingupGUI := false
 
 ; performance counters
 global ticktock := 0
-maxfps := 45
+maxfps := 60
 tickCount := 0
 ticksPerFrame := 1000 / maxfps
 frameCount := 0

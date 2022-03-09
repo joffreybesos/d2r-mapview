@@ -9,8 +9,8 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     static items
     static objects
     StartTime := A_TickCount
-    startingOffset := offsets["playerOffset"]  ;default offset
-    
+    startingOffset := offsets["playerOffset"] ;default offset
+
     ;WriteLog("Looking for Level No address at player offset " playerOffset)
     , startingAddress := d2rprocess.BaseAddress + playerOffset
     , playerUnit := d2rprocess.read(startingAddress, "Int64")
@@ -42,21 +42,19 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     , pStatsListEx := d2rprocess.read(playerUnit + 0x88, "Int64")
     , statPtr := d2rprocess.read(pStatsListEx + 0x30, "Int64")
     , statCount := d2rprocess.read(pStatsListEx + 0x38, "Int64")
-
+    ,  d2rprocess.readRaw(statPtr + 0x2, buffer, statCount*8)
     ; get level and experience
     Loop, %statCount%
     {
-        statOffset := (A_Index-1) * 8
-        statEnum := d2rprocess.read(statPtr + 0x2 + statOffset, "UShort")
+        offset := (A_Index -1) * 8
+        , statEnum := NumGet(&buffer , offset, Type := "UShort")
+        , statValue := NumGet(&buffer , offset + 0x2, Type := "UInt")
         if (statEnum == 12) {
-            playerLevel := d2rprocess.read(statPtr + 0x4 + statOffset, "UInt")
+            playerLevel := statValue
         }
         if (statEnum == 13) {
-            experience := d2rprocess.read(statPtr + 0x4 + statOffset, "UInt")
-            
+            experience := statValue
         }
-        if (statEnum > 13)
-            break
     }
 
     ; get other players
@@ -104,8 +102,8 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     , yPos := d2rprocess.read(pathAddress + 0x06, "UShort")
     , xPosOffset := d2rprocess.read(pathAddress + 0x00, "UShort") 
     , yPosOffset := d2rprocess.read(pathAddress + 0x04, "UShort")
-    , xPosOffset := xPosOffset / 65536   ; get percentage
-    , yPosOffset := yPosOffset / 65536   ; get percentage
+    , xPosOffset := xPosOffset / 65536 ; get percentage
+    , yPosOffset := yPosOffset / 65536 ; get percentage
     , xPos := xPos + xPosOffset
     , yPos := yPos + yPosOffset
 

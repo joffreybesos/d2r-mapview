@@ -3,13 +3,13 @@
 ReadItems(ByRef d2rprocess, startingOffset, ByRef items) {
     ; items
     items := []
-    itemsOffset := startingOffset + (4 * 1024)
+    , itemsOffset := startingOffset + (4 * 1024)
+    , baseAddress := d2rprocess.BaseAddress + itemsOffset
+    , d2rprocess.readRaw(baseAddress, unitTableBuffer, 128*8)
     Loop, 128
     {
-        newOffset := itemsOffset + (8 * (A_Index - 1))
-        , itemAddress := d2rprocess.BaseAddress + newOffset
-        , itemUnit := d2rprocess.read(itemAddress, "Int64")
-        
+        offset := (8 * (A_Index - 1))
+        , itemUnit := NumGet(&unitTableBuffer , offset, "Int64")
         while (itemUnit > 0) { ; keep following the next pointer
             itemType := d2rprocess.read(itemUnit + 0x00, "UInt")
             if (itemType == 4) { ; item is 4

@@ -3,11 +3,12 @@ ReadObjects(ByRef d2rprocess, startingOffset, ByRef levelNo, ByRef gameObjects) 
     ; items
     gameObjects := []
     , objectOffset := startingOffset + (2 * 1024)
-    Loop, 256
+    , baseAddress := d2rprocess.BaseAddress + objectOffset
+    , d2rprocess.readRaw(baseAddress, unitTableBuffer, 128*8)
+    Loop, 128
     {
-        newOffset := objectOffset + (8 * (A_Index - 1))
-        , itemAddress := d2rprocess.BaseAddress + newOffset
-        , objectUnit := d2rprocess.read(itemAddress, "Int64")
+        offset := (8 * (A_Index - 1))
+        , objectUnit := NumGet(&unitTableBuffer , offset, "Int64")
         
         while (objectUnit > 0) { ; keep following the next pointer
             itemType := d2rprocess.read(objectUnit + 0x00, "UInt") ; item is 4

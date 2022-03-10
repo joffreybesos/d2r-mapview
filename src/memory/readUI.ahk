@@ -3,7 +3,7 @@ SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
 
-readUI(d2rprocess, gameWindowId, settings, session) {
+readUI(ByRef d2rprocess, gameWindowId, settings, session) {
     if (not WinExist(gameWindowId)) {
         WriteLog(gameWindowId " not found, please make sure game is running")
         if (session) {

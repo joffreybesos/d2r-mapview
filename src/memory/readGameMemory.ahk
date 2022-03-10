@@ -64,7 +64,11 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
 
     ; ; get mobs
     if (settings["showNormalMobs"] or settings["showUniqueMobs"] or settings["showBosses"] or settings["showDeadMobs"]) {
+        ;DllCall("QueryPerformanceCounter", "Int64*", MobStartTime)
         ReadMobs(d2rprocess, startingOffset, mobs)
+        ;DllCall("QueryPerformanceCounter", "Int64*", MobEndTime)
+        ;duration := MobEndTime - MobStartTime
+        ;OutputDebug, % "Mobs time: " duration "`n"
     }
 
     ; missiles

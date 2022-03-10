@@ -1,28 +1,22 @@
 
 ReadMobs(ByRef d2rprocess, startingOffset, ByRef mobs) {
     ; monsters
-    ;StartTime := A_TickCount
-    
     mobs := []
     monstersOffset := startingOffset + 1024
+    baseAddress := d2rprocess.BaseAddress + monstersOffset
+    d2rprocess.readRaw(baseAddress, unitTableBuffer, 128*8)
     Loop, 128
     {
-        
-        newOffset := monstersOffset + (8 * (A_Index - 1))
-        , mobAddress := d2rprocess.BaseAddress + newOffset
-        , mobUnit := d2rprocess.read(mobAddress, "Int64")
+        offset := (8 * (A_Index - 1))
+        , mobUnit := NumGet(&unitTableBuffer , offset, "Int64")
         while (mobUnit > 0) { ; keep following the next pointer
-            
-
-
             mobType := d2rprocess.read(mobUnit + 0x00, "UInt")
             , txtFileNo := d2rprocess.read(mobUnit + 0x04, "UInt")
             if (!HideNPC(txtFileNo)) {
                 unitId := d2rprocess.read(mobUnit + 0x08, "UInt")
                 , mode := d2rprocess.read(mobUnit + 0x0c, "UInt")
                 , pUnitData := d2rprocess.read(mobUnit + 0x10, "Int64")
-                , pPath := d2rprocess.read(mobUnit + 0x38, "Int64")
-            
+                , pPath := d2rprocess.read(mobUnit + 0x38, "Int64") 
                 , isUnique := d2rprocess.read(pUnitData + 0x18, "UShort")
                 , monx := d2rprocess.read(pPath + 0x02, "UShort")
                 , mony := d2rprocess.read(pPath + 0x06, "UShort")
@@ -43,7 +37,7 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef mobs) {
                 pStatsListEx := d2rprocess.read(mobUnit + 0x88, "Int64")
                 , statPtr := d2rprocess.read(pStatsListEx + 0x30, "Int64")
                 , statCount := d2rprocess.read(pStatsListEx + 0x38, "Int64")
-
+                , isPlayerMinion := 0
                 , playerMinion := getPlayerMinion(txtFileNo)
                 if (playerMinion) {
                     isPlayerMinion:= 1
@@ -52,11 +46,11 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef mobs) {
                 }
 
                 isTownNPC := isTownNPC(txtFileNo)
+                , hp := 0
+                , maxhp := 0
+                , immunities := { physical: 0, magic: 0, fire: 0, light: 0, cold: 0, poison: 0 }
                 if (!isPlayerMinion) {
-                    hp := 0
-                    , maxhp := 0
-                    , immunities := { physical: 0, magic: 0, fire: 0, light: 0, cold: 0, poison: 0 }
-                    , d2rprocess.readRaw(statPtr + 0x2, buffer, statCount*8)
+                    d2rprocess.readRaw(statPtr + 0x2, buffer, statCount*8)
                     Loop, %statCount%
                     {
                         offset := (A_Index -1) * 8

@@ -3,12 +3,13 @@
 readMissiles(ByRef d2rprocess, startingOffset) {
     ;global settings
     array := []
-    tableOffset := startingOffset + (3 * 1024)
+    , tableOffset := startingOffset + (3 * 1024)
+    , baseAddress := d2rprocess.BaseAddress + tableOffset
+    , d2rprocess.readRaw(baseAddress, unitTableBuffer, 128*8)
     Loop, 128
     {
-        newOffset := tableOffset + (8 * (A_Index - 1))
-        , arrayAddress := d2rprocess.BaseAddress + newOffset
-        , arrayUnit := d2rprocess.read(arrayAddress, "Int64")
+        offset := (8 * (A_Index - 1))
+        , arrayUnit := NumGet(&unitTableBuffer , offset, "Int64")
         while (arrayUnit > 0 ) { ; keep following the next pointer
             txtFileNo := d2rprocess.read(arrayUnit + 0x04, "UInt")
             ;tooltip, % txtFileNo . "", 300, 0, 7

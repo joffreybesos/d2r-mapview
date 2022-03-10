@@ -5,12 +5,13 @@ ReadOtherPlayers(ByRef d2rprocess, startingOffset, ByRef otherPlayers) {
     SetFormat Integer, D
 
     found := false
+    , baseAddress := d2rprocess.BaseAddress + startingOffset
+    , d2rprocess.readRaw(baseAddress, unitTableBuffer, 128*8)
     loop, 128
     {
         ;WriteLogDebug("Attempt " A_Index " with starting offset " startingOffset)
-        newOffset := HexAdd(startingOffset, (A_Index - 1) * 8)
-        , startingAddress := d2rprocess.BaseAddress + newOffset
-        , playerUnit := d2rprocess.read(startingAddress, "Int64")
+        offset := (8 * (A_Index - 1))
+        , playerUnit := NumGet(&unitTableBuffer , offset, "Int64")
         while (playerUnit > 0) { ; keep following the next pointer
             pInventory := playerUnit + 0x90
             , inventory := d2rprocess.read(pInventory, "Int64")
@@ -27,7 +28,6 @@ ReadOtherPlayers(ByRef d2rprocess, startingOffset, ByRef otherPlayers) {
                     , actAddress := d2rprocess.read(pAct, "Int64")
                     , mapSeedAddress := actAddress + 0x14
                     , mapSeed := d2rprocess.read(mapSeedAddress, "UInt")
-
                     , pPath := playerUnit + 0x38
                     , pathAddress := d2rprocess.read(pPath, "Int64")
                     , xPos := d2rprocess.read(pathAddress + 0x02, "UShort")
@@ -38,14 +38,12 @@ ReadOtherPlayers(ByRef d2rprocess, startingOffset, ByRef otherPlayers) {
                     , yPosOffset := yPosOffset / 65536   ; get percentage
                     , xPos := xPos + xPosOffset
                     , yPos := yPos + yPosOffset
-
                     , pUnitData := playerUnit + 0x10
                     , playerNameAddress := d2rprocess.read(pUnitData, "Int64")
                     , playerName := d2rprocess.readString(playerNameAddress, length := 0)
                     
                     if (xPos > 0 and yPos > 0) {
                         SetFormat Integer, D
-                        ;WriteLog("SUCCESS: Found other player: " name " " newOffset ", at " A_Index " position " xPos " " yPos)
                         otherPlayers.push({ "player": A_Index, "playerName": playerName, "x": xPos, "y": yPos})
                     }
                 }

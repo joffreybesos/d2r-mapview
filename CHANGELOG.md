@@ -2,12 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.6.8] - 2021-03-09 - Exit text size
+## [2.6.8] - 2021-03-10 - Exit text size
 
 - You can now change the size of the text for level exits
 - Revives will no longer show immunities
-- Some performance improvements to memory reading
+- Massive improvement to performance reading memory values
 - Other slight perf improvements in drawing
+- You can now configure the maximum FPS, choose a lower value if this MH is a resource hog
 
 ## [2.6.7] - 2021-03-07 - Revived monsters/mercs/summons now appear
 

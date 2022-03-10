@@ -44,7 +44,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
 #Include %A_ScriptDir%\ui\gdip\unitsLayer.ahk
 
-global version := "2.6.7"
+global version := "2.6.8"
 
 lastMap := ""
 exitArray := []
@@ -161,7 +161,7 @@ settingupGUI := false
 
 ; performance counters
 global ticktock := 0
-maxfps := 60
+maxfps := settings["fpscap"]
 tickCount := 0
 ticksPerFrame := 1000 / maxfps
 frameCount := 0

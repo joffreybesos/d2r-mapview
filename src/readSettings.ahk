@@ -113,6 +113,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["enableD2ML"] := 0
     settings["windowTitle"] := "D2R:main"
     settings["debug"] := 0
+    settings["fpscap"] := 60
     
     settings["showPlayerMissiles"] := 1
     settings["showEnemyMissiles"] := 1

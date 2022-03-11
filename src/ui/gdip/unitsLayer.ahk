@@ -110,8 +110,8 @@ class UnitsLayer {
         , this.pPenDead := Gdip_CreatePen(deadColor, this.deadDotSize)
         , this.pPenMerc := Gdip_CreatePen(mercColor, this.normalDotSize * 0.7)
         , this.pPenTownNPC := Gdip_CreatePen(townNPCColor, this.normalDotSize * 0.7)
-        , this.pPenMercCross := Gdip_CreatePen(mercColor, 2)
-        , this.pPenTownNPCCross := Gdip_CreatePen(townNPCColor, 2)
+        , this.pPenMercCross := Gdip_CreatePen(mercColor, 1 * scale)
+        , this.pPenTownNPCCross := Gdip_CreatePen(townNPCColor, 1 * scale)
 
         ; immunities
         , physicalImmuneColor := 0xff . settings["physicalImmuneColor"] 
@@ -130,15 +130,15 @@ class UnitsLayer {
 
         ; portals
         if (settings["centerMode"]) {
-            this.pPortal := Gdip_CreatePen("0xff" . settings["portalColor"], 5)
-            this.pRedPortal := Gdip_CreatePen("0xff" . settings["redPortalColor"], 5)
+            this.pPortal := Gdip_CreatePen("0xff" . settings["portalColor"], 2.5 * scale)
+            this.pRedPortal := Gdip_CreatePen("0xff" . settings["redPortalColor"], 2.5 * scale)
         } else {
-            this.pPortal := Gdip_CreatePen("0xff" . settings["portalColor"], 2.5)
-            this.pRedPortal := Gdip_CreatePen("0xff" . settings["redPortalColor"], 2.5)
+            this.pPortal := Gdip_CreatePen("0xff" . settings["portalColor"], 2.5 * scale)
+            this.pRedPortal := Gdip_CreatePen("0xff" . settings["redPortalColor"], 2.5 * scale)
         }
 
         ; chests
-        this.pChest := Gdip_CreatePen(0xcc111111, 2)
+        this.pChest := Gdip_CreatePen(0xcc111111, 1 * scale)
     }
 
     delete() {

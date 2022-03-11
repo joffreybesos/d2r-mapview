@@ -285,10 +285,10 @@ While 1 {
             
             ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
 
-            if (settings["centerMode"]) {
-                MovePlayerMap(settings, d2rprocess, playerOffset, mapHwnd1, unitHwnd1, imageData, uiData)
+            if (settings["centerMode"] and gameMemoryData["pathAddress"]) {
+                MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], mapHwnd1, unitHwnd1, imageData, uiData)
             }
-            if (Mod(ticktock, 3)) {
+            if (Mod(ticktock, 6)) {
                 checkAutomapVisibility(d2rprocess, gameMemoryData)
             }
             lastlevel := gameMemoryData["levelNo"]

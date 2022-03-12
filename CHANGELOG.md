@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.9] - 2021-03-12 - Unique and set item names
+
+- When an item drops on the ground it will show/speak the full unique or set item name
+  e.g. instead of 'Unique Battle Boots' you will hear 'Unique War Traveler Battle Boots'
+- The item does not have to be identified for this to work
+- Both the text to speech and alert on the screen will show the full name
+- This doesn't work for all items - it doesn't work for rings and amulets
+- The name should be localised and say the name in your local language.
+
 ## [2.6.8] - 2021-03-10 - Exit text size
 
 - You can now change the size of the text for level exits

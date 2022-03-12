@@ -34,7 +34,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["textSize"] := "20"
     settings["textAlignment"] := "LEFT"
     settings["showAllHistory"] := 0
-    settings["showIPtext"] := 1
+    settings["showIPtext"] := 0
     settings["showFPS"] := 0
     settings["textIPfontSize"] := "18"
     settings["textIPalignment"] := "LEFT"

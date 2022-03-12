@@ -1,7 +1,8 @@
 
-ReadMobs(ByRef d2rprocess, startingOffset, ByRef mobs) {
+ReadMobs(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef mobs, ByRef hoveredMob) {
     ; monsters
     mobs := []
+    hoveredMob := {}
     monstersOffset := startingOffset + 1024
     baseAddress := d2rprocess.BaseAddress + monstersOffset
     d2rprocess.readRaw(baseAddress, unitTableBuffer, 128*8)
@@ -65,16 +66,14 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef mobs) {
                             }
                         }
                         
-                        if (statValue >= 100) {
-                            switch (statEnum) {
-                                ; no enums here, just bad practices instead
-                                case 36: immunities["physical"] := 1 ;physical immune
-                                case 37: immunities["magic"] := 1    ;magic immune
-                                case 39: immunities["fire"] := 1     ;fire resist
-                                case 41: immunities["light"] := 1    ;light resist
-                                case 43: immunities["cold"] := 1     ;cold resist
-                                case 45: immunities["poison"] := 1   ;poison resist
-                            }
+                        switch (statEnum) {
+                            ; no enums here, just bad practices instead
+                            case 36: immunities["physical"] := statValue ;physical immune
+                            case 37: immunities["magic"] := statValue    ;magic immune
+                            case 39: immunities["fire"] := statValue     ;fire resist
+                            case 41: immunities["light"] := statValue    ;light resist
+                            case 43: immunities["cold"] := statValue     ;cold resist
+                            case 45: immunities["poison"] := statValue   ;poison resist
                         }
                         
                         if (isBoss) {
@@ -90,8 +89,16 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef mobs) {
                             }
                         }
                     }
+                    if (currentHoveringUnitId) {
+                        if (currentHoveringUnitId == unitId) { ; monster currently has mouse hovering
+                            isHovered := true
+                        }
+                    }
                 }
-                mob := {"txtFileNo": txtFileNo, "mode": mode, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "isPlayerMinion": isPlayerMinion, "textTitle": textTitle, "immunities": immunities, "hp": hp, "maxhp": maxhp, "isTownNPC": isTownNPC }
+                mob := {"txtFileNo": txtFileNo, "mode": mode, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "isPlayerMinion": isPlayerMinion, "textTitle": textTitle, "immunities": immunities, "hp": hp, "maxhp": maxhp, "isTownNPC": isTownNPC, "isHovered": isHovered }
+                if (isHovered) {
+                    hoveredMob := mob
+                }
                 mobs.push(mob)
             }
             mobUnit := d2rprocess.read(mobUnit + 0x150, "Int64")  ; get next mob

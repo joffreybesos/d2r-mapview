@@ -1,6 +1,3 @@
-#SingleInstance, Force
-SendMode Input
-SetWorkingDir, %A_ScriptDir%
 
 
 PatternScan(ByRef d2r, ByRef offsets) {
@@ -44,5 +41,13 @@ PatternScan(ByRef d2r, ByRef offsets) {
     menuOffset := ((patternAddress - d2r.BaseAddress) + 6 + offsetBuffer)
     offsets["menuOffset"] := menuOffset
     WriteLog("Scanned and found menu offset: " menuOffset)
+
+    ; last hover object
+    pattern := d2r.hexStringToPattern("C6 84 C2 ?? ?? ?? ?? ?? 48 8B 74 24 ??") 
+    patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
+    hoverOffset := d2r.read(patternAddress + 3, "Int") - 1
+    offsets["hoverOffset"] := hoverOffset
+    WriteLog("Scanned and found hover offset: " hoverOffset)
+    
     SetFormat, Integer, D
 }

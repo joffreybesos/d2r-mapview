@@ -42,7 +42,8 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\readSettings.ahk
 #Include %A_ScriptDir%\serverHealthCheck.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
-#Include %A_ScriptDir%\ui\gdip\unitsLayer.ahk
+#Include %A_ScriptDir%\ui\gdip\UnitsLayer.ahk
+#Include %A_ScriptDir%\ui\gdip\UIAssistLayer.ahk
 
 global version := "2.6.8"
 
@@ -154,6 +155,8 @@ global mapHwnd1 := WinExist()
 
 Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
 global unitHwnd1 := WinExist()
+
+uiAssistLayer := new UIAssistLayer(settings)
 
 sessionList := []
 offsetAttempts := 6
@@ -284,6 +287,7 @@ While 1 {
             }
             
             ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
+            uiAssistLayer.drawMonsterBar(gameMemoryData["hoveredMob"])
 
             if (settings["centerMode"] and gameMemoryData["pathAddress"]) {
                 MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], mapHwnd1, unitHwnd1, imageData, uiData)

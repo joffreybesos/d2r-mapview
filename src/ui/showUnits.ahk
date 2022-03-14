@@ -1,6 +1,7 @@
 #SingleInstance, Force
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
+#Include %A_ScriptDir%\ui\drawing\helper.ahk
 #Include %A_ScriptDir%\ui\drawing\exits.ahk
 #Include %A_ScriptDir%\ui\drawing\items.ahk
 #Include %A_ScriptDir%\ui\drawing\lines.ahk
@@ -116,10 +117,8 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
         playerCrossYoffset := (yPosDot)+centerTopOffset
         if (settings["playerAsCross"]) {
             ; draw a gress cross to represent the player
-            points := createCross(playerCrossXoffset, playerCrossYoffset, 5 * scale)
-            
-            Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenGreen, points)
-            
+            points := createCross(playerCrossXoffset, playerCrossYoffset, 4.9 * scale)
+            Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenPlayer, points)
         } else {
             ; draw a square dot, but angled along the map Gdip_PathOutline()
             pBrush := Gdip_BrushCreateSolid(0xff00FF00)
@@ -133,10 +132,10 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
             , y3 := playerCrossYoffset + yscale
 
             points = %x1%,%y2%|%x2%,%y1%|%x3%,%y2%|%x2%,%y3%
-            Gdip_FillPolygon(unitsLayer.G, unitsLayer.pBrushGreen, points)    
+            Gdip_FillPolygon(unitsLayer.G, unitsLayer.pBrushPlayer, points)    
+            ; dotSize := 23
             ; Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenBlack, playerCrossXoffset-(dotSize/2), playerCrossYoffset-(dotSize/4), dotSize, dotSize/2)
-            ; Gdip_FillEllipse(unitsLayer.G, unitsLayer.pBrushGreen, playerCrossXoffset-(dotSize/2), playerCrossYoffset-(dotSize/4), dotSize, dotSize/2)
-            
+            ; Gdip_FillEllipse(unitsLayer.G, unitsLayer.pBrushPlayer, playerCrossXoffset-(dotSize/2), playerCrossYoffset-(dotSize/4), dotSize, dotSize/2)
         }       
     }
 
@@ -178,67 +177,3 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
     
 }
 
-
-correctPos(settings, xPosDot, yPosDot, centerX, centerY, RWidth, RHeight, scale) {
-    correctedPos := findNewPos(xPosDot, yPosDot, centerX, centerY, RWidth, RHeight, scale)
-    if (settings["centerMode"]) {
-        correctedPos["x"] := correctedPos["x"] + settings["centerModeXUnitoffset"]
-        correctedPos["y"] := correctedPos["y"] + settings["centerModeYUnitoffset"]
-    }
-    return correctedPos
-}
-
-; converting to cartesian to polar and back again sucks
-; I wish my matrix transformations worked
-findNewPos(xPosDot, yPosDot, centerX, centerY, RWidth, RHeight, scale) {
-    newAngle := findAngle(xPosDot, yPosDot, centerX, centerY) + 45
-    , distance := getDistanceFromCoords(xPosDot, yPosDot, centerX, centerY) * scale
-    , newPos := getPosFromAngle((RWidth/2),(RHeight/2),distance,newAngle)
-    , newPos["y"] := (RHeight/2) + ((RHeight/2) - newPos["y"]) /2
-    return newPos
-}
-
-
-findAngle(xPosDot, yPosDot, midW, midH) {
-    Pi := 4 * ATan(1)
-    , Conversion := -180 / Pi  ; Radians to deg.
-    , Angle2 := DllCall("msvcrt.dll\atan2", "Double", yPosDot-midH, "Double", xPosDot-midW, "CDECL Double") * Conversion
-    if (Angle2 < 0)
-        Angle2 += 360
-    return Angle2
-}
-
-getDistanceFromCoords(x2,y2,x1,y1){
-    return sqrt((y2-y1)**2+(x2-x1)**2)
-}
-
-getPosFromAngle(x1,y1,len,ang){
-	ang:=(ang-90) * 0.0174532925
-	return {"x": x1+len*cos(ang),"y": y1+len*sin(ang)}
-}
-
-
-hasVal(haystack, needle) {
-	for index, value in haystack
-		if (value == needle)
-			return index
-	return 0
-}
-
-
-createCross(ByRef playerCrossXoffset, ByRef playerCrossYoffset, ByRef scale) {
-    xscale := scale
-    , yscale := scale / 2
-    , x1 := playerCrossXoffset - xscale - xscale
-    , x2 := playerCrossXoffset - xscale
-    , x3 := playerCrossXoffset
-    , x4 := playerCrossXoffset + xscale
-    , x5 := playerCrossXoffset + xscale + xscale
-    , y1 := playerCrossYoffset - yscale - yscale
-    , y2 := playerCrossYoffset - yscale
-    , y3 := playerCrossYoffset
-    , y4 := playerCrossYoffset + yscale
-    , y5 := playerCrossYoffset + yscale + yscale
-    points = %x1%,%y2%|%x2%,%y3%|%x1%,%y4%|%x2%,%y5%|%x3%,%y4%|%x4%,%y5%|%x5%,%y4%|%x4%,%y3%|%x5%,%y2%|%x4%,%y1%|%x3%,%y2%|%x2%,%y1%
-    return points
-}

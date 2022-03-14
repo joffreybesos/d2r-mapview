@@ -45,7 +45,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\UnitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UIAssistLayer.ahk
 
-global version := "2.6.9"
+global version := "2.7.0"
 
 lastMap := ""
 exitArray := []
@@ -77,7 +77,8 @@ global isMapShowing:=1
 global debug := settings["debug"]
 global gameWindowId := settings["gameWindowId"]
 global gameStartTime:=0
-global diabloFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
+global exocetFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
+global formalFont := (A_ScriptDir . "\formal436bt-regular.otf")
 global mapLoading := 0
 global seenItems := []
 global oSpVoice := ComObjCreate("SAPI.SpVoice")

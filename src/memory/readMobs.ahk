@@ -223,108 +223,133 @@ getSuperUniqueName(txtFileNo) {
 
 isTownNPC(txtFileNo) {
     switch (txtFileNo) {
-        case 146: return 1 ; DeckardCain,
-        case 154: return 1 ; Charsi,
-        case 147: return 1 ; Gheed, 154
-        case 150: return 1 ; Kashya,
-        case 155: return 1 ; Warriv,
-        case 148: return 1 ; Akara,
-        case 244: return 1 ; DeckardCain2,
-        case 210: return 1 ; Meshif,
-        case 175: return 1 ; Warriv2,
-        case 199: return 1 ; Elzix,
-        case 198: return 1 ; Greiz,
-        case 177: return 1 ; Drognan,
-        case 178: return 1 ; Fara,
-        case 202: return 1 ; Lysander,
-        case 176: return 1 ; Atma,
-        case 200: return 1 ; Geglash,
-        case 331: return 1 ; Kaelan,
-        case 245: return 1 ; DeckardCain3,
-        case 264: return 1 ; Meshif2,
-        case 255: return 1 ; Ormus,
-        case 176: return 1 ; Atma,
-        case 252: return 1 ; Asheara,
-        case 254: return 1 ; Alkor,
-        case 253: return 1 ; Hratli,
-        case 297: return 1 ; Natalya,
-        case 246: return 1 ; DeckardCain4,
-        case 251: return 1 ; Tyrael,
-        case 367: return 1 ; Tyrael2,
-        case 521: return 1 ; Tyrael3,
-        case 257: return 1 ; Halbu,
-        case 405: return 1 ; Jamella,
-        case 265: return 1 ; DeckardCain5,
-        case 520: return 1 ; DeckardCain6,
-        case 512: return 1 ; Drehya,
-        case 527: return 1 ; Drehya2,
-        case 515: return 1 ; QualKehk,
-        case 513: return 1 ; Malah,
-        case 511: return 1 ; Larzuk,
-        case 514: return 1 ; NihlathakTown,
-        case 266: return 1 ; Navi,
-        case 408: return 1 ; Malachai,
-        case 406: return 1 ; Izual2, 
+        case 146: return "DeckardCain"
+        case 154: return "Charsi"
+        case 147: return "Gheed"
+        case 150: return "Kashya"
+        case 155: return "Warriv"
+        case 148: return "Akara"
+        case 244: return "DeckardCain"
+        case 210: return "Meshif"
+        case 175: return "Warriv"
+        case 199: return "Elzix"
+        case 198: return "Greiz"
+        case 177: return "Drognan"
+        case 178: return "Fara"
+        case 202: return "Lysander"
+        case 176: return "Atma"
+        case 200: return "Geglash"
+        case 331: return "Kaelan"
+        case 245: return "DeckardCain"
+        case 264: return "Meshif"
+        case 255: return "Ormus"
+        case 176: return "Atma"
+        case 252: return "Asheara"
+        case 254: return "Alkor"
+        case 253: return "Hratli"
+        case 297: return "Natalya"
+        case 246: return "DeckardCain"
+        case 251: return "Tyrael"
+        case 367: return "Tyrael"
+        case 521: return "Tyrael"
+        case 257: return "Halbu"
+        case 405: return "Jamella"
+        case 265: return "DeckardCain"
+        case 520: return "DeckardCain"
+        case 512: return "Drehya"
+        case 527: return "Drehya"
+        case 515: return "Qual-Kehk"
+        case 513: return "Malah"
+        case 511: return "Larzuk"
+        case 514: return "Nihlathak Town"
+        case 266: return "navi"
+        case 408: return "Malachai"
+        case 406: return "Izual" 
     }
 }
 
 ; certain NPCs we don't want to see such as mercs
 HideNPC(txtFileNo) {
     switch (txtFileNo) {
-        case 149: return 1
-        case 151: return 1
-        case 152: return 1
-        case 153: return 1
-        case 157: return 1
-        case 158: return 1
-        case 159: return 1
-        case 195: return 1
-        case 196: return 1
-        case 197: return 1
-        case 179: return 1
-        case 185: return 1
-        case 203: return 1
-        case 204: return 1
-        case 205: return 1
-        case 268: return 1
-        case 269: return 1
-        ;case 271: return 1
-        case 272: return 1
-        case 293: return 1
-        case 294: return 1
-        ;case 289: return 1
-        ;case 290: return 1
-        ;case 291: return 1
-        ;case 292: return 1
-        case 296: return 1
-        case 318: return 1
-        case 319: return 1
-        case 320: return 1
-        case 321: return 1
-        case 322: return 1
-        case 323: return 1
-        case 324: return 1
-        case 325: return 1
-        case 332: return 1
-        ;case 338: return 1
-        case 339: return 1
-        case 344: return 1
-        case 355: return 1
-        ;case 359: return 1
-        ;case 363: return 1
-        ;case 364: return 1
-        case 370: return 1
-        case 377: return 1
-        case 378: return 1
-        case 392: return 1
-        case 393: return 1
-        case 401: return 1
-        case 411: return 1
-        case 412: return 1
-        case 414: return 1
-        case 415: return 1
-        case 416: return 1
-        case 711: return 1
+        case 149: return 1 ;Chicken
+        case 151: return 1 ;Rat
+        case 152: return 1 ;Rogue
+        case 153: return 1 ;HellMeteor
+        case 157: return 1 ;Bird
+        case 158: return 1 ;Bird2
+        case 159: return 1 ;Bat
+        case 195: return 1 ;Act2Male
+        case 196: return 1 ;Act2Female
+        case 197: return 1 ;Act2Child
+        case 179: return 1 ;Cow
+        case 185: return 1 ;Camel
+        case 203: return 1 ;Act2Guard
+        case 204: return 1 ;Act2Vendor
+        case 205: return 1 ;Act2Vendor2
+        case 227: return 1 ;Maggot
+        case 268: return 1 ;Bug
+        case 269: return 1 ;Scorpion
+        case 271: return 1 ;Rogue2
+        case 272: return 1 ;Rogue3
+        case 283: return 1 ;Larva
+        case 293: return 1 ;Familiar
+        case 294: return 1 ;Act3Male
+        case 289: return 1 ;ClayGolem
+        case 290: return 1 ;BloodGolem
+        case 291: return 1 ;IronGolem
+        case 292: return 1 ;FireGolem
+        case 296: return 1 ;Act3Female
+        case 318: return 1 ;Snake
+        case 319: return 1 ;Parrot
+        case 320: return 1 ;Fish
+        case 321: return 1 ;EvilHole
+        case 322: return 1 ;EvilHole2
+        case 323: return 1 ;EvilHole3
+        case 324: return 1 ;EvilHole4
+        case 325: return 1 ;EvilHole5
+        case 326: return 1 ;FireboltTrap
+        case 327: return 1 ;HorzMissileTrap
+        case 328: return 1 ;VertMissileTrap
+        case 329: return 1 ;PoisonCloudTrap
+        case 330: return 1 ;LightningTrap
+        case 332: return 1 ;InvisoSpawner
+        case 338: return 1 ;Guard
+        case 339: return 1 ;MiniSpider
+        case 344: return 1 ;BoneWall
+        case 351: return 1 ;Hydra
+        case 352: return 1 ;Hydra2
+        case 353: return 1 ;Hydra3
+        case 355: return 1 ;SevenTombs
+        case 357: return 1 ;Valkyrie
+        case 359: return 1 ;IronWolf
+        case 363: return 1 ;NecroSkeleton
+        case 364: return 1 ;NecroMage
+        case 366: return 1 ;CompellingOrb},
+        case 370: return 1 ;SpiritMummy
+        case 377: return 1 ;Act2Guard4
+        case 378: return 1 ;Act2Guard5
+        case 392: return 1 ;Window
+        case 393: return 1 ;Window2
+        case 401: return 1 ;MephistoSpirit
+        case 410: return 1 ;WakeOfDestruction
+        case 411: return 1 ;ChargedBoltSentry
+        case 412: return 1 ;LightningSentry
+        case 414: return 1 ;InvisiblePet
+        case 415: return 1 ;InfernoSentry
+        case 416: return 1 ;DeathSentry
+        case 417: return 1 ;ShadowWarrior
+        case 418: return 1 ;ShadowMaster
+        case 419: return 1 ;DruidHawk
+        case 420: return 1 ;DruidSpiritWolf
+        case 421: return 1 ;DruidFenris
+        case 423: return 1 ;HeartOfWolverine
+        case 424: return 1 ;OakSage
+        case 428: return 1 ;DruidBear
+        case 543: return 1 ;BaalThrone
+        case 567: return 1 ;InjuredBarbarian
+        case 568: return 1 ;InjuredBarbarian2
+        case 569: return 1 ;InjuredBarbarian3
+        case 711: return 1 ;DemonHole
     }
     return 0
 }

@@ -273,13 +273,7 @@ No one can say for sure. Blizzard do have Warden anti-cheat that will scan your 
 
 ## Troubleshooting
 
-- A log file `log.txt` is generated in the same folder as the executable.
-- You can also set debug logging to `true` in `settings.ini` for verbose logging.
-- Go to the discord server if you need further help <https://discord.gg/qEgqyVW3uj>
-- Tested and working on Diablo 2 Resurrected `1.0.67554`
-
-Error message `Warning: The keyboard and/or mouse hook could not be activated; some parts of the script will not function`:
-This happens with certain antivirus where it will block hotkeys, you may need to 'allow' the script for hotkeys to work.
+Refer to <https://github.com/joffreybesos/d2r-mapview/wiki/Setup-guide#troubleshooting>  
 
 ## Licence
 

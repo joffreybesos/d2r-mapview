@@ -1,6 +1,3 @@
-#SingleInstance, Force
-SendMode Input
-SetWorkingDir, %A_ScriptDir%
 
 drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageData, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset) {
     ; draw item alerts
@@ -33,15 +30,18 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
                 SetFormat Integer, D
                 itemText := itemText " [" item.numSockets "]"
             }
-            textx := itemx - 250
-            , texty := itemy - 107
-            , acolor := "cc" . alert.color
-            Options = x%textx% y%texty% Center vBottom c%acolor% r8 s%fontSize% 
-            textx := textx + 1
-            , texty := texty + 1
-            Options2 = x%textx% y%texty% Center vBottom cff000000 r8 s%fontSize%
-            Gdip_TextToGraphics(unitsLayer.G, itemText, Options2, diabloFont, 500, 100)
-            Gdip_TextToGraphics(unitsLayer.G, itemText, Options, diabloFont, 500, 100)
+            ; textx := itemx - 250
+            ; , texty := itemy - 107
+            ; , acolor := "cc" . alert.color
+            ; Options = x%textx% y%texty% Center vBottom c%acolor% r8 s%fontSize% 
+            ; textx := textx + 1
+            ; , texty := texty + 1
+            ; Options2 = x%textx% y%texty% Center vBottom cff000000 r8 s%fontSize%
+            ; Gdip_TextToGraphics(unitsLayer.G, itemText, Options2, exocetFont, 500, 100)
+            ; Gdip_TextToGraphics(unitsLayer.G, itemText, Options, exocetFont, 500, 100)
+            acolor := "cc" . alert.color    
+            drawFloatingText(unitsLayer, itemx, itemy, fontSize, acolor, true, exocetFont, itemText)
+
             switch (ticktock) {
                 case 1: Gdip_FillEllipse(unitsLayer.G, pBrush1, itemx-5, itemy-5, 10, 10)
                 case 2: Gdip_FillEllipse(unitsLayer.G, pBrush2, itemx-6, itemy-6, 12, 12)

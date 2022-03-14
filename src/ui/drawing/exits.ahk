@@ -46,8 +46,8 @@ drawExits(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
             textx := textx + 2
             ,texty := texty + 2
             Options2 = x%textx% y%texty% Center Bold vBottom c%exitTextColorShadow% r8 s%exitTextSize%
-            Gdip_TextToGraphics(unitsLayer.G, exitName, Options2, diabloFont, 800, 100)
-            Gdip_TextToGraphics(unitsLayer.G, exitName, Options, diabloFont, 800, 100)
+            Gdip_TextToGraphics(unitsLayer.G, exitName, Options2, exocetFont, 800, 100)
+            Gdip_TextToGraphics(unitsLayer.G, exitName, Options, exocetFont, 800, 100)
         }
     }
 }

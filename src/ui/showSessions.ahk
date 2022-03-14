@@ -83,8 +83,8 @@ drawHeader(G, textx, texty, Width, fontSize, textStr) {
     textx := textx + 2
     texty := texty + 2
     Options2 = x%textx% y%texty% Left vCenter cff000000 r4 s%fontSize% Bold
-    Gdip_TextToGraphics(G, textStr, Options2, diabloFont, Width, 50)
-    Gdip_TextToGraphics(G, textStr, Options, diabloFont, Width, 50)
+    Gdip_TextToGraphics(G, textStr, Options2, exocetFont, Width, 50)
+    Gdip_TextToGraphics(G, textStr, Options, exocetFont, Width, 50)
 }
 
 drawData(G, textx, texty, Width, Height, fontSize, textList) {
@@ -92,6 +92,6 @@ drawData(G, textx, texty, Width, Height, fontSize, textList) {
     textx := textx + 2
     texty := texty + 2
     Options2 = x%textx% y%texty% Left vTop cff000000 r4 s%fontSize% Bold
-    Gdip_TextToGraphics(G, textList, Options2, diabloFont, Width, Height)
-    Gdip_TextToGraphics(G, textList, Options, diabloFont, Width, Height)
+    Gdip_TextToGraphics(G, textList, Options2, exocetFont, Width, Height)
+    Gdip_TextToGraphics(G, textList, Options, exocetFont, Width, Height)
 }

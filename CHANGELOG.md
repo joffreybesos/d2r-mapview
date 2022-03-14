@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.0] - 2021-03-14 - Visual polish
+
+- Town NPCs now have their names above them
+- Introduced the other diablo font
+- Item alert text will now have a black background
+- Player dot is now blue to be consistent with normal automap
+- Other players are now bright green
+- Other player names has also been made to appear the same as the normal automap
+
 ## [2.6.9] - 2021-03-12 - Unique and set item names
 
 - When an item drops on the ground it will show/speak the full unique or set item name

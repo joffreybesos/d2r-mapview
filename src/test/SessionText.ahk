@@ -2,8 +2,8 @@
 
 #Include ..\include\Gdip_All.ahk
 #Include ..\..\src\stats\GameSession.ahk
-; global diabloFont = "Arial"
-global diabloFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
+; global exocetFont = "Arial"
+global exocetFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
 
 sessionList := []
 session1 := new GameSession("GameName1", A_TickCount, "PlayerName1")
@@ -60,11 +60,11 @@ ShowHistoryText(hwnd1, gameWindowId, sessionList, position = "RIGHT", textBoxWid
         col3 := textBoxWidth * 0.78
 
         Options = x%col1% y0 Left vCenter cffffffff r4 s%fontSize% Bold
-        Gdip_TextToGraphics(G, "Game Name", Options, diabloFont, Width, 50)
+        Gdip_TextToGraphics(G, "Game Name", Options, exocetFont, Width, 50)
         Options = x%col2% y0 Left vCenter cffffffff r4 s%fontSize% Bold
-        Gdip_TextToGraphics(G, "Character", Options, diabloFont, Width, 50)
+        Gdip_TextToGraphics(G, "Character", Options, exocetFont, Width, 50)
         Options = x%col3% y0 Left vCenter cffffffff r4 s%fontSize% Bold
-        Gdip_TextToGraphics(G, "Duration", Options, diabloFont, Width, 50)
+        Gdip_TextToGraphics(G, "Duration", Options, exocetFont, Width, 50)
 
         y := 40
         ; lists is in reverse order
@@ -77,14 +77,14 @@ ShowHistoryText(hwnd1, gameWindowId, sessionList, position = "RIGHT", textBoxWid
             gameTime := session.duration
 
             Options = x%col1% y%y% Left vCenter cffFFD700 r4 s%fontSize%
-            Gdip_TextToGraphics(G, gameName, Options, diabloFont, Width, 50)
+            Gdip_TextToGraphics(G, gameName, Options, exocetFont, Width, 50)
 
             Options = x%col2% y%y% Left vCenter cffFFD700 r4 s%fontSize%
-            Gdip_TextToGraphics(G, playerName, Options, diabloFont, Width, 50)
+            Gdip_TextToGraphics(G, playerName, Options, exocetFont, Width, 50)
 
             gameTime := Round(gameTime, 1) . " sec"
             Options = x%col3% y%y% Left vCenter cffFFD700 r4 s%fontSize%
-            Gdip_TextToGraphics(G, gameTime, Options, diabloFont, Width/2, 50)
+            Gdip_TextToGraphics(G, gameTime, Options, exocetFont, Width/2, 50)
             y += 40
             
         }

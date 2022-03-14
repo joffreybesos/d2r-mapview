@@ -26,11 +26,15 @@ class UnitsLayer {
     }
 
     createPens(ByRef settings) {
-        this.pPenGreen := Gdip_CreatePen(0xff00FF00, 2)
+        this.pPenGreen := Gdip_CreatePen(0xff00FF00, 1 * scale)
+        this.pPenPlayer := Gdip_CreatePen(0xff2087fd, 2)
+        this.pPenOtherPlayer := Gdip_CreatePen(0xff00ff00, 1 * scale)
         this.pBrushGreen := Gdip_BrushCreateSolid(0xff00FF00)
+        this.pBrushPlayer := Gdip_BrushCreateSolid(0xff2087fd)
+        this.pBrushOtherPlayer := Gdip_BrushCreateSolid(0xff00FF00)
         this.pBrushDarkGreen := Gdip_BrushCreateSolid(0xff00aa00)
-        this.pPenBlack := Gdip_CreatePen(0xff000000, 1)
-        this.pPenHealth := Gdip_CreatePen(0xccdd0000, 1)
+        this.pPenBlack := Gdip_CreatePen(0xff000000, 0.5 * scale)
+        this.pPenHealth := Gdip_CreatePen(0xccdd0000, 0.5 * scale)
         this.pBrushHealth := Gdip_BrushCreateSolid(0x44dd0000)
         this.pBrushNonHealth := Gdip_BrushCreateSolid(0x44000000)
 
@@ -110,8 +114,8 @@ class UnitsLayer {
         , this.pPenDead := Gdip_CreatePen(deadColor, this.deadDotSize)
         , this.pPenMerc := Gdip_CreatePen(mercColor, this.normalDotSize * 0.7)
         , this.pPenTownNPC := Gdip_CreatePen(townNPCColor, this.normalDotSize * 0.7)
-        , this.pPenMercCross := Gdip_CreatePen(mercColor, 1 * scale)
-        , this.pPenTownNPCCross := Gdip_CreatePen(townNPCColor, 1 * scale)
+        , this.pPenMercCross := Gdip_CreatePen(mercColor, 0.8* scale)
+        , this.pPenTownNPCCross := Gdip_CreatePen(townNPCColor, 0.8 * scale)
 
         ; immunities
         , physicalImmuneColor := 0xff . settings["physicalImmuneColor"] 
@@ -150,8 +154,12 @@ class UnitsLayer {
         Gdip_DeleteBrush(this.pBrushGreen) 
         , Gdip_DeleteBrush(this.pBrushDarkGreen) 
         , Gdip_DeletePen(this.pPenGreen)
+        , Gdip_DeletePen(this.pPenPlayer)
+        , Gdip_DeletePen(this.pPenOtherPlayer)
+        , Gdip_DeleteBrush(this.pBrushOtherPlayer)
         , Gdip_DeletePen(this.pPenBlack)
         , Gdip_DeletePen(this.pPenHealth)
+        , Gdip_DeleteBrush(this.pBrushPlayer)
         , Gdip_DeleteBrush(this.pBrushHealth) 
         , Gdip_DeleteBrush(this.pBrushNonHealth) 
         , Gdip_DeletePen(this.pLineWP)

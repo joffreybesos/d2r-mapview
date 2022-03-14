@@ -35,11 +35,11 @@ ShowInfoText(hwnd1, gameWindowId, ipaddress, currentFPS, position = "LEFT", font
         Options2 = x0 y20 %align% vTop cffc6b276 r4 s%fontSize%
         
         if (settings["showIPtext"]) {
-            Gdip_TextToGraphics(G, ipaddress, Options, diablofont, textBoxWidth, 50)
+            Gdip_TextToGraphics(G, ipaddress, Options, exocetFont, textBoxWidth, 50)
         }
         if (settings["showFPS"]) {
             currentFPS := currentFPS " FPS"
-            Gdip_TextToGraphics(G, currentFPS, Options2, diablofont, textBoxWidth, 50)
+            Gdip_TextToGraphics(G, currentFPS, Options2, exocetFont, textBoxWidth, 50)
         }
         UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, textBoxWidth, 50)
         SelectObject(hdc, obm)

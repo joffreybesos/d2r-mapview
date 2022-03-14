@@ -216,48 +216,48 @@ getSuperUniqueName(txtFileNo) {
 
 isTownNPC(txtFileNo) {
     switch (txtFileNo) {
-        case 146: return 1 ; DeckardCain,
-        case 154: return 1 ; Charsi,
-        case 147: return 1 ; Gheed, 154
-        case 150: return 1 ; Kashya,
-        case 155: return 1 ; Warriv,
-        case 148: return 1 ; Akara,
-        case 244: return 1 ; DeckardCain2,
-        case 210: return 1 ; Meshif,
-        case 175: return 1 ; Warriv2,
-        case 199: return 1 ; Elzix,
-        case 198: return 1 ; Greiz,
-        case 177: return 1 ; Drognan,
-        case 178: return 1 ; Fara,
-        case 202: return 1 ; Lysander,
-        case 176: return 1 ; Atma,
-        case 200: return 1 ; Geglash,
-        case 331: return 1 ; Kaelan,
-        case 245: return 1 ; DeckardCain3,
-        case 264: return 1 ; Meshif2,
-        case 255: return 1 ; Ormus,
-        case 176: return 1 ; Atma,
-        case 252: return 1 ; Asheara,
-        case 254: return 1 ; Alkor,
-        case 253: return 1 ; Hratli,
-        case 297: return 1 ; Natalya,
-        case 246: return 1 ; DeckardCain4,
-        case 251: return 1 ; Tyrael,
-        case 367: return 1 ; Tyrael2,
-        case 521: return 1 ; Tyrael3,
-        case 257: return 1 ; Halbu,
-        case 405: return 1 ; Jamella,
-        case 265: return 1 ; DeckardCain5,
-        case 520: return 1 ; DeckardCain6,
-        case 512: return 1 ; Drehya,
-        case 527: return 1 ; Drehya2,
-        case 515: return 1 ; QualKehk,
-        case 513: return 1 ; Malah,
-        case 511: return 1 ; Larzuk,
-        case 514: return 1 ; NihlathakTown,
-        case 266: return 1 ; Navi,
-        case 408: return 1 ; Malachai,
-        case 406: return 1 ; Izual2, 
+        case 146: return "DeckardCain"
+        case 154: return "Charsi"
+        case 147: return "Gheed"
+        case 150: return "Kashya"
+        case 155: return "Warriv"
+        case 148: return "Akara"
+        case 244: return "DeckardCain"
+        case 210: return "Meshif"
+        case 175: return "Warriv"
+        case 199: return "Elzix"
+        case 198: return "Greiz"
+        case 177: return "Drognan"
+        case 178: return "Fara"
+        case 202: return "Lysander"
+        case 176: return "Atma"
+        case 200: return "Geglash"
+        case 331: return "Kaelan"
+        case 245: return "DeckardCain"
+        case 264: return "Meshif"
+        case 255: return "Ormus"
+        case 176: return "Atma"
+        case 252: return "Asheara"
+        case 254: return "Alkor"
+        case 253: return "Hratli"
+        case 297: return "Natalya"
+        case 246: return "DeckardCain"
+        case 251: return "Tyrael"
+        case 367: return "Tyrael"
+        case 521: return "Tyrael"
+        case 257: return "Halbu"
+        case 405: return "Jamella"
+        case 265: return "DeckardCain"
+        case 520: return "DeckardCain"
+        case 512: return "Drehya"
+        case 527: return "Drehya"
+        case 515: return "Qual-Kehk"
+        case 513: return "Malah"
+        case 511: return "Larzuk"
+        case 514: return "Nihlathak Town"
+        case 266: return "navi"
+        case 408: return "Malachai"
+        case 406: return "Izual" 
     }
 }
 

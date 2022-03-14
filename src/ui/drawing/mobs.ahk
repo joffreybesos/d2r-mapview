@@ -67,6 +67,9 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
                         if (mob["isPlayerMinion"] and settings["showMerc"]) {
                             Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenMercCross, points)
                         } else if (mob["isTownNPC"] and !mob["isPlayerMinion"] and settings["showTownNPCs"]) {
+                            fontSize := 11 * scale
+                            npcName := mob["isTownNPC"]
+                            drawFloatingText(unitsLayer, mobx, moby-(9.2 * scale), fontSize, "ffc6b276", true, formalFont, localizedStrings[npcName])
                             Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenTownNPCCross, points)
                         } else if (!mob["isTownNPC"] and !mob["isPlayerMinion"]) {
                             ;Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenNormal, points)
@@ -76,6 +79,9 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
                         if (mob["isPlayerMinion"] and settings["showMerc"]) {
                             Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenMerc, mobx-(unitsLayer.normalDotSize/2), moby-(unitsLayer.normalDotSize/1.5), unitsLayer.normalDotSize, unitsLayer.normalDotSize/2)
                         } else if (mob["isTownNPC"] and !mob["isPlayerMinion"] and settings["showTownNPCs"]) {
+                            fontSize := 11 * scale
+                            npcName := mob["isTownNPC"]
+                            drawFloatingText(unitsLayer, mobx, moby-(9.2 * scale), fontSize, "ffc6b276", true, formalFont, localizedStrings[npcName])
                             Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenTownNPC, mobx-(unitsLayer.normalDotSize/2), moby-(unitsLayer.normalDotSize/1.5), unitsLayer.normalDotSize, unitsLayer.normalDotSize/2)
                         } else if (!mob["isTownNPC"] and !mob["isPlayerMinion"]) {
                             Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenNormal, mobx-(unitsLayer.normalDotSize/2), moby-(unitsLayer.normalDotSize/1.5), unitsLayer.normalDotSize, unitsLayer.normalDotSize/2)
@@ -108,7 +114,7 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
                     Options2 = x%textx% y%texty% Center vBottom cff000000 r8 s24
                     
                     ;x|y|width|height|chars|lines
-                    measuredString := Gdip_TextToGraphics(unitsLayer.G, mob["textTitle"], Options2, diabloFont, 200, 100)
+                    measuredString := Gdip_TextToGraphics(unitsLayer.G, mob["textTitle"], Options2, exocetFont, 200, 100)
                     , ms := StrSplit(measuredString , "|")
                     , healthbarx := ms[1] - 10
                     , healthbary := ms[2] - 5
@@ -120,7 +126,7 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
                     , nonhealthPortionx := healthbarx + healthPortion
                     Gdip_FillRectangle(unitsLayer.G, unitsLayer.pBrushNonHealth, nonhealthPortionx, healthbary, nonhealthPortion, healthbarheight)
                     Gdip_FillRectangle(unitsLayer.G, unitsLayer.pBrushHealth, healthbarx, healthbary, healthPortion, healthbarheight)
-                    Gdip_TextToGraphics(unitsLayer.G, mob["textTitle"], Options, diabloFont, 200, 100)
+                    Gdip_TextToGraphics(unitsLayer.G, mob["textTitle"], Options, exocetFont, 200, 100)
                     Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenBoss, mobx-(unitsLayer.bossDotSize/2), moby-(unitsLayer.bossDotSize/2), unitsLayer.bossDotSize, unitsLayer.bossDotSize/2)
                 }
             }
@@ -169,5 +175,4 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
             }
         }
     }
-
 }

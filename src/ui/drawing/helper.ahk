@@ -57,24 +57,25 @@ calculatePercentage(ByRef x1,ByRef y1,ByRef x2,ByRef y2, ByRef percentage)
 
 calcThirdPoint(x1,y1,x2,y2, ByRef angle, ByRef distance) {
     y1 := y1 * 2
-    y2 := y2 * 2
-    Angle2 := findAngle(x1, y1, x2, y2)
-    newAngle := angle - Angle2
-    newPos := getPosFromAngle(x1,y1,distance,newAngle)
-    newPos["y"] := newPos["y"] / 2
+    , y2 := y2 * 2
+    , Angle2 := findAngle(x1, y1, x2, y2)
+    , newAngle := angle - Angle2
+    , newPos := getPosFromAngle(x1,y1,distance,newAngle)
+    , newPos["y"] := newPos["y"] / 2
     return newPos
 }
 
 
 
 drawFloatingText(ByRef unitsLayer, ByRef unitx, ByRef unity, ByRef fontSize, ByRef fontColor, ByRef background, ByRef font, ByRef text) {
-    textSpaceWidth := 450
-    textSpaceHeight := 100
-    textx := unitx - textSpaceWidth /2
-    texty := unity-(unitsLayer.normalDotSize/2) - textSpaceHeight
+    
+    textSpaceWidth := StrLen(text) * fontSize
+    , textSpaceHeight := 100
+    , textx := unitx - textSpaceWidth /2
+    , texty := unity-(unitsLayer.normalDotSize/2) - textSpaceHeight
     Options = x%textx% y%texty% Center vBottom c%fontColor% r8 s%fontSize%
     textx := textx + 1
-    texty := texty + 1
+    , texty := texty + 1
     Options2 = x%textx% y%texty% Center vBottom cff000000 r8 s%fontSize%
     
 

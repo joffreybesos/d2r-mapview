@@ -40,14 +40,7 @@ drawExits(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
             ,correctedPos := correctPos(settings, exitX, exitY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             ,exitX := correctedPos["x"] + centerLeftOffset
             ,exitY := correctedPos["y"] + centerTopOffset
-            ,textx := exitX - 400
-            ,texty := exitY - 110
-            Options = x%textx% y%texty% Center Bold vBottom c%exitTextColor% r8 s%exitTextSize%
-            textx := textx + 2
-            ,texty := texty + 2
-            Options2 = x%textx% y%texty% Center Bold vBottom c%exitTextColorShadow% r8 s%exitTextSize%
-            Gdip_TextToGraphics(unitsLayer.G, exitName, Options2, exocetFont, 800, 100)
-            Gdip_TextToGraphics(unitsLayer.G, exitName, Options, exocetFont, 800, 100)
+            drawFloatingText(unitsLayer, exitX, exitY-10, exitTextSize, exitTextColor, false, exocetFont, exitName)
         }
     }
 }

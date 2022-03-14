@@ -69,7 +69,9 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
                         } else if (mob["isTownNPC"] and !mob["isPlayerMinion"] and settings["showTownNPCs"]) {
                             fontSize := 11 * scale
                             npcName := mob["isTownNPC"]
-                            drawFloatingText(unitsLayer, mobx, moby-(9.2 * scale), fontSize, "ffc6b276", true, formalFont, localizedStrings[npcName])
+                            if (settings["showTownNPCNames"]) {
+                                drawFloatingText(unitsLayer, mobx, moby-(9.2 * scale), fontSize, "ffc6b276", true, formalFont, localizedStrings[npcName])
+                            }
                             Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenTownNPCCross, points)
                         } else if (!mob["isTownNPC"] and !mob["isPlayerMinion"]) {
                             ;Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenNormal, points)
@@ -81,7 +83,9 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
                         } else if (mob["isTownNPC"] and !mob["isPlayerMinion"] and settings["showTownNPCs"]) {
                             fontSize := 11 * scale
                             npcName := mob["isTownNPC"]
-                            drawFloatingText(unitsLayer, mobx, moby-(9.2 * scale), fontSize, "ffc6b276", true, formalFont, localizedStrings[npcName])
+                            if (settings["showTownNPCNames"]) {
+                                drawFloatingText(unitsLayer, mobx, moby-(9.2 * scale), fontSize, "ffc6b276", true, formalFont, localizedStrings[npcName])
+                            }
                             Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenTownNPC, mobx-(unitsLayer.normalDotSize/2), moby-(unitsLayer.normalDotSize/1.5), unitsLayer.normalDotSize, unitsLayer.normalDotSize/2)
                         } else if (!mob["isTownNPC"] and !mob["isPlayerMinion"]) {
                             Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenNormal, mobx-(unitsLayer.normalDotSize/2), moby-(unitsLayer.normalDotSize/1.5), unitsLayer.normalDotSize, unitsLayer.normalDotSize/2)

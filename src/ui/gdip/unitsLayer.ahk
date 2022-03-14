@@ -26,15 +26,16 @@ class UnitsLayer {
     }
 
     createPens(ByRef settings) {
-        this.pPenGreen := Gdip_CreatePen(0xff00FF00, 1 * scale)
-        this.pPenPlayer := Gdip_CreatePen(0xff2087fd, 2)
-        this.pPenOtherPlayer := Gdip_CreatePen(0xff00ff00, 1 * scale)
+        scale := 2 ; TOFIX: Need to include this variable in construtor
+        this.pPenGreen := Gdip_CreatePen(0xff00FF00, 0.8 * scale)
+        this.pPenPlayer := Gdip_CreatePen(0xff2087fd, 1 * scale)
+        this.pPenOtherPlayer := Gdip_CreatePen(0xff00ff00, 0.8 * scale)
+        this.pPenBlack := Gdip_CreatePen(0xff000000, 0.5 * scale)
+        this.pPenHealth := Gdip_CreatePen(0xccdd0000, 0.5 * scale)
         this.pBrushGreen := Gdip_BrushCreateSolid(0xff00FF00)
         this.pBrushPlayer := Gdip_BrushCreateSolid(0xff2087fd)
         this.pBrushOtherPlayer := Gdip_BrushCreateSolid(0xff00FF00)
         this.pBrushDarkGreen := Gdip_BrushCreateSolid(0xff00aa00)
-        this.pPenBlack := Gdip_CreatePen(0xff000000, 0.5 * scale)
-        this.pPenHealth := Gdip_CreatePen(0xccdd0000, 0.5 * scale)
         this.pBrushHealth := Gdip_BrushCreateSolid(0x44dd0000)
         this.pBrushNonHealth := Gdip_BrushCreateSolid(0x44000000)
 
@@ -65,7 +66,7 @@ class UnitsLayer {
         , penSize:=2
         , this.majorDotSize := settings["missileMajorDotSize"]
         , this.minorDotSize := settings["missileMinorDotSize"]
-        scale := 2 ; TOFIX: Need to include this variable in construtor
+        
         if (settings["centerMode"]) {
             penSize := penSize * (scale / 1.2)
             , this.majorDotSize := this.majorDotSize * (scale / 1.1)

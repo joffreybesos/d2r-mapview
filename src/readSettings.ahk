@@ -48,6 +48,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["showMerc"] := 1
     settings["showTownNPCs"] := 1
     settings["NPCsAsCross"] := 0
+    settings["showTownNPCNames"] := 1
     
     settings["showImmunities"] := 1
     settings["showPlayerDotCenter"] := 1

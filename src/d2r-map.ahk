@@ -43,6 +43,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\serverHealthCheck.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
 #Include %A_ScriptDir%\ui\gdip\unitsLayer.ahk
+#Include %A_ScriptDir%\ui\gdip\WelcomeSplash.ahk
 
 global version := "2.7.0"
 
@@ -156,6 +157,8 @@ global mapHwnd1 := WinExist()
 Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
 global unitHwnd1 := WinExist()
 
+welcomeSplash := new WelcomeSplash(settings)
+
 sessionList := []
 offsetAttempts := 6
 settingupGUI := false
@@ -169,7 +172,9 @@ frameCount := 0
 fpsTimer := A_TickCount
 currentFPS := 0
 
+
 While 1 {
+    welcomeSplash.drawWelcomeText()
     frameStart:=A_TickCount
     ; scan for the player offset
     playerOffset := scanForPlayer(d2rprocess, playerOffset, startingOffset, settings)

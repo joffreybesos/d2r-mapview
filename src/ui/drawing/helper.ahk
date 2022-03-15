@@ -57,39 +57,25 @@ calculatePercentage(ByRef x1,ByRef y1,ByRef x2,ByRef y2, ByRef percentage)
 
 calcThirdPoint(x1,y1,x2,y2, ByRef angle, ByRef distance) {
     y1 := y1 * 2
-    y2 := y2 * 2
-    Angle2 := findAngle(x1, y1, x2, y2)
-    newAngle := angle - Angle2
-    newPos := getPosFromAngle(x1,y1,distance,newAngle)
-    newPos["y"] := newPos["y"] / 2
+    , y2 := y2 * 2
+    , Angle2 := findAngle(x1, y1, x2, y2)
+    , newAngle := angle - Angle2
+    , newPos := getPosFromAngle(x1,y1,distance,newAngle)
+    , newPos["y"] := newPos["y"] / 2
     return newPos
 }
 
 
-; drawFloatingText(unitsLayer, unitx, unity, fontSize, fontColor, font, text) {
-;     textSpaceWidth := 200
-;     textSpaceHeight := 100
-;     textx := unitx - textSpaceWidth /2
-;     texty := unity-(unitsLayer.normalDotSize/2) - textSpaceHeight
-;     Options = x%textx% y%texty% Center vBottom c%fontColor% r8 s%fontSize%
-;     textx := textx + 1
-;     texty := texty + 1
-;     Options2 = x%textx% y%texty% Center vBottom cff000000 r8 s%fontSize%
-;     Gdip_TextToGraphics(unitsLayer.G, text, Options2, font, textSpaceWidth, textSpaceHeight)
-;     Gdip_TextToGraphics(unitsLayer.G, text, Options,  font, textSpaceWidth, textSpaceHeight)
-; }
 
-
-
-
-drawFloatingText(unitsLayer, unitx, unity, fontSize, fontColor, background, font, text) {
-    textSpaceWidth := 400
-    textSpaceHeight := 100
-    textx := unitx - textSpaceWidth /2
-    texty := unity-(unitsLayer.normalDotSize/2) - textSpaceHeight
+drawFloatingText(ByRef unitsLayer, ByRef unitx, ByRef unity, ByRef fontSize, ByRef fontColor, ByRef background, ByRef font, ByRef text) {
+    
+    textSpaceWidth := StrLen(text) * fontSize
+    , textSpaceHeight := 100
+    , textx := unitx - textSpaceWidth /2
+    , texty := unity-(unitsLayer.normalDotSize/2) - textSpaceHeight
     Options = x%textx% y%texty% Center vBottom c%fontColor% r8 s%fontSize%
     textx := textx + 1
-    texty := texty + 1
+    , texty := texty + 1
     Options2 = x%textx% y%texty% Center vBottom cff000000 r8 s%fontSize%
     
 
@@ -109,7 +95,7 @@ drawFloatingText(unitsLayer, unitx, unity, fontSize, fontColor, background, font
 }
 
 
-drawChest(unitsLayer, objectx, objecty, chestscale, state) {
+drawChest(ByRef unitsLayer, ByRef objectx, ByRef objecty, ByRef chestscale, ByRef state) {
     if (state == "trap") {
         pBrush := Gdip_BrushCreateSolid(0xccff0000)
     } else if (state == "locked") {

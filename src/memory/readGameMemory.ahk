@@ -59,10 +59,12 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
 
 
     hoverAddress := d2rprocess.BaseAddress + offsets["hoverOffset"]
-    isHovered := d2rprocess.read(hoverAddress, "UChar")
+    ;isHovered := d2rprocess.read(hoverAddress, "UChar")
+    d2rprocess.readRaw(hoverAddress, hoverBuffer, 12)
+    isHovered := NumGet(&unitTableBuffer , 0, "UChar")
     if (isHovered) {
-        lastHoveredType := d2rprocess.read(hoverAddress + 0x04, "UInt") ; player =0, monster, object, missile, item, tile
-        lastHoveredUnitId := d2rprocess.read(hoverAddress + 0x08, "UInt")
+        lastHoveredType := NumGet(&unitTableBuffer , 0x04, "UInt")
+        lastHoveredUnitId := NumGet(&unitTableBuffer , 0x08, "UInt")
     }
     ; get other players
     if (settings["showOtherPlayers"]) {
@@ -72,7 +74,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     ; ; get mobs
     if (settings["showNormalMobs"] or settings["showUniqueMobs"] or settings["showBosses"] or settings["showDeadMobs"]) {
         ;DllCall("QueryPerformanceCounter", "Int64*", MobStartTime)
-        if (lastHoveredType == 1) {
+        if (lastHoveredType) {
             ReadMobs(d2rprocess, startingOffset, lastHoveredUnitId, mobs, hoveredMob)
         } else {
             ReadMobs(d2rprocess, startingOffset, 0, mobs, hoveredMob)

@@ -39,6 +39,7 @@ class UIAssistLayer {
             
             resists := mob.immunities
             ;resists := { "physical": 45, "magic": 10, "fire": 45, "light": 120, "cold": 45, "poison": 45 }
+            ;OutputDebug, % mob.txtFileNo " " resists["fire"] " " resists["cold"] "`n"
 
             numResists := (resists["physical"] > 0) + (resists["magic"] > 0) + (resists["fire"] > 0) + (resists["light"] > 0) + (resists["cold"] > 0) + (resists["poison"] > 0)
             startx := (gameWidth / 2) - (this.maxWidth / 2)

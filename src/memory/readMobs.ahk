@@ -27,6 +27,7 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef mo
                 , yPosOffset := yPosOffset / 65536   ; get percentage
                 , monx := monx + xPosOffset
                 , mony := mony + yPosOffset
+                , isHovered := false
 
                 , isBoss := 0
                 , textTitle := getBossName(txtFileNo)

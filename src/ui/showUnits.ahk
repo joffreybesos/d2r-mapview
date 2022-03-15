@@ -10,7 +10,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\drawing\objects.ahk
 #Include %A_ScriptDir%\ui\drawing\otherplayers.ahk
 
-ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByRef imageData, ByRef gameMemoryData, ByRef shrines, ByRef uiData) {
+ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByRef imageData, ByRef gameMemoryData, ByRef shrines, ByRef presetData, ByRef uiData) {
     scale:= settings["scale"]
     , leftMargin:= settings["leftMargin"]
     , topMargin:= settings["topMargin"]
@@ -91,7 +91,7 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
 
     ; draw portals
     if (settings["showPortals"] or settings["showChests"] or settings["showShrines"]) {
-        drawObjects(unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, shrines, centerLeftOffset, centerTopOffset)
+        drawObjects(unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, shrines, centerLeftOffset, centerTopOffset, presetData)
     }
 
     ; draw lines

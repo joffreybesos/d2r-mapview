@@ -1,8 +1,9 @@
 
 
-drawObjects(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageData, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef shrines, ByRef centerLeftOffset, ByRef centerTopOffset) {
+drawObjects(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageData, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef shrines, ByRef centerLeftOffset, ByRef centerTopOffset, ByRef presetData) {
     if (settings["showPortals"] or settings["showChests"]) {
         gameObjects := gameMemoryData["objects"]
+        presetChests := presetData["presetChests"]
         
         for index, object in gameObjects
         {
@@ -38,16 +39,29 @@ drawObjects(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageD
             }
             if (settings["showChests"]) {
                 if (object["isChest"]) {
+                    presetIndex := object["objectx"] "-" object["objecty"]
+                    if (mode != 0) {
+                        presetChests[presetIndex] := 0
+                    } else {
+                        if (presetChests[presetIndex]) {
+                            objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
+                            , objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
+                            , correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                            , objectx := correctedPos["x"] + centerLeftOffset
+                            , objecty := correctedPos["y"] + centerTopOffset
+                            drawSuperChest(unitsLayer, objectx, objecty, 0.4 * scale)
+                        }
+                    }
                     if (object["mode"] == 0) {
                         objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
                         , objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
                         , correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                         , objectx := correctedPos["x"] + centerLeftOffset
                         , objecty := correctedPos["y"] + centerTopOffset
-                        if (settings["centerMode"]) {
-                            drawChest(unitsLayer, objectx, objecty, 0.5, object["chestState"])
+                        if (presetChests[presetIndex]) {
+                            ;drawSuperChest(unitsLayer, objectx, objecty, 0.4 * scale)
                         } else {
-                            drawChest(unitsLayer, objectx, objecty, 0.3, object["chestState"])
+                            drawChest(unitsLayer, objectx, objecty, 0.25 * scale, object["chestState"])
                         }
                     }
                 }

@@ -253,6 +253,20 @@ While 1 {
                 ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 22 is opacity
                 ; Download map
                 downloadMapImage(settings, gameMemoryData, imageData, 0)
+                presetData := []
+
+                presetChests := []
+                superchestsHeader := imageData["superchests"]
+                if (superchestsHeader) {
+                    Loop, parse, superchestsHeader, `|
+                    {
+                        chestArray := StrSplit(A_LoopField, ",")
+                        x := chestArray[1] + imageData["mapOffsetX"]
+                        y := chestArray[2] + imageData["mapOffsetY"]
+                        presetChests[x "-" y] := 1
+                    }
+                }
+                presetData["presetChests"] := presetChests
 
                 ; Show Map
                 if (lastlevel == "") {
@@ -284,7 +298,7 @@ While 1 {
                 redrawMap := 0
             }
             
-            ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
+            ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, presetData, uiData)
 
             if (settings["centerMode"] and gameMemoryData["pathAddress"]) {
                 MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], mapHwnd1, unitHwnd1, imageData, uiData)

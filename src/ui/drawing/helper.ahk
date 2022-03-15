@@ -94,6 +94,52 @@ drawFloatingText(ByRef unitsLayer, ByRef unitx, ByRef unity, ByRef fontSize, ByR
     Gdip_TextToGraphics(unitsLayer.G, text, Options,  font, textSpaceWidth, textSpaceHeight)
 }
 
+drawSuperChest(ByRef unitsLayer, ByRef objectx, ByRef objecty, ByRef chestscale) {
+    
+    chestxoffset := objectx - 10
+    , chestyoffset := objecty - 10
+    , x1 := 10 * chestscale + chestxoffset
+    , y1 := 19 * chestscale + chestyoffset
+    , x2 := 40 * chestscale + chestxoffset
+    , y2 := 12 * chestscale + chestyoffset
+    , x3 := 50 * chestscale + chestxoffset
+    , y3 := 28 * chestscale + chestyoffset
+    , x4 := 19 * chestscale + chestxoffset
+    , y4 := 34 * chestscale + chestyoffset
+    , x5 := 4 * chestscale + chestxoffset
+    , y5 := 25 * chestscale + chestyoffset
+    , x6 := 35 * chestscale + chestxoffset
+    , x7 := 17 * chestscale + chestxoffset
+    , y7 := 32 * chestscale + chestyoffset
+    , x8 := 4 * chestscale + chestxoffset
+    , y8 := 18 * chestscale + chestyoffset
+    , x9 := 16 * chestscale + chestxoffset
+    , y9 := 35 * chestscale + chestyoffset
+    , x10:= 15 * chestscale + chestxoffset
+    , y11:= 13 * chestscale + chestyoffset
+    , y12:= 30 * chestscale + chestyoffset
+    , y13:= 31 * chestscale + chestyoffset
+    , y15:= 24 * chestscale + chestyoffset
+    , y16:= 40 * chestscale + chestyoffset
+    , y17:= 49 * chestscale + chestyoffset
+    , y18:= 38 * chestscale + chestyoffset
+    , y19:= 21 * chestscale + chestyoffset
+    , piewidth := 15 * chestscale
+    , pieheight := 30 * chestscale
+    backpoints = %x1%,%y1%|%x2%,%y2%|%x3%,%y3%|%x4%,%y4%|%x5%,%y5%|%x1%,%y19%
+
+    Gdip_DrawPie(unitsLayer.G, unitsLayer.pPenSuperChest, x6, y2, piewidth, pieheight, 180, 180)
+    Gdip_FillPolygon(unitsLayer.G, unitsLayer.pBrushSuperChest, backpoints)
+    Gdip_FillPie(unitsLayer.G, unitsLayer.pBrushSuperChest, x8, y8, piewidth, pieheight, 180, 180) ;15,30
+    Gdip_FillPie(unitsLayer.G, unitsLayer.pBrushSuperChest, x6, y11, piewidth, pieheight, 180, 180) ;17,31
+    points = %x5%,%y15%|%x5%,%y16%|%x4%,%y17%|%x4%,%y4%|%x4%,%y17%|%x3%,%y18%|%x3%,%y15%|%x4%,%y4%|%x5%,%y5%
+    Gdip_DrawPie(unitsLayer.G, unitsLayer.pPenSuperChest, x8, y8, piewidth, pieheight, 180, 180)
+    Gdip_FillPolygon(unitsLayer.G, unitsLayer.pBrushSuperChest, points)
+    Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenSuperChest, Points)
+    Gdip_DrawLine(unitsLayer.G, unitsLayer.pPenSuperChest, x1, y1, x2, y2)
+    
+}
+
 
 drawChest(ByRef unitsLayer, ByRef objectx, ByRef objecty, ByRef chestscale, ByRef state) {
     if (state == "trap") {

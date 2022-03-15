@@ -139,6 +139,10 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
                 case "waypoint": waypoint := Trim(field[2]), foundFields++
                 case "bosses": bosses := Trim(field[2]), foundFields++
                 case "quests": quests := Trim(field[2]), foundFields++
+                case "chests": chests := Trim(field[2]), foundFields++
+                case "superchests": superchests := Trim(field[2]), foundFields++
+                case "shrines": shrines := Trim(field[2]), foundFields++
+                case "wells": wells := Trim(field[2]), foundFields++
                 case "prerotated": prerotated := convertToBool(field[2]), foundFields++
                 case "originalwidth": originalwidth := Trim(field[2]), foundFields++
                 case "originalheight": originalheight := Trim(field[2]), foundFields++
@@ -148,8 +152,7 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
             WriteLog("ERROR: Did not find all expected response headers, turn on debug mode to view. Unexpected behaviour may occur")
         }
     }
-    ;WriteLog("sFile: " sFile ", leftTrimmed: " leftTrimmed ", topTrimmed: " topTrimmed ", levelScale: " levelScale ", levelxmargin: " levelxmargin ", levelymargin: " levelymargin ", mapOffsetX: " mapOffsetX ", mapOffsety: " mapOffsety ", mapwidth: " mapwidth ", mapheight: " mapheight ", exits: " exits  ", waypoint: " waypoint  ", bosses: " bosses)
-    mapData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "levelScale": levelScale, "levelxmargin": levelxmargin, "levelymargin": levelymargin, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight, "exits": exits, "waypoint": waypoint, "bosses": bosses, "quests": quests, "prerotated": prerotated, "originalwidth": originalwidth, "originalheight": originalheight }
+    mapData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "levelScale": levelScale, "levelxmargin": levelxmargin, "levelymargin": levelymargin, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight, "exits": exits, "waypoint": waypoint, "bosses": bosses, "quests": quests, "prerotated": prerotated, "originalwidth": originalwidth, "originalheight": originalheight, "chests": chests, "superchests": superchests, "shrines": shrines, "wells": wells }
 } 
 
 

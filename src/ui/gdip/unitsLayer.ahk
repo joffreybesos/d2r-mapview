@@ -144,6 +144,8 @@ class UnitsLayer {
 
         ; chests
         this.pChest := Gdip_CreatePen(0xcc111111, 1 * scale)
+        this.pPenSuperChest := Gdip_CreatePen(0xcc888800, 1 * scale)
+        this.pBrushSuperChest := Gdip_BrushCreateSolid(0xcc542a00)
     }
 
     delete() {
@@ -200,5 +202,7 @@ class UnitsLayer {
         , Gdip_DeletePen(this.pPortal)
         , Gdip_DeletePen(this.pRedPortal)
         , Gdip_DeletePen(this.pChest)
+        , Gdip_DeletePen(this.pPenSuperChest)
+        , Gdip_DeleteBrush(this.pBrushSuperChest)
     }
 }

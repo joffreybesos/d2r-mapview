@@ -43,6 +43,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\serverHealthCheck.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
 #Include %A_ScriptDir%\ui\gdip\unitsLayer.ahk
+#Include %A_ScriptDir%\ui\gdip\SessionTableLayer.ahk
 
 global version := "2.7.0"
 
@@ -169,6 +170,8 @@ frameCount := 0
 fpsTimer := A_TickCount
 currentFPS := 0
 
+historyText := new SessionTableLayer()
+
 While 1 {
     frameStart:=A_TickCount
     ; scan for the player offset
@@ -202,7 +205,8 @@ While 1 {
                         sessionList := readSessionFile("GameSessionLog.csv")
                     }
                 }
-                ShowHistoryText(gamenameHwnd1, gameWindowId, sessionList, historyToggle, settings["textAlignment"], settings["textSectionWidth"], settings["textSize"])
+                ;ShowHistoryText(gamenameHwnd1, gameWindowId, sessionList, historyToggle, settings["textAlignment"], settings["textSectionWidth"], settings["textSize"])
+                historyText.drawTable(sessionList)
             }
             offsetAttempts := 26
             WriteLogDebug("Offset attempts " offsetAttempts)

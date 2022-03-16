@@ -211,7 +211,10 @@ While 1 {
     } else {
         offsetAttempts := 0
         Gui, GameInfo: Hide  ; hide the last game info
+        ; timeStamp("readGameMemory")
         readGameMemory(d2rprocess, settings, playerOffset, gameMemoryData)
+        ; timeStamp("readGameMemory")
+
         if (gameMemoryData["experience"]) {
             lastPlayerLevel:= gameMemoryData["playerLevel"]
             lastPlayerExperience:=gameMemoryData["experience"]
@@ -393,6 +396,28 @@ unHideMap() {
 {
     WriteLog("Pressed Shift+F10, exiting...")
     session.saveEntry()
+
+    ; performance stats
+    alreadyseenperf := []
+    for k, perf in perfdata
+    {
+        
+        thisName := perf["name"]
+        if (!HasVal(alreadyseenperf, thisName)) {
+            averageVal := 0
+            count := 0
+            for k, perf2 in perfdata
+            {
+                thisName2 := perf2["name"]
+                if (thisName2 == thisName) {
+                    averageVal := averageVal + perf2["duration"]
+                    ++count
+                }
+            }
+            OutputDebug, % thisName " " Round(averageVal / count) "`n"
+            alreadyseenperf.Push(thisName)
+        }
+    }
     ExitApp
 }
 return

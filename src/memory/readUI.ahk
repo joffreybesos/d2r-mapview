@@ -1,38 +1,20 @@
-#SingleInstance, Force
-SendMode Input
-SetWorkingDir, %A_ScriptDir%
-
 
 readUI(ByRef d2rprocess, gameWindowId, settings, session) {
-    if (not WinExist(gameWindowId)) {
-        WriteLog(gameWindowId " not found, please make sure game is running")
-        if (session) {
-            session.saveEntry()
-        }
-        ExitApp
-    }
-
     ; UI offset 0x21F89AA
-    offset := offsets["uiOffset"]
-    , base := d2rprocess.BaseAddress + offset
+    base := d2rprocess.BaseAddress + offsets["uiOffset"]
+    d2rprocess.readRaw(base - 0xA, buffer, 32)
+    invMenu := NumGet(&buffer , 0x01, Type := "UChar")
+    charMenu := NumGet(&buffer , 0x02, Type := "UChar")
+    skillSelect := NumGet(&buffer , 0x03, Type := "UChar")
+    skillMenu := NumGet(&buffer , 0x04, Type := "UChar")
+    npcInteract := NumGet(&buffer , 0x08, Type := "UChar")
+    quitMenu := NumGet(&buffer , 0x09, Type := "UChar")
+    npcShop := NumGet(&buffer , 0x0B, Type := "UChar")
+    questsMenu := NumGet(&buffer , 0xE, Type := "UChar")
+    waypointMenu := NumGet(&buffer , 0x13, Type := "UChar")
+    partyMenu := NumGet(&buffer , 0x15, Type := "UChar")
+    mercMenu := NumGet(&buffer , 0x1E, Type := "UChar")
 
-    , d2rprocess.readRaw(base - 0x1, buffer, 1)
-    , quitMenu := NumGet(&buffer , 0, Type := "UShort")
-    , d2rprocess.readRaw(base + 0x4, buffer, 1)
-    , questsMenu := NumGet(&buffer , 0, Type := "UShort")
-    , d2rprocess.readRaw(base - 0x6, buffer, 1)
-    , skillMenu := NumGet(&buffer , 0, Type := "UShort")
-    , d2rprocess.readRaw(base - 0x8, buffer, 1)
-    , charMenu := NumGet(&buffer , 0, Type := "UShort")
-    , d2rprocess.readRaw(base - 0x9, buffer, 1)
-    , invMenu := NumGet(&buffer , 0, Type := "UShort")
-    , d2rprocess.readRaw(base + 0x14, buffer, 1)
-    , mercMenu := NumGet(&buffer , 0, Type := "UShort")
-    , d2rprocess.readRaw(base + 0xb, buffer, 1)
-    , partyMenu := NumGet(&buffer , 0, Type := "UShort")
-    , d2rprocess.readRaw(base + 0x9, buffer, 1)
-    , waypointMenu := NumGet(&buffer , 0, Type := "UShort")
-
-    ;WriteLog("ESC" quitMenu " Q" questsMenu " T" skillMenu " C" charMenu " I" invMenu " O" mercMenu " P" partyMenu " W" waypointMenu)
+    ;OutputDebug, % "ESC" quitMenu " Q" questsMenu " T" skillMenu " C" charMenu " I" invMenu " O" mercMenu " P" partyMenu " W" waypointMenu
     return (quitMenu or questsMenu or skillMenu or charMenu or invMenu or mercMenu or partyMenu or waypointMenu)
 }

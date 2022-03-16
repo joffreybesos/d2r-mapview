@@ -59,48 +59,58 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
 
     ; get other players
     if (settings["showOtherPlayers"]) {
+        ; timeStamp("ReadOtherPlayers")
         ReadOtherPlayers(d2rprocess, startingOffset, otherPlayerData)
+        ; timeStamp("ReadOtherPlayers")
     }
 
     ; ; get mobs
     if (settings["showNormalMobs"] or settings["showUniqueMobs"] or settings["showBosses"] or settings["showDeadMobs"]) {
-        ;DllCall("QueryPerformanceCounter", "Int64*", MobStartTime)
+        ; timeStamp("ReadMobs")
         ReadMobs(d2rprocess, startingOffset, mobs)
-        ;DllCall("QueryPerformanceCounter", "Int64*", MobEndTime)
-        ;duration := MobEndTime - MobStartTime
-        ;OutputDebug, % "Mobs time: " duration "`n"
+        ; timeStamp("ReadMobs")
     }
 
     ; missiles
     missiles:=[]
     ; PlayerMissiles
     if (settings["showPlayerMissiles"]){
+        ; timeStamp("readMissiles")
         playerMissiles := readMissiles(d2rprocess, startingOffset + (6 * 1024))
         missiles.push(playerMissiles)
+        ; timeStamp("readMissiles")
     }
     ; EnemyMissiles
     if (settings["showEnemyMissiles"]){
+        ; timeStamp("readEnemyMissiles")
         enemyMissiles := readMissiles(d2rprocess, startingOffset)
         missiles.push(enemyMissiles)
+        ; timeStamp("readEnemyMissiles")
     }
 
     ; get items
     if (settings["enableItemFilter"]) {
         if (Mod(ticktock, 3)) {
+            ; timeStamp("readItems")
             ReadItems(d2rprocess, startingOffset, items)
+            ; timeStamp("readItems")
         }
     }
 
     ; get objects
     if (settings["showShrines"] or settings["showPortals"] or settings["showChests"]) {
         if (Mod(ticktock, 6)) {
+            ; timeStamp("ReadObjects")
             ReadObjects(d2rprocess, startingOffset, levelNo, objects)
+            ; timeStamp("ReadObjects")
         }
     }
-
+    ; timeStamp("readUI")
     menuShown := readUI(d2rprocess, gameWindowId, settings, session)
+    ; timeStamp("readUI")
 
     ; player position
+    ; timeStamp("playerposition")
     pathAddress := d2rprocess.read(playerUnit + 0x38, "Int64")
     , xPos := d2rprocess.read(pathAddress + 0x02, "UShort") 
     , yPos := d2rprocess.read(pathAddress + 0x06, "UShort")
@@ -114,6 +124,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     if (!xPos) {
         WriteLog("Did not find player position at player offset " playerOffset) 
     }
+    ; timeStamp("playerposition")
     gameMemoryData := {"pathAddress": pathAddress, "gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "missiles": missiles, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName, "experience": experience, "playerLevel": playerLevel, "menuShown": menuShown }
     ;ElapsedTime := A_TickCount - StartTime
     ;OutputDebug, % ElapsedTime "`n"

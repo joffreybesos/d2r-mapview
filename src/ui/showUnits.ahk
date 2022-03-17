@@ -11,6 +11,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\drawing\otherplayers.ahk
 
 ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByRef imageData, ByRef gameMemoryData, ByRef shrines, ByRef uiData) {
+    ; timeStamp("unitsStart")
     scale:= settings["scale"]
     , leftMargin:= settings["leftMargin"]
     , topMargin:= settings["topMargin"]
@@ -50,10 +51,10 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
     , correctedPos := correctPos(settings, xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
     , xPosDot := correctedPos["x"]
     , yPosDot := correctedPos["y"]
-
+    WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
     
     if (settings["centerMode"]) {
-        WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
+        
         leftMargin := (gameWidth/2) - xPosDot + (settings["centerModeXoffset"] /2) + windowLeftMargin
         , topMargin := (gameHeight/2) - yPosDot + (settings["centerModeYoffset"] /2) + windowTopMargin
         , regionWidth := gameWidth
@@ -78,39 +79,55 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
 
         ;ToolTip % centerLeftOffset " " centerTopOffset
     }
+    ; timeStamp("unitsStart")
     
     ;Missiles
     if (settings["showPlayerMissiles"] or settings["showEnemyMissiles"]) {
+        ; timeStamp("drawMissiles")
         drawMissiles(unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
+        ; timeStamp("drawMissiles")
     }
 
     ; draw monsters
     if (settings["showNormalMobs"] or settings["showDeadMobs"] or settings["showUniqueMobs"] or settings["showBosses"]) {
+        ; timeStamp("drawMonsters")
         drawMonsters(unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
+        ; timeStamp("drawMonsters")
     }
 
     ; draw portals
     if (settings["showPortals"] or settings["showChests"] or settings["showShrines"]) {
+        ; timeStamp("drawObjects")
         drawObjects(unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, shrines, centerLeftOffset, centerTopOffset)
+        ; timeStamp("drawObjects")
     }
 
     ; draw lines
     if (settings["showWaypointLine"] or settings["showNextExitLine"] or settings["showBossLine"]) {
+        ; timeStamp("drawLines")
         drawLines(unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset, xPosDot, yPosDot)
+        ; timeStamp("drawLines")
     }
 
+    ; timeStamp("drawExits")
     drawExits(unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset, xPosDot, yPosDot)
+    ; timeStamp("drawExits")
 
     ; draw other players
     if (settings["showOtherPlayers"]) {
+        ; timeStamp("drawPlayers")
         drawPlayers(unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
+        ; timeStamp("drawPlayers")
      }
 
     ; show item alerts
     if (settings["enableItemFilter"]) {
+        ; timeStamp("drawItemAlerts")
         drawItemAlerts(unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
+        ; timeStamp("drawItemAlerts")
     }
 
+    ; timeStamp("drawPlayer")
     if (!settings["centerMode"] or settings["showPlayerDotCenter"]) {
         ; draw player
         playerCrossXoffset := (xPosDot)+centerLeftOffset
@@ -138,9 +155,10 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
             ; Gdip_FillEllipse(unitsLayer.G, unitsLayer.pBrushPlayer, playerCrossXoffset-(dotSize/2), playerCrossYoffset-(dotSize/4), dotSize, dotSize/2)
         }       
     }
-
+    ; timeStamp("drawPlayer")
+    ; timeStamp("unitsEnd")
     if (settings["centerMode"]) {
-        WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
+        
         leftMargin := (gameWidth/2) - xPosDot + (settings["centerModeXoffset"] /2)
         , topMargin := (gameHeight/2) - yPosDot + (settings["centerModeYoffset"] /2)
         , regionWidth := gameWidth
@@ -169,11 +187,6 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
         UpdateLayeredWindow(unitHwnd1, unitsLayer.hdc, , , scaledWidth, scaledHeight)
         Gdip_GraphicsClear( unitsLayer.G )
     }
-
-    ElapsedTime := A_TickCount - StartTime
-    ;ToolTip % "`n`n`n`n" ElapsedTime
-    ;WriteLog("Draw players " ElapsedTime " ms taken")
-
-    
+    ; timeStamp("unitsEnd")
 }
 

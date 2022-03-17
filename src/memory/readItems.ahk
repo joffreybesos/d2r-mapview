@@ -3,8 +3,7 @@
 ReadItems(ByRef d2rprocess, startingOffset, ByRef items) {
     ; items
     items := []
-    , itemsOffset := startingOffset + (4 * 1024)
-    , baseAddress := d2rprocess.BaseAddress + itemsOffset
+    , baseAddress := d2rprocess.BaseAddress + startingOffset + (4 * 1024)
     , d2rprocess.readRaw(baseAddress, unitTableBuffer, 128*8)
     Loop, 128
     {

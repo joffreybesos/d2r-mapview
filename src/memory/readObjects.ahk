@@ -2,8 +2,7 @@
 ReadObjects(ByRef d2rprocess, startingOffset, ByRef levelNo, ByRef gameObjects) {
     ; items
     gameObjects := []
-    , objectOffset := startingOffset + (2 * 1024)
-    , baseAddress := d2rprocess.BaseAddress + objectOffset
+    , baseAddress := d2rprocess.BaseAddress + startingOffset + (2 * 1024)
     , d2rprocess.readRaw(baseAddress, unitTableBuffer, 128*8)
     Loop, 128
     {
@@ -12,7 +11,6 @@ ReadObjects(ByRef d2rprocess, startingOffset, ByRef levelNo, ByRef gameObjects) 
         
         while (objectUnit > 0) { ; keep following the next pointer
             itemType := d2rprocess.read(objectUnit + 0x00, "UInt") ; item is 4
-            
             if (itemType == 2) {  ; 2 == object
                 txtFileNo := d2rprocess.read(objectUnit + 0x04, "UInt")
                 , mode := d2rprocess.read(objectUnit + 0x0c, "UInt")
@@ -23,12 +21,11 @@ ReadObjects(ByRef d2rprocess, startingOffset, ByRef levelNo, ByRef gameObjects) 
                 if (isPortal or isShrine or isRedPortal or isChest) {
                     
                     pUnitData := d2rprocess.read(objectUnit + 0x10, "Int64")
-
-                    , pObjectTxt := d2rprocess.read(pUnitData, "Int64")
-                    , sObjectTxt := d2rprocess.readString(pObjectTxt, 16)
+                    ; , pObjectTxt := d2rprocess.read(pUnitData, "Int64")
+                    ; , sObjectTxt := d2rprocess.readString(pObjectTxt, 16)
                     , interactType := d2rprocess.read(pUnitData + 0x08, "UShort")
                     , shrineFlag := d2rprocess.read(pUnitData + 0x09, "UShort")
-                    , shrineTxt := d2rprocess.readString(pUnitData + 0x0c, 16)
+                    ; , shrineTxt := d2rprocess.readString(pUnitData + 0x0c, 16)
                     , name := getObjectName(txtFileNo)
 
                     , pPath := d2rprocess.read(objectUnit + 0x38, "Int64")  

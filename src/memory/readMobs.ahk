@@ -2,31 +2,33 @@
 ReadMobs(ByRef d2rprocess, startingOffset, ByRef mobs) {
     ; monsters
     mobs := []
-    monstersOffset := startingOffset + 1024
-    baseAddress := d2rprocess.BaseAddress + monstersOffset
+    baseAddress := d2rprocess.BaseAddress + startingOffset + 1024
     d2rprocess.readRaw(baseAddress, unitTableBuffer, 128*8)
     Loop, 128
     {
         offset := (8 * (A_Index - 1))
         , mobUnit := NumGet(&unitTableBuffer , offset, "Int64")
         while (mobUnit > 0) { ; keep following the next pointer
-            mobType := d2rprocess.read(mobUnit + 0x00, "UInt")
-            , txtFileNo := d2rprocess.read(mobUnit + 0x04, "UInt")
+            ;mobType := d2rprocess.read(mobUnit + 0x00, "UInt")
+            ;txtFileNo := d2rprocess.read(mobUnit + 0x04, "UInt")
+            d2rprocess.readRaw(mobUnit, mobStructData, 144)
+            , mobType := NumGet(&mobStructData , 0x00, "UInt")
+            , txtFileNo := NumGet(&mobStructData , 0x04, "UInt")
             if (!HideNPC(txtFileNo)) {
-                unitId := d2rprocess.read(mobUnit + 0x08, "UInt")
-                , mode := d2rprocess.read(mobUnit + 0x0c, "UInt")
-                , pUnitData := d2rprocess.read(mobUnit + 0x10, "Int64")
-                , pPath := d2rprocess.read(mobUnit + 0x38, "Int64") 
+                unitId := NumGet(&mobStructData , 0x08, "UInt")
+                , mode := NumGet(&mobStructData , 0x0c, "UInt")
+                , pUnitData := NumGet(&mobStructData , 0x10, "Int64")
+                , pPath := NumGet(&mobStructData , 0x38, "Int64")
                 , isUnique := d2rprocess.read(pUnitData + 0x18, "UShort")
-                , monx := d2rprocess.read(pPath + 0x02, "UShort")
-                , mony := d2rprocess.read(pPath + 0x06, "UShort")
-                , xPosOffset := d2rprocess.read(pPath + 0x00, "UShort") 
-                , yPosOffset := d2rprocess.read(pPath + 0x04, "UShort")
+                , d2rprocess.readRaw(pPath, pathStructData, 16)
+                , monx := NumGet(&pathStructData , 0x02, "UShort")
+                , mony := NumGet(&pathStructData , 0x06, "UShort")
+                , xPosOffset := NumGet(&pathStructData , 0x00, "UShort")
+                , yPosOffset := NumGet(&pathStructData , 0x04, "UShort")
                 , xPosOffset := xPosOffset / 65536   ; get percentage
                 , yPosOffset := yPosOffset / 65536   ; get percentage
                 , monx := monx + xPosOffset
                 , mony := mony + yPosOffset
-
                 , isBoss := 0
                 , textTitle := getBossName(txtFileNo)
                 if (textTitle) {
@@ -34,7 +36,7 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef mobs) {
                 }
                 
                 ;get immunities
-                pStatsListEx := d2rprocess.read(mobUnit + 0x88, "Int64")
+                pStatsListEx := NumGet(&mobStructData , 0x88, "Int64")
                 , statPtr := d2rprocess.read(pStatsListEx + 0x30, "Int64")
                 , statCount := d2rprocess.read(pStatsListEx + 0x38, "Int64")
                 , isPlayerMinion := 0
@@ -42,6 +44,7 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef mobs) {
                 if (playerMinion) {
                     isPlayerMinion:= 1
                 } else {
+                    ; is a revive
                     isPlayerMinion := ((d2rprocess.read(pStatsListEx + 0xAC8 + 0xc, "UInt") & 31) == 1)
                 }
 

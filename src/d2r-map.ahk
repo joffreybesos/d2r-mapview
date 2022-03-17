@@ -215,7 +215,10 @@ While 1 {
     } else {
         offsetAttempts := 0
         Gui, GameInfo: Hide  ; hide the last game info
+        ; timeStamp("readGameMemory")
         readGameMemory(d2rprocess, settings, playerOffset, gameMemoryData)
+        ; timeStamp("readGameMemory")
+
         if (gameMemoryData["experience"]) {
             lastPlayerLevel:= gameMemoryData["playerLevel"]
             lastPlayerExperience:=gameMemoryData["experience"]
@@ -287,8 +290,9 @@ While 1 {
                 
                 redrawMap := 0
             }
-            
+            ; timeStamp("ShowUnits")
             ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
+            ; timeStamp("ShowUnits")
 
             if (settings["centerMode"] and gameMemoryData["pathAddress"]) {
                 MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], mapHwnd1, unitHwnd1, imageData, uiData)
@@ -397,6 +401,28 @@ unHideMap() {
 {
     WriteLog("Pressed Shift+F10, exiting...")
     session.saveEntry()
+
+    ; performance stats
+    alreadyseenperf := []
+    for k, perf in perfdata
+    {
+        
+        thisName := perf["name"]
+        if (!HasVal(alreadyseenperf, thisName)) {
+            averageVal := 0
+            count := 0
+            for k, perf2 in perfdata
+            {
+                thisName2 := perf2["name"]
+                if (thisName2 == thisName) {
+                    averageVal := averageVal + perf2["duration"]
+                    ++count
+                }
+            }
+            OutputDebug, % thisName " " Round(averageVal / count / 1000.0, 2) "ms `n"
+            alreadyseenperf.Push(thisName)
+        }
+    }
     ExitApp
 }
 return

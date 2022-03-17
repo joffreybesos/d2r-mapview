@@ -106,6 +106,10 @@ class SessionTableLayer {
         
     }
 
+    hide() {
+        Gui, SessionTable: Hide
+    }
+
     delete() {
         SelectObject(this.hdc, this.obm)
         DeleteObject(this.hbm)

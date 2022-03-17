@@ -32,7 +32,6 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
-;#Include %A_ScriptDir%\ui\showInfo.ahk
 #Include %A_ScriptDir%\ui\showUnits.ahk
 #Include %A_ScriptDir%\ui\movePlayerMap.ahk
 #Include %A_ScriptDir%\stats\GameSession.ahk
@@ -214,6 +213,7 @@ While 1 {
         ; timeStamp("readGameMemory")
         readGameMemory(d2rprocess, settings, playerOffset, gameMemoryData)
         ; timeStamp("readGameMemory")
+        
 
         if (gameMemoryData["experience"]) {
             lastPlayerLevel:= gameMemoryData["playerLevel"]
@@ -243,6 +243,8 @@ While 1 {
                 ;ipAddress := readIPAddress(d2rprocess, gameWindowId, offsets, session)
                 shrines := []
                 seenItems := []
+                gameInfoLayer.drawInfoText(currentFPS)
+                historyText.hide()
             }
 
             ; if there's a level num then the player is in a map
@@ -283,7 +285,10 @@ While 1 {
 
                 unitsLayer.delete()
                 unitsLayer := new UnitsLayer(uiData)
-                gameInfoLayer.updateAreaLevel(levelNo,  gameMemoryData["difficulty"])
+                
+                gameInfoLayer.updateAreaLevel(levelNo, gameMemoryData["difficulty"])
+                gameInfoLayer.updateExpLevel(levelNo, gameMemoryData["difficulty"], gameMemoryData["playerLevel"])
+                
                 
                 redrawMap := 0
             }
@@ -323,7 +328,9 @@ While 1 {
         , currentFPS := Round(currentFPS, 1)
         , frameCount := 0
         , fpsTimer := A_TickCount
-        gameInfoLayer.drawInfoText(currentFPS)
+        if (playerOffset) {
+            gameInfoLayer.drawInfoText(currentFPS)
+        }
     }
     if (frameDuration < ticksPerFrame) {
         Sleep, ticksPerFrame - frameDuration

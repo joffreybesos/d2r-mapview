@@ -47,6 +47,49 @@ class GameInfoLayer {
         this.areaLevel := areaLevels["" difficulty ""]
     }
 
+    updateExpLevel(levelNo, difficulty, clvl) {
+        if (this.areaLevel) {
+            if (clvl < 25) {
+                leveldiff := this.areaLevel - clvl
+                experiencePenalty := 0
+                switch (leveldiff) {
+                    case 6:  experiencePenalty := 19
+                    case 7:  experiencePenalty := 38
+                    case 8:  experiencePenalty := 57
+                    case 9:  experiencePenalty := 76
+                    case 10:  experiencePenalty := 95
+                    case -6:  experiencePenalty := 19
+                    case -7:  experiencePenalty := 38
+                    case -8:  experiencePenalty := 57
+                    case -9:  experiencePenalty := 76
+                    case -10:  experiencePenalty := 95
+                }
+                if (levelDiff > 10)
+                    experiencePenalty := 95
+                if (levelDiff < -10)
+                    experiencePenalty := 95
+
+            } else if (clvl > 25 and clvl < 70) {
+                leveldiff := clvl - this.areaLevel
+                experiencePenalty := 0
+                switch (leveldiff) {
+                    case 6:  experiencePenalty := 19
+                    case 7:  experiencePenalty := 38
+                    case 8:  experiencePenalty := 57
+                    case 9:  experiencePenalty := 76
+                    case 10:  experiencePenalty := 95
+                }
+                if (levelDiff > 10)
+                    experiencePenalty := 95
+            } else if (clvl > 70) {
+                experiencePenalty := 0
+            }
+            this.experiencePenalty := experiencePenalty
+        } else {
+            this.experiencePenalty := 0
+        }
+    }
+
     drawInfoText(ByRef currentFPS) {
         if (WinActive(gameWindowId)) {
             Gui, GameInfo: Show, NA
@@ -69,6 +112,9 @@ class GameInfoLayer {
             }
             if (this.areaLevel) {
                 textList := textList "Area Level: " this.areaLevel "`n"
+            }
+            if (this.experiencePenalty > 0) {
+                textList := textList "XP penalty: " this.experiencePenalty "% `n"
             }
         }
         if (settings["showFPS"]) {
@@ -93,6 +139,10 @@ class GameInfoLayer {
         Options2 = x%textx% y%texty% Left vTop cff000000 r4 s%fontSize%
         Gdip_TextToGraphics(this.G, textList, Options2, exocetFont)
         Gdip_TextToGraphics(this.G, textList, Options, exocetFont)
+    }
+
+    hide() {
+        Gui, GameInfo: Hide
     }
 
     delete() {

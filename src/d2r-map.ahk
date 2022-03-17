@@ -170,7 +170,7 @@ frameCount := 0
 fpsTimer := A_TickCount
 currentFPS := 0
 
-historyText := new SessionTableLayer()
+historyText := new SessionTableLayer(settings)
 
 While 1 {
     frameStart:=A_TickCount
@@ -617,6 +617,8 @@ Update:
     WriteLog("Applying new settings...")
     cmode := settings["centerMode"]
     UpdateSettings(settings, defaultSettings)
+    historyText.delete()
+    historyText := new SessionTableLayer(settings)
     if (cmode != settings["centerMode"]) { ; if centermode changed
         lastlevel := "INVALIDATED"
         imageData := {}

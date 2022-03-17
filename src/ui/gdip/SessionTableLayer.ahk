@@ -11,32 +11,34 @@ class SessionTableLayer {
         Gui, SessionTable: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
         this.SessionTableLayerHwnd := WinExist()
         this.y := 20
-        WinGetPos, , , gameWidth, gameHeight, %gameWindowId% 
-        this.drawBoxWidth := 400
-        this.drawBoxHeight := gameHeight
+        WinGetPos, gameWindowX, gameWindowY, gameWindowWidth, gameWindowHeight, %gameWindowId% 
+        this.gameWindowX := gameWindowX
+        this.gameWindowY := gameWindowY
+        this.gameWindowWidth := gameWindowWidth
+        this.gameWindowHeight := gameWindowHeight
+
         pToken := Gdip_Startup()
         DetectHiddenWindows, On
-        this.hbm := CreateDIBSection(this.drawBoxWidth, this.drawBoxHeight)
+        this.hbm := CreateDIBSection(gameWindowWidth, gameWindowHeight)
         this.hdc := CreateCompatibleDC()
         this.obm := SelectObject(this.hdc, this.hbm)
         this.G := Gdip_GraphicsFromHDC(this.hdc)
         Gdip_SetSmoothingMode(this.G, 4)
         Gdip_SetInterpolationMode(this.G, 7)
         Gui, SessionTable: Show, NA
+        
+        this.historyTextSize := settings["historyTextSize"]
+        historyTextAlignment := settings["historyTextAlignment"]
+        StringUpper, historyTextAlignment, historyTextAlignment
+        this.historyTextAlignment := historyTextAlignment
+
     }
 
     drawTable(ByRef sessionList) {
+        fontSize := this.historyTextSize
+        headery := 40
+        datay := 15
         col1 := 0
-        col2 := textBoxWidth * 0.11
-        col3 := textBoxWidth * 0.33
-        col4 := textBoxWidth * 0.63
-        col5 := textBoxWidth * 0.81
-
-        this.drawHeader(col1, 0, fontSize, "L")
-        this.drawHeader(col2, 0, fontSize, "Character")
-        this.drawHeader(col3, 0, fontSize, "Game Name")
-        this.drawHeader(col4, 0, fontSize, "Duration")
-        this.drawHeader(col5, 0, fontSize, "+XP")
 
         ; lists is in reverse order
         max := sessionList.length()
@@ -48,39 +50,55 @@ class SessionTableLayer {
         Loop %max%
         {
             session := sessionList[(max-A_Index+1)]
+            rowNum := rowNum "" A_Index "`n"
             playerLevelList := playerLevelList . session.getPreciseLevel() . "`n"
             playerNameList := playerNameList . session.playerName . "`n"
             gameNameList := gameNameList . session.gameName . "`n"
             xpgainedList := xpgainedList . session.getExperienceGained() . "`n"
-            gameTime := session.duration . "s"
-            gameTimeList := gameTimeList . gameTime . "`n"
+            gameTimeList := gameTimeList . this.GetDurationFormatEx(session.duration) . "`n"
         }
-        this.drawData(G, col1, 40, fontSize, playerLevelList)
-        this.drawData(G, col2, 40, fontSize, playerNameList)
-        this.drawData(G, col3, 40, fontSize, gameNameList)
-        this.drawData(G, col4, 40, fontSize, gameTimeList)
-        this.drawData(G, col5, 40, fontSize, xpgainedList)
+        
+        col2 := this.drawData(col1, headery, fontSize, rowNum)
+        col3 := this.drawData(col2, headery, fontSize, playerLevelList)
+        col4 := this.drawData(col3, headery, fontSize, playerNameList)
+        col5 := this.drawData(col4, headery, fontSize, gameNameList)
+        col6 := this.drawData(col5, headery, fontSize, gameTimeList)
+        col7 := this.drawData(col6, headery, fontSize, xpgainedList)
 
-        UpdateLayeredWindow(this.SessionTableLayerHwnd, this.hdc, 0, 0, this.drawBoxWidth, this.drawBoxHeight)
+        
+        this.drawHeader(col2, datay, fontSize, "Lvl")
+        this.drawHeader(col3, datay, fontSize, "Character")
+        this.drawHeader(col4, datay, fontSize, "Game Name")
+        this.drawHeader(col5, datay, fontSize, "Duration")
+        this.drawHeader(col6, datay, fontSize, "+XP")
+
+        leftMargin := this.gameWindowX
+        if (this.historyTextAlignment == "RIGHT") {
+            leftMargin :=  this.gameWindowWidth - col7 +  this.gameWindowX
+        }
+        UpdateLayeredWindow(this.SessionTableLayerHwnd, this.hdc, leftMargin, this.gameWindowY, this.gameWindowWidth, this.gameWindowHeight)
     }
 
-    
-    drawHeader(textx, texty,fontSize, textStr) {
-        Options = x%textx% y%texty% Left vCenter cffffffff r4 s%fontSize% Bold
-        textx := textx + 2
-        texty := texty + 2
-        Options2 = x%textx% y%texty% Left vCenter cff000000 r4 s%fontSize% Bold
-        Gdip_TextToGraphics(this.G, textStr, Options2, exocetFont, this.drawBoxWidth, 50)
-        Gdip_TextToGraphics(this.G, textStr, Options, exocetFont, this.drawBoxWidth, 50)
+    drawHeader(textx, texty, fontSize, textStr) {
+        Options = x%textx% y%texty% Left vBottom cffffffff r4 s%fontSize% Bold
+        textx := textx + 1
+        texty := texty + 1
+        Options2 = x%textx% y%texty% Left vBottom cff000000 r4 s%fontSize% Bold
+        Gdip_TextToGraphics(this.G, textStr, Options2, formalFont)
+        Gdip_TextToGraphics(this.G, textStr, Options, formalFont)
     }
 
     drawData(textx, texty, fontSize, textList) {
-        Options = x%textx% y%texty% Left vTop cffFFD700 r4 s%fontSize% Bold
-        textx := textx + 2
-        texty := texty + 2
-        Options2 = x%textx% y%texty% Left vTop cff000000 r4 s%fontSize% Bold
-        Gdip_TextToGraphics(this.G, textList, Options2, exocetFont, this.drawBoxWidth, this.drawBoxHeight)
-        Gdip_TextToGraphics(this.G, textList, Options, exocetFont, this.drawBoxWidth, this.drawBoxHeight)
+        Options = x%textx% y%texty% Left vTop cffFFD700 r4 s%fontSize%
+        Options = x%textx% y%texty% Left vTop cffFFD700 r4 s%fontSize%
+        textx := textx + 1
+        texty := texty + 1
+        Options2 = x%textx% y%texty% Left vTop cff000000 r4 s%fontSize%
+        Gdip_TextToGraphics(this.G, textList, Options2, formalFont)
+        drawnArea := Gdip_TextToGraphics(this.G, textList, Options, formalFont)
+        ms := StrSplit(drawnArea , "|")
+        return ms[3] ? ms[3] + textx + 5 : 100 + textx
+        
     }
 
     delete() {
@@ -88,5 +106,15 @@ class SessionTableLayer {
         DeleteObject(this.hbm)
         DeleteDC(this.hdc)
         Gui, SessionTable: Destroy
+    }
+
+    GetDurationFormatEx(Duration, Format := "m' m 's' s'", LocaleName := "!x-sys-default-locale")
+    {
+        if (Size := DllCall("GetDurationFormatEx", "str", LocaleName, "uint", 0, "ptr", 0, "int64", Duration * 10000000, "ptr", (Format ? &Format : 0), "ptr", 0, "int", 0)) {
+            VarSetCapacity(DurationStr, Size << !!A_IsUnicode, 0)
+            if (DllCall("GetDurationFormatEx", "str", LocaleName, "uint", 0, "ptr", 0, "int64", Duration * 10000000, "ptr", (Format ? &Format : 0), "str", DurationStr, "int", Size))
+                return DurationStr
+        }
+        return false
     }
 }

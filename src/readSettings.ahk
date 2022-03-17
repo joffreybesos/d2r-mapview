@@ -31,9 +31,8 @@ readSettings(settingsFile, ByRef settings) {
     settings["centerModeXUnitoffset"] := "4"
     settings["centerModeYUnitoffset"] := "0"
     settings["showGameInfo"] := 1
-    settings["textSectionWidth"] := "700"
-    settings["textSize"] := "20"
-    settings["textAlignment"] := "LEFT"
+    settings["historyTextAlignment"] := "LEFT"
+    settings["historyTextSize"] := "16"
     settings["showAllHistory"] := 0
     settings["showIPtext"] := 0
     settings["showFPS"] := 0

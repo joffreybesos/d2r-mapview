@@ -82,28 +82,27 @@ class SessionTableLayer {
             leftMargin :=  this.gameWindowWidth - col7 +  this.gameWindowX - 5
         }
         UpdateLayeredWindow(this.SessionTableLayerHwnd, this.hdc, leftMargin, this.gameWindowY, this.gameWindowWidth, this.gameWindowHeight)
+        Gdip_GraphicsClear( this.G )
     }
 
     drawHeader(textx, texty, fontSize, textStr) {
         Options = x%textx% y%texty% Left vBottom cffffffff r4 s%fontSize% Bold
-        textx := textx + 1
-        texty := texty + 1
-        Options2 = x%textx% y%texty% Left vBottom cff000000 r4 s%fontSize% Bold
+        shadowtextx := textx + 1
+        shadowtexty := texty + 1
+        Options2 = x%shadowtextx% y%shadowtexty% Left vBottom cff000000 r4 s%fontSize% Bold
         Gdip_TextToGraphics(this.G, textStr, Options2, formalFont)
         Gdip_TextToGraphics(this.G, textStr, Options, formalFont)
     }
 
     drawData(textx, texty, fontSize, textList, defaultColumnWidth) {
         Options = x%textx% y%texty% Left vTop cffFFD700 r4 s%fontSize%
-        Options = x%textx% y%texty% Left vTop cffFFD700 r4 s%fontSize%
-        textx := textx + 1
-        texty := texty + 1
-        Options2 = x%textx% y%texty% Left vTop cff000000 r4 s%fontSize%
+        shadowtextx := textx + 1
+        shadowtexty := texty + 1
+        Options2 = x%shadowtextx% y%shadowtexty% Left vTop cff000000 r4 s%fontSize%
         Gdip_TextToGraphics(this.G, textList, Options2, formalFont)
         drawnArea := Gdip_TextToGraphics(this.G, textList, Options, formalFont)
         ms := StrSplit(drawnArea , "|")
         return ms[3] > 0.0 ? ms[3] + textx + 5 : defaultColumnWidth + textx
-        
     }
 
     hide() {

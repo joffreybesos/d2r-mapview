@@ -32,10 +32,10 @@ readSettings(settingsFile, ByRef settings) {
     settings["centerModeYUnitoffset"] := "0"
     settings["showGameHistory"] := 1
     settings["historyTextAlignment"] := "LEFT"
-    settings["historyTextSize"] := "16"
+    settings["historyTextSize"] := "18"
     settings["showAllHistory"] := 0
     settings["showFPS"] := 0
-    settings["showGameInfo"] := 0
+    settings["showGameInfo"] := 1
     settings["gameInfoFontSize"] := "18"
     settings["gameInfoAlignment"] := "LEFT"
     settings["exitTextSize"] := "12"

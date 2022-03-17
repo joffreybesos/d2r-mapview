@@ -33,6 +33,9 @@ drawExits(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
             if (exitArray[2] == "The Ancients Way") {
                 exitArray[2] := "Ancients' Way"
             }
+            if (exitArray[2] == "The Drifter Cavern") {
+                exitArray[2] := "Echo Chamber"
+            }
 
             exitName := localizedStrings[exitArray[2]]
             ,exitX := (exitArray[3] * serverScale) + padding

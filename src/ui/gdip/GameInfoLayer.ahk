@@ -47,6 +47,11 @@ class GameInfoLayer {
         this.areaLevel := areaLevels["" difficulty ""]
     }
 
+    updateSessionStart(startTime) {
+        this.startTime := startTime
+        this.hideStartupText := false
+    }
+
     updateExpLevel(levelNo, difficulty, clvl) {
         if (this.areaLevel) {
             if (clvl < 25) {
@@ -101,13 +106,13 @@ class GameInfoLayer {
         if (settings["showGameInfo"]) {
             textList := "D2R-MAPVIEW`n"
             ; only show this text for the first 10 seconds from startup
-            if (!hideStartupText) {
-                if (A_TickCount - ScriptStartTime < 10000) {
+            if (!this.hideStartupText) {
+                if (A_TickCount - this.startTime < 10000) {
                     textList := textList "Ctrl+O for options`n"
                     textList := textList "Ctrl+H for help`n"
                 } else {
                     height := height - 40
-                    hideStartupText := true
+                    this.hideStartupText := true
                 }
             }
             if (this.areaLevel) {

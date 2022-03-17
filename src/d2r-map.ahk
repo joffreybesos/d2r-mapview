@@ -142,7 +142,7 @@ playerOffset := offsets["playerOffset"]
 startingOffset := offsets["playerOffset"]
 uiOffset := offsets["uiOffset"]
 
-global ScriptStartTime := A_TickCount
+
 
 pToken := Gdip_Startup()
 
@@ -202,6 +202,7 @@ While 1 {
                         sessionList := readSessionFile("GameSessionLog.csv")
                     }
                 }
+                gameInfoLayer.hide()
                 historyText.drawTable(sessionList, historyToggle)
             }
             offsetAttempts := 26
@@ -243,7 +244,8 @@ While 1 {
                 ;ipAddress := readIPAddress(d2rprocess, gameWindowId, offsets, session)
                 shrines := []
                 seenItems := []
-                gameInfoLayer.drawInfoText(currentFPS)
+                gameInfoLayer.updateSessionStart(session.startTime)
+                ;gameInfoLayer.drawInfoText(currentFPS)
                 historyText.hide()
             }
 

@@ -32,9 +32,8 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\showMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
-#Include %A_ScriptDir%\ui\showInfo.ahk
+;#Include %A_ScriptDir%\ui\showInfo.ahk
 #Include %A_ScriptDir%\ui\showUnits.ahk
-#Include %A_ScriptDir%\ui\showSessions.ahk
 #Include %A_ScriptDir%\ui\movePlayerMap.ahk
 #Include %A_ScriptDir%\stats\GameSession.ahk
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
@@ -44,8 +43,9 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
 #Include %A_ScriptDir%\ui\gdip\unitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\SessionTableLayer.ahk
+#Include %A_ScriptDir%\ui\gdip\GameInfoLayer.ahk
 
-global version := "2.7.0"
+global version := "2.7.1"
 
 lastMap := ""
 exitArray := []
@@ -143,14 +143,11 @@ playerOffset := offsets["playerOffset"]
 startingOffset := offsets["playerOffset"]
 uiOffset := offsets["uiOffset"]
 
+global ScriptStartTime := A_TickCount
+
 pToken := Gdip_Startup()
 
 ; create GUI windows
-Gui, IPaddress: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs +HwndipHwnd1
-
-Gui, GameInfo: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-global gamenameHwnd1 := WinExist()
-
 Gui, Map: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
 global mapHwnd1 := WinExist()
 
@@ -171,6 +168,7 @@ fpsTimer := A_TickCount
 currentFPS := 0
 
 historyText := new SessionTableLayer(settings)
+gameInfoLayer := new GameInfoLayer(settings)
 
 While 1 {
     frameStart:=A_TickCount
@@ -213,7 +211,6 @@ While 1 {
         Sleep, 80 ; sleep when no offset found, you're likely in menu
     } else {
         offsetAttempts := 0
-        Gui, GameInfo: Hide  ; hide the last game info
         ; timeStamp("readGameMemory")
         readGameMemory(d2rprocess, settings, playerOffset, gameMemoryData)
         ; timeStamp("readGameMemory")
@@ -243,8 +240,7 @@ While 1 {
                 session.startingPlayerLevel := gameMemoryData["playerLevel"]
                 session.startingExperience := gameMemoryData["experience"]
                 lastSeed := gameMemoryData["mapSeed"]
-                ipAddress := readIPAddress(d2rprocess, gameWindowId, offsets, session)
-                    
+                ;ipAddress := readIPAddress(d2rprocess, gameWindowId, offsets, session)
                 shrines := []
                 seenItems := []
             }
@@ -271,6 +267,7 @@ While 1 {
                 }
                 mapLoading := 0
                 Gui, LoadingText: Destroy ; remove loading text
+                
                 redrawMap := 1
             }
             if (redrawMap) {
@@ -286,6 +283,7 @@ While 1 {
 
                 unitsLayer.delete()
                 unitsLayer := new UnitsLayer(uiData)
+                gameInfoLayer.updateAreaLevel(levelNo,  gameMemoryData["difficulty"])
                 
                 redrawMap := 0
             }
@@ -323,12 +321,9 @@ While 1 {
         frameCount += 0
         , currentFPS := frameCount / (((A_TickCount-fpsTimer) / 1000))
         , currentFPS := Round(currentFPS, 1)
-        ;ToolTip, % "`n`n`n`n`n" frameCount
         , frameCount := 0
         , fpsTimer := A_TickCount
-        if (isMapShowing) {
-            ShowInfoText(ipHwnd1, gameWindowId, ipAddress, currentFPS, settings["textIPalignment"], settings["textIPfontSize"])
-        }
+        gameInfoLayer.drawInfoText(currentFPS)
     }
     if (frameDuration < ticksPerFrame) {
         Sleep, ticksPerFrame - frameDuration
@@ -370,7 +365,6 @@ hideMap(alwaysShowMap, menuShown := 0) {
     if ((alwaysShowMap == false) or menuShown) {
         Gui, Map: Hide
         Gui, Units: Hide
-        Gui, IPaddress: Hide
         if (isMapShowing) {
             WriteLogDebug("Map hidden")
         }
@@ -388,7 +382,6 @@ unHideMap() {
     if (!mapLoading) {
         Gui, Map: Show, NA
         Gui, Units: Show, NA
-        Gui, IPaddress: Show, NA
     } else {
         WriteLogDebug("Tried to show map while map loading, ignoring...")
     }
@@ -618,6 +611,8 @@ Update:
     UpdateSettings(settings, defaultSettings)
     historyText.delete()
     historyText := new SessionTableLayer(settings)
+    gameInfoLayer.delete()
+    gameInfoLayer := new GameInfoLayer(settings)
     if (cmode != settings["centerMode"]) { ; if centermode changed
         lastlevel := "INVALIDATED"
         imageData := {}

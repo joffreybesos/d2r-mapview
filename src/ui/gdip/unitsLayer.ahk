@@ -138,8 +138,8 @@ class UnitsLayer {
             this.pPortal := Gdip_CreatePen("0xff" . settings["portalColor"], 2.5 * scale)
             this.pRedPortal := Gdip_CreatePen("0xff" . settings["redPortalColor"], 2.5 * scale)
         } else {
-            this.pPortal := Gdip_CreatePen("0xff" . settings["portalColor"], 2.5 * scale)
-            this.pRedPortal := Gdip_CreatePen("0xff" . settings["redPortalColor"], 2.5 * scale)
+            this.pPortal := Gdip_CreatePen("0xff" . settings["portalColor"], 1.3 * scale)
+            this.pRedPortal := Gdip_CreatePen("0xff" . settings["redPortalColor"], 1.3 * scale)
         }
 
         ; chests

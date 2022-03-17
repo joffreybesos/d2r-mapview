@@ -30,14 +30,14 @@ readSettings(settingsFile, ByRef settings) {
     settings["centerModeYoffset"] := "-25"
     settings["centerModeXUnitoffset"] := "4"
     settings["centerModeYUnitoffset"] := "0"
-    settings["showGameInfo"] := 1
+    settings["showGameHistory"] := 1
     settings["historyTextAlignment"] := "LEFT"
     settings["historyTextSize"] := "16"
     settings["showAllHistory"] := 0
-    settings["showIPtext"] := 0
     settings["showFPS"] := 0
-    settings["textIPfontSize"] := "18"
-    settings["textIPalignment"] := "LEFT"
+    settings["showGameInfo"] := 0
+    settings["gameInfoFontSize"] := "18"
+    settings["gameInfoAlignment"] := "LEFT"
     settings["exitTextSize"] := "12"
 
     settings["showNormalMobs"] := 1

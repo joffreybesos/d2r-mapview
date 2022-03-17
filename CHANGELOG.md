@@ -12,6 +12,12 @@ Overhaul to game history table:
 - Changing settings for game history no longer requires restart
 - Row numbers added
 
+Other changes:
+
+- Minor performance tweaks
+- Performance profiling added but disabled by default
+- 
+
 ## [2.7.0] - 2021-03-14 - Visual polish
 
 - Town NPCs now have their names above them

@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.1] - 2021-03-17 - Game history refactored
+
+Overhaul to game history table:  
+
+- Game history uses new font
+- Columns are sized to the contents (no more overlapping text)
+- Game history time is now in 0m 0s format rather than just 0.00s
+- Changing settings for game history no longer requires restart
+- Row numbers added
+
 ## [2.7.0] - 2021-03-14 - Visual polish
 
 - Town NPCs now have their names above them

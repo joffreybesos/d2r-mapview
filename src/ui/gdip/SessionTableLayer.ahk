@@ -34,11 +34,16 @@ class SessionTableLayer {
 
     }
 
-    drawTable(ByRef sessionList) {
+    drawTable(ByRef sessionList, ByRef historyToggle) {
+        if (WinActive(gameWindowId) and historyToggle) {
+            Gui, SessionTable: Show, NA
+        } else {
+            Gui, SessionTable: Hide
+        }
         fontSize := this.historyTextSize
         headery := 40
         datay := 15
-        col1 := 0
+        col1 := 5
 
         ; lists is in reverse order
         max := sessionList.length()
@@ -58,14 +63,14 @@ class SessionTableLayer {
             gameTimeList := gameTimeList . this.GetDurationFormatEx(session.duration) . "`n"
         }
         
-        col2 := this.drawData(col1, headery, fontSize, rowNum)
-        col3 := this.drawData(col2, headery, fontSize, playerLevelList)
-        col4 := this.drawData(col3, headery, fontSize, playerNameList)
-        col5 := this.drawData(col4, headery, fontSize, gameNameList)
-        col6 := this.drawData(col5, headery, fontSize, gameTimeList)
-        col7 := this.drawData(col6, headery, fontSize, xpgainedList)
+        col2 := this.drawData(col1, headery, fontSize, rowNum, 2 * fontSize)
+        col3 := this.drawData(col2, headery, fontSize, playerLevelList, 3 * fontSize)
+        col4 := this.drawData(col3, headery, fontSize, playerNameList, 9 * fontSize)
+        col5 := this.drawData(col4, headery, fontSize, gameNameList, 9 * fontSize)
+        col6 := this.drawData(col5, headery, fontSize, gameTimeList, 8 * fontSize)
+        col7 := this.drawData(col6, headery, fontSize, xpgainedList, 3 * fontSize)
 
-        
+        this.drawHeader(col1, datay, fontSize, "#")
         this.drawHeader(col2, datay, fontSize, "Lvl")
         this.drawHeader(col3, datay, fontSize, "Character")
         this.drawHeader(col4, datay, fontSize, "Game Name")
@@ -74,7 +79,7 @@ class SessionTableLayer {
 
         leftMargin := this.gameWindowX
         if (this.historyTextAlignment == "RIGHT") {
-            leftMargin :=  this.gameWindowWidth - col7 +  this.gameWindowX
+            leftMargin :=  this.gameWindowWidth - col7 +  this.gameWindowX - 5
         }
         UpdateLayeredWindow(this.SessionTableLayerHwnd, this.hdc, leftMargin, this.gameWindowY, this.gameWindowWidth, this.gameWindowHeight)
     }
@@ -88,7 +93,7 @@ class SessionTableLayer {
         Gdip_TextToGraphics(this.G, textStr, Options, formalFont)
     }
 
-    drawData(textx, texty, fontSize, textList) {
+    drawData(textx, texty, fontSize, textList, defaultColumnWidth) {
         Options = x%textx% y%texty% Left vTop cffFFD700 r4 s%fontSize%
         Options = x%textx% y%texty% Left vTop cffFFD700 r4 s%fontSize%
         textx := textx + 1
@@ -97,7 +102,7 @@ class SessionTableLayer {
         Gdip_TextToGraphics(this.G, textList, Options2, formalFont)
         drawnArea := Gdip_TextToGraphics(this.G, textList, Options, formalFont)
         ms := StrSplit(drawnArea , "|")
-        return ms[3] ? ms[3] + textx + 5 : 100 + textx
+        return ms[3] > 0.0 ? ms[3] + textx + 5 : defaultColumnWidth + textx
         
     }
 

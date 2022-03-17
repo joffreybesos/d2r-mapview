@@ -205,8 +205,7 @@ While 1 {
                         sessionList := readSessionFile("GameSessionLog.csv")
                     }
                 }
-                ;ShowHistoryText(gamenameHwnd1, gameWindowId, sessionList, historyToggle, settings["textAlignment"], settings["textSectionWidth"], settings["textSize"])
-                historyText.drawTable(sessionList)
+                historyText.drawTable(sessionList, historyToggle)
             }
             offsetAttempts := 26
             WriteLogDebug("Offset attempts " offsetAttempts)

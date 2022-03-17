@@ -12,15 +12,6 @@ drawPlayers(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageD
             playerx := correctedPos["x"] + centerLeftOffset
             playery := correctedPos["y"] + centerTopOffset
             if (settings["showOtherPlayerNames"]) {
-                ; textx := playerx-2 - 160
-                ; texty := playery-2 - 100
-                ; Options = x%textx% y%texty% Center Bold vBottom cff00AA00 r8 s24
-                ; textx := textx + 1.5
-                ; texty := texty + 1.5
-                ; Options2 = x%textx% y%texty% Center Bold vBottom cff000000 r8 s24
-                ; Gdip_TextToGraphics(unitsLayer.G, player["playerName"], Options2, exocetFont, 320, 100)
-                ; Gdip_TextToGraphics(unitsLayer.G, player["playerName"], Options, exocetFont, 320, 100)
-
                 drawFloatingText(unitsLayer, playerx+1, playery-(9.2 * scale), 11 * scale, "ff00ff00", true, formalFont, player["playerName"])
             }
             
@@ -41,8 +32,7 @@ drawPlayers(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageD
                 , y1 := playery - yscale
                 , y2 := playery
                 , y3 := playery + yscale
-
-                points = %x1%,%y2%|%x2%,%y1%|%x3%,%y2%|%x2%,%y3%
+                , points = %x1%,%y2%|%x2%,%y1%|%x3%,%y2%|%x2%,%y3%
                 Gdip_FillPolygon(unitsLayer.G, unitsLayer.pBrushOtherPlayer, points)
                 Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenBlack, Points)
             }   

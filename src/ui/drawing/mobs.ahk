@@ -5,20 +5,23 @@ SetWorkingDir, %A_ScriptDir%
 drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageData, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset) {
     mobs := gameMemoryData["mobs"]
 
+    ; timeStamp("drawMonsters-showDeadMobs")
     if (settings["showDeadMobs"]) {
         for index, mob in mobs
         {
             if (mob["mode"] == 0 or mob["mode"] == 12) { ; dead
                 mobx := ((mob["x"] - imageData["mapOffsetX"]) * serverScale) + padding
-                moby := ((mob["y"] - imageData["mapOffsetY"]) * serverScale) + padding
-                correctedPos := correctPos(settings, mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-                mobx := correctedPos["x"] + centerLeftOffset
-                moby := correctedPos["y"] + centerTopOffset
+                , moby := ((mob["y"] - imageData["mapOffsetY"]) * serverScale) + padding
+                , correctedPos := correctPos(settings, mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                , mobx := correctedPos["x"] + centerLeftOffset
+                , moby := correctedPos["y"] + centerTopOffset
                 Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenDead, mobx-(unitsLayer.deadDotSize/2), moby-(unitsLayer.deadDotSize/2), unitsLayer.deadDotSize, unitsLayer.deadDotSize/2)
             }
         }
     }
+    ; timeStamp("drawMonsters-showDeadMobs")
     
+    ; timeStamp("drawMonsters-showNormalMobs")
     if (settings["showNormalMobs"]) {
         for index, mob in mobs
         {
@@ -95,7 +98,9 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
             }
         }
     }
+    ; timeStamp("drawMonsters-showNormalMobs")
 
+    ; timeStamp("drawMonsters-showUniqueMobs")
     ; having this in a separate loop forces it to be drawn on top
     for index, mob in mobs
     {
@@ -179,4 +184,5 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
             }
         }
     }
+    ; timeStamp("drawMonsters-showUniqueMobs")
 }

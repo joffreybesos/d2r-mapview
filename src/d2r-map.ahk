@@ -286,8 +286,9 @@ While 1 {
                 
                 redrawMap := 0
             }
-            
+            ; timeStamp("ShowUnits")
             ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
+            ; timeStamp("ShowUnits")
 
             if (settings["centerMode"] and gameMemoryData["pathAddress"]) {
                 MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], mapHwnd1, unitHwnd1, imageData, uiData)
@@ -414,7 +415,7 @@ unHideMap() {
                     ++count
                 }
             }
-            OutputDebug, % thisName " " Round(averageVal / count) "`n"
+            OutputDebug, % thisName " " Round(averageVal / count / 1000.0, 2) "ms `n"
             alreadyseenperf.Push(thisName)
         }
     }

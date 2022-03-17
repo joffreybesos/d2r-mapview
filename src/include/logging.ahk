@@ -13,16 +13,15 @@ WriteLogDebug(text) {
 	}
 }
 
-
 timeStamp(name) {
 	DllCall("QueryPerformanceCounter", "Int64P", timestamp)
 	if (timestamps[name]) {
 		duration := timestamp - timestamps[name]
 		;OutputDebug, % name "," duration "`n"
 		perfdata.push({"name": name, "duration": duration})
-		
+
 		timestamps[name] := 0
 	} else {
 		timestamps[name] := timestamp
 	}
-}	
+}

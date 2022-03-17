@@ -14,9 +14,16 @@ Overhaul to game history table:
 
 Other changes:
 
-- Minor performance tweaks
+- 'Game Info' will now appear on the top left in game
+- Game Info can be switched off and replaces IP text
+- You can also change the font size
+- Game Info will tell you the current map Area Level 1-85
+- If you are clvl < 70 you will also see any experience penalty you might be receiving
+- IP text has been removed since it's no longer relevant for 2.4
+- Some help text appears in the top left for the first 10 seconds after MH launch
+
+- Other minor performance tweaks
 - Performance profiling added but disabled by default
-- 
 
 ## [2.7.0] - 2021-03-14 - Visual polish
 

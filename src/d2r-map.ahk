@@ -361,11 +361,13 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
             WriteLogDebug("D2R is not active window, hiding map")
         }
         hideMap(false)
+        gameInfoLayer.hide()
     } else if (!isAutomapShown(d2rprocess, uiOffset) and !alwaysShowMap) {
         ; hidemap
         hideMap(alwaysShowMap)
     } else {
         unHideMap()
+        gameInfoLayer.show()
     } 
     return
 }

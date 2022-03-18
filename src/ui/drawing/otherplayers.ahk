@@ -32,7 +32,7 @@ drawPlayers(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageD
                 , y1 := playery - yscale
                 , y2 := playery
                 , y3 := playery + yscale
-                , points = %x1%,%y2%|%x2%,%y1%|%x3%,%y2%|%x2%,%y3%
+                points = %x1%,%y2%|%x2%,%y1%|%x3%,%y2%|%x2%,%y3%
                 Gdip_FillPolygon(unitsLayer.G, unitsLayer.pBrushOtherPlayer, points)
                 Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenBlack, Points)
             }   

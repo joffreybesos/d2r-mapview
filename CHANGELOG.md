@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.2] - 2021-03-18 - Bug fix for showing other players
+
+- Previously when you joined a game with other players an error message would show
+
 ## [2.7.1] - 2021-03-17 - Game history refactored
 
 Overhaul to game history table:  

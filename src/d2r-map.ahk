@@ -44,7 +44,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\SessionTableLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\GameInfoLayer.ahk
 
-global version := "2.7.1"
+global version := "2.7.2"
 
 lastMap := ""
 exitArray := []

@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 
 - Identified unique or set items on the ground will have their proper name (including rings and ammys)
 - Changed game history table font back to exocet after feedback (game names were hard to read)
-- Quest unique items e.g. Khalim's Flail, will no longer trigger a voice alert
+- Quest items e.g. Khalim's Flail, will no longer trigger a voice alert
+- Centered mode is now turned on by default
 
 ## [2.7.2] - 2021-03-18 - Bug fix for showing other players
 

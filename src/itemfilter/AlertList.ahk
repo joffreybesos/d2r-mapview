@@ -167,7 +167,6 @@ class AlertList {
             }
 
             if (foundItemName && foundQuality && iseth && noneth && iden && unid) {
-                ;msgbox % qualityName " " item.name " matched " alert.name
                 return alert
             }
         }
@@ -175,7 +174,7 @@ class AlertList {
     }
 }
 
-
+; this will validate the item alerts at startup to check for errors
 validate(yamlAlert, name) {
     errormsg21 := localizedStrings["errormsg21"]
     errormsg22 := localizedStrings["errormsg22"]

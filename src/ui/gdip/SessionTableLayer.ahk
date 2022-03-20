@@ -63,12 +63,12 @@ class SessionTableLayer {
             gameTimeList := gameTimeList . this.GetDurationFormatEx(session.duration) . "`n"
         }
         
-        col2 := this.drawData(col1, headery, fontSize, rowNum, 2 * fontSize)
+        col2 := this.drawData(col1, headery, fontSize, rowNum, 1 * fontSize)
         col3 := this.drawData(col2, headery, fontSize, playerLevelList, 3 * fontSize)
-        col4 := this.drawData(col3, headery, fontSize, playerNameList, 9 * fontSize)
-        col5 := this.drawData(col4, headery, fontSize, gameNameList, 9 * fontSize)
-        col6 := this.drawData(col5, headery, fontSize, gameTimeList, 8 * fontSize)
-        col7 := this.drawData(col6, headery, fontSize, xpgainedList, 3 * fontSize)
+        col4 := this.drawData(col3, headery, fontSize, playerNameList, 7 * fontSize)
+        col5 := this.drawData(col4, headery, fontSize, gameNameList, 7 * fontSize)
+        col6 := this.drawData(col5, headery, fontSize, gameTimeList, 6 * fontSize)
+        col7 := this.drawData(col6, headery, fontSize, xpgainedList, 2 * fontSize)
 
         this.drawHeader(col1, datay, fontSize, "#")
         this.drawHeader(col2, datay, fontSize, "Lvl")
@@ -88,21 +88,23 @@ class SessionTableLayer {
     drawHeader(textx, texty, fontSize, textStr) {
         Options = x%textx% y%texty% Left vBottom cffffffff r4 s%fontSize% Bold
         shadowtextx := textx + 1
-        shadowtexty := texty + 1
+        , shadowtexty := texty + 1
         Options2 = x%shadowtextx% y%shadowtexty% Left vBottom cff000000 r4 s%fontSize% Bold
-        Gdip_TextToGraphics(this.G, textStr, Options2, formalFont)
-        Gdip_TextToGraphics(this.G, textStr, Options, formalFont)
+        Gdip_TextToGraphics(this.G, textStr, Options2, exocetFont)
+        Gdip_TextToGraphics(this.G, textStr, Options, exocetFont)
     }
 
     drawData(textx, texty, fontSize, textList, defaultColumnWidth) {
         Options = x%textx% y%texty% Left vTop cffFFD700 r4 s%fontSize%
         shadowtextx := textx + 1
-        shadowtexty := texty + 1
+        , shadowtexty := texty + 1
         Options2 = x%shadowtextx% y%shadowtexty% Left vTop cff000000 r4 s%fontSize%
-        Gdip_TextToGraphics(this.G, textList, Options2, formalFont)
-        drawnArea := Gdip_TextToGraphics(this.G, textList, Options, formalFont)
+        Gdip_TextToGraphics(this.G, textList, Options2, exocetFont)
+        drawnArea := Gdip_TextToGraphics(this.G, textList, Options, exocetFont)
         ms := StrSplit(drawnArea , "|")
-        return ms[3] > 0.0 ? ms[3] + textx + 5 : defaultColumnWidth + textx
+        minSize := defaultColumnWidth + textx
+        textSize := ms[3] + textx + 10
+        return textSize > minSize ? textSize : minSize
     }
 
     hide() {
@@ -116,7 +118,7 @@ class SessionTableLayer {
         Gui, SessionTable: Destroy
     }
 
-    GetDurationFormatEx(Duration, Format := "m' m 's' s'", LocaleName := "!x-sys-default-locale")
+    GetDurationFormatEx(Duration, Format := "m'm 's's'", LocaleName := "!x-sys-default-locale")
     {
         if (Size := DllCall("GetDurationFormatEx", "str", LocaleName, "uint", 0, "ptr", 0, "int64", Duration * 10000000, "ptr", (Format ? &Format : 0), "ptr", 0, "int", 0)) {
             VarSetCapacity(DurationStr, Size << !!A_IsUnicode, 0)

@@ -60,29 +60,31 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
 
 announceItem(settings, item, alert) {
     if (settings["allowTextToSpeech"] or settings["allowItemDropSounds"]) {
-        if (!hasVal(seenItems, item.getHash())) {
-            ; seen item for the first time
-            WriteLog("ITEMLOG: Found item '" item.quality " " item.name "' matched to alert '" alert.name "'")
-            if (settings["allowTextToSpeech"]) {
-                SetFormat Integer, D
-                volume := Round(settings["textToSpeechVolume"] + 0)
-                pitch := Round(settings["textToSpeechPitch"] + 0)
-                speed := Round(settings["textToSpeechSpeed"] + 0)
-                try {
-                    speech := "<pitch absmiddle=""" pitch """><rate absspeed=""" speed """><volume level=""" volume """>" item.getTextToSpeech() "</volume></rate></pitch>"
-                    oSpVoice.Speak(speech, 1)
-                } catch e {
-                    WriteLog("Error with text to speech, try changing voice " speech)   
-                    WriteLog(e.message)
+        if (!item.isQuestItem(item.txtFileNo)) {
+            if (!hasVal(seenItems, item.getHash())) {
+                ; seen item for the first time
+                WriteLog("ITEMLOG: Found item '" item.quality " " item.name "' matched to alert '" alert.name "'")
+                if (settings["allowTextToSpeech"]) {
+                    SetFormat Integer, D
+                    volume := Round(settings["textToSpeechVolume"] + 0)
+                    pitch := Round(settings["textToSpeechPitch"] + 0)
+                    speed := Round(settings["textToSpeechSpeed"] + 0)
+                    try {
+                        speech := "<pitch absmiddle=""" pitch """><rate absspeed=""" speed """><volume level=""" volume """>" item.getTextToSpeech() "</volume></rate></pitch>"
+                        oSpVoice.Speak(speech, 1)
+                    } catch e {
+                        WriteLog("Error with text to speech, try changing voice " speech)   
+                        WriteLog(e.message)
+                    }
                 }
-            }
-            if (settings["allowItemDropSounds"]) {
-                if (alert.soundfile) {
-                    soundfile := alert.soundfile
-                    SoundPlay, %soundfile%
+                if (settings["allowItemDropSounds"]) {
+                    if (alert.soundfile) {
+                        soundfile := alert.soundfile
+                        SoundPlay, %soundfile%
+                    }
                 }
+                seenItems.push(item.getHash())
             }
-            seenItems.push(item.getHash())
         }
     }
 }

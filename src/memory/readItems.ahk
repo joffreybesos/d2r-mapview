@@ -22,7 +22,7 @@ ReadItems(ByRef d2rprocess, startingOffset, ByRef items) {
 
                     ; itemQuality - 5 is set, 7 is unique (6 rare, 4, magic)
                     , itemQuality := d2rprocess.read(pUnitData, "UInt")
-
+                    , uniqueOrSetId := d2rprocess.read(pUnitData + 0x34, "UInt")
                     , pPath := d2rprocess.read(itemUnit + 0x38, "Int64")  
                     , itemx := d2rprocess.read(pPath + 0x10, "UShort")
                     , itemy := d2rprocess.read(pPath + 0x14, "UShort")
@@ -42,7 +42,7 @@ ReadItems(ByRef d2rprocess, startingOffset, ByRef items) {
                         }
                     }
                     flags := d2rprocess.read(pUnitData + 0x18, "UInt")
-                    , item := new GameItem(txtFileNo, itemQuality)
+                    , item := new GameItem(txtFileNo, itemQuality, uniqueOrSetId)
                     , item.itemLoc := itemLoc
                     , item.itemx := itemx
                     , item.itemy := itemy

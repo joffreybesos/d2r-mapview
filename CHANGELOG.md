@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.3] - 2021-03-19 - Minor changes
+
+- Identified unique or set items on the ground will have their proper name (including rings and ammys)
+- Changed game history table font back to exocet after feedback (game names were hard to read)
+- Quest unique items e.g. Khalim's Flail, will no longer trigger a voice alert
+
 ## [2.7.2] - 2021-03-18 - Bug fix for showing other players
 
 - Previously when you joined a game with other players an error message would show

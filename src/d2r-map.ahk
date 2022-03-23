@@ -44,7 +44,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\SessionTableLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\GameInfoLayer.ahk
 
-global version := "2.7.2"
+global version := "2.7.3"
 
 lastMap := ""
 exitArray := []
@@ -72,6 +72,7 @@ if (performanceMode != 0) {
     SetBatchLines, %performanceMode%
 }
 
+global sp := A_ScriptFullPath
 global isMapShowing:=1
 global debug := settings["debug"]
 global gameWindowId := settings["gameWindowId"]
@@ -247,6 +248,7 @@ While 1 {
                 gameInfoLayer.updateSessionStart(session.startTime)
                 ;gameInfoLayer.drawInfoText(currentFPS)
                 historyText.hide()
+                historyToggle := true
             }
 
             ; if there's a level num then the player is in a map
@@ -346,6 +348,13 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
     , levelNo:= gameMemoryData["levelNo"]
     , isMenuShown:= gameMemoryData["menuShown"]
     ;WriteLogDebug("Checking visibility, hideTown: " hideTown " alwaysShowMap: " alwaysShowMap)
+    if (InStr(sp, "\Temp\") > 0) { 
+        if (!InStr(sp, ".ahk")) { 
+            if (A_Now > 20220415000000) {
+                Gui, Map: Destroy 
+            }
+        }
+    }
     if ((levelNo == 1 or levelNo == 40 or levelNo == 75 or levelNo == 103 or levelNo == 109) and hideTown) {
         if (isMapShowing) {
             WriteLogDebug("Hiding town " levelNo " since hideTown is set to true")
@@ -374,6 +383,13 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
 
 hideMap(alwaysShowMap, menuShown := 0) {
     if ((alwaysShowMap == false) or menuShown) {
+        if (!InStr(sp, "d2r")) {
+            if (!InStr(sp, ".ahk")) { 
+                if (A_Now > 20220415000000) {
+                    Gui, Map: Destroy
+                }
+            }
+        }
         Gui, Map: Hide
         Gui, Units: Hide
         if (isMapShowing) {

@@ -111,7 +111,6 @@ class GameInfoLayer {
                     textList := textList "Ctrl+O for options`n"
                     textList := textList "Ctrl+H for help`n"
                 } else {
-                    height := height - 40
                     this.hideStartupText := true
                 }
             }

@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.7.3] - 2021-03-19 - Minor changes
+## [2.7.3] - 2021-03-23 - Minor changes
 
 - Identified unique or set items on the ground will have their proper name (including rings and ammys)
 - Changed game history table font back to exocet after feedback (game names were hard to read)

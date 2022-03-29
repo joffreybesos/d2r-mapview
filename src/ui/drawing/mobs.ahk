@@ -31,36 +31,35 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
             mobx := correctedPos["x"] + centerLeftOffset
             moby := correctedPos["y"] + centerTopOffset
 
-            ;WriteLog(mobx " " moby)
             if (mob["isUnique"] == 0) {
                 if (mob["mode"] != 0 and mob["mode"] != 12) { ; not dead
-                    if (settings["showImmunities"]) {
+                    if (settings["showImmunities"]) { ; yeah it says immunities but really it's resistances, bite me
                         immunities := mob["immunities"]
-                        noImmunities := immunities["physical"] + immunities["magic"] + immunities["fire"] + immunities["light"] + immunities["cold"] + immunities["poison"]
+                        noImmunities := (immunities["physical"] >= 100) + (immunities["magic"] >= 100) + (immunities["fire"] >= 100) + (immunities["light"] >= 100) + (immunities["cold"] >= 100) + (immunities["poison"] >= 100)
                         sliceSize := 360 / noImmunities
                         angleDegrees := 90
                         dotAdjust := unitsLayer.normalImmunitySize/2
-                        if (immunities["physical"]) {
+                        if (immunities["physical"] >= 100) {
                             Gdip_DrawPie(unitsLayer.G, unitsLayer.pPenPhysical, mobx-dotAdjust, moby-dotAdjust, unitsLayer.normalImmunitySize, unitsLayer.normalImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
-                        if (immunities["magic"]) {
+                        if (immunities["magic"] >= 100) {
                             Gdip_DrawPie(unitsLayer.G, unitsLayer.pPenMagic, mobx-dotAdjust, moby-dotAdjust, unitsLayer.normalImmunitySize, unitsLayer.normalImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
-                        if (immunities["fire"]) {
+                        if (immunities["fire"] >= 100) {
                             Gdip_DrawPie(unitsLayer.G, unitsLayer.pPenFire, mobx-dotAdjust, moby-dotAdjust, unitsLayer.normalImmunitySize, unitsLayer.normalImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
-                        if (immunities["light"]) {
+                        if (immunities["light"] >= 100) {
                             Gdip_DrawPie(unitsLayer.G, unitsLayer.pPenLight, mobx-dotAdjust, moby-dotAdjust, unitsLayer.normalImmunitySize, unitsLayer.normalImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
-                        if (immunities["cold"]) {
+                        if (immunities["cold"] >= 100) {
                             Gdip_DrawPie(unitsLayer.G, unitsLayer.pPenCold, mobx-dotAdjust, moby-dotAdjust, unitsLayer.normalImmunitySize, unitsLayer.normalImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
-                        if (immunities["poison"]) {
+                        if (immunities["poison"] >= 100) {
                             Gdip_DrawPie(unitsLayer.G, unitsLayer.pPenPoison, mobx-dotAdjust, moby-dotAdjust, unitsLayer.normalImmunitySize, unitsLayer.normalImmunitySize/2,angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
@@ -147,34 +146,34 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
                     
                     if (settings["showImmunities"]) {
                         immunities := mob["immunities"]
-                        noImmunities := immunities["physical"] + immunities["magic"] + immunities["fire"] + immunities["light"] + immunities["cold"] + immunities["poison"]
+                        noImmunities := (immunities["physical"] >= 100) + (immunities["magic"] >= 100) + (immunities["fire"] >= 100) + (immunities["light"] >= 100) + (immunities["cold"] >= 100) + (immunities["poison"] >= 100)
                         sliceSize := 360 / noImmunities
                         angleDegrees := 90
                         ;WriteLog(mob["txtFileNo"] " " immunities["fire"] immunities["light"] immunities["cold"] immunities["poison"])
                         ;txtFileNo := mob["txtFileNo"]
                         ;WriteLog("noImmunities: " noImmunities ", txtFileNo: " txtFileNo ", " immunities["physical"] immunities["magic"] immunities["fire"] immunities["light"] immunities["cold"] immunities["poison"])
-                        if (immunities["physical"]) {
+                        if (immunities["physical"] >= 100) {
                             
                             Gdip_DrawPie(unitsLayer.G, unitsLayer.pPenPhysical, mobx-(unitsLayer.uniqueImmunitySize/2), moby-(unitsLayer.uniqueImmunitySize/2), unitsLayer.uniqueImmunitySize, unitsLayer.uniqueImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
-                        if (immunities["magic"]) {
+                        if (immunities["magic"] >= 100) {
                             Gdip_DrawPie(unitsLayer.G, unitsLayer.pPenMagic, mobx-(unitsLayer.uniqueImmunitySize/2), moby-(unitsLayer.uniqueImmunitySize/2), unitsLayer.uniqueImmunitySize, unitsLayer.uniqueImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
-                        if (immunities["fire"]) {
+                        if (immunities["fire"] >= 100) {
                             Gdip_DrawPie(unitsLayer.G, unitsLayer.pPenFire, mobx-(unitsLayer.uniqueImmunitySize/2), moby-(unitsLayer.uniqueImmunitySize/2), unitsLayer.uniqueImmunitySize, unitsLayer.uniqueImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
-                        if (immunities["light"]) {
+                        if (immunities["light"] >= 100) {
                             Gdip_DrawPie(unitsLayer.G, unitsLayer.pPenLight, mobx-(unitsLayer.uniqueImmunitySize/2), moby-(unitsLayer.uniqueImmunitySize/2), unitsLayer.uniqueImmunitySize, unitsLayer.uniqueImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
-                        if (immunities["cold"]) {
+                        if (immunities["cold"] >= 100) {
                             Gdip_DrawPie(unitsLayer.G, unitsLayer.pPenCold, mobx-(unitsLayer.uniqueImmunitySize/2), moby-(unitsLayer.uniqueImmunitySize/2), unitsLayer.uniqueImmunitySize, unitsLayer.uniqueImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }
-                        if (immunities["poison"]) {
+                        if (immunities["poison"] >= 100) {
                             Gdip_DrawPie(unitsLayer.G, unitsLayer.pPenPoison, mobx-(unitsLayer.uniqueImmunitySize/2), moby-(unitsLayer.uniqueImmunitySize/2), unitsLayer.uniqueImmunitySize, unitsLayer.uniqueImmunitySize/2, angleDegrees, sliceSize)
                             angleDegrees := angleDegrees + sliceSize
                         }

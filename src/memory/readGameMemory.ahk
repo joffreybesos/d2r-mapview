@@ -57,6 +57,15 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
         }
     }
 
+
+    hoverAddress := d2rprocess.BaseAddress + offsets["hoverOffset"]
+    ;isHovered := d2rprocess.read(hoverAddress, "UChar")
+    d2rprocess.readRaw(hoverAddress, hoverBuffer, 12)
+    isHovered := NumGet(&unitTableBuffer , 0, "UChar")
+    if (isHovered) {
+        lastHoveredType := NumGet(&unitTableBuffer , 0x04, "UInt")
+        lastHoveredUnitId := NumGet(&unitTableBuffer , 0x08, "UInt")
+    }
     ; get other players
     if (settings["showOtherPlayers"]) {
         ; timeStamp("ReadOtherPlayers")
@@ -66,9 +75,15 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
 
     ; ; get mobs
     if (settings["showNormalMobs"] or settings["showUniqueMobs"] or settings["showBosses"] or settings["showDeadMobs"]) {
-        ; timeStamp("ReadMobs")
-        ReadMobs(d2rprocess, startingOffset, mobs)
-        ; timeStamp("ReadMobs")
+        if (lastHoveredType) {
+            ; timeStamp("ReadMobs")
+            ReadMobs(d2rprocess, startingOffset, lastHoveredUnitId, mobs, hoveredMob)
+            ; timeStamp("ReadMobs")
+        } else {
+            ; timeStamp("ReadMobs")
+            ReadMobs(d2rprocess, startingOffset, 0, mobs, hoveredMob)
+            ; timeStamp("ReadMobs")
+        }
     }
 
     ; missiles
@@ -125,7 +140,8 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
         WriteLog("Did not find player position at player offset " playerOffset) 
     }
     ; timeStamp("playerposition")
-    gameMemoryData := {"pathAddress": pathAddress, "gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "missiles": missiles, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName, "experience": experience, "playerLevel": playerLevel, "menuShown": menuShown }
+    
+    gameMemoryData := {"pathAddress": pathAddress, "gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "missiles": missiles, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName, "experience": experience, "playerLevel": playerLevel, "menuShown": menuShown, "hoveredMob": hoveredMob }
     ;ElapsedTime := A_TickCount - StartTime
     ;OutputDebug, % ElapsedTime "`n"
     ;ToolTip % "`n`n`n`n" ElapsedTime

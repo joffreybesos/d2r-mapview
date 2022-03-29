@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.4] - 2021-03-29 - Minor changes
+
+- Fixed bug where game history would show in game (for real this time)
+- Fixed bug where game history wouldn't record consecutive sessions for the same offline character
+- (There is still a bug with offline characters using the game name of the last online game)
+
 ## [2.7.3] - 2021-03-23 - Minor changes
 
 - Identified unique or set items on the ground will have their proper name (including rings and ammys)

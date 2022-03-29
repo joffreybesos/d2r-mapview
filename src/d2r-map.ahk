@@ -185,6 +185,7 @@ While 1 {
             lastlevel:=
             shrines := []
             seenItems := []
+            newGame := 1
             if (session) {
                 session.setEndTime(gameEndTime)
                 session.endingPlayerLevel := lastPlayerLevel
@@ -223,7 +224,7 @@ While 1 {
         }
 
         if ((gameMemoryData["difficulty"] == "0" or gameMemoryData["difficulty"] == "1" or gameMemoryData["difficulty"] == "2") and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
-            if (gameMemoryData["mapSeed"] != lastSeed) {
+            if (gameMemoryData["mapSeed"] != lastSeed or newGame) {
                 gameStartTime := A_TickCount    
                 currentGameName := readLastGameName(d2rprocess, gameWindowId, offsets, session)
 
@@ -247,9 +248,11 @@ While 1 {
                 seenItems := []
                 gameInfoLayer.updateSessionStart(session.startTime)
                 ;gameInfoLayer.drawInfoText(currentFPS)
-                historyText.hide()
-                historyToggle := true
+                newGame := 0
+                
             }
+            historyText.hide()
+            historyToggle := true
 
             ; if there's a level num then the player is in a map
             if (gameMemoryData["levelNo"] != lastlevel) { ; only redraw map when it changes

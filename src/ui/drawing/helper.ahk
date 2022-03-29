@@ -211,3 +211,19 @@ createCross(ByRef playerCrossXoffset, ByRef playerCrossYoffset, ByRef scale) {
     points = %x1%,%y2%|%x2%,%y3%|%x1%,%y4%|%x2%,%y5%|%x3%,%y4%|%x4%,%y5%|%x5%,%y4%|%x4%,%y3%|%x5%,%y2%|%x4%,%y1%|%x3%,%y2%|%x2%,%y1%
     return points
 }
+
+isWindowFullScreen(WinID)
+{
+    ;checks if the specified window is full screen
+    ;use WinExist of another means to get the Unique ID (HWND) of the desired window
+
+    if ( !WinID )
+        return false
+
+	WinGet style, Style, ahk_id %WinID%
+	WinGetPos ,,,winW,winH, %WinID%
+	; 0x800000 is WS_BORDER.
+	; 0x20000000 is WS_MINIMIZE.
+	; no border and not minimized
+	Return ((style & 0x20800000) or winH < A_ScreenHeight or winW < A_ScreenWidth) ? false : true
+}

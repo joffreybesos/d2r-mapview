@@ -10,16 +10,21 @@ class UIAssistLayer {
     __new(ByRef settings) {
         Gui, UIAssist: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
         this.UIAssistLayerHwnd := WinExist()
+        if (isWindowFullScreen(gameWindowId)) {
+            this.y := 0
+        } else {
+            this.y := 32
+        }
+        
 
         this.resistBoxWidth := 40
         this.resistBoxHeight := 30
         this.resistFontSize := 18
         this.maxWidth := this.resistBoxWidth * 6
-        this.y := 0
         WinGetPos, , , gameWidth, gameHeight, %gameWindowId% 
         pToken := Gdip_Startup()
         DetectHiddenWindows, On
-        this.hbm := CreateDIBSection(this.maxWidth, this.y + this.resistBoxHeight)
+        this.hbm := CreateDIBSection(this.maxWidth, this.resistBoxHeight)
         this.hdc := CreateCompatibleDC()
         this.obm := SelectObject(this.hdc, this.hbm)
         this.G := Gdip_GraphicsFromHDC(this.hdc)
@@ -45,38 +50,38 @@ class UIAssistLayer {
             startx := (gameWidth / 2) - (this.maxWidth / 2)
             x := 0
             if (resists["physical"]) {
-                Gdip_FillRectangle(this.G, this.pBrushPhysical, x, this.y, this.resistBoxWidth, this.resistBoxHeight)
-                this.drawResistText(x, this.y, resistFontSize, resists["physical"])
+                Gdip_FillRectangle(this.G, this.pBrushPhysical, x, 0, this.resistBoxWidth, this.resistBoxHeight)
+                this.drawResistText(x, 0, resistFontSize, resists["physical"])
             }
             x := x + this.resistBoxWidth
             if (resists["magic"]) {
-                Gdip_FillRectangle(this.G, this.pBrushMagic, x, this.y, this.resistBoxWidth, this.resistBoxHeight)
-                this.drawResistText(x, this.y, resistFontSize, resists["magic"])
+                Gdip_FillRectangle(this.G, this.pBrushMagic, x, 0, this.resistBoxWidth, this.resistBoxHeight)
+                this.drawResistText(x, 0, resistFontSize, resists["magic"])
             }
             x := x + this.resistBoxWidth
             if (resists["fire"]) {
-                Gdip_FillRectangle(this.G, this.pBrushFire, x, this.y, this.resistBoxWidth, this.resistBoxHeight)
-                this.drawResistText(x, this.y, resistFontSize, resists["fire"])
+                Gdip_FillRectangle(this.G, this.pBrushFire, x, 0, this.resistBoxWidth, this.resistBoxHeight)
+                this.drawResistText(x, 0, resistFontSize, resists["fire"])
             }
             x := x + this.resistBoxWidth
             if (resists["light"]) {
-            Gdip_FillRectangle(this.G, this.pBrushLight, x, this.y, this.resistBoxWidth, this.resistBoxHeight)
-            this.drawResistText(x, this.y, resistFontSize, resists["light"])
+            Gdip_FillRectangle(this.G, this.pBrushLight, x, 0, this.resistBoxWidth, this.resistBoxHeight)
+            this.drawResistText(x, 0, resistFontSize, resists["light"])
             }
             x := x + this.resistBoxWidth
             if (resists["cold"]) {
-            Gdip_FillRectangle(this.G, this.pBrushCold, x, this.y, this.resistBoxWidth, this.resistBoxHeight)
-            this.drawResistText(x, this.y, resistFontSize, resists["cold"])
+            Gdip_FillRectangle(this.G, this.pBrushCold, x, 0, this.resistBoxWidth, this.resistBoxHeight)
+            this.drawResistText(x, 0, resistFontSize, resists["cold"])
             }
             x := x + this.resistBoxWidth
             if (resists["poison"]) {
-            Gdip_FillRectangle(this.G, this.pBrushPoison, x, this.y, this.resistBoxWidth, this.resistBoxHeight)
-            this.drawResistText(x, this.y, resistFontSize, resists["poison"])
+            Gdip_FillRectangle(this.G, this.pBrushPoison, x, 0, this.resistBoxWidth, this.resistBoxHeight)
+            this.drawResistText(x, 0, resistFontSize, resists["poison"])
             }
             x := x + this.resistBoxWidth
             
         }
-        UpdateLayeredWindow(this.UIAssistLayerHwnd, this.hdc, gamewindowx + startx, gamewindowy, this.maxWidth, this.y + this.resistBoxHeight)
+        UpdateLayeredWindow(this.UIAssistLayerHwnd, this.hdc, gamewindowx + startx, gamewindowy + this.y, this.maxWidth, this.resistBoxHeight)
         Gdip_GraphicsClear( this.G )
     }
 
@@ -91,8 +96,8 @@ class UIAssistLayer {
         textx := textx + 0.8
         texty := texty + 0.8
         Options2 = x%textx% y%texty% Center vCenter cff000000 r8 s%resistFontSize%
-        Gdip_TextToGraphics(this.G, resistVal, Options2, diabloFont, this.resistBoxWidth*2, this.resistBoxHeight)
-        Gdip_TextToGraphics(this.G, resistVal, Options,  diabloFont, this.resistBoxWidth*2, this.resistBoxHeight)
+        Gdip_TextToGraphics(this.G, resistVal, Options2, formalFont, this.resistBoxWidth*2, this.resistBoxHeight)
+        Gdip_TextToGraphics(this.G, resistVal, Options,  formalFont, this.resistBoxWidth*2, this.resistBoxHeight)
     }
 
     createPens(ByRef settings) {

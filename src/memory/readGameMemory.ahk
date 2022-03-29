@@ -8,6 +8,7 @@
 readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryData) {
     static items
     static objects
+    hoveredMob := {}
     ;StartTime := A_TickCount
     startingOffset := offsets["playerOffset"] ;default offset
 
@@ -59,12 +60,11 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
 
 
     hoverAddress := d2rprocess.BaseAddress + offsets["hoverOffset"]
-    ;isHovered := d2rprocess.read(hoverAddress, "UChar")
     d2rprocess.readRaw(hoverAddress, hoverBuffer, 12)
-    isHovered := NumGet(&unitTableBuffer , 0, "UChar")
+    isHovered := NumGet(&hoverBuffer , 0, "UChar")
     if (isHovered) {
-        lastHoveredType := NumGet(&unitTableBuffer , 0x04, "UInt")
-        lastHoveredUnitId := NumGet(&unitTableBuffer , 0x08, "UInt")
+        lastHoveredType := NumGet(&hoverBuffer , 0x04, "UInt")
+        lastHoveredUnitId := NumGet(&hoverBuffer , 0x08, "UInt")
     }
     ; get other players
     if (settings["showOtherPlayers"]) {

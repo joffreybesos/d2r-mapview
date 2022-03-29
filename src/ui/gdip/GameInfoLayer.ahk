@@ -12,7 +12,11 @@ class GameInfoLayer {
         gameInfoAlignment := settings["gameInfoAlignment"]
         StringUpper, gameInfoAlignment, gameInfoAlignment
         this.gameInfoAlignment := gameInfoAlignment
-        this.topPadding := 20
+        if (isWindowFullScreen(gameWindowId)) {
+            this.topPadding := 10
+        } else {
+            this.topPadding := 40
+        }
         height := this.topPadding
         if (settings["showGameInfo"]) {
             height := height + 80

@@ -10,7 +10,12 @@ class SessionTableLayer {
     __new(ByRef settings) {
         Gui, SessionTable: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
         this.SessionTableLayerHwnd := WinExist()
-        this.y := 20
+        if (isWindowFullScreen(gameWindowId)) {
+            this.y := 20
+        } else {
+            this.y := 40
+        }
+        
         WinGetPos, gameWindowX, gameWindowY, gameWindowWidth, gameWindowHeight, %gameWindowId% 
         this.gameWindowX := gameWindowX
         this.gameWindowY := gameWindowY

@@ -5,9 +5,9 @@ All notable changes to this project will be documented in this file.
 ## [2.7.4] - 2021-03-29 - Resist stats for mobs
 
 - When you hover over a monster, you will see their exact resistances now
-- Each box will show their resists, >100 means immune
-- This is to be help fine tune any 'minus enemy resist' gear
-- This is not the most useful feature and it will probably change over time
+  Each box will show their resists, >100 means immune
+  This is to be help fine tune any 'minus enemy resist' gear
+  This is not the most useful feature and I'm open to ideas on how to improve it
 - Fixed bug where game history would show in game (for real this time)
 - Fixed bug where game history wouldn't record consecutive sessions for the same offline character
 - (There is still a bug with offline characters using the game name of the last online game)

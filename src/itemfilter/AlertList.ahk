@@ -118,7 +118,8 @@ class AlertList {
                         ; matched item
                         
                         if (itarr[2] != "") { ; if sockets are defined
-                            if (itarr[2] == item.numSockets) {
+                            
+                            if (itarr[2] == item.getNumSockets()) {
                                 foundItemName := true
                             }
                         } else {

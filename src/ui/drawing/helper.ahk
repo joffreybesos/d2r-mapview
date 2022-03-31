@@ -78,20 +78,18 @@ drawFloatingText(ByRef unitsLayer, ByRef unitx, ByRef unity, ByRef fontSize, ByR
     , texty := texty + 1
     Options2 = x%textx% y%texty% Center vBottom cff000000 r8 s%fontSize%
     
-
+    ;x|y|width|height|chars|lines
+    measuredString := Gdip_TextToGraphics(unitsLayer.G, text, Options2, font, textSpaceWidth, textSpaceHeight)
     if (background) {        
-        ;x|y|width|height|chars|lines
-        measuredString := Gdip_TextToGraphics(unitsLayer.G, text, Options2, font, textSpaceWidth, textSpaceHeight)
-        , ms := StrSplit(measuredString , "|")
+        ms := StrSplit(measuredString , "|")
         , bgx := ms[1] - 5
         , bgy := ms[2] - 2
         , bgw := ms[3] + 8
         , bgh := ms[4] + 0
         Gdip_FillRectangle(unitsLayer.G, unitsLayer.pBrushNonHealth, bgx, bgy, bgw, bgh)
-    } else {
-        Gdip_TextToGraphics(unitsLayer.G, text, Options2, font, textSpaceWidth, textSpaceHeight)
     }
     Gdip_TextToGraphics(unitsLayer.G, text, Options,  font, textSpaceWidth, textSpaceHeight)
+    return measuredString
 }
 
 

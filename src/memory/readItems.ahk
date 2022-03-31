@@ -16,11 +16,8 @@ ReadItems(ByRef d2rprocess, startingOffset, ByRef items) {
                 
                 ;itemLoc - 0 in inventory, 1 equipped, 2 in belt, 3 on ground, 4 cursor, 5 dropping, 6 socketed
                 , itemLoc := d2rprocess.read(itemUnit + 0x0C, "UInt")
-                ;WriteLog(txtFileNo " " itemLoc " " itemType)
                 if (itemLoc == 3 or itemLoc == 5) { ; on ground or dropping
                     pUnitData := d2rprocess.read(itemUnit + 0x10, "Int64")
-
-                    ; itemQuality - 5 is set, 7 is unique (6 rare, 4, magic)
                     , itemQuality := d2rprocess.read(pUnitData, "UInt")
                     , uniqueOrSetId := d2rprocess.read(pUnitData + 0x34, "UInt")
                     , pPath := d2rprocess.read(itemUnit + 0x38, "Int64")  
@@ -29,26 +26,18 @@ ReadItems(ByRef d2rprocess, startingOffset, ByRef items) {
                     , pStatsListEx := d2rprocess.read(itemUnit + 0x88, "Int64")
                     , statPtr := d2rprocess.read(pStatsListEx + 0x30, "Int64")
                     , statCount := d2rprocess.read(pStatsListEx + 0x38, "Int64")
-                    , d2rprocess.readRaw(statPtr + 0x2, buffer, statCount*8)
-                    , numSockets := 0
-                    Loop, %statCount%
-                    {
-                        offset := (A_Index -1) * 8
-                        , statEnum := NumGet(&buffer , offset, Type := "UShort")
-                        if (statEnum == 194) {
-                            statValue := NumGet(&buffer , offset + 0x2, Type := "UInt")
-                            numSockets := statValue
-                            break
-                        }
-                    }
-                    flags := d2rprocess.read(pUnitData + 0x18, "UInt")
+                    , statExPtr := d2rprocess.read(pStatsListEx + 0x80, "Int64")
+                    , statExCount := d2rprocess.read(pStatsListEx + 0x88, "Int64")
+                    , flags := d2rprocess.read(pUnitData + 0x18, "UInt")
                     , item := new GameItem(txtFileNo, itemQuality, uniqueOrSetId)
                     , item.itemLoc := itemLoc
                     , item.itemx := itemx
                     , item.itemy := itemy
-                    , item.numSockets := numSockets
+                    , item.statPtr := statPtr
+                    , item.statCount := statCount
+                    , item.statExPtr := statExPtr
+                    , item.statExCount := statExCount
                     , item.calculateFlags(flags)
-                    ; WriteLog(txtFileNo " " item.toString())
                     , items.push(item)
                 }
             }

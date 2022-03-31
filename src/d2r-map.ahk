@@ -14,6 +14,16 @@ SetWinDelay, -1
 SetControlDelay, -1
 SendMode Input
 
+;Menu, Tray, Standard
+Menu, Tray, NoStandard ; to remove default menu
+Menu, Tray, Tip, d2r-mapview
+Menu, Tray, Add, Settings, ShowSettings
+Menu, Tray, Add
+Menu, Tray, Add, Reload, Reload
+Menu, Tray, Add
+Menu, Tray, Add, Exit, ExitMH
+
+
 SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\logging.ahk
 #Include %A_ScriptDir%\include\Yaml.ahk
@@ -138,7 +148,7 @@ if (not WinExist(gameWindowId)) {
 }
 
 ; initialise memory reading
-d2rprocess := initMemory(gameWindowId)
+global d2rprocess := initMemory(gameWindowId)
 
 patternScan(d2rprocess, offsets)
 playerOffset := offsets["playerOffset"]
@@ -424,35 +434,7 @@ unHideMap() {
 }
 
 
-+F10::
-{
-    WriteLog("Pressed Shift+F10, exiting...")
-    session.saveEntry()
-
-    ; performance stats
-    alreadyseenperf := []
-    for k, perf in perfdata
-    {
-        
-        thisName := perf["name"]
-        if (!HasVal(alreadyseenperf, thisName)) {
-            averageVal := 0
-            count := 0
-            for k, perf2 in perfdata
-            {
-                thisName2 := perf2["name"]
-                if (thisName2 == thisName) {
-                    averageVal := averageVal + perf2["duration"]
-                    ++count
-                }
-            }
-            OutputDebug, % thisName " " Round(averageVal / count / 1000.0, 2) "ms `n"
-            alreadyseenperf.Push(thisName)
-        }
-    }
-    ExitApp
-}
-return
++F10::Gosub, ExitMH
 
 MapAlwaysShow:
 {
@@ -629,6 +611,44 @@ HistoryToggle:
 
 ^O::
 {
+    Gosub, ShowSettings
+    return
+}
+
+
+ExitMH:
+{
+    WriteLog("Pressed Shift+F10, exiting...")
+    session.saveEntry()
+
+    ; performance stats
+    alreadyseenperf := []
+    for k, perf in perfdata
+    {
+        
+        thisName := perf["name"]
+        if (!HasVal(alreadyseenperf, thisName)) {
+            averageVal := 0
+            count := 0
+            for k, perf2 in perfdata
+            {
+                thisName2 := perf2["name"]
+                if (thisName2 == thisName) {
+                    averageVal := averageVal + perf2["duration"]
+                    ++count
+                }
+            }
+            OutputDebug, % thisName " " Round(averageVal / count / 1000.0, 2) "ms `n"
+            alreadyseenperf.Push(thisName)
+        }
+    }
+    ExitApp
+    return
+}
+
+
+ShowSettings:
+{
     uix := settings["settingsUIX"]
     uiy := settings["settingsUIY"]
     if (!uix)
@@ -671,5 +691,11 @@ UpdateFlag:
         GuiControl, Show, Unsaved
         GuiControl, Enable, UpdateBtn
     }
+    return
+}
+
+Reload:
+{
+    Reload
     return
 }

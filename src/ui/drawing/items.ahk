@@ -30,6 +30,10 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
                 itemText := itemText " [" item.numSockets "]"
             }
             acolor := "cc" . alert.color    
+            if (item.txtFileNo == 603 or item.txtFileNo == 604 or item.txtFileNo == 605) {
+                item.loadStats()
+                itemText := itemText "`n" item.statList
+            }
             drawFloatingText(unitsLayer, itemx, itemy, fontSize, acolor, true, exocetFont, itemText)
 
             switch (ticktock) {

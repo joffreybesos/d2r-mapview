@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
   Each box will show their resists, >100 means immune
   This is to be help fine tune any 'minus enemy resist' gear
   This is not the most useful feature and I'm open to ideas on how to improve it
+- Added options when you right click the MH in the system tray
 - Fixed bug where game history would show in game (for real this time)
 - Fixed bug where game history wouldn't record consecutive sessions for the same offline character
 - (There is still a bug with offline characters using the game name of the last online game)

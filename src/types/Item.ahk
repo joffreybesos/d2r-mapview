@@ -10,8 +10,13 @@ class GameItem {
     itemLoc := 0
     quality := ""
     itemx := 0
-    itemy := 0 
+    itemy := 0
+    isSocketed := false 
     numSockets := 0
+    statCount := 0
+    statBuffer := 
+    statList := ""
+
     identified := false
     ethereal := false
 
@@ -81,6 +86,56 @@ class GameItem {
         return speechString
     }
 
+    getNumSockets() {
+        if (this.isSocketed and this.numSockets == 0) {
+            this.loadStats()
+        }
+        return this.numSockets
+    }
+
+    loadStats() {
+        SetFormat Integer, D
+        statCount := this.statCount
+        d2rprocess.readRaw(this.statPtr + 0x2, statBuffer, statCount*8)
+        ;OutputDebug, % this.name " " statCount "`n"
+        statList := ""
+        Loop, %statCount%
+        {
+            offset := (A_Index -1) * 8
+            , statEnum := NumGet(&statBuffer, offset, Type := "UShort")
+            , statValue := NumGet(&statBuffer , offset + 0x2, Type := "UInt")
+            switch (statEnum) {
+                case 6: statValue := statValue >> 8   ; life
+                case 7: statValue := statValue >> 8   ; maxlife
+                case 8: statValue := statValue >> 8   ; mana
+                case 9: statValue := statValue >> 8   ; maxmana
+                case 11: statValue := statValue >> 8   ; maxstamina
+                case 194: this.numSockets := statValue
+            }
+            statName := this.getStatName(statEnum)
+            statList := statList " " statName " " statValue 
+        }
+        ; statExCount := this.statExCount
+        ; d2rprocess.readRaw(this.statExPtr + 0x2, statBuffer, statExCount*8)
+        ; Loop, %statExCount%
+        ; {
+        ;     offset := (A_Index -1) * 8
+        ;     , statEnum := NumGet(&statBuffer, offset, Type := "UShort")
+        ;     , statValue := NumGet(&statBuffer , offset + 0x2, Type := "UInt")
+        ;     switch (statEnum) {
+        ;         case 6: statValue := statValue >> 8   ; life
+        ;         case 7: statValue := statValue >> 8   ; maxlife
+        ;         case 8: statValue := statValue >> 8   ; mana
+        ;         case 9: statValue := statValue >> 8   ; maxmana
+        ;         case 11: statValue := statValue >> 8   ; maxstamina
+        ;         case 194: this.numSockets := statValue
+        ;     }
+        ;     statName := this.getStatName(statEnum)
+        ;     statList := statList " " statName " " statValue 
+        ; }
+        this.statList := statList
+    }
+
     toString() {
         return "txtFileNo: " this.txtFileNo ", name: " this.name ", itemLoc: " this.itemLoc ", quality: " this.quality ", isRune: " this.isRune() ", id: " this.identified ", eth: " this.ethereal ", itemx: " this.itemx ", itemy: " this.itemy
     }
@@ -121,8 +176,9 @@ class GameItem {
         ; if (0x00000400 & flags) {  ; IFLAG_UNK1
         ;     ; flagsList.push("IFLAG_UNK1") 
         ; }
-        ; if (0x00000800 & flags) {  ; IFLAG_SOCKETED
-        ;     this.socketed := true
+        if (0x00000800 & flags) {  ; IFLAG_SOCKETED
+            this.isSocketed := true
+        }
         ;     ; flagsList.push("IFLAG_SOCKETED") 
         ; }
         ; if (0x00001000 & flags) {  ; IFLAG_NOSELL
@@ -726,7 +782,6 @@ class GameItem {
             case 400: return localizedStrings["Hellfire Torch"]
         }
     }
-
 
     getLocalizedName(txtFileNo) {
         switch (txtFileNo) {
@@ -3177,6 +3232,7 @@ class GameItem {
             default: return ""
         }
     }
+
     isQuestItem(txtFileNo) {
         switch (txtFileNo) {
             case 87: return 1 ; "The Gidbinn" 
@@ -3185,6 +3241,7 @@ class GameItem {
             case 90: return 1 ; "Hellforge Hammer" 
             case 91: return 1 ; "Horadric Staff" 
             case 92: return 1 ; "Staff of Kings"
+            case 173: return 1 ; "Khalim's Flail"
             case 521: return 1 ; "Amulet of the Viper" 
             case 553: return 1 ; "Khalim's Eye" 
             case 554: return 1 ; "Khalim's Heart" 
@@ -3197,6 +3254,422 @@ class GameItem {
             case 553: return 1 ; "Khalim's Eye" 
             case 554: return 1 ; "Khalim's Heart" 
             case 555: return 1 ; "Khalim's Brain" 
+        }
+    }
+
+    getStatName(statEnum) {
+        switch (statEnum) {
+            case 0: return "Strength"
+            case 1: return "Energy"
+            case 2: return "Dexterity"
+            case 3: return "Vitality"
+            case 4: return "StatPoints"
+            case 5: return "SkillPoints"
+            case 6: return "Life"
+            case 7: return "MaxLife"
+            case 8: return "Mana"
+            case 9: return "MaxMana"
+            case 10: return "Stamina"
+            case 11: return "MaxStamina"
+            case 12: return "Level"
+            case 13: return "Experience"
+            case 14: return "Gold"
+            case 15: return "StashGold"
+            case 16: return "ArmorPercent"
+            case 17: return "EnhancedDamageMax"
+            case 18: return "EnhancedDamage"
+            case 19: return "AttackRating"
+            case 20: return "ChanceToBlock"
+            case 21: return "MinDamage"
+            case 22: return "MaxDamage"
+            case 23: return "SecondMinDamage"
+            case 24: return "SecMaxDamage"
+            case 25: return "DamagePercent"
+            case 26: return "ManaRecovery"
+            case 27: return "ManaRecoveryBonus"
+            case 28: return "StaminaRecoveryBonus"
+            case 29: return "LastExp"
+            case 30: return "NextExp"
+            case 31: return "Defense"
+            case 32: return "DefenseVsMissiles"
+            case 33: return "DefenseVsHth"
+            case 34: return "NormalDamageReduction"
+            case 35: return "MagicDamageReduction"
+            case 36: return "DamageReduced"
+            case 37: return "MagicResist"
+            case 38: return "MaxMagicResist"
+            case 39: return "FireResist"
+            case 40: return "MaxFireResist"
+            case 41: return "LightningResist"
+            case 42: return "MaxLightningResist"
+            case 43: return "ColdResist"
+            case 44: return "MaxColdResist"
+            case 45: return "PoisonResist"
+            case 46: return "MaxPoisonResist"
+            case 47: return "DamageAura"
+            case 48: return "FireMinDamage"
+            case 49: return "FireMaxDamage"
+            case 50: return "LightningMinDamage"
+            case 51: return "LightningMaxDamage"
+            case 52: return "MagicMinDamage"
+            case 53: return "MagicMaxDamage"
+            case 54: return "ColdMinDamage"
+            case 55: return "ColdMaxDamage"
+            case 56: return "ColdLength"
+            case 57: return "PoisonMinDamage"
+            case 58: return "PoisonMaxDamage"
+            case 59: return "PoisonLength"
+            case 60: return "LifeSteal"
+            case 61: return "LifeStealMax"
+            case 62: return "ManaSteal"
+            case 63: return "ManaStealMax"
+            case 64: return "StaminaDrainMinDamage"
+            case 65: return "StaminaDrainMaxDamage"
+            case 66: return "StunLength"
+            case 67: return "VelocityPercent"
+            case 68: return "AttackRate"
+            case 69: return "OtherAnimRate"
+            case 70: return "Quantity"
+            case 71: return "Value"
+            case 72: return "Durability"
+            case 73: return "MaxDurability"
+            case 74: return "HPRegen"
+            case 75: return "MaxDurabilityPercent"
+            case 76: return "MaxHPPercent"
+            case 77: return "MaxManaPercent"
+            case 78: return "AttackerTakesDamage"
+            case 79: return "GoldFind"
+            case 80: return "MagicFind"
+            case 81: return "Knockback"
+            case 82: return "TimeDuration"
+            case 83: return "AddClassSkills"
+            case 84: return "Unused84"
+            case 85: return "AddExperience"
+            case 86: return "HealAfterKill"
+            case 87: return "ReducePrices"
+            case 88: return "DoubleHerbDuration"
+            case 89: return "LightRadius"
+            case 90: return "LightColor"
+            case 91: return "RequirementPercent"
+            case 92: return "LevelRequire"
+            case 93: return "IncreasedAttackSpeed"
+            case 94: return "LevelRequirePercent"
+            case 95: return "LastBlockFrame"
+            case 96: return "FasterRunWalk"
+            case 97: return "NonClassSkill"
+            case 98: return "State"
+            case 99: return "FasterHitRecovery"
+            case 100: return "PlayerCount"
+            case 101: return "PoisonOverrideLength"
+            case 102: return "FasterBlockRate"
+            case 103: return "BypassUndead"
+            case 104: return "BypassDemons"
+            case 105: return "FasterCastRate"
+            case 106: return "BypassBeasts"
+            case 107: return "SingleSkill"
+            case 108: return "SlainMonstersRestInPeace"
+            case 109: return "CurseResistance"
+            case 110: return "PoisonLengthResist"
+            case 111: return "NormalDamage"
+            case 112: return "Howl"
+            case 113: return "Stupidity"
+            case 114: return "DamageTakenGoesToMana"
+            case 115: return "IgnoreTargetsAR"
+            case 116: return "FractionalTargetAC"
+            case 117: return "PreventMonsterHeal"
+            case 118: return "HalfFreezeDuration"
+            case 119: return "AttackRatingPercent"
+            case 120: return "DamageTargetAC"
+            case 121: return "DemonDamagePercent"
+            case 122: return "UndeadDamagePercent"
+            case 123: return "DemonAttackRating"
+            case 124: return "UndeadAttackRating"
+            case 125: return "Throwable"
+            case 126: return "ElemSkills"
+            case 127: return "AllSkills"
+            case 128: return "AttackerTakesLightDamage"
+            case 129: return "IronMaidenLevel"
+            case 130: return "LifeTapLevel"
+            case 131: return "ThornsPercent"
+            case 132: return "BoneArmor"
+            case 133: return "BoneArmorMax"
+            case 134: return "Freeze"
+            case 135: return "OpenWounds"
+            case 136: return "CrushingBlow"
+            case 137: return "KickDamage"
+            case 138: return "ManaAfterKill"
+            case 139: return "HealAfterDemonKill"
+            case 140: return "ExtraBlood"
+            case 141: return "DeadlyStrike"
+            case 142: return "AbsorbFirePercent"
+            case 143: return "AbsorbFire"
+            case 144: return "AbsorbLightningPercent"
+            case 145: return "AbsorbLightning"
+            case 146: return "AbsorbMagicPercent"
+            case 147: return "AbsorbMagic"
+            case 148: return "AbsorbColdPercent"
+            case 149: return "AbsorbCold"
+            case 150: return "Slow"
+            case 151: return "Aura"
+            case 152: return "Indestructible"
+            case 153: return "CannotBeFrozen"
+            case 154: return "StaminaDrainPercent"
+            case 155: return "Reanimate"
+            case 156: return "Pierce"
+            case 157: return "MagicAarow"
+            case 158: return "ExplosiveAarow"
+            case 159: return "ThrowMinDamage"
+            case 160: return "ThrowMaxDamage"
+            case 161: return "SkillHandofAthena"
+            case 162: return "SkillStaminaPercent"
+            case 163: return "SkillPassiveStaminaPercent"
+            case 164: return "SkillConcentration"
+            case 165: return "SkillEnchant"
+            case 166: return "SkillPierce"
+            case 167: return "SkillConviction"
+            case 168: return "SkillChillingArmor"
+            case 169: return "SkillFrenzy"
+            case 170: return "SkillDecrepify"
+            case 171: return "SkillArmorPercent"
+            case 172: return "Alignment"
+            case 173: return "Target0"
+            case 174: return "Target1"
+            case 175: return "GoldLost"
+            case 176: return "ConverisonLevel"
+            case 177: return "ConverisonMaxHP"
+            case 178: return "UnitDooverlay"
+            case 179: return "AttackVsMonType"
+            case 180: return "DamageVsMonType"
+            case 181: return "Fade"
+            case 182: return "ArmorOverridePercent"
+            case 183: return "Unused183"
+            case 184: return "Unused184"
+            case 185: return "Unused185"
+            case 186: return "Unused186"
+            case 187: return "Unused187"
+            case 188: return "AddSkillTab"
+            case 189: return "Unused189"
+            case 190: return "Unused190"
+            case 191: return "Unused191"
+            case 192: return "Unused192"
+            case 193: return "Unused193"
+            case 194: return "NumSockets"
+            case 195: return "SkillOnAttack"
+            case 196: return "SkillOnKill"
+            case 197: return "SkillOnDeath"
+            case 198: return "SkillOnHit"
+            case 199: return "SkillOnLevelUp"
+            case 200: return "Unused200"
+            case 201: return "SkillOnGetHit"
+            case 202: return "Unused202"
+            case 203: return "Unused203"
+            case 204: return "ItemChargedSkill"
+            case 205: return "Unused205"
+            case 206: return "Unused206"
+            case 207: return "Unused207"
+            case 208: return "Unused208"
+            case 209: return "Unused209"
+            case 210: return "Unused210"
+            case 211: return "Unused211"
+            case 212: return "Unused212"
+            case 213: return "Unused213"
+            case 214: return "ArmorPerLevel"
+            case 215: return "ArmorPercentPerLevel"
+            case 216: return "LifePerLevel"
+            case 217: return "ManaPerLevel"
+            case 218: return "MaxDamagePerLevel"
+            case 219: return "MaxDamagePercentPerLevel"
+            case 220: return "StrengthPerLevel"
+            case 221: return "DexterityPerLevel"
+            case 222: return "EnergyPerLevel"
+            case 223: return "VitalityPerLevel"
+            case 224: return "AttackRatingPerLevel"
+            case 225: return "AttackRatingPercentPerLevel"
+            case 226: return "ColdDamageMaxPerLevel"
+            case 227: return "FireDamageMaxPerLevel"
+            case 228: return "LightningDamageMaxPerLevel"
+            case 229: return "PoisonDamageMaxPerLevel"
+            case 230: return "ResistColdPerLevel"
+            case 231: return "ResistFirePerLevel"
+            case 232: return "ResistLightningPerLevel"
+            case 233: return "ResistPoisonPerLevel"
+            case 234: return "AbsorbColdPerLevel"
+            case 235: return "AbsorbFirePerLevel"
+            case 236: return "AbsorbLightningPerLevel"
+            case 237: return "AbsorbPoisonPerLevel"
+            case 238: return "ThornsPerLevel"
+            case 239: return "FindGoldPerLevel"
+            case 240: return "MagicFindPerLevel"
+            case 241: return "RegenStaminaPerLevel"
+            case 242: return "StaminaPerLevel"
+            case 243: return "DamageDemonPerLevel"
+            case 244: return "DamageUndeadPerLevel"
+            case 245: return "AttackRatingDemonPerLevel"
+            case 246: return "AttackRatingUndeadPerLevel"
+            case 247: return "CrushingBlowPerLevel"
+            case 248: return "OpenWoundsPerLevel"
+            case 249: return "KickDamagePerLevel"
+            case 250: return "DeadlyStrikePerLevel"
+            case 251: return "FindGemsPerLevel"
+            case 252: return "ReplenishDurability"
+            case 253: return "ReplenishQuantity"
+            case 254: return "ExtraStack"
+            case 255: return "FindItem"
+            case 256: return "SlashDamage"
+            case 257: return "SlashDamagePercent"
+            case 258: return "CrushDamage"
+            case 259: return "CrushDamagePercent"
+            case 260: return "ThrustDamage"
+            case 261: return "ThrustDamagePercent"
+            case 262: return "AbsorbSlash"
+            case 263: return "AbsorbCrush"
+            case 264: return "AbsorbThrust"
+            case 265: return "AbsorbSlashPercent"
+            case 266: return "AbsorbCrushPercent"
+            case 267: return "AbsorbThrustPercent"
+            case 268: return "ArmorByTime"
+            case 269: return "ArmorPercentByTime"
+            case 270: return "LifeByTime"
+            case 271: return "ManaByTime"
+            case 272: return "MaxDamageByTime"
+            case 273: return "MaxDamagePercentByTime"
+            case 274: return "StrengthByTime"
+            case 275: return "DexterityByTime"
+            case 276: return "EnergyByTime"
+            case 277: return "VitalityByTime"
+            case 278: return "AttackRatingByTime"
+            case 279: return "AttackRatingPercentByTime"
+            case 280: return "ColdDamageMaxByTime"
+            case 281: return "FireDamageMaxByTime"
+            case 282: return "LightningDamageMaxByTime"
+            case 283: return "PoisonDamageMaxByTime"
+            case 284: return "ResistColdByTime"
+            case 285: return "ResistFireByTime"
+            case 286: return "ResistLightningByTime"
+            case 287: return "ResistPoisonByTime"
+            case 288: return "AbsorbColdByTime"
+            case 289: return "AbsorbFireByTime"
+            case 290: return "AbsorbLightningByTime"
+            case 291: return "AbsorbPoisonByTime"
+            case 292: return "FindGoldByTime"
+            case 293: return "MagicFindByTime"
+            case 294: return "RegenStaminaByTime"
+            case 295: return "StaminaByTime"
+            case 296: return "DamageDemonByTime"
+            case 297: return "DamageUndeadByTime"
+            case 298: return "AttackRatingDemonByTime"
+            case 299: return "AttackRatingUndeadByTime"
+            case 300: return "CrushingBlowByTime"
+            case 301: return "OpenWoundsByTime"
+            case 302: return "KickDamageByTime"
+            case 303: return "DeadlyStrikeByTime"
+            case 304: return "FindGemsByTime"
+            case 305: return "PierceCold"
+            case 306: return "PierceFire"
+            case 307: return "PierceLightning"
+            case 308: return "PiercePoison"
+            case 309: return "DamageVsMonster"
+            case 310: return "DamagePercentVsMonster"
+            case 311: return "AttackRatingVsMonster"
+            case 312: return "AttackRatingPercentVsMonster"
+            case 313: return "AcVsMonster"
+            case 314: return "AcPercentVsMonster"
+            case 315: return "FireLength"
+            case 316: return "BurningMin"
+            case 317: return "BurningMax"
+            case 318: return "ProgressiveDamage"
+            case 319: return "ProgressiveSteal"
+            case 320: return "ProgressiveOther"
+            case 321: return "ProgressiveFire"
+            case 322: return "ProgressiveCold"
+            case 323: return "ProgressiveLightning"
+            case 324: return "ExtraCharges"
+            case 325: return "ProgressiveAttackRating"
+            case 326: return "PoisonCount"
+            case 327: return "DamageFrameRate"
+            case 328: return "PierceIdx"
+            case 329: return "FireSkillDamage"
+            case 330: return "LightningSkillDamage"
+            case 331: return "ColdSkillDamage"
+            case 332: return "PoisonSkillDamage"
+            case 333: return "EnemyFireResist"
+            case 334: return "EnemyLightningResist"
+            case 335: return "EnemyColdResist"
+            case 336: return "EnemyPoisonResist"
+            case 337: return "PassiveCriticalStrike"
+            case 338: return "PassiveDodge"
+            case 339: return "PassiveAvoid"
+            case 340: return "PassiveEvade"
+            case 341: return "PassiveWarmth"
+            case 342: return "PassiveMasteryMeleeAttackRating"
+            case 343: return "PassiveMasteryMeleeDamage"
+            case 344: return "PassiveMasteryMeleeCritical"
+            case 345: return "PassiveMasteryThrowAttackRating"
+            case 346: return "PassiveMasteryThrowDamage"
+            case 347: return "PassiveMasteryThrowCritical"
+            case 348: return "PassiveWeaponBlock"
+            case 349: return "SummonResist"
+            case 350: return "ModifierListSkill"
+            case 351: return "ModifierListLevel"
+            case 352: return "LastSentHPPercent"
+            case 353: return "SourceUnitType"
+            case 354: return "SourceUnitID"
+            case 355: return "ShortParam1"
+            case 356: return "QuestItemDifficulty"
+            case 357: return "PassiveMagicMastery"
+            case 358: return "PassiveMagicPierce"
+        }
+    }
+
+    getAbbrevStatName(statEnum) {
+        switch (statEnum) {
+            case 0: return "str"
+            case 1: return "ene"
+            case 2: return "dex"
+            case 3: return "vit"
+            case 6: return "hp"
+            case 7: return "hp"
+            case 8: return "mana"
+            case 9: return "mana"
+            case 11: return "stam"
+            case 13: return "xp"
+            case 19: return "ar"
+            case 20: return "ctb"
+            case 21: return "mind"
+            case 22: return "maxd"
+            case 23: return "mind"
+            case 24: return "maxd"
+            case 31: return "def"
+            case 34: return "dr"
+            case 35: return "mdr"
+            case 36: return "dr"
+            case 37: return "mr"
+            case 39: return "fr"
+            case 41: return "lr"
+            case 43: return "cr"
+            case 45: return "pr"
+            case 49: return "fdmg"
+            case 51: return "ldmg"
+            case 53: return "mdmg"
+            case 55: return "cdmg"
+            case 58: return "pdmg"
+            case 60: return "ls"
+            case 62: return "ms"
+            case 68: return "ar"
+            case 79: return "gf"
+            case 80: return "mf"
+            case 81: return "kb"
+            case 83: return "skill"
+            case 93: return "ias"
+            case 96: return "frw"
+            case 97: return "skill"
+            case 99: return "fhr"
+            case 102: return "fbr"
+            case 105: return "fcr"
+            case 107: return "skill"
+            case 126: return "skill"
+            case 127: return "skill"
+            case 188: return "skill"
         }
     }
 }

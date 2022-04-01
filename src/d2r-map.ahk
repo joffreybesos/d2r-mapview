@@ -53,6 +53,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\unitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\SessionTableLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\GameInfoLayer.ahk
+#Include %A_ScriptDir%\ui\gdip\PartyInfoLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UnitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UIAssistLayer.ahk
 
@@ -183,6 +184,7 @@ currentFPS := 0
 
 historyText := new SessionTableLayer(settings)
 gameInfoLayer := new GameInfoLayer(settings)
+partyInfoLayer := new PartyInfoLayer(settings)
 
 While 1 {
     frameStart:=A_TickCount
@@ -218,9 +220,10 @@ While 1 {
                         sessionList := readSessionFile("GameSessionLog.csv")
                     }
                 }
-                gameInfoLayer.hide()
                 historyText.drawTable(sessionList, historyToggle)
             }
+            gameInfoLayer.hide()
+            partyInfoLayer.hide()
             offsetAttempts := 26
             WriteLogDebug("Offset attempts " offsetAttempts)
         }
@@ -352,6 +355,7 @@ While 1 {
         , fpsTimer := A_TickCount
         if (playerOffset) {
             gameInfoLayer.drawInfoText(currentFPS)
+            partyInfoLayer.drawInfoText()
         }
     }
     if (frameDuration < ticksPerFrame) {
@@ -389,12 +393,14 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
         }
         hideMap(false)
         gameInfoLayer.hide()
+        partyInfoLayer.hide()
     } else if (!isAutomapShown(d2rprocess, uiOffset) and !alwaysShowMap) {
         ; hidemap
         hideMap(alwaysShowMap)
     } else {
         unHideMap()
         gameInfoLayer.show()
+        partyInfoLayer.show()
     } 
     return
 }
@@ -668,6 +674,8 @@ Update:
     historyText := new SessionTableLayer(settings)
     gameInfoLayer.delete()
     gameInfoLayer := new GameInfoLayer(settings)
+    partyInfoLayer.delete()
+    partyInfoLayer := new PartyInfoLayer(settings)
     if (cmode != settings["centerMode"]) { ; if centermode changed
         lastlevel := "INVALIDATED"
         imageData := {}

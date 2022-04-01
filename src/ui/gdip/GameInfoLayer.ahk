@@ -164,130 +164,135 @@ class GameInfoLayer {
 
 getAreaLevel(levelNo) {
     switch (levelNo) {
-        case 2: return { "0": 1, "1": 36, "2": 67}
-        case 3: return { "0": 2, "1": 36, "2": 68}
-        case 4: return { "0": 4, "1": 37, "2": 68}
-        case 5: return { "0": 5, "1": 38, "2": 68}
-        case 6: return { "0": 6, "1": 38, "2": 69}
-        case 7: return { "0": 8, "1": 39, "2": 69}
-        case 8: return { "0": 1, "1": 36, "2": 79}
-        case 9: return { "0": 2, "1": 36, "2": 77}
-        case 10: return { "0": 4, "1": 37, "2": 69}
-        case 11: return { "0": 5, "1": 38, "2": 80}
-        case 12: return { "0": 7, "1": 39, "2": 85}
-        case 13: return { "0": 2, "1": 37, "2": 78}
-        case 14: return { "0": 4, "1": 38, "2": 83}
-        case 15: return { "0": 5, "1": 39, "2": 81}
-        case 16: return { "0": 7, "1": 40, "2": 85}
-        case 17: return { "0": 3, "1": 36, "2": 80}
-        case 18: return { "0": 3, "1": 37, "2": 83}
-        case 19: return { "0": 3, "1": 37, "2": 85}
-        case 21: return { "0": 7, "1": 38, "2": 75}
-        case 22: return { "0": 7, "1": 39, "2": 76}
-        case 23: return { "0": 7, "1": 40, "2": 77}
-        case 24: return { "0": 7, "1": 41, "2": 78}
-        case 25: return { "0": 7, "1": 42, "2": 79}
-        case 26: return { "0": 8, "1": 40, "2": 70}
-        case 27: return { "0": 9, "1": 40, "2": 70}
-        case 28: return { "0": 9, "1": 40, "2": 70}
-        case 29: return { "0": 10, "1": 41, "2": 71}
-        case 30: return { "0": 10, "1": 41, "2": 71}
-        case 31: return { "0": 10, "1": 41, "2": 71}
-        case 32: return { "0": 10, "1": 41, "2": 72}
-        case 33: return { "0": 11, "1": 42, "2": 72}
-        case 34: return { "0": 11, "1": 42, "2": 72}
-        case 35: return { "0": 11, "1": 42, "2": 73}
-        case 36: return { "0": 12, "1": 43, "2": 73}
-        case 37: return { "0": 12, "1": 43, "2": 73}
-        case 38: return { "0": 6, "1": 39, "2": 76}
-        case 39: return { "0": 28, "1": 64, "2": 81}
-        case 41: return { "0": 14, "1": 43, "2": 75}
-        case 42: return { "0": 15, "1": 44, "2": 76}
-        case 43: return { "0": 16, "q1": 45, "2": 76}
-        case 44: return { "0": 17, "1": 46, "2": 77}
-        case 45: return { "0": 18, "1": 46, "2": 77}
-        case 46: return { "0": 16, "1": 48, "2": 79}
-        case 47: return { "0": 13, "1": 43, "2": 74}
-        case 48: return { "0": 13, "1": 43, "2": 74}
-        case 49: return { "0": 14, "1": 44, "2": 75}
-        case 50: return { "0": 13, "1": 47, "2": 78}
-        case 52: return { "0": 13, "1": 47, "2": 78}
-        case 53: return { "0": 13, "1": 47, "2": 78}
-        case 54: return { "0": 13, "1": 48, "2": 78}
-        case 55: return { "0": 12, "1": 44, "2": 78}
-        case 56: return { "0": 12, "1": 44, "2": 79}
-        case 57: return { "0": 13, "1": 45, "2": 81}
-        case 58: return { "0": 14, "1": 47, "2": 82}
-        case 59: return { "0": 12, "1": 44, "2": 79}
-        case 60: return { "0": 13, "1": 45, "2": 82}
-        case 61: return { "0": 14, "1": 47, "2": 83}
-        case 62: return { "0": 17, "1": 45, "2": 84}
-        case 63: return { "0": 17, "1": 45, "2": 84}
-        case 64: return { "0": 17, "1": 46, "2": 85}
-        case 65: return { "0": 17, "1": 46, "2": 85}
-        case 66: return { "0": 17, "1": 49, "2": 80}
-        case 67: return { "0": 17, "1": 49, "2": 80}
-        case 68: return { "0": 17, "1": 49, "2": 80}
-        case 69: return { "0": 17, "1": 49, "2": 80}
-        case 70: return { "0": 17, "1": 49, "2": 80}
-        case 71: return { "0": 17, "1": 49, "2": 80}
-        case 72: return { "0": 17, "1": 49, "2": 80}
-        case 73: return { "0": 17, "1": 49, "2": 80}
-        case 74: return { "0": 14, "1": 48, "2": 79}
-        case 76: return { "0": 21, "1": 49, "2": 79}
-        case 77: return { "0": 21, "1": 50, "2": 80}
-        case 78: return { "0": 22, "1": 50, "2": 80}
-        case 79: return { "0": 22, "1": 52, "2": 80}
-        case 80: return { "0": 22, "1": 52, "2": 81}
-        case 81: return { "0": 23, "1": 52, "2": 81}
-        case 82: return { "0": 24, "1": 53, "2": 81}
-        case 83: return { "0": 24, "1": 54, "2": 82}
-        case 84: return { "0": 21, "1": 50, "2": 79}
-        case 85: return { "0": 21, "1": 50, "2": 79}
-        case 86: return { "0": 21, "1": 51, "2": 80}
-        case 87: return { "0": 21, "1": 51, "2": 81}
-        case 88: return { "0": 22, "1": 51, "2": 81}
-        case 89: return { "0": 22, "1": 51, "2": 82}
-        case 90: return { "0": 21, "1": 51, "2": 82}
-        case 91: return { "0": 22, "1": 51, "2": 83}
-        case 92: return { "0": 23, "1": 52, "2": 84}
-        case 93: return { "0": 24, "1": 53, "2": 85}
-        case 94: return { "0": 23, "1": 53, "2": 84}
-        case 95: return { "0": 23, "1": 53, "2": 84}
-        case 96: return { "0": 23, "1": 53, "2": 84}
-        case 97: return { "0": 24, "1": 54, "2": 85}
-        case 98: return { "0": 24, "1": 54, "2": 85}
-        case 99: return { "0": 24, "1": 54, "2": 85}
-        case 100: return { "0": 25, "1": 55, "2": 83}
-        case 101: return { "0": 25, "1": 55, "2": 83}
-        case 102: return { "0": 25, "1": 55, "2": 83}
-        case 104: return { "0": 26, "1": 56, "2": 82}
-        case 105: return { "0": 26, "1": 56, "2": 83}
-        case 106: return { "0": 27, "1": 57, "2": 84}
-        case 107: return { "0": 27, "1": 57, "2": 85}
-        case 108: return { "0": 28, "1": 58, "2": 85}
-        case 110: return { "0": 24, "1": 58, "2": 80}
-        case 111: return { "0": 25, "1": 59, "2": 81}
-        case 112: return { "0": 26, "1": 60, "2": 81}
-        case 113: return { "0": 29, "1": 61, "2": 82}
-        case 114: return { "0": 29, "1": 61, "2": 83}
-        case 115: return { "0": 29, "1": 61, "2": 83}
-        case 116: return { "0": 29, "1": 61, "2": 84}
-        case 117: return { "0": 27, "1": 60, "2": 81}
-        case 118: return { "0": 29, "1": 62, "2": 82}
-        case 119: return { "0": 29, "1": 62, "2": 83}
-        case 120: return { "0": 37, "1": 68, "2": 87}
-        case 121: return { "0": 32, "1": 63, "2": 83}
-        case 122: return { "0": 33, "1": 63, "2": 83}
-        case 123: return { "0": 34, "1": 64, "2": 84}
-        case 124: return { "0": 36, "1": 64, "2": 84}
-        case 125: return { "0": 39, "1": 60, "2": 81}
-        case 126: return { "0": 39, "1": 61, "2": 82}
-        case 127: return { "0": 39, "1": 62, "2": 83}
-        case 128: return { "0": 39, "1": 65, "2": 85}
-        case 129: return { "0": 40, "1": 65, "2": 85}
-        case 130: return { "0": 42, "1": 66, "2": 85}
-        case 131: return { "0": 43, "1": 66, "2": 85}
-        case 132: return { "0": 43, "1": 66, "2": 85}
+        case 2: return { "0": 1, "1": 36, "2": 67}     ; Blood Moor
+        case 3: return { "0": 2, "1": 36, "2": 68}     ; Cold Plains
+        case 4: return { "0": 4, "1": 37, "2": 68}     ; Stony Field
+        case 5: return { "0": 5, "1": 38, "2": 68}     ; Dark Wood
+        case 6: return { "0": 6, "1": 38, "2": 69}     ; Black Marsh
+        case 7: return { "0": 8, "1": 39, "2": 69}     ; Tamoe Highland
+        case 8: return { "0": 1, "1": 36, "2": 79}     ; Den of Evil
+        case 9: return { "0": 2, "1": 36, "2": 77}     ; Cave Level 1
+        case 10: return { "0": 4, "1": 37, "2": 69}     ; Underground Passage Level 1
+        case 11: return { "0": 5, "1": 38, "2": 80}     ; Hole Level 1
+        case 12: return { "0": 7, "1": 39, "2": 85}     ; Pit Level 1
+        case 13: return { "0": 2, "1": 37, "2": 78}     ; Cave Level 2
+        case 14: return { "0": 4, "1": 38, "2": 83}     ; Underground Passage Level 2
+        case 15: return { "0": 5, "1": 39, "2": 81}     ; Hole Level 2
+        case 16: return { "0": 7, "1": 40, "2": 85}     ; Pit Level 2
+        case 17: return { "0": 3, "1": 36, "2": 80}     ; Burial Grounds
+        case 18: return { "0": 3, "1": 37, "2": 83}     ; Crypt
+        case 19: return { "0": 3, "1": 37, "2": 85}     ; Mausoleum
+        ; Forgotten Tower
+        case 21: return { "0": 7, "1": 38, "2": 75}     ; Tower Cellar Level 1
+        case 22: return { "0": 7, "1": 39, "2": 76}     ; Tower Cellar Level 2
+        case 23: return { "0": 7, "1": 40, "2": 77}     ; Tower Cellar Level 3
+        case 24: return { "0": 7, "1": 41, "2": 78}     ; Tower Cellar Level 4
+        case 25: return { "0": 7, "1": 42, "2": 79}     ; Tower Cellar Level 5
+        case 26: return { "0": 8, "1": 40, "2": 70}     ; Monastery Gate
+        case 27: return { "0": 9, "1": 40, "2": 70}     ; Outer Cloister
+        case 28: return { "0": 9, "1": 40, "2": 70}     ; Barracks
+        case 29: return { "0": 10, "1": 41, "2": 71}     ; Jail Level 1
+        case 30: return { "0": 10, "1": 41, "2": 71}     ; Jail Level 2
+        case 31: return { "0": 10, "1": 41, "2": 71}     ; Jail Level 3
+        case 32: return { "0": 10, "1": 41, "2": 72}     ; Inner Cloister
+        case 33: return { "0": 11, "1": 42, "2": 72}     ; Cathedral
+        case 34: return { "0": 11, "1": 42, "2": 72}     ; Catacombs Level 1
+        case 35: return { "0": 11, "1": 42, "2": 73}     ; Catacombs Level 2
+        case 36: return { "0": 12, "1": 43, "2": 73}     ; Catacombs Level 3
+        case 37: return { "0": 12, "1": 43, "2": 73}     ; Catacombs Level 4
+        case 38: return { "0": 6, "1": 39, "2": 76}      ; Tristram
+        case 39: return { "0": 28, "1": 64, "2": 81}     ; Moo Moo Farm
+        case 41: return { "0": 14, "1": 43, "2": 75}     ; Rocky Waste
+        case 42: return { "0": 15, "1": 44, "2": 76}     ; Dry Hills
+        case 43: return { "0": 16, "q1": 45, "2": 76}    ; Far Oasis
+        case 44: return { "0": 17, "1": 46, "2": 77}     ; Lost City
+        case 45: return { "0": 18, "1": 46, "2": 77}     ; Valley of Snakes
+        case 46: return { "0": 16, "1": 48, "2": 79}     ; Canyon of the Magi
+        case 47: return { "0": 13, "1": 43, "2": 74}     ; Sewers Level 1
+        case 48: return { "0": 13, "1": 43, "2": 74}     ; Sewers Level 2
+        case 49: return { "0": 14, "1": 44, "2": 75}     ; Sewers Level 3
+        case 50: return { "0": 13, "1": 47, "2": 78}     ; Harem Level 1
+        ; Harem Level 2
+        case 52: return { "0": 13, "1": 47, "2": 78}     ; Palace Cellar Level 1
+        case 53: return { "0": 13, "1": 47, "2": 78}     ; Palace Cellar Level 2
+        case 54: return { "0": 13, "1": 48, "2": 78}     ; Palace Cellar Level 3
+        case 55: return { "0": 12, "1": 44, "2": 78}     ; Stony Tomb Level 1
+        case 56: return { "0": 12, "1": 44, "2": 79}     ; Halls of the Dead Level 1
+        case 57: return { "0": 13, "1": 45, "2": 81}     ; Halls of the Dead Level 2
+        case 58: return { "0": 14, "1": 47, "2": 82}     ; Claw Viper Temple Level 1
+        case 59: return { "0": 12, "1": 44, "2": 79}     ; Stony Tomb Level 2
+        case 60: return { "0": 13, "1": 45, "2": 82}     ; Halls of the Dead Level 3
+        case 61: return { "0": 14, "1": 47, "2": 83}     ; Claw Viper Temple Level 2
+        case 62: return { "0": 17, "1": 45, "2": 84}     ; Maggot Lair Level 1
+        case 63: return { "0": 17, "1": 45, "2": 84}     ; Maggot Lair Level 2
+        case 64: return { "0": 17, "1": 46, "2": 85}     ; Maggot Lair Level 3
+        case 65: return { "0": 17, "1": 46, "2": 85}     ; Ancient Tunnels
+        case 66: return { "0": 17, "1": 49, "2": 80}     ; Tal Rasha's Tomb #1
+        case 67: return { "0": 17, "1": 49, "2": 80}     ; Tal Rasha's Tomb #2
+        case 68: return { "0": 17, "1": 49, "2": 80}     ; Tal Rasha's Tomb #3
+        case 69: return { "0": 17, "1": 49, "2": 80}     ; Tal Rasha's Tomb #4
+        case 70: return { "0": 17, "1": 49, "2": 80}     ; Tal Rasha's Tomb #5
+        case 71: return { "0": 17, "1": 49, "2": 80}     ; Tal Rasha's Tomb #6
+        case 72: return { "0": 17, "1": 49, "2": 80}     ; Tal Rasha's Tomb #7
+        case 73: return { "0": 17, "1": 49, "2": 80}     ; Duriel's Lair
+        case 74: return { "0": 14, "1": 48, "2": 79}     ; Arcane Sanctuary
+        ; Kurast Docktown
+        case 76: return { "0": 21, "1": 49, "2": 79}     ; Spider Forest
+        case 77: return { "0": 21, "1": 50, "2": 80}     ; Great Marsh
+        case 78: return { "0": 22, "1": 50, "2": 80}     ; Flayer Jungle
+        case 79: return { "0": 22, "1": 52, "2": 80}     ; Lower Kurast
+        case 80: return { "0": 22, "1": 52, "2": 81}     ; Kurast Bazaar
+        case 81: return { "0": 23, "1": 52, "2": 81}     ; Upper Kurast
+        case 82: return { "0": 24, "1": 53, "2": 81}     ; Kurast Causeway
+        case 83: return { "0": 24, "1": 54, "2": 82}     ; Travincal
+        case 84: return { "0": 21, "1": 50, "2": 79}     ; Arachnid Lair
+        case 85: return { "0": 21, "1": 50, "2": 79}     ; Spider Cavern
+        case 86: return { "0": 21, "1": 51, "2": 80}     ; Swampy Pit Level 1
+        case 87: return { "0": 21, "1": 51, "2": 81}     ; Swampy Pit Level 2
+        case 88: return { "0": 22, "1": 51, "2": 81}     ; Flayer Dungeon Level 1
+        case 89: return { "0": 22, "1": 51, "2": 82}     ; Flayer Dungeon Level 2
+        case 90: return { "0": 21, "1": 51, "2": 82}     ; Swampy Pit Level 3
+        case 91: return { "0": 22, "1": 51, "2": 83}     ; Flayer Dungeon Level 3
+        case 92: return { "0": 23, "1": 52, "2": 84}     ; Sewers Level 1
+        case 93: return { "0": 24, "1": 53, "2": 85}     ; Sewers Level 2
+        case 94: return { "0": 23, "1": 53, "2": 84}     ; Ruined Temple
+        case 95: return { "0": 23, "1": 53, "2": 84}     ; Disused Fane
+        case 96: return { "0": 23, "1": 53, "2": 84}     ; Forgotten Reliquary
+        case 97: return { "0": 24, "1": 54, "2": 85}     ; Forgotten Temple
+        case 98: return { "0": 24, "1": 54, "2": 85}     ; Ruined Fane
+        case 99: return { "0": 24, "1": 54, "2": 85}     ; Disused Reliquary
+        case 100: return { "0": 25, "1": 55, "2": 83}     ; Durance of Hate Level 1
+        case 101: return { "0": 25, "1": 55, "2": 83}     ; Durance of Hate Level 2
+        case 102: return { "0": 25, "1": 55, "2": 83}     ; Durance of Hate Level 3
+        ; Pandemonium Fortress
+        case 104: return { "0": 26, "1": 56, "2": 82}     ; Outer Steppes
+        case 105: return { "0": 26, "1": 56, "2": 83}     ; Plains of Despair
+        case 106: return { "0": 27, "1": 57, "2": 84}     ; City of the Damned
+        case 107: return { "0": 27, "1": 57, "2": 85}     ; River of Flame
+        case 108: return { "0": 28, "1": 58, "2": 85}     ; Chaos Sanctuary
+        ; Harrogath
+        case 110: return { "0": 24, "1": 58, "2": 80}     ; Bloody Foothills
+        case 111: return { "0": 25, "1": 59, "2": 81}     ; Frigid Highlands
+        case 112: return { "0": 26, "1": 60, "2": 81}     ; Arreat Plateau
+        case 113: return { "0": 29, "1": 61, "2": 82}     ; Crystalline Passage
+        case 114: return { "0": 29, "1": 61, "2": 83}     ; Frozen River
+        case 115: return { "0": 29, "1": 61, "2": 83}     ; Glacial Trail
+        case 116: return { "0": 29, "1": 61, "2": 84}     ; Drifter Cavern
+        case 117: return { "0": 27, "1": 60, "2": 81}     ; Frozen Tundra
+        case 118: return { "0": 29, "1": 62, "2": 82}     ; Ancients' Way
+        case 119: return { "0": 29, "1": 62, "2": 83}     ; Icy Cellar
+        case 120: return { "0": 37, "1": 68, "2": 87}     ; Arreat Summit
+        case 121: return { "0": 32, "1": 63, "2": 83}     ; Nihlathaks Temple
+        case 122: return { "0": 33, "1": 63, "2": 83}     ; Halls of Anguish
+        case 123: return { "0": 34, "1": 64, "2": 84}     ; Halls of Death's Calling
+        case 124: return { "0": 36, "1": 64, "2": 84}     ; Halls of Vaught
+        case 125: return { "0": 39, "1": 60, "2": 81}     ; Abaddon
+        case 126: return { "0": 39, "1": 61, "2": 82}     ; Pit of Acheron
+        case 127: return { "0": 39, "1": 62, "2": 83}     ; Infernal Pit
+        case 128: return { "0": 39, "1": 65, "2": 85}     ; Worldstone Keep Level 1
+        case 129: return { "0": 40, "1": 65, "2": 85}     ; Worldstone Keep Level 2
+        case 130: return { "0": 42, "1": 66, "2": 85}     ; Worldstone Keep Level 3
+        case 131: return { "0": 43, "1": 66, "2": 85}     ; Throne of Destruction
+        case 132: return { "0": 43, "1": 66, "2": 85}     ; Worldstone Chamber
     }
 }

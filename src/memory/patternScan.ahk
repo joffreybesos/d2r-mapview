@@ -48,6 +48,14 @@ PatternScan(ByRef d2r, ByRef offsets) {
     hoverOffset := d2r.read(patternAddress + 3, "Int") - 1
     offsets["hoverOffset"] := hoverOffset
     WriteLog("Scanned and found hover offset: " hoverOffset)
+
+    ; roster
+    pattern := d2r.hexStringToPattern("02 45 33 D2 4D 8B") 
+    patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
+    offsetBuffer := d2r.read(patternAddress - 3, "Int")
+    rosterOffset := ((patternAddress - d2r.BaseAddress) + 1 + offsetBuffer)
+    offsets["rosterOffset"] := rosterOffset
+    WriteLog("Scanned and found roster offset: " rosterOffset)
     
     SetFormat, Integer, D
 }

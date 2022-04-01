@@ -4,10 +4,12 @@
 #Include %A_ScriptDir%\memory\readObjects.ahk
 #Include %A_ScriptDir%\memory\readMissiles.ahk
 #Include %A_ScriptDir%\memory\readUI.ahk
+#Include %A_ScriptDir%\memory\readParty.ahk
 
 readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryData) {
     static items
     static objects
+    static partyList
     hoveredMob := {}
     ;StartTime := A_TickCount
     startingOffset := offsets["playerOffset"] ;default offset
@@ -110,6 +112,11 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
             ReadItems(d2rprocess, startingOffset, items)
             ; timeStamp("readItems")
         }
+    }
+
+    ; get party
+    if (Mod(ticktock, 3)) {
+        ReadParty(d2rprocess, partyList)
     }
 
     ; get objects

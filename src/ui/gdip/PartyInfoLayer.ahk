@@ -9,28 +9,40 @@ class PartyInfoLayer {
 
     __new(ByRef settings) {
         ;this.partyInfoFontSize := settings["PartyInfoFontSize"]
-        this.partyInfoFontSize := 14
+        
         this.topPadding := 0
-        if (!isWindowFullScreen(gameWindowId)) {
-            this.topPadding :=  this.topPadding + 31 ; titlebar height
-        }
+        this.leftPadding := 0
+        ; if (!isWindowFullScreen(gameWindowId)) {
+        ;     this.topPadding :=  this.topPadding + 31 ; titlebar height
+        ;     this.leftPadding :=  this.leftPadding + 5 ; border width
+        ; }
+
+        gameClientArea := getWindowClientArea()
+        ;WinGetPos, gameWindowX, gameWindowY, gameWindowWidth, gameWindowHeight, %gameWindowId% 
+        gameWindowX := gameClientArea["X"]
+        gameWindowY := gameClientArea["Y"]
+        gameWindowWidth := gameClientArea["W"]
+        gameWindowHeight := gameClientArea["H"]
+
+
         Gui, PartyInfo: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
         this.PartyInfoLayerHwnd := WinExist()
-        WinGetPos, gameWindowX, gameWindowY, gameWindowWidth, gameWindowHeight, %gameWindowId% 
+        
         if ((gameWindowWidth / gameWindowHeight) > 2) { ;if ultrawide
-            this.leftMargin := (gameWindowWidth/2) - (1.034 * gameWindowHeight) - 3
-            this.topMargin := this.topPadding + (gameWindowHeight / 53)
+            this.leftMargin := this.leftPadding + ((gameWindowWidth/2) - (1.034 * gameWindowHeight)) + gameWindowX - 1
+            this.topMargin := this.topPadding + (gameWindowHeight / 53) + gameWindowY
             this.spacing := gameWindowHeight / 10.6
         } else {
-            this.leftMargin := (gameWindowHeight / 46) - 3
-            this.topMargin := this.topPadding + (gameWindowHeight / 51.5)
+            this.leftMargin := this.leftPadding + ((gameWindowHeight / 46)) + gameWindowX - 2
+            this.topMargin := this.topPadding + (gameWindowHeight / 51.5) + gameWindowY
             this.spacing := gameWindowHeight / 10.6
         }
+        this.partyInfoFontSize := this.spacing / 11
         
         this.textBoxWidth := 200
         this.textBoxHeight := gameWindowHeight
         this.xoffset := 0
-        this.yoffset := this.spacing * 0.85
+        this.yoffset := this.spacing * 0.85 ; + gameWindowY
 
         pToken := Gdip_Startup()
         DetectHiddenWindows, On
@@ -97,6 +109,18 @@ class PartyInfoLayer {
         Gui, PartyInfo: Destroy
     }
 
+}
+
+getWindowClientArea() {
+    WinGet, windowId, ID , %gameWindowId%
+    VarSetCapacity(RECT, 16, 0)
+    DllCall("user32\GetClientRect", Ptr,windowId, Ptr,&RECT)
+    DllCall("user32\ClientToScreen", Ptr,windowId, Ptr,&RECT)
+    Win_Client_X := NumGet(&RECT, 0, "Int")
+    Win_Client_Y := NumGet(&RECT, 4, "Int")
+    Win_Client_W := NumGet(&RECT, 8, "Int")
+    Win_Client_H := NumGet(&RECT, 12, "Int")
+    return { "x": Win_Client_X, "Y": Win_Client_Y, "W": Win_Client_W, "H": Win_Client_H }
 }
 
 getAreaName(areaNum) {

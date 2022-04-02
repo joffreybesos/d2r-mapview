@@ -29,9 +29,9 @@ class PartyInfoLayer {
         this.PartyInfoLayerHwnd := WinExist()
         
         if ((gameWindowWidth / gameWindowHeight) > 2) { ;if ultrawide
-            this.leftMargin := this.leftPadding + ((gameWindowWidth/2) - (1.034 * gameWindowHeight)) + gameWindowX - 1
+            this.leftMargin := this.leftPadding + ((gameWindowWidth/2) - (1.034 * gameWindowHeight)) + gameWindowX - 3
             this.topMargin := this.topPadding + (gameWindowHeight / 53) + gameWindowY
-            this.spacing := gameWindowHeight / 10.6
+            this.spacing := gameWindowHeight / 10.59
         } else {
             this.leftMargin := this.leftPadding + ((gameWindowHeight / 46)) + gameWindowX - 2
             this.topMargin := this.topPadding + (gameWindowHeight / 51.5) + gameWindowY

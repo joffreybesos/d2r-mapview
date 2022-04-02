@@ -8,22 +8,13 @@ class PartyInfoLayer {
     PartyInfoLayerHwnd :=
 
     __new(ByRef settings) {
-        ;this.partyInfoFontSize := settings["PartyInfoFontSize"]
-        
         this.topPadding := 0
         this.leftPadding := 0
-        ; if (!isWindowFullScreen(gameWindowId)) {
-        ;     this.topPadding :=  this.topPadding + 31 ; titlebar height
-        ;     this.leftPadding :=  this.leftPadding + 5 ; border width
-        ; }
-
         gameClientArea := getWindowClientArea()
-        ;WinGetPos, gameWindowX, gameWindowY, gameWindowWidth, gameWindowHeight, %gameWindowId% 
         gameWindowX := gameClientArea["X"]
         gameWindowY := gameClientArea["Y"]
         gameWindowWidth := gameClientArea["W"]
         gameWindowHeight := gameClientArea["H"]
-
 
         Gui, PartyInfo: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
         this.PartyInfoLayerHwnd := WinExist()
@@ -111,17 +102,7 @@ class PartyInfoLayer {
 
 }
 
-getWindowClientArea() {
-    WinGet, windowId, ID , %gameWindowId%
-    VarSetCapacity(RECT, 16, 0)
-    DllCall("user32\GetClientRect", Ptr,windowId, Ptr,&RECT)
-    DllCall("user32\ClientToScreen", Ptr,windowId, Ptr,&RECT)
-    Win_Client_X := NumGet(&RECT, 0, "Int")
-    Win_Client_Y := NumGet(&RECT, 4, "Int")
-    Win_Client_W := NumGet(&RECT, 8, "Int")
-    Win_Client_H := NumGet(&RECT, 12, "Int")
-    return { "x": Win_Client_X, "Y": Win_Client_Y, "W": Win_Client_W, "H": Win_Client_H }
-}
+
 
 getAreaName(areaNum) {
     switch (areaNum) {

@@ -225,3 +225,15 @@ isWindowFullScreen(WinID)
 	; no border and not minimized
 	Return ((style & 0x20800000) or winH < A_ScreenHeight or winW < A_ScreenWidth) ? false : true
 }
+
+getWindowClientArea() {
+    WinGet, windowId, ID , %gameWindowId%
+    VarSetCapacity(RECT, 16, 0)
+    DllCall("user32\GetClientRect", Ptr,windowId, Ptr,&RECT)
+    DllCall("user32\ClientToScreen", Ptr,windowId, Ptr,&RECT)
+    Win_Client_X := NumGet(&RECT, 0, "Int")
+    Win_Client_Y := NumGet(&RECT, 4, "Int")
+    Win_Client_W := NumGet(&RECT, 8, "Int")
+    Win_Client_H := NumGet(&RECT, 12, "Int")
+    return { "x": Win_Client_X, "Y": Win_Client_Y, "W": Win_Client_W, "H": Win_Client_H }
+}

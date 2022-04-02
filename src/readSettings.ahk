@@ -38,6 +38,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["showGameInfo"] := 1
     settings["gameInfoFontSize"] := "18"
     settings["gameInfoAlignment"] := "LEFT"
+    settings["showPartyLocations"] := 1
     settings["exitTextSize"] := "12"
 
     settings["showNormalMobs"] := 1

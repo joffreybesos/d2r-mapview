@@ -10,18 +10,13 @@ class UIAssistLayer {
     __new(ByRef settings) {
         Gui, UIAssist: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
         this.UIAssistLayerHwnd := WinExist()
-        if (isWindowFullScreen(gameWindowId)) {
-            this.y := 0
-        } else {
-            this.y := 32
-        }
-        
-
-        this.resistBoxWidth := 40
-        this.resistBoxHeight := 30
-        this.resistFontSize := 18
-        this.maxWidth := this.resistBoxWidth * 6
         WinGetPos, , , gameWidth, gameHeight, %gameWindowId% 
+        this.y := 0
+        this.resistBoxWidth := (gameHeight / 50) * 1.2
+        this.resistBoxHeight := gameHeight / 50
+        this.resistFontSize := gameHeight / 85
+        this.maxWidth := this.resistBoxWidth * 6
+        
         pToken := Gdip_Startup()
         DetectHiddenWindows, On
         this.hbm := CreateDIBSection(this.maxWidth, this.resistBoxHeight)
@@ -39,7 +34,12 @@ class UIAssistLayer {
     drawMonsterBar(ByRef mob) {
         if (mob.txtFileNo) {
             SetFormat, integer, D
-            WinGetPos, gamewindowx, gamewindowy, gameWidth, gameHeight, %gameWindowId% 
+            gameClientArea := getWindowClientArea()
+            gamewindowx := gameClientArea["X"]
+            gamewindowy := gameClientArea["Y"]
+            gameWidth := gameClientArea["W"]
+            gameHeight := gameClientArea["H"]
+            ;WinGetPos, gamewindowx, gamewindowy, gameWidth, gameHeight, %gameWindowId% 
             resistFontSize := this.resistFontSize
             
             resists := mob.immunities

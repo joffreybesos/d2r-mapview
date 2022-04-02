@@ -9,7 +9,7 @@ class PartyInfoLayer {
 
     __new(ByRef settings) {
         this.topPadding := 0
-        this.leftPadding := 0
+        this.leftPadding := 0 
         gameClientArea := getWindowClientArea()
         gameWindowX := gameClientArea["X"]
         gameWindowY := gameClientArea["Y"]

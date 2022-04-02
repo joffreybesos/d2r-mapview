@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - For party members, their location will now appear under their icon
   Alignment of the text may be off for some resolutions, please let me know in #support
   The player location will only appear for those in your party
+  You can turn this off in settings (Ctrl+O)
 - When you hover over a monster, you will see their exact resistances now
   Each box will show their resists, >100 means immune
   This is to be help fine tune any 'minus enemy resist' gear

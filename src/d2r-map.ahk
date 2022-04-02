@@ -239,6 +239,9 @@ While 1 {
             lastPlayerLevel:= gameMemoryData["playerLevel"]
             lastPlayerExperience:=gameMemoryData["experience"]
         }
+        if (!levelNo) {
+            partyInfoLayer.hide()
+        }
 
         if ((gameMemoryData["difficulty"] == "0" or gameMemoryData["difficulty"] == "1" or gameMemoryData["difficulty"] == "2") and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
             if (gameMemoryData["mapSeed"] != lastSeed or newGame) {
@@ -327,6 +330,7 @@ While 1 {
             if (Mod(ticktock, 6)) {
                 checkAutomapVisibility(d2rprocess, gameMemoryData)
             }
+            
             lastlevel := gameMemoryData["levelNo"]
         } else {
             WriteLog("In Menu - no valid difficulty, levelno, or mapseed found '" gameMemoryData["difficulty"] "' '" gameMemoryData["levelNo"] "' '" gameMemoryData["mapSeed"] "'")
@@ -355,7 +359,7 @@ While 1 {
         , fpsTimer := A_TickCount
         if (playerOffset) {
             gameInfoLayer.drawInfoText(currentFPS)
-            partyInfoLayer.drawInfoText()
+            partyInfoLayer.drawInfoText(gameMemoryData["partyList"], gameMemoryData["unitId"])
         }
     }
     if (frameDuration < ticksPerFrame) {
@@ -383,6 +387,7 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
         }
         hideMap(false)
     } else if gameMemoryData["menuShown"] {
+        partyInfoLayer.hide()
         if (isMapShowing) {
             WriteLogDebug("Hiding since UI menu is shown")
         }
@@ -399,9 +404,10 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
         hideMap(alwaysShowMap)
     } else {
         unHideMap()
-        gameInfoLayer.show()
-        partyInfoLayer.show()
-    } 
+    }
+    if (!levelNo) {
+        partyInfoLayer.hide()
+    }
     return
 }
 

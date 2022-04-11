@@ -3070,7 +3070,7 @@ class GameItem {
             case 497: return "Guardian Crown" 
             case 498: return "Sacred Targe" 
             case 499: return "Sacred Rondache" 
-            case 500: return "Ancient Shield" 
+            case 500: return "Kurast Shield" 
             case 501: return "Zakarum Shield" 
             case 502: return "Vortex Shield" 
             case 503: return "Minion Skull" 

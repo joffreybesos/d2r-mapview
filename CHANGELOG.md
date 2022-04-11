@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.5] - 2021-03-29 - Party info now shows level
+
+- Under each player icon you can now see the player level
+- Localisation has been added to the player location (font sizes may be a bit weird)
+- Fixed issue with Kurast Shield missing from list of base items
+
 ## [2.7.4] - 2021-03-29 - Party member locations and resist stats for mobs
 
 - For party members, their location will now appear under their icon

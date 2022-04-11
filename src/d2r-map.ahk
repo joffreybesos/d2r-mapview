@@ -36,6 +36,12 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\memory\readLastGameName.ahk
 #Include %A_ScriptDir%\memory\readIPAddress.ahk
 #Include %A_ScriptDir%\memory\patternScan.ahk
+; #Include %A_ScriptDir%\mapdata\generateImage.ahk
+; #Include %A_ScriptDir%\mapdata\generateImage.ahk
+; #Include %A_ScriptDir%\mapdata\generateMapData.ahk
+; #Include %A_ScriptDir%\mapdata\stitchMaps.ahk
+; #Include %A_ScriptDir%\types\Area.ahk
+; #Include %A_ScriptDir%\types\Areas.ahk
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
 #Include %A_ScriptDir%\ui\image\prefetchMaps.ahk

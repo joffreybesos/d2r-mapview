@@ -13,3 +13,4 @@ currentmap.png
 /src/GameSessionLog.csv
 /src/d2r-map3.ahk
 /src/*.wav
+/src/cache

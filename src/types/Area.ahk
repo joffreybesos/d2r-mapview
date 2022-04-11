@@ -148,8 +148,8 @@ class Area {
         }
 
         Gdip_DeleteBrush(pBrush)
-        sOutput := this.name ".bmp"
-        Gdip_SaveBitmapToFile(pBitmap, sOutput)
+        ;sOutput := "./cache/" this.name ".bmp"
+        ;Gdip_SaveBitmapToFile(pBitmap, sOutput)
         SelectObject(hdc, obm)
         DeleteObject(hbm)
         DeleteDC(hdc)

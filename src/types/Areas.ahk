@@ -21,7 +21,7 @@ class Areas {
 	   
     stitchMapsPadding(ByRef mapId) {
 
-        stitchedDimensions := { "x": 99999, "y": 99999, "width": 0, "height": 0 }
+        padding := 75
 
         areasToStitch := []
         areaNosToStitch := this.getStitchedMaps(mapId)
@@ -29,30 +29,15 @@ class Areas {
         {
 			areaData := this.getMapJSON(ByRef extMapId)
 			thisArea := new Area(areaData, extMapId)
-            
-            thisWidth := thisArea.json.offset.x + thisArea.json.size.width
-            if (thisWidth > stitchedDimensions.width) {
-                stitchedDimensions.width := thisWidth
-            }
-            thisHeight := thisArea.json.offset.y + thisArea.json.size.height
-            if (thisHeight > stitchedDimensions.height) {
-                stitchedDimensions.height := thisHeight
-            }
-
-            thisX := thisArea.json.offset.x
-            if (thisX < stitchedDimensions.x) {
-                stitchedDimensions.x := thisX
-            }
-            thisY := thisArea.json.offset.y
-            if (thisY < stitchedDimensions.y) {
-                stitchedDimensions.y := thisY
+            if (extMapId == mapId) {
+                stitchedDimensions := { "x": (thisArea.json.offset.x - padding), "y": (thisArea.json.offset.y - padding), "width": (thisArea.json.size.width + (padding * 2)), "height": (thisArea.json.size.height + (padding*2)) }
             }
             areasToStitch.push(thisArea)
         }
 
         pToken := Gdip_Startup()
-        stitchedWidth := stitchedDimensions.width - stitchedDimensions.x
-        stitchedHeight := stitchedDimensions.height - stitchedDimensions.y
+        stitchedWidth := stitchedDimensions.width
+        stitchedHeight := stitchedDimensions.height
         pBitmap := Gdip_CreateBitmap(stitchedWidth, stitchedHeight)
         hbm := CreateDIBSection(stitchedWidth, stitchedHeight)
         hdc := CreateCompatibleDC()
@@ -67,7 +52,7 @@ class Areas {
             Gdip_DrawImage(G, area.edgeBitmap, x, y, area.json.size.width, area.json.size.height)
         }
 
-        sOutput := "stiched.bmp"
+        sOutput :=  "./cache/stitched.bmp"
         Gdip_SaveBitmapToFile(pBitmap, sOutput)
         SelectObject(hdc, obm)
         DeleteObject(hbm)

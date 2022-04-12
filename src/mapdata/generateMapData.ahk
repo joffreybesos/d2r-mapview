@@ -2,39 +2,16 @@
 
 ; create JSON data for a single map maps for a given seed/difficulty
 generateMapData(ByRef seed, ByRef difficulty, ByRef mapId) {
-    cmd := exePath " """ d2path """ --seed " seed " --difficulty " difficulty " --map " mapId
-    response := StdOutToVar(cmd)
-    levelData := 
-    Loop, parse, response, `n, `r
-    {
-        if (SubStr(A_LoopField, 1, 7) == "{""type""") {
-            levelData := A_LoopField
-        }
-    }
-    return levelData
+    filename := seed "_" difficulty "_" mapId ".json"
+	cmd := exePath " """ d2path """ --seed " seed " --difficulty " difficulty " --map " mapId " > " A_Temp "\" filename
+	Run, %comspec% /c %cmd%,,hide
 }
-
-; ; create all JSON data for all maps for a given seed/difficulty
-; generateAllMapData(ByRef seed, ByRef difficulty) {
-;     cmd := exePath " """ d2path """ --seed " seed " --difficulty " difficulty
-;     response := StdOutToVar(cmd)
-; 	levels := []
-;     Loop, parse, response, `n, `r
-;     {
-;         if (SubStr(A_LoopField, 1, 7) == "{""type""") {
-;             levels.push(A_LoopField)
-;         }
-;     }
-;     return levels
-; }
 
 ; create all JSON data for all maps for a given seed/difficulty
 generateAllMapData(ByRef seed, ByRef difficulty) {
 	Loop, 136
 	{
-		filename := seed "_" difficulty "_" A_Index ".json"
-		cmd := exePath " """ d2path """ --seed " seed " --difficulty " difficulty " --map " A_Index " > " A_Temp "\" filename
-		Run, %comspec% /c %cmd%,,hide
+		generateMapData(seed, difficulty, A_Index)
 	}
 }
 

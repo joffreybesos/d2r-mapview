@@ -36,12 +36,10 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\memory\readLastGameName.ahk
 #Include %A_ScriptDir%\memory\readIPAddress.ahk
 #Include %A_ScriptDir%\memory\patternScan.ahk
-; #Include %A_ScriptDir%\mapdata\generateImage.ahk
-; #Include %A_ScriptDir%\mapdata\generateImage.ahk
-; #Include %A_ScriptDir%\mapdata\generateMapData.ahk
-; #Include %A_ScriptDir%\mapdata\stitchMaps.ahk
-; #Include %A_ScriptDir%\types\Area.ahk
-; #Include %A_ScriptDir%\types\Areas.ahk
+#Include %A_ScriptDir%\mapdata\generateMapData.ahk
+#Include %A_ScriptDir%\types\Area.ahk
+#Include %A_ScriptDir%\types\Areas.ahk
+#Include %A_ScriptDir%\ui\image\generateMapImage.ahk
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
 #Include %A_ScriptDir%\ui\image\prefetchMaps.ahk
@@ -106,6 +104,8 @@ global centerLeftOffset := 0
 global centerTopOffset := 0
 global redrawMap := 1
 global offsets := []
+global d2path := "E:\Dev\d2-mapserver\game"
+global exePath := "E:\Dev\d2r-mapview\src\d2lod-map.exe"
 
 CreateSettingsGUI(settings, localizedStrings)
 
@@ -252,8 +252,12 @@ While 1 {
         if ((gameMemoryData["difficulty"] == "0" or gameMemoryData["difficulty"] == "1" or gameMemoryData["difficulty"] == "2") and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
             if (gameMemoryData["mapSeed"] != lastSeed or newGame) {
                 gameStartTime := A_TickCount    
-                currentGameName := readLastGameName(d2rprocess, gameWindowId, offsets, session)
+                seenItems := []
 
+                ; generate data for map seed
+                areas := new Areas(gameMemoryData["mapSeed"], gameMemoryData["difficulty"])
+
+                currentGameName := readLastGameName(d2rprocess, gameWindowId, offsets, session)
                 if (session) {
                     session.setEndTime(gameEndTime)
                     session.endingPlayerLevel := lastPlayerLevel
@@ -271,7 +275,7 @@ While 1 {
                 lastSeed := gameMemoryData["mapSeed"]
                 ;ipAddress := readIPAddress(d2rprocess, gameWindowId, offsets, session)
                 shrines := []
-                seenItems := []
+                
                 gameInfoLayer.updateSessionStart(session.startTime)
                 ;gameInfoLayer.drawInfoText(currentFPS)
                 newGame := 0
@@ -289,7 +293,8 @@ While 1 {
                 Gui, Units: Hide ; hide player dot
                 ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 22 is opacity
                 ; Download map
-                downloadMapImage(settings, gameMemoryData, imageData, 0)
+                ;downloadMapImage(settings, gameMemoryData, imageData, 0)
+                generateMapImage(settings, areas, gameMemoryData["levelNo"], imageData)
 
                 ; Show Map
                 if (lastlevel == "") {

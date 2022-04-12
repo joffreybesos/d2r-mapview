@@ -5,15 +5,13 @@ class Area {
     mapgrid :=
     mapId := 0
     name := ""
-    stitchedMaps := []
-    edgeBitmap := 
+    bitmap := 0
 
-    __new(ByRef mapJSONData, ByRef mapId) {
+    __new(ByRef mapJSONData, ByRef mapId, Byref renderScale) {
         this.mapId := mapId
         this.name := getMapName(this.mapId)
         this.json := mapJSONData
-        ;this.stitchedMaps := getStitchedMaps(this.mapId)
-        this.edgeBitmap := this.createEdgeImage()
+        this.edgeBitmap := this.createEdgeImage(renderScale)
     }
 
     convertMapDataToGrid() {
@@ -101,14 +99,66 @@ class Area {
         }
 
         Gdip_DeleteBrush(pBrush)
-        sOutput := "./cache/" this.name ".bmp"
-        Gdip_SaveBitmapToFile(pBitmap, sOutput)
+        ;sOutput := "./cache/" this.name ".bmp"
+        ;Gdip_SaveBitmapToFile(pBitmap, sOutput)
         SelectObject(hdc, obm)
         DeleteObject(hbm)
         DeleteDC(hdc)
         Gdip_DeleteGraphics(G)
         ;Gdip_DisposeImage(pBitmap)
         return pBitmap
+    }
+
+    setImage(ByRef pBitmap) {
+        this.bitmap := pBitmap
+    }
+
+    saveImageToFile(ByRef filename) {
+        if (this.bitmap == 0) {
+            OutputDebug, % "No image found"
+            return
+        }
+        pToken := Gdip_Startup()
+        Gdip_SaveBitmapToFile(this.bitmap, filename)
+    }
+
+    getHeaders() {
+        s := "Connection: keep-alive" "`n"
+        s .= "Date: x" "`n"
+        s .= "Keep-Alive: timeout=5" "`n"
+        s .= "Content-Length: 128794" "`n"
+        s .= "Content-Type: image/png" "`n"
+        s .= "X-Powered-By: Express" "`n"
+        s .= "Access-Control-Allow-Origin: *" "`n"
+        s .= "Access-Control-Allow-Credentials: true" "`n"
+        s .= "leftTrimmed: 0" "`n"
+        s .= "topTrimmed: 0" "`n"
+        s .= "offsetx: " this.json.offset.x "`n"
+        s .= "offsety: " this.json.offset.y "`n"
+        s .= "mapwidth: " this.json.size.width "`n"
+        s .= "mapheight: " this.json.size.height "`n"
+        s .= "exits: " "`n"
+        s .= "waypoint: " "`n"
+        s .= "bosses: " "`n"
+        s .= "quests: " "`n"
+        s .= "chests: " "`n"
+        s .= "superchests: " "`n"
+        s .= "shrines: " "`n"
+        s .= "wells: " "`n"
+        s .= "serverScale: 3" "`n"
+        s .= "originalwidth: 0" "`n"
+        s .= "originalheight: 0" "`n"
+        s .= "prerotated: false" "`n"
+        s .= "info: REVAMPED.ORG IS A SCAM" "`n"
+        s .= "info2: D2RESURREKTED IS A SCAM" "`n"
+        s .= "info3: YOU SHOULD NOT HAVE PAID FOR THIS" "`n"
+        s .= "website: https://github.com/joffreybesos/d2r-mapview" "`n"
+        return s
+    }
+
+    saveHeaders(ByRef filename) {
+        s := this.getHeaders()
+        FileAppend, %s%, %filename%
     }
 }
 
@@ -260,24 +310,3 @@ getMapName(mapId) {
     }
 }
 
-
-
-checkSurroungPixels(ByRef rows, ByRef irow, ByRef icol) {
-	if (rows[irow - 1][icol - 1] == 1) 
-		return true
-	if (rows[irow - 1][icol] == 1) 
-		return true
-	if (rows[irow - 1][icol + 1] == 1) 
-		return true
-	if (rows[irow][icol - 1] == 1) 
-		return true
-	if (rows[irow][icol + 1] == 1) 
-		return true
-	if (rows[irow + 1][icol - 1] == 1) 
-		return true
-	if (rows[irow + 1][icol] == 1) 
-		return true
-	if (rows[irow + 1][icol + 1] == 1) 
-		return true
-  return false
-}

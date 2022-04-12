@@ -3,8 +3,8 @@ class Areas {
     mapSeed := 0
     difficulty := 0
     json :=             ; parsed JSON fro ALL areas
-    areas := []         ; list of Area.ahk
-	areaJSONList := []  ; list of JSON blobs
+    ;areas := []         ; list of Area.ahk
+	
 
     __new(ByRef mapSeed, ByRef difficulty) {
         this.mapSeed := mapSeed
@@ -13,7 +13,6 @@ class Areas {
     }
 
     getMapJSON(ByRef mapId) {
-        ;OutputDebug, % this.areaJSONList[mapId]
         lastChars := ""
         endOfBody := "]}`r`n`r`n"
 		filename := A_Temp "\" this.mapSeed "_" this.difficulty "_" mapId ".json"
@@ -24,28 +23,33 @@ class Areas {
 			if (lastChars == endOfBody) {
 				break
 			}
-			if ((A_TickCount - start) > 10000) {
+			if ((A_TickCount - start) > 20000) {
 				OutputDebug, % "ERROR loading " filename
+				WriteLog("ERROR loading " filename)
 				break
 			}
 		}
+		fileContents := StrReplace(fileContents, "`r", "")
+		fileContents := StrReplace(fileContents, "`n", "")
+		OutputDebug, % fileContents
 		return JSON.Load(fileContents)
     }
 
-	getArea(ByRef mapId) {
-		areaData := this.getMapJSON(ByRef mapId)
-		area := new Area(areaData, mapId)
+	getArea(ByRef mapId, renderScale := 2) {
+		areaData := this.getMapJSON(mapId)
+		area := new Area(areaData, mapId, renderScale)
+		area.setImage(this.stitchMapsPadding(mapId, 150, renderScale))
 		return area
 	}
 
 	   
-    stitchMapsPadding(ByRef mapId, padding := 150) {
+    stitchMapsPadding(ByRef mapId, padding := 150, renderScale := 2) {
         areasToStitch := []
         areaNosToStitch := this.getStitchedMaps(mapId)
         for k, extMapId in areaNosToStitch
         {
-			areaData := this.getMapJSON(ByRef extMapId)
-			thisArea := new Area(areaData, extMapId)
+			areaData := this.getMapJSON(extMapId)
+			thisArea := new Area(areaData, extMapId, renderScale)
             if (extMapId == mapId) {
                 stitchedDimensions := { "x": (thisArea.json.offset.x - (padding/2)), "y": (thisArea.json.offset.y - (padding/2)), "width": (thisArea.json.size.width + (padding)), "height": (thisArea.json.size.height + (padding)) }
             }
@@ -53,29 +57,27 @@ class Areas {
         }
 
         pToken := Gdip_Startup()
-        stitchedWidth := stitchedDimensions.width
-        stitchedHeight := stitchedDimensions.height
+        stitchedWidth := stitchedDimensions.width * renderScale
+        stitchedHeight := stitchedDimensions.height * renderScale
         pBitmap := Gdip_CreateBitmap(stitchedWidth, stitchedHeight)
         hbm := CreateDIBSection(stitchedWidth, stitchedHeight)
         hdc := CreateCompatibleDC()
         obm := SelectObject(hdc, hbm)
         Gdip_SetSmoothingMode(G, 4) 
         G := Gdip_GraphicsFromImage(pBitmap)
-        ; pBitmap := Gdip_RotateBitmapAtCenter(pBitmap, 45) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
+        ;pBitmap := Gdip_RotateBitmapAtCenter(pBitmap, 45) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
         for k, area in areasToStitch
         {
             x := area.json.offset.x - stitchedDimensions.x
             y := area.json.offset.y - stitchedDimensions.y
-            Gdip_DrawImage(G, area.edgeBitmap, x, y, area.json.size.width, area.json.size.height)
+            Gdip_DrawImage(G, area.edgeBitmap, x * renderScale, y * renderScale, area.json.size.width * renderScale, area.json.size.height * renderScale)
         }
 
-        sOutput :=  "./cache/stitched.bmp"
-        Gdip_SaveBitmapToFile(pBitmap, sOutput)
         SelectObject(hdc, obm)
         DeleteObject(hbm)
         DeleteDC(hdc)
         Gdip_DeleteGraphics(G)
-        Gdip_DisposeImage(pBitmap)
+		return pBitmap
     }
 
 

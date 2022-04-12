@@ -1,15 +1,35 @@
 
 class Areas {
+    mapSeed := 0
+    difficulty := 0
     json :=             ; parsed JSON fro ALL areas
     areas := []         ; list of Area.ahk
 	areaJSONList := []  ; list of JSON blobs
 
     __new(ByRef mapSeed, ByRef difficulty) {
-        this.areaJSONList := generateAllMapData(mapSeed, difficulty)
+        this.mapSeed := mapSeed
+        this.difficulty := difficulty
+        generateAllMapData(mapSeed, difficulty)
     }
 
     getMapJSON(ByRef mapId) {
-		return JSON.Load(this.areaJSONList[mapId])
+        ;OutputDebug, % this.areaJSONList[mapId]
+        lastChars := ""
+        endOfBody := "]}`r`n`r`n"
+		filename := A_Temp "\" this.mapSeed "_" this.difficulty "_" mapId ".json"
+		start := A_TickCount
+		while (lastChars != endOfBody) {
+			FileRead, fileContents, %filename%
+			StringRight, lastChars, fileContents, 6
+			if (lastChars == endOfBody) {
+				break
+			}
+			if ((A_TickCount - start) > 10000) {
+				OutputDebug, % "ERROR loading " filename
+				break
+			}
+		}
+		return JSON.Load(fileContents)
     }
 
 	getArea(ByRef mapId) {
@@ -19,10 +39,7 @@ class Areas {
 	}
 
 	   
-    stitchMapsPadding(ByRef mapId) {
-
-        padding := 75
-
+    stitchMapsPadding(ByRef mapId, padding := 150) {
         areasToStitch := []
         areaNosToStitch := this.getStitchedMaps(mapId)
         for k, extMapId in areaNosToStitch
@@ -30,7 +47,7 @@ class Areas {
 			areaData := this.getMapJSON(ByRef extMapId)
 			thisArea := new Area(areaData, extMapId)
             if (extMapId == mapId) {
-                stitchedDimensions := { "x": (thisArea.json.offset.x - padding), "y": (thisArea.json.offset.y - padding), "width": (thisArea.json.size.width + (padding * 2)), "height": (thisArea.json.size.height + (padding*2)) }
+                stitchedDimensions := { "x": (thisArea.json.offset.x - (padding/2)), "y": (thisArea.json.offset.y - (padding/2)), "width": (thisArea.json.size.width + (padding)), "height": (thisArea.json.size.height + (padding)) }
             }
             areasToStitch.push(thisArea)
         }
@@ -112,7 +129,7 @@ class Areas {
 			case 111: return [109,110,111,112]
 			case 112: return [109,110,111,112]
 		}
-		return mapId
+		return [mapId]
 
     }
 

@@ -85,82 +85,31 @@ class Area {
         mapOffsetX := this.json.offset.x
         mapOffsetY := this.json.offset.y
 
-        lines := JSON.Dump(mapTileHeight)
-        cols := this.json.size.width
-        maplines := Object()
-        maplines.SetCapacity(lines)
-        Loop, %lines%
+        rows := mapTileHeight
+        cols := mapTileWidth
+        Loop, %rows%
         {
-            lineIdx := A_Index - 1
-            maplines[lineIdx] := Object()
-            maplines[lineIdx].SetCapacity(cols)
-            line := JSON.Dump(this.json.map[lineIdx])
-            line := StrReplace(line, "[", "")
-            line := StrReplace(line, "]", "")
-            if (line == """""") {
-                line := 
-            }
-
-            alt := 0
-            fieldNo := 0
-            Loop, parse, line, `,
+            row := A_Index - 1
+            line := this.json.map[row]
+            Loop, parse, line
             {
-                Loop, %A_LoopField%
-                {
-                    maplines[lineIdx][fieldNo] := alt
-                    ++fieldNo
-                }
-                alt := !alt
-            }
-            
-            if (fieldNo <= mapTileWidth) {
-                
-                remainder := mapTileWidth - fieldNo
-                Loop, %remainder%
-                {
-                    maplines[lineIdx][fieldNo] := alt
-                    ++fieldNo
+                col := A_Index - 1
+                if (A_LoopField) {
+                    Gdip_FillRectangle(G, pBrush, col*renderScale , row*renderScale, renderScale, renderScale)
                 }
             }
-        }
-        
-        ; mapPixels are now maplines[row][column]
-        
-        x := padding/2
-        y := padding/2
-        Loop, %mapTileHeight%
-        {
-            irow := A_Index - 1
-            Loop, %mapTileWidth%
-            {
-                icol := A_Index -1
-                thisPixel := maplines[irow][icol]
-                if (thisPixel == 0) {
-                    borders := checkSurroungPixels(maplines, irow, icol)
-                    if (borders) {
-                        Gdip_FillRectangle(G, pBrush, x*renderScale , y*renderScale, renderScale, renderScale)
-                    }
-                }
-                ++x
-            }
-            x := padding/2
-            ++y
         }
 
         Gdip_DeleteBrush(pBrush)
-        ;sOutput := "./cache/" this.name ".bmp"
-        ;Gdip_SaveBitmapToFile(pBitmap, sOutput)
+        sOutput := "./cache/" this.name ".bmp"
+        Gdip_SaveBitmapToFile(pBitmap, sOutput)
         SelectObject(hdc, obm)
         DeleteObject(hbm)
         DeleteDC(hdc)
         Gdip_DeleteGraphics(G)
         ;Gdip_DisposeImage(pBitmap)
-        
         return pBitmap
-        
     }
-
-     
 }
 
 

@@ -1,3 +1,4 @@
+#MaxMem 256
 
 ; create JSON data for a single map maps for a given seed/difficulty
 generateMapData(ByRef seed, ByRef difficulty, ByRef mapId) {
@@ -17,30 +18,24 @@ generateMapData(ByRef seed, ByRef difficulty, ByRef mapId) {
 ; generateAllMapData(ByRef seed, ByRef difficulty) {
 ;     cmd := exePath " """ d2path """ --seed " seed " --difficulty " difficulty
 ;     response := StdOutToVar(cmd)
-;     levelData := "{""seed"": """ . seed . """, ""difficulty"": """ . difficulty . """, ""levels"": ["
+; 	levels := []
 ;     Loop, parse, response, `n, `r
 ;     {
 ;         if (SubStr(A_LoopField, 1, 7) == "{""type""") {
-;             levelData := levelData A_LoopField "," 
+;             levels.push(A_LoopField)
 ;         }
 ;     }
-; 	StringTrimRight, levelData, levelData, 1
-; 	levelData := levelData "]}"
-;     return levelData
+;     return levels
 ; }
 
 ; create all JSON data for all maps for a given seed/difficulty
 generateAllMapData(ByRef seed, ByRef difficulty) {
-    cmd := exePath " """ d2path """ --seed " seed " --difficulty " difficulty
-    response := StdOutToVar(cmd)
-	levels := []
-    Loop, parse, response, `n, `r
-    {
-        if (SubStr(A_LoopField, 1, 7) == "{""type""") {
-            levels.push(A_LoopField)
-        }
-    }
-    return levels
+	Loop, 136
+	{
+		filename := seed "_" difficulty "_" A_Index ".json"
+		cmd := exePath " """ d2path """ --seed " seed " --difficulty " difficulty " --map " A_Index " > " A_Temp "\" filename
+		Run, %comspec% /c %cmd%,,hide
+	}
 }
 
 ; runs a command and captures stdout without flashing a cmd window

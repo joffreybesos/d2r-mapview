@@ -9,47 +9,23 @@ class Areas {
     __new(ByRef mapSeed, ByRef difficulty) {
         this.mapSeed := mapSeed
         this.difficulty := difficulty
-        generateAllMapData(mapSeed, difficulty)
-    }
-
-    getMapJSON(ByRef mapId) {
-        lastChars := ""
-        endOfBody := "]}`r`n`r`n"
-		filename := A_Temp "\" this.mapSeed "_" this.difficulty "_" mapId ".json"
-		start := A_TickCount
-		while (lastChars != endOfBody) {
-			FileRead, fileContents, %filename%
-			StringRight, lastChars, fileContents, 6
-			if (lastChars == endOfBody) {
-				break
-			}
-			if ((A_TickCount - start) > 20000) {
-				OutputDebug, % "ERROR loading " filename
-				WriteLog("ERROR loading " filename)
-				break
-			}
-		}
-		fileContents := StrReplace(fileContents, "`r", "")
-		fileContents := StrReplace(fileContents, "`n", "")
-		OutputDebug, % fileContents
-		return JSON.Load(fileContents)
+		this.cacheFolder := A_Temp
+        generateAllMapData(mapSeed, difficulty, this.cacheFolder)
     }
 
 	getArea(ByRef mapId, renderScale := 2) {
-		areaData := this.getMapJSON(mapId)
-		area := new Area(areaData, mapId, renderScale)
+		area := new Area(this.mapSeed, this.difficulty, mapId, this.cacheFolder)
 		area.setImage(this.stitchMapsPadding(mapId, 150, renderScale))
 		return area
 	}
 
-	   
     stitchMapsPadding(ByRef mapId, padding := 150, renderScale := 2) {
         areasToStitch := []
         areaNosToStitch := this.getStitchedMaps(mapId)
         for k, extMapId in areaNosToStitch
         {
 			areaData := this.getMapJSON(extMapId)
-			thisArea := new Area(areaData, extMapId, renderScale)
+			thisArea := new Area(this.mapSeed, this.difficulty, extMapId, this.cacheFolder)
             if (extMapId == mapId) {
                 stitchedDimensions := { "x": (thisArea.json.offset.x - (padding/2)), "y": (thisArea.json.offset.y - (padding/2)), "width": (thisArea.json.size.width + (padding)), "height": (thisArea.json.size.height + (padding)) }
             }
@@ -70,7 +46,7 @@ class Areas {
         {
             x := area.json.offset.x - stitchedDimensions.x
             y := area.json.offset.y - stitchedDimensions.y
-            Gdip_DrawImage(G, area.edgeBitmap, x * renderScale, y * renderScale, area.json.size.width * renderScale, area.json.size.height * renderScale)
+            Gdip_DrawImage(G, area.rawBitmap, x * renderScale, y * renderScale, area.json.size.width * renderScale, area.json.size.height * renderScale)
         }
 
         SelectObject(hdc, obm)

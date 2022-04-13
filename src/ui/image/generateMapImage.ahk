@@ -1,11 +1,11 @@
 
 generateMapImage(ByRef settings, ByRef areas, ByRef mapId, ByRef imageData) {
-    renderScale := 2
+    renderScale := 1
     if (settings["centerMode"]) {
         renderScale := settings["serverScale"]
     }
     
-    sFile := A_Temp . "\" . areas.mapSeed . "_" . areas.difficulty . "_" . mapId ".bmp"
+    sFile := A_Temp . "\" . areas.mapSeed . "_" . areas.difficulty . "_" . mapId "_" renderScale ".bmp"
 
     area := areas.getArea(mapId, renderScale)
     respHeaders := area.getHeaders()

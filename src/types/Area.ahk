@@ -1,116 +1,30 @@
 
 class Area {
     json :=
-    maplines :=
-    mapgrid :=
     mapId := 0
-    name := ""
+    name := "Unknown map"
+    rawBitmap := 0
     bitmap := 0
 
-    __new(ByRef mapJSONData, ByRef mapId, Byref renderScale) {
+    __new(ByRef mapSeed, ByRef difficulty, ByRef mapId, ByRef cacheFolder) {
         this.mapId := mapId
         this.name := getMapName(this.mapId)
-        this.json := mapJSONData
-        this.edgeBitmap := this.createEdgeImage(renderScale)
+        this.baseFile := cacheFolder "\" mapSeed "_" difficulty "_" mapId
+        this.json := this.getMapJSON()
+        this.rawBitmap := this.getBitmap()
     }
 
-    convertMapDataToGrid() {
-        width  := this.json.size.width
-        height := this.json.size.height
-
-        maplines :=
-        lines := JSON.Dump(height)
-        Loop, %lines%
-        {
-            line := JSON.Dump(this.json.map[A_Index])
-            line := StrReplace(line, "[", "")
-            line := StrReplace(line, "]", "")
-            if (line == """""") {
-                line :=
-            }
-            maplines := maplines "`n" line
-        }
-        this.maplines := maplines
+    getMapJSON() {
+		filename := this.baseFile ".json"
+		FileRead, fileContents, %filename%
+        return JSON.Load(fileContents)
     }
 
-    convertMapLinesToEdgeGrid() {
-        
-        this.mapgrid := ""
-        maplines := this.maplines
-        Loop, parse, maplines, `n
-        {
-            line := ""
-            alt := 0
-            for index, field in StrSplit(A_LoopField, ",")
-            {
-                Loop, %field%
-                {
-                    line := line . alt
-                }
-                alt := !alt
-            }
-            if (StrLen(line) < width) {
-                remainder := width - StrLen(line)
-                Loop, %remainder%
-                {
-                    line := line . alt
-                }
-            }
-            this.mapgrid := this.mapgrid . line . "`n"
-        }
-        return this.mapgrid
-    }
-
-    createEdgeImage(renderScale := 2, padding := 0) {
-        mapBMPWidth := this.json.size.width * renderScale
-        mapBMPHeight := this.json.size.height * renderScale
-
-        pToken := Gdip_Startup()
-        pBitmap := Gdip_CreateBitmap(mapBMPWidth + (padding * 2), mapBMPHeight + (padding * 2))
-        Gdip_GetRotatedDimensions(mapBMPWidth, mapBMPHeight, 45, rotatedBMPWidth, rotatedBMPHeight)
-        hbm := CreateDIBSection(rotatedBMPWidth, rotatedBMPHeight)
-        hdc := CreateCompatibleDC()
-        obm := SelectObject(hdc, hbm)
-        Gdip_SetSmoothingMode(G, 4) 
-        G := Gdip_GraphicsFromImage(pBitmap)
-        
-        pBrush := Gdip_BrushCreateSolid(0xffaaaaaa)
-        
-        x := 1
-        y := 1
-        mapTileWidth  := this.json.size.width
-        mapTileHeight := this.json.size.height
-        mapOffsetX := this.json.offset.x
-        mapOffsetY := this.json.offset.y
-
-        rows := mapTileHeight
-        cols := mapTileWidth
-        Loop, %rows%
-        {
-            row := A_Index - 1
-            line := this.json.map[row]
-            Loop, parse, line
-            {
-                col := A_Index - 1
-                if (A_LoopField) {
-                    Gdip_FillRectangle(G, pBrush, col*renderScale , row*renderScale, renderScale, renderScale)
-                }
-            }
-        }
-
-        Gdip_DeleteBrush(pBrush)
-        ;sOutput := "./cache/" this.name ".bmp"
-        ;Gdip_SaveBitmapToFile(pBitmap, sOutput)
-        SelectObject(hdc, obm)
-        DeleteObject(hbm)
-        DeleteDC(hdc)
-        Gdip_DeleteGraphics(G)
-        ;Gdip_DisposeImage(pBitmap)
-        return pBitmap
-    }
-
-    setImage(ByRef pBitmap) {
-        this.bitmap := pBitmap
+    getBitmap() {
+		filename := this.baseFile ".bmp"
+		pToken := Gdip_Startup()
+        pBitmap := Gdip_CreateBitmapFromFile(filename)
+		return pBitmap
     }
 
     saveImageToFile(ByRef filename) {
@@ -120,6 +34,10 @@ class Area {
         }
         pToken := Gdip_Startup()
         Gdip_SaveBitmapToFile(this.bitmap, filename)
+    }
+
+    setImage(pBitmap) {
+        this.bitmap := pBitmap
     }
 
     getHeaders() {

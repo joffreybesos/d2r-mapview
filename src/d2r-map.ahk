@@ -27,6 +27,7 @@ Menu, Tray, Add, Exit, ExitMH
 SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\logging.ahk
 #Include %A_ScriptDir%\include\Yaml.ahk
+#Include %A_ScriptDir%\include\JSON.ahk
 #Include %A_ScriptDir%\itemfilter\AlertList.ahk
 #Include %A_ScriptDir%\itemfilter\ItemAlert.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk

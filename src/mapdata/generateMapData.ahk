@@ -1,18 +1,9 @@
 #MaxMem 256
 
-; create JSON data for a single map maps for a given seed/difficulty
-generateMapData(ByRef seed, ByRef difficulty, ByRef mapId) {
-    filename := seed "_" difficulty "_" mapId ".json"
-	cmd := exePath " """ d2path """ --seed " seed " --difficulty " difficulty " --map " mapId " > " A_Temp "\" filename
-	Run, %comspec% /c %cmd%,,hide
-}
-
 ; create all JSON data for all maps for a given seed/difficulty
-generateAllMapData(ByRef seed, ByRef difficulty) {
-	Loop, 136
-	{
-		generateMapData(seed, difficulty, A_Index)
-	}
+generateAllMapData(ByRef seed, ByRef difficulty, ByRef folder) {
+	cmd := exePath " """ d2path """ --seed " seed " --difficulty " difficulty " --edge --output-folder " folder
+	RunWait, %comspec% /c %cmd%,,hide
 }
 
 ; runs a command and captures stdout without flashing a cmd window

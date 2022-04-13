@@ -3,8 +3,6 @@ class Areas {
     mapSeed := 0
     difficulty := 0
     json :=             ; parsed JSON fro ALL areas
-    ;areas := []         ; list of Area.ahk
-	
 
     __new(ByRef mapSeed, ByRef difficulty) {
         this.mapSeed := mapSeed
@@ -24,17 +22,16 @@ class Areas {
         areaNosToStitch := this.getStitchedMaps(mapId)
         for k, extMapId in areaNosToStitch
         {
-			areaData := this.getMapJSON(extMapId)
 			thisArea := new Area(this.mapSeed, this.difficulty, extMapId, this.cacheFolder)
             if (extMapId == mapId) {
-                stitchedDimensions := { "x": (thisArea.json.offset.x - (padding/2)), "y": (thisArea.json.offset.y - (padding/2)), "width": (thisArea.json.size.width + (padding)), "height": (thisArea.json.size.height + (padding)) }
+                stitchedDimensions := { "x": (thisArea.json.offset.x), "y": (thisArea.json.offset.y), "width": (thisArea.json.size.width), "height": (thisArea.json.size.height) }
             }
             areasToStitch.push(thisArea)
         }
 
         pToken := Gdip_Startup()
-        stitchedWidth := stitchedDimensions.width * renderScale
-        stitchedHeight := stitchedDimensions.height * renderScale
+        stitchedWidth := (stitchedDimensions.width + padding) * renderScale
+        stitchedHeight := (stitchedDimensions.height + padding) * renderScale
         pBitmap := Gdip_CreateBitmap(stitchedWidth, stitchedHeight)
         hbm := CreateDIBSection(stitchedWidth, stitchedHeight)
         hdc := CreateCompatibleDC()
@@ -44,9 +41,9 @@ class Areas {
         ;pBitmap := Gdip_RotateBitmapAtCenter(pBitmap, 45) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
         for k, area in areasToStitch
         {
-            x := area.json.offset.x - stitchedDimensions.x
-            y := area.json.offset.y - stitchedDimensions.y
-            Gdip_DrawImage(G, area.rawBitmap, x * renderScale, y * renderScale, area.json.size.width * renderScale, area.json.size.height * renderScale)
+            x := area.json.offset.x - stitchedDimensions.x + (padding /2)
+            y := area.json.offset.y - stitchedDimensions.y + (padding /2)
+            Gdip_DrawImage(G, area.rawBitmap, x * renderScale, y * renderScale, area.bmpWidth * renderScale, area.bmpHeight * renderScale)
         }
 
         SelectObject(hdc, obm)

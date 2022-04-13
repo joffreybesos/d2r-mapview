@@ -7,7 +7,7 @@ generateMapImage(ByRef settings, ByRef areas, ByRef mapId, ByRef imageData) {
     
     sFile := A_Temp . "\" . areas.mapSeed . "_" . areas.difficulty . "_" . mapId "_" renderScale ".bmp"
 
-    area := areas.getArea(mapId, renderScale)
+    area := areas.getArea(mapId, 1)
     respHeaders := area.getHeaders()
     area.saveImageToFile(sFile)
 

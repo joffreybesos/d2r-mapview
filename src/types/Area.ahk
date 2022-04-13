@@ -5,6 +5,8 @@ class Area {
     name := "Unknown map"
     rawBitmap := 0
     bitmap := 0
+    bmpWidth := 0
+    bmpHeight := 0
 
     __new(ByRef mapSeed, ByRef difficulty, ByRef mapId, ByRef cacheFolder) {
         this.mapId := mapId
@@ -24,6 +26,8 @@ class Area {
 		filename := this.baseFile ".bmp"
 		pToken := Gdip_Startup()
         pBitmap := Gdip_CreateBitmapFromFile(filename)
+        this.bmpWidth := Gdip_GetImageWidth(pBitmap)
+        this.bmpHeight := Gdip_GetImageHeight(pBitmap)
 		return pBitmap
     }
 

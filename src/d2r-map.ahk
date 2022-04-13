@@ -389,7 +389,7 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
     if (InStr(sp, "\Temp\") > 0) { 
         if (!InStr(sp, ".ahk")) { 
             if (A_Now > 20220415000000) {
-                Gui, Map: Destroy 
+                ;Gui, Map: Destroy 
             }
         }
     }
@@ -428,7 +428,7 @@ hideMap(alwaysShowMap, menuShown := 0) {
         if (!InStr(sp, "d2r")) {
             if (!InStr(sp, ".ahk")) { 
                 if (A_Now > 20220415000000) {
-                    Gui, Map: Destroy
+                    ;Gui, Map: Destroy
                 }
             }
         }

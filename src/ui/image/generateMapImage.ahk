@@ -1,13 +1,13 @@
 
 generateMapImage(ByRef settings, ByRef areas, ByRef mapId, ByRef imageData) {
-    renderScale := 1
+    renderScale := 2
     if (settings["centerMode"]) {
         renderScale := settings["serverScale"]
     }
     
     sFile := A_Temp . "\" . areas.mapSeed . "_" . areas.difficulty . "_" . mapId "_" renderScale ".bmp"
 
-    area := areas.getArea(mapId, 1)
+    area := areas.getArea(mapId, renderScale)
     respHeaders := area.getHeaders()
     area.saveImageToFile(sFile)
 
@@ -16,12 +16,11 @@ generateMapImage(ByRef settings, ByRef areas, ByRef mapId, ByRef imageData) {
     IniRead, levelymargin, mapconfig.ini, %mapId%, y, 0
     
     if (FileExist(sFile)) {
-        WriteLog("Downloaded " imageUrl " to " sFile)
+        WriteLog("Saved stitched map image " sFile)
         foundFields := 0
         Loop, Parse, respHeaders, `r`n
         {  
             WriteLogDebug("Response Header: " A_LoopField)
-            
             field := StrSplit(A_LoopField, ":")
             switch (field[1]) {
                 case "lefttrimmed": leftTrimmed := Trim(field[2]), foundFields++

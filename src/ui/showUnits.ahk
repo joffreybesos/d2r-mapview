@@ -158,7 +158,7 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
     ; timeStamp("drawPlayer")
     ; timeStamp("unitsEnd")
     if (settings["centerMode"]) {
-        
+        SetFormat, Integer, D
         leftMargin := (gameWidth/2) - xPosDot + (settings["centerModeXoffset"] /2)
         , topMargin := (gameHeight/2) - yPosDot + (settings["centerModeYoffset"] /2)
         , regionWidth := gameWidth
@@ -174,7 +174,7 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
             , regionHeight := gameHeight - topMargin + windowTopMargin
         }
         ;ToolTip % "`n`n`n`n" regionX " " regionY " " regionWidth " " regionHeight
-        WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapHwnd1%
+        ;WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapHwnd1%
         ;WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %unitHwnd1%
         UpdateLayeredWindow(unitHwnd1, unitsLayer.hdc, 0, 0, gameWidth, gameHeight)
         Gdip_GraphicsClear( unitsLayer.G )

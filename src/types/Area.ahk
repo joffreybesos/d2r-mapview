@@ -10,7 +10,7 @@ class Area {
 
     __new(ByRef mapSeed, ByRef difficulty, ByRef mapId, ByRef cacheFolder) {
         this.mapId := mapId
-        this.name := getMapName(this.mapId)
+        this.name := getMapName(mapId)
         this.baseFile := cacheFolder "\" mapSeed "_" difficulty "_" mapId
         this.json := this.getMapJSON()
         this.rawBitmap := this.getBitmap()

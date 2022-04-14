@@ -117,7 +117,7 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
     DeleteObject(hbm)
     DeleteDC(hdc)
     Gdip_DeleteGraphics(G)
-    Gdip_DisposeImage(pBitmap)
+    ;Gdip_DisposeImage(pBitmap)
     ElapsedTime := A_TickCount - StartTime
     ; WriteLogDebug("Drew map " ElapsedTime " ms taken")
     uiData := { "scaledWidth": scaledWidth, "scaledHeight": scaledHeight, "sizeWidth": Width, "sizeHeight": Height, "rotatedWidth": rotatedWidth, "rotatedHeight": rotatedHeight }

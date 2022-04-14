@@ -39,11 +39,11 @@ class Areas {
         Gdip_SetSmoothingMode(G, 4) 
         G := Gdip_GraphicsFromImage(pBitmap)
         ;pBitmap := Gdip_RotateBitmapAtCenter(pBitmap, 45) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
-        for k, area in areasToStitch
+        for k, thisArea in areasToStitch
         {
-            x := area.json.offset.x - stitchedDimensions.x + (padding /2)
-            y := area.json.offset.y - stitchedDimensions.y + (padding /2)
-            Gdip_DrawImage(G, area.rawBitmap, x * renderScale, y * renderScale, area.bmpWidth * renderScale, area.bmpHeight * renderScale)
+            x := thisArea.json.offset.x - stitchedDimensions.x + (padding /2)
+            y := thisArea.json.offset.y - stitchedDimensions.y + (padding /2)
+            Gdip_DrawImage(G, thisArea.rawBitmap, x * renderScale, y * renderScale, thisArea.bmpWidth * renderScale, thisArea.bmpHeight * renderScale)
         }
 
         SelectObject(hdc, obm)
@@ -54,7 +54,7 @@ class Areas {
     }
 
 
-    getStitchedMaps(mapId) {
+    getStitchedMaps(ByRef mapId) {
         switch (mapId) {
 			;// act 1
 			case 1: return [1,2,3,4,17]

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.6] - 2021-04-16 - Bug fixes
+
+- Added auto-retry to downloading map images from the map server
+- Better error logging for mapserver connection issues
+- Fixed issue where you would hear item alerts from previous game session when starting new session
+- Help will only show when you have D2R active
+
 ## [2.7.5] - 2021-04-15 - Party info now shows level
 
 - Fixed party location broken by patch 2.4

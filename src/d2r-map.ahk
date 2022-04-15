@@ -57,7 +57,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\UnitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UIAssistLayer.ahk
 
-global version := "2.7.5"
+global version := "2.7.6"
 
 lastMap := ""
 exitArray := []
@@ -589,6 +589,8 @@ HistoryToggle:
     ; IniWrite, %historyToggle%, settings.ini, Settings, showGameInfo
     return
 }
+
+#IfWinActive ahk_exe D2R.exe
 ^H::
 {
     if (helpToggle) {
@@ -601,10 +603,11 @@ HistoryToggle:
     helpToggle := !helpToggle
     return
 }
+
 ~TAB::
 ~Space::
 {
-    WriteLogDebug("TAB or Space pressed")
+    WriteLogDebug("TAB or Space pressed, map visibility being checked")
     checkAutomapVisibility(d2rprocess, gameMemoryData)
     return
 }
@@ -614,6 +617,15 @@ HistoryToggle:
     helpToggle := 1
     return
 }
+
+~+F11::
+{
+    WriteLog("Reloading script!")
+    Reload
+    return
+}
+
+
 ~+F9::
 {
     WriteLog("Debug mode set to " debug)

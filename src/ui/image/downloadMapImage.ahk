@@ -79,6 +79,13 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
             }
         } catch e {
             errMsg := e.message
+            errMsg := StrReplace(errMsg, "`nSource:`t`tWinHttp.WinHttpRequest`nDescription:`t", "")
+            errMsg := StrReplace(errMsg, "`r`n`nHelpFile:`t`t(null)`nHelpContext:`t0", "")
+            WriteLog(errMsg)
+            Loop, Parse, respHeaders, `n
+            {
+                WriteLog("Response Header: " A_LoopField)
+            }
             if (Instr(errMsg, "The operation timed out")) {
                 WriteLog("ERROR: Timeout downloading image from " imageUrl)
                 WriteLog("You can try opening the above URL in your browser to test connectivity")
@@ -86,21 +93,16 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
                     WriteLog("Prefetching was enabled")
                 }
                 if (tries == 0) {
-                    WriteLog("Retrying...")
+                    WriteLog("ERROR: Downloading image " errMsg ", Retrying...")
                     downloadMapImage(settings, gameMemoryData, ByRef mapData, 1)
                 } else {
                     Msgbox, 48, d2r-mapview %version%, %errormsg8%`n%errormsg9%`n`n%errormsg3%
                 }
             } else if (Instr(errMsg, "The requested header was not found")) {
-                Loop, Parse, respHeaders, `n
-                {
-                    WriteLog("Response Header: " A_LoopField)
-                }
                 WriteLog("ERROR: Did not find an expected header " imageUrl)
-                WriteLog("If it didn't find the correct headers, you likely need to update your server docker image")
+                WriteLog("If it didn't find the correct headers, something went wrong reading from the map server")
                 Msgbox, 48, d2r-mapview %version%, %errormsg1%`n%errormsg7%`n`n%errormsg3%
             } else {
-                WriteLog(errMsg)
                 Loop, Parse, respHeaders, `n
                 {
                     WriteLog("Response Header: " A_LoopField)
@@ -109,13 +111,23 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
                 if (FileExist(sFile)) {
                     WriteLog("Downloaded image to file, but something else went wrong " sFile)
                 }
-                If InStr(baseUrl, "map.d2r-mapview.xyz")
-                    Msgbox, 48, d2r-mapview %version%, %errormsg1%`n%errormsg2%`n`n%errormsg3%
-                Else
-                    Msgbox, 48, d2r-mapview %version%, %errormsg4% %baseUrl%.`n%errormsg5%`n%errormsg6%`n`n%errMsg%`n%errormsg3%
+                if (tries == 0) {
+                    WriteLog("ERROR: Downloading image " errMsg ", Retrying...")
+                    downloadMapImage(settings, gameMemoryData, ByRef mapData, 1)
+                } else {
+                    If InStr(baseUrl, "map.d2r-mapview.xyz") {
+                        WriteLog("ERROR: Still using free server, you are using old settings")
+                        Msgbox, 48, d2r-mapview %version%, %errormsg1%`n%errormsg2%`n`n%errormsg3%
+                    } Else {
+                        WriteLog("ERROR: Could not load map even after retrying " errMsg)
+                        Msgbox, 48, d2r-mapview %version%, %errormsg4% %baseUrl%.`n%errormsg5%`n%errormsg6%`n`n%errMsg%`n%errormsg3%
+                    }
+                }
             }
         }
-        FileAppend, %respHeaders%, %sFileTxt%
+        if (tries == 0) {
+            FileAppend, %respHeaders%, %sFileTxt%
+        }
     }
     if (FileExist(sFileTxt)) {
         FileRead, respHeaders, %sFileTxt%
@@ -146,9 +158,12 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
         }
         if (foundFields < 9) {
             WriteLog("ERROR: Did not find all expected response headers, turn on debug mode to view. Unexpected behaviour may occur")
+            Loop, Parse, respHeaders, `n
+            {
+                WriteLog("Response Header: " A_LoopField)
+            }
         }
     }
-    ;WriteLog("sFile: " sFile ", leftTrimmed: " leftTrimmed ", topTrimmed: " topTrimmed ", levelScale: " levelScale ", levelxmargin: " levelxmargin ", levelymargin: " levelymargin ", mapOffsetX: " mapOffsetX ", mapOffsety: " mapOffsety ", mapwidth: " mapwidth ", mapheight: " mapheight ", exits: " exits  ", waypoint: " waypoint  ", bosses: " bosses)
     mapData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "levelScale": levelScale, "levelxmargin": levelxmargin, "levelymargin": levelymargin, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight, "exits": exits, "waypoint": waypoint, "bosses": bosses, "quests": quests, "prerotated": prerotated, "originalwidth": originalwidth, "originalheight": originalheight }
 } 
 

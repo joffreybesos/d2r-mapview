@@ -16,6 +16,9 @@ checkServer(ByRef settings) {
             startMapServer("d2-mapserver.exe", settings)
         } else {
             emsg := e.message
+            emsg := StrReplace(emsg, "`nSource:`t`tWinHttp.WinHttpRequest`nDescription:`t", "")
+            emsg := StrReplace(emsg, "`r`n`nHelpFile:`t`t(null)`nHelpContext:`t0", "")
+            WriteLog(emsg)
             Msgbox, 48, d2r-mapview %version%, %errormsg13% %baseUrl%`n`n%errormsg14%`n%errormsg15%`n%errormsg16%`n%emsg%`n`n%errormsg3%
             ExitApp
         }
@@ -31,7 +34,7 @@ startMapServer(serverExe, ByRef settings) {
     errormsg18 := localizedStrings["errormsg18"]
     errormsg19 := localizedStrings["errormsg19"]
     errormsg20 := localizedStrings["errormsg20"]
-    WriteLog("Starting map server...")
+    WriteLog("Attempting to start map server...")
     Runwait, taskkill /im %serverExe% /f
     Runwait, taskkill /im node.exe /f
 

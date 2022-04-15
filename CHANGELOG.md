@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [2.7.5] - 2021-04-15 - Party info now shows level
 
-- Fixed party location for D2R 2.4
+- Fixed party location broken by patch 2.4
+- Fixed game name in game history broken by patch 2.4
 - Under each player icon you can now see the player level as well as location
 - Localisation has been added to the player location (font sizes may be a bit weird)
 - Fixed issue with Kurast Shield missing from list of base items

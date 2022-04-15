@@ -105,38 +105,56 @@ global offsets := []
 CreateSettingsGUI(settings, localizedStrings)
 
 switchMapModeKey := settings["switchMapMode"]
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %switchMapModeKey%, SwitchMapMode
-
+if (switchMapModeKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %switchMapModeKey%, SwitchMapMode
+}
 historyToggleKey := settings["historyToggleKey"]
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %historyToggleKey%, HistoryToggle
+if (historyToggleKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %historyToggleKey%, HistoryToggle
+}
 
 alwaysShowKey := settings["alwaysShowKey"]
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %alwaysShowKey%, MapAlwaysShow
+if (alwaysShowKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %alwaysShowKey%, MapAlwaysShow
+}
 
 increaseMapSizeKey := settings["increaseMapSizeKey"]
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %increaseMapSizeKey%, MapSizeIncrease
+if (increaseMapSizeKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %increaseMapSizeKey%, MapSizeIncrease
+}
 
 decreaseMapSizeKey := settings["decreaseMapSizeKey"]
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %decreaseMapSizeKey%, MapSizeDecrease
+if (decreaseMapSizeKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %decreaseMapSizeKey%, MapSizeDecrease
+}
 
 moveMapLeftKey := settings["moveMapLeft"]
-moveMapRightKey := settings["moveMapRight"]
-moveMapUpKey := settings["moveMapUp"]
-moveMapDownKey := settings["moveMapDown"]
+if (moveMapLeftKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %moveMapLeftKey%, MoveMapLeft
+}
 
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %moveMapLeftKey%, MoveMapLeft
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %moveMapRightKey%, MoveMapRight
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %moveMapUpKey%, MoveMapUp
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %moveMapDownKey%, MoveMapDown
+moveMapRightKey := settings["moveMapRight"]
+if (moveMapLeftKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %moveMapRightKey%, MoveMapRight
+}
+moveMapUpKey := settings["moveMapUp"]
+if (moveMapLeftKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %moveMapUpKey%, MoveMapUp
+}
+moveMapDownKey := settings["moveMapDown"]
+if (moveMapLeftKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %moveMapDownKey%, MoveMapDown
+}
+
 errormsg3 := localizedStrings["errormsg3"]
 errormsg10:= localizedStrings["errormsg10"]
 errormsg11 := localizedStrings["errormsg11"]

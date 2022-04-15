@@ -4,7 +4,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\logging.ahk
 
 downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
-
+    static serverisv10
     errormsg1 := localizedStrings["errormsg1"]
     errormsg2 := localizedStrings["errormsg2"]
     errormsg3 := localizedStrings["errormsg3"]
@@ -49,85 +49,66 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
         ; if either file is missing, do a fresh download
         FileDelete, %sFile%
         FileDelete, %sFileTxt%
+        tries := 0
+        Loop, 5
+        {
+            tries++
+            try {
+                whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+                whr.SetTimeouts("45000", "45000", "45000", "45000")
+                whr.Open("GET", imageUrl, true)
+                whr.Send()
+                whr.WaitForResponse()
 
-        try {
-            whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-            whr.SetTimeouts("45000", "45000", "45000", "45000")
-            whr.Open("GET", imageUrl, true)
-            whr.Send()
-            whr.WaitForResponse()
-            
-            fileContents := whr.ResponseBody
-            respHeaders := whr.GetAllResponseHeaders
-            vStream := whr.ResponseStream
-            
-            if (ComObjType(vStream) = 0xD) {      ;VT_UNKNOWN = 0xD
-                pIStream := ComObjQuery(vStream, "{0000000c-0000-0000-C000-000000000046}")	;defined in ObjIdl.h
+                fileContents := whr.ResponseBody
+                respHeaders := whr.GetAllResponseHeaders
+                vStream := whr.ResponseStream
 
-                oFile := FileOpen( sFile, "w")
-                Loop {	
-                    VarSetCapacity(Buffer, 8192)
-                    hResult := DllCall(NumGet(NumGet(pIStream + 0) + 3 * A_PtrSize)	; IStream::Read 
-                        , "ptr", pIStream	
-                        , "ptr", &Buffer			;pv [out] A pointer to the buffer which the stream data is read into.
-                        , "uint", 8192			;cb [in] The number of bytes of data to read from the stream object.
-                        , "ptr*", cbRead)		;pcbRead [out] A pointer to a ULONG variable that receives the actual number of bytes read from the stream object. 
-                    oFile.RawWrite(&Buffer, cbRead)
-                } Until (cbRead = 0)
-                ObjRelease(pIStream)
-                oFile.Close()
-            }
-        } catch e {
-            errMsg := e.message
-            errMsg := StrReplace(errMsg, "`nSource:`t`tWinHttp.WinHttpRequest`nDescription:`t", "")
-            errMsg := StrReplace(errMsg, "`r`n`nHelpFile:`t`t(null)`nHelpContext:`t0", "")
-            WriteLog(errMsg)
-            Loop, Parse, respHeaders, `n
-            {
-                WriteLog("Response Header: " A_LoopField)
-            }
-            if (Instr(errMsg, "The operation timed out")) {
-                WriteLog("ERROR: Timeout downloading image from " imageUrl)
-                WriteLog("You can try opening the above URL in your browser to test connectivity")
-                if (settings["enablePrefetch"]) {
-                    WriteLog("Prefetching was enabled")
+                if (ComObjType(vStream) = 0xD) {      ;VT_UNKNOWN = 0xD
+                    pIStream := ComObjQuery(vStream, "{0000000c-0000-0000-C000-000000000046}")	;defined in ObjIdl.h
+
+                    oFile := FileOpen( sFile, "w")
+                    Loop {	
+                        VarSetCapacity(Buffer, 8192)
+                        hResult := DllCall(NumGet(NumGet(pIStream + 0) + 3 * A_PtrSize)	; IStream::Read 
+                            , "ptr", pIStream	
+                            , "ptr", &Buffer			;pv [out] A pointer to the buffer which the stream data is read into.
+                            , "uint", 8192			;cb [in] The number of bytes of data to read from the stream object.
+                            , "ptr*", cbRead)		;pcbRead [out] A pointer to a ULONG variable that receives the actual number of bytes read from the stream object. 
+                        oFile.RawWrite(&Buffer, cbRead)
+                    } Until (cbRead = 0)
+                    ObjRelease(pIStream)
+                    oFile.Close()
                 }
-                if (tries == 0) {
-                    WriteLog("ERROR: Downloading image " errMsg ", Retrying...")
-                    downloadMapImage(settings, gameMemoryData, ByRef mapData, 1)
-                } else {
-                    Msgbox, 48, d2r-mapview %version%, %errormsg8%`n%errormsg9%`n`n%errormsg3%
-                }
-            } else if (Instr(errMsg, "The requested header was not found")) {
-                WriteLog("ERROR: Did not find an expected header " imageUrl)
-                WriteLog("If it didn't find the correct headers, something went wrong reading from the map server")
-                Msgbox, 48, d2r-mapview %version%, %errormsg1%`n%errormsg7%`n`n%errormsg3%
-            } else {
+                if (respHeaders)
+                    break
+            } catch e {
+                errMsg := e.message
+                errMsg := StrReplace(errMsg, "`nSource:`t`tWinHttp.WinHttpRequest`nDescription:`t", "")
+                errMsg := StrReplace(errMsg, "`r`n`nHelpFile:`t`t(null)`nHelpContext:`t0", "")
+                WriteLog("ERROR: " errMsg)
                 Loop, Parse, respHeaders, `n
                 {
                     WriteLog("Response Header: " A_LoopField)
                 }
-                WriteLog("ERROR: Error downloading image from " imageUrl)
                 if (FileExist(sFile)) {
-                    WriteLog("Downloaded image to file, but something else went wrong " sFile)
+                    WriteLog("Map image exists in cache " sFile)
                 }
-                if (tries == 0) {
-                    WriteLog("ERROR: Downloading image " errMsg ", Retrying...")
-                    downloadMapImage(settings, gameMemoryData, ByRef mapData, 1)
-                } else {
-                    If InStr(baseUrl, "map.d2r-mapview.xyz") {
-                        WriteLog("ERROR: Still using free server, you are using old settings")
-                        Msgbox, 48, d2r-mapview %version%, %errormsg1%`n%errormsg2%`n`n%errormsg3%
-                    } Else {
-                        WriteLog("ERROR: Could not load map even after retrying " errMsg)
-                        Msgbox, 48, d2r-mapview %version%, %errormsg4% %baseUrl%.`n%errormsg5%`n%errormsg6%`n`n%errMsg%`n%errormsg3%
-                    }
+                if (Instr(errMsg, "The operation timed out")) {
+                    WriteLog("ERROR: Timeout downloading image from " imageUrl)
+                    WriteLog("The mapserver likely isn't running for some reason")
                 }
+                if (A_Index == 5) {
+                    WriteLog("ERROR: Could not load map even after retrying 5 times " errMsg)
+                    Msgbox, 48, d2r-mapview %version%, %errormsg4% %baseUrl%.`n%errormsg5%`n%errormsg6%`n`n%errMsg%`n%errormsg3%
+                }
+                FileDelete, %sFile%
             }
         }
-        if (tries == 0) {
-            FileAppend, %respHeaders%, %sFileTxt%
+        if (tries > 1) {
+            WriteLog("Downloaded image after " tries " tries")
         }
+        FileAppend, %respHeaders%, %sFileTxt%
     }
     if (FileExist(sFileTxt)) {
         FileRead, respHeaders, %sFileTxt%
@@ -163,6 +144,14 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
                 WriteLog("Response Header: " A_LoopField)
             }
         }
+        ; if prerotated returns true at least once then it will be for every other request
+        ; this should stop any weird rotation issues
+        if (prerotated) {
+            serverisv10 := true
+        }
+        if (serverisv10) {
+            prerotated := true
+        }
     }
     mapData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "levelScale": levelScale, "levelxmargin": levelxmargin, "levelymargin": levelymargin, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight, "exits": exits, "waypoint": waypoint, "bosses": bosses, "quests": quests, "prerotated": prerotated, "originalwidth": originalwidth, "originalheight": originalheight }
 } 
@@ -173,4 +162,10 @@ convertToBool(field) {
     if (Trim(field) == "true")
         return 1
     return 0
+}
+
+
+downloadImageFile(ByRef imageUrl, ByRef sFile) {
+
+    return respHeaders
 }

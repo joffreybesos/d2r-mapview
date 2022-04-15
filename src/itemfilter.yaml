@@ -12,6 +12,7 @@ enabledAlerts:
   - Runes
   - RareHeadGear
   - RareJewelry
+  - Keys
   - GemsAmethyst
   - GemsDiamond
   - GemsEmerald
@@ -197,6 +198,13 @@ Alerts:
     #ignoreidentified: true     # only alert if the jewel is not identified
     color: 6D6DFF
     
+  Keys:
+    items:
+      - Key of Terror
+      - Key of Hate
+      - Key of Destruction
+    color: ffa600
+
   Charms:
     items:
       - Small Charm

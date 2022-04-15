@@ -7,7 +7,7 @@
 #Include %A_ScriptDir%\memory\readParty.ahk
 
 readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryData) {
-    static items
+    global items
     static objects
     static partyList
     hoveredMob := {}

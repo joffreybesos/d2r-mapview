@@ -199,6 +199,7 @@ While 1 {
         if (offsetAttempts > 25) {
             hideMap(false)
             lastlevel:=
+            items := []
             shrines := []
             seenItems := []
             newGame := 1
@@ -265,6 +266,7 @@ While 1 {
                 lastSeed := gameMemoryData["mapSeed"]
                 ;ipAddress := readIPAddress(d2rprocess, gameWindowId, offsets, session)
                 shrines := []
+                items := []
                 seenItems := []
                 gameInfoLayer.updateSessionStart(session.startTime)
                 ;gameInfoLayer.drawInfoText(currentFPS)
@@ -373,14 +375,6 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
     , hideTown:= settings["hideTown"]
     , levelNo:= gameMemoryData["levelNo"]
     , isMenuShown:= gameMemoryData["menuShown"]
-    ;WriteLogDebug("Checking visibility, hideTown: " hideTown " alwaysShowMap: " alwaysShowMap)
-    if (InStr(sp, "\Temp\") > 0) { 
-        if (!InStr(sp, ".ahk")) { 
-            if (A_Now > 20220415000000) {
-                Gui, Map: Destroy 
-            }
-        }
-    }
     if ((levelNo == 1 or levelNo == 40 or levelNo == 75 or levelNo == 103 or levelNo == 109) and hideTown) {
         if (isMapShowing) {
             WriteLogDebug("Hiding town " levelNo " since hideTown is set to true")
@@ -413,13 +407,6 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
 
 hideMap(alwaysShowMap, menuShown := 0) {
     if ((alwaysShowMap == false) or menuShown) {
-        if (!InStr(sp, "d2r")) {
-            if (!InStr(sp, ".ahk")) { 
-                if (A_Now > 20220415000000) {
-                    Gui, Map: Destroy
-                }
-            }
-        }
         Gui, Map: Hide
         Gui, Units: Hide
         if (isMapShowing) {

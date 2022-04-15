@@ -67,6 +67,7 @@ WriteLog("*******************************************************************")
 WriteLog("* Map overlay started https://github.com/joffreybesos/d2r-mapview *")
 WriteLog("*******************************************************************")
 WriteLog("Version: " version)
+WriteLog("Working folder: " A_ScriptDir)
 WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyVW3uj")
 ClearCache(A_Temp)
 global settings

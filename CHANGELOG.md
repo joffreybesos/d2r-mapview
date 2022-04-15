@@ -4,11 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [2.7.6] - 2021-04-16 - Bug fixes
 
-- Fixed issue where occasionally the map wouldn't show
+- Fixed issue in last release where occasionally the map wouldn't show
 - Added auto-retry to downloading map images from the map server
 - Better error logging for mapserver connection issues
 - Fixed issue where you would hear item alerts from previous game session when starting new session
-- Ctrl+H Help will only show when you have D2R window active
+- Ctrl+H help will only show when you have D2R window active
 
 ## [2.7.5] - 2021-04-15 - Party info now shows level
 

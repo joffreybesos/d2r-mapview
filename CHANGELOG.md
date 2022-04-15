@@ -2,8 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.7.4] - 2021-03-29 - Resist stats for mobs
+## [2.7.5] - 2021-03-29 - Party info now shows level
 
+- Under each player icon you can now see the player level
+- Localisation has been added to the player location (font sizes may be a bit weird)
+- Fixed issue with Kurast Shield missing from list of base items
+
+## [2.7.4] - 2021-03-29 - Party member locations and resist stats for mobs
+
+- For party members, their location will now appear under their icon
+  Alignment of the text may be off for some resolutions, please let me know in #support
+  The player location will only appear for those in your party
+  You can turn this off in settings (Ctrl+O)
 - When you hover over a monster, you will see their exact resistances now
   Each box will show their resists, >100 means immune
   This is to be help fine tune any 'minus enemy resist' gear

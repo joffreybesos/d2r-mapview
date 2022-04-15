@@ -42,51 +42,52 @@ class SessionTableLayer {
     drawTable(ByRef sessionList, ByRef historyToggle) {
         if (WinActive(gameWindowId) and historyToggle) {
             Gui, SessionTable: Show, NA
+        
+            fontSize := this.historyTextSize
+            headery := 40
+            datay := 15
+            col1 := 5
+
+            ; lists is in reverse order
+            max := sessionList.length()
+            playerLevelList :=
+            playerNameList :=
+            gameNameList :=
+            gameTimeList :=
+            xpgainedList :=
+            Loop %max%
+            {
+                session := sessionList[(max-A_Index+1)]
+                rowNum := rowNum "" A_Index "`n"
+                playerLevelList := playerLevelList . session.getPreciseLevel() . "`n"
+                playerNameList := playerNameList . session.playerName . "`n"
+                gameNameList := gameNameList . session.gameName . "`n"
+                xpgainedList := xpgainedList . session.getExperienceGained() . "`n"
+                gameTimeList := gameTimeList . this.GetDurationFormatEx(session.duration) . "`n"
+            }
+            
+            col2 := this.drawData(col1, headery, fontSize, rowNum, 1 * fontSize)
+            col3 := this.drawData(col2, headery, fontSize, playerLevelList, 3 * fontSize)
+            col4 := this.drawData(col3, headery, fontSize, playerNameList, 7 * fontSize)
+            col5 := this.drawData(col4, headery, fontSize, gameNameList, 7 * fontSize)
+            col6 := this.drawData(col5, headery, fontSize, gameTimeList, 6 * fontSize)
+            col7 := this.drawData(col6, headery, fontSize, xpgainedList, 2 * fontSize)
+
+            this.drawHeader(col1, datay, fontSize, "#")
+            this.drawHeader(col2, datay, fontSize, "Lvl")
+            this.drawHeader(col3, datay, fontSize, "Character")
+            this.drawHeader(col4, datay, fontSize, "Game Name")
+            this.drawHeader(col5, datay, fontSize, "Duration")
+            this.drawHeader(col6, datay, fontSize, "+XP")
+
+            leftMargin := this.gameWindowX
+            if (this.historyTextAlignment == "RIGHT") {
+                leftMargin :=  this.gameWindowWidth - col7 +  this.gameWindowX - 5
+            }
+            UpdateLayeredWindow(this.SessionTableLayerHwnd, this.hdc, leftMargin, this.gameWindowY, this.gameWindowWidth, this.gameWindowHeight)
         } else {
             Gui, SessionTable: Hide
         }
-        fontSize := this.historyTextSize
-        headery := 40
-        datay := 15
-        col1 := 5
-
-        ; lists is in reverse order
-        max := sessionList.length()
-        playerLevelList :=
-        playerNameList :=
-        gameNameList :=
-        gameTimeList :=
-        xpgainedList :=
-        Loop %max%
-        {
-            session := sessionList[(max-A_Index+1)]
-            rowNum := rowNum "" A_Index "`n"
-            playerLevelList := playerLevelList . session.getPreciseLevel() . "`n"
-            playerNameList := playerNameList . session.playerName . "`n"
-            gameNameList := gameNameList . session.gameName . "`n"
-            xpgainedList := xpgainedList . session.getExperienceGained() . "`n"
-            gameTimeList := gameTimeList . this.GetDurationFormatEx(session.duration) . "`n"
-        }
-        
-        col2 := this.drawData(col1, headery, fontSize, rowNum, 1 * fontSize)
-        col3 := this.drawData(col2, headery, fontSize, playerLevelList, 3 * fontSize)
-        col4 := this.drawData(col3, headery, fontSize, playerNameList, 7 * fontSize)
-        col5 := this.drawData(col4, headery, fontSize, gameNameList, 7 * fontSize)
-        col6 := this.drawData(col5, headery, fontSize, gameTimeList, 6 * fontSize)
-        col7 := this.drawData(col6, headery, fontSize, xpgainedList, 2 * fontSize)
-
-        this.drawHeader(col1, datay, fontSize, "#")
-        this.drawHeader(col2, datay, fontSize, "Lvl")
-        this.drawHeader(col3, datay, fontSize, "Character")
-        this.drawHeader(col4, datay, fontSize, "Game Name")
-        this.drawHeader(col5, datay, fontSize, "Duration")
-        this.drawHeader(col6, datay, fontSize, "+XP")
-
-        leftMargin := this.gameWindowX
-        if (this.historyTextAlignment == "RIGHT") {
-            leftMargin :=  this.gameWindowWidth - col7 +  this.gameWindowX - 5
-        }
-        UpdateLayeredWindow(this.SessionTableLayerHwnd, this.hdc, leftMargin, this.gameWindowY, this.gameWindowWidth, this.gameWindowHeight)
         Gdip_GraphicsClear( this.G )
     }
 

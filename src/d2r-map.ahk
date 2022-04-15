@@ -53,10 +53,11 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\unitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\SessionTableLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\GameInfoLayer.ahk
+#Include %A_ScriptDir%\ui\gdip\PartyInfoLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UnitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UIAssistLayer.ahk
 
-global version := "2.7.4"
+global version := "2.7.5"
 
 lastMap := ""
 exitArray := []
@@ -183,6 +184,7 @@ currentFPS := 0
 
 historyText := new SessionTableLayer(settings)
 gameInfoLayer := new GameInfoLayer(settings)
+partyInfoLayer := new PartyInfoLayer(settings)
 
 While 1 {
     frameStart:=A_TickCount
@@ -218,9 +220,10 @@ While 1 {
                         sessionList := readSessionFile("GameSessionLog.csv")
                     }
                 }
-                gameInfoLayer.hide()
                 historyText.drawTable(sessionList, historyToggle)
             }
+            gameInfoLayer.hide()
+            partyInfoLayer.hide()
             offsetAttempts := 26
             WriteLogDebug("Offset attempts " offsetAttempts)
         }
@@ -235,6 +238,9 @@ While 1 {
         if (gameMemoryData["experience"]) {
             lastPlayerLevel:= gameMemoryData["playerLevel"]
             lastPlayerExperience:=gameMemoryData["experience"]
+        }
+        if (!levelNo) {
+            partyInfoLayer.hide()
         }
 
         if ((gameMemoryData["difficulty"] == "0" or gameMemoryData["difficulty"] == "1" or gameMemoryData["difficulty"] == "2") and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
@@ -324,6 +330,7 @@ While 1 {
             if (Mod(ticktock, 6)) {
                 checkAutomapVisibility(d2rprocess, gameMemoryData)
             }
+            
             lastlevel := gameMemoryData["levelNo"]
         } else {
             WriteLog("In Menu - no valid difficulty, levelno, or mapseed found '" gameMemoryData["difficulty"] "' '" gameMemoryData["levelNo"] "' '" gameMemoryData["mapSeed"] "'")
@@ -352,6 +359,7 @@ While 1 {
         , fpsTimer := A_TickCount
         if (playerOffset) {
             gameInfoLayer.drawInfoText(currentFPS)
+            partyInfoLayer.drawInfoText(gameMemoryData["partyList"], gameMemoryData["unitId"])
         }
     }
     if (frameDuration < ticksPerFrame) {
@@ -379,6 +387,7 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
         }
         hideMap(false)
     } else if gameMemoryData["menuShown"] {
+        partyInfoLayer.hide()
         if (isMapShowing) {
             WriteLogDebug("Hiding since UI menu is shown")
         }
@@ -389,13 +398,16 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
         }
         hideMap(false)
         gameInfoLayer.hide()
+        partyInfoLayer.hide()
     } else if (!isAutomapShown(d2rprocess, uiOffset) and !alwaysShowMap) {
         ; hidemap
         hideMap(alwaysShowMap)
     } else {
         unHideMap()
-        gameInfoLayer.show()
-    } 
+    }
+    if (!levelNo) {
+        partyInfoLayer.hide()
+    }
     return
 }
 
@@ -668,6 +680,8 @@ Update:
     historyText := new SessionTableLayer(settings)
     gameInfoLayer.delete()
     gameInfoLayer := new GameInfoLayer(settings)
+    partyInfoLayer.delete()
+    partyInfoLayer := new PartyInfoLayer(settings)
     if (cmode != settings["centerMode"]) { ; if centermode changed
         lastlevel := "INVALIDATED"
         imageData := {}

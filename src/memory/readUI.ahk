@@ -1,5 +1,5 @@
 
-readUI(ByRef d2rprocess, gameWindowId, settings, session) {
+readUI(ByRef d2rprocess) {
     ; UI offset 0x21F89AA
     base := d2rprocess.BaseAddress + offsets["uiOffset"]
     d2rprocess.readRaw(base - 0xA, buffer, 32)

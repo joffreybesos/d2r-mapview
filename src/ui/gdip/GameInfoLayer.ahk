@@ -12,11 +12,15 @@ class GameInfoLayer {
         gameInfoAlignment := settings["gameInfoAlignment"]
         StringUpper, gameInfoAlignment, gameInfoAlignment
         this.gameInfoAlignment := gameInfoAlignment
-        if (isWindowFullScreen(gameWindowId)) {
-            this.topPadding := 10
-        } else {
-            this.topPadding := 40
-        }
+
+        gameClientArea := getWindowClientArea()
+        gameWindowX := gameClientArea["X"]
+        gameWindowY := gameClientArea["Y"]
+        gameWindowWidth := gameClientArea["W"]
+        gameWindowHeight := gameClientArea["H"]
+
+        this.topPadding := 10
+
         height := this.topPadding
         if (settings["showGameInfo"]) {
             height := height + 80
@@ -25,11 +29,10 @@ class GameInfoLayer {
             height := height + 20
         }
         
-
         Gui, GameInfo: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
         this.GameInfoLayerHwnd := WinExist()
         this.y := 20
-        WinGetPos, gameWindowX, gameWindowY, gameWindowWidth, gameWindowHeight, %gameWindowId% 
+        
         this.gameWindowX := gameWindowX
         this.gameWindowY := gameWindowY
         this.textBoxWidth := 200

@@ -4,10 +4,12 @@
 #Include %A_ScriptDir%\memory\readObjects.ahk
 #Include %A_ScriptDir%\memory\readMissiles.ahk
 #Include %A_ScriptDir%\memory\readUI.ahk
+#Include %A_ScriptDir%\memory\readParty.ahk
 
 readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryData) {
     static items
     static objects
+    static partyList
     hoveredMob := {}
     ;StartTime := A_TickCount
     startingOffset := offsets["playerOffset"] ;default offset
@@ -15,6 +17,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     ;WriteLog("Looking for Level No address at player offset " playerOffset)
     , startingAddress := d2rprocess.BaseAddress + playerOffset
     , playerUnit := d2rprocess.read(startingAddress, "Int64")
+    , unitId := d2rprocess.read(playerUnit + 0x08, "UInt")
 
     ; get the level number
     , pPath := d2rprocess.read(playerUnit + 0x38, "Int64")
@@ -112,6 +115,11 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
         }
     }
 
+    ; get party
+    if (Mod(ticktock, 3)) {
+        ReadParty(d2rprocess, partyList)
+    }
+
     ; get objects
     if (settings["showShrines"] or settings["showPortals"] or settings["showChests"]) {
         if (Mod(ticktock, 6)) {
@@ -121,7 +129,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
         }
     }
     ; timeStamp("readUI")
-    menuShown := readUI(d2rprocess, gameWindowId, settings, session)
+    menuShown := readUI(d2rprocess)
     ; timeStamp("readUI")
 
     ; player position
@@ -141,7 +149,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     }
     ; timeStamp("playerposition")
     
-    gameMemoryData := {"pathAddress": pathAddress, "gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "missiles": missiles, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName, "experience": experience, "playerLevel": playerLevel, "menuShown": menuShown, "hoveredMob": hoveredMob }
+    gameMemoryData := {"pathAddress": pathAddress, "gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "missiles": missiles, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName, "experience": experience, "playerLevel": playerLevel, "menuShown": menuShown, "hoveredMob": hoveredMob, "partyList": partyList, "unitId": unitId}
     ;ElapsedTime := A_TickCount - StartTime
     ;OutputDebug, % ElapsedTime "`n"
     ;ToolTip % "`n`n`n`n" ElapsedTime

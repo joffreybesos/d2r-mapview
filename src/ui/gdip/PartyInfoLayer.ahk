@@ -71,7 +71,11 @@ class PartyInfoLayer {
             if (k > 1) { ; don't draw your own
                 if (v.partyId == playerPartyId) { ; only if in same party
                     levelName := getAreaName(v.area)
-					playerText := v.plevel " - " levelName
+					if (levelName) {
+						playerText := v.plevel " - " levelName
+					} else {
+						playerText := v.plevel
+					}
                     this.drawData(this.xoffset, this.yoffset + (this.spacing * (k-1)), fontSize, playerText)
                 }
             }

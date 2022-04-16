@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.7] - 2021-04-16 - More bug fixes
+
+- Fixed issue with map not rotating correctly introduced last version
+- MH will now autoretry 5 times to download the map image
+- You will no longer receive an error if you set an invalid hotkey
+
 ## [2.7.6] - 2021-04-16 - Bug fixes
 
 - Fixed issue in last release where occasionally the map wouldn't show

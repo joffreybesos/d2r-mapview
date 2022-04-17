@@ -67,6 +67,7 @@ calcThirdPoint(x1,y1,x2,y2, ByRef angle, ByRef distance) {
 
 
 
+
 drawFloatingText(ByRef unitsLayer, ByRef unitx, ByRef unity, ByRef fontSize, ByRef fontColor, ByRef background, ByRef font, ByRef text) {
     
     textSpaceWidth := StrLen(text) * fontSize

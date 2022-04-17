@@ -10,21 +10,16 @@ class SessionTableLayer {
     __new(ByRef settings) {
         Gui, SessionTable: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
         this.SessionTableLayerHwnd := WinExist()
-        if (isWindowFullScreen(gameWindowId)) {
-            this.y := 20
-        } else {
-            this.y := 40
-        }
-        
-        WinGetPos, gameWindowX, gameWindowY, gameWindowWidth, gameWindowHeight, %gameWindowId% 
-        this.gameWindowX := gameWindowX
-        this.gameWindowY := gameWindowY
-        this.gameWindowWidth := gameWindowWidth
-        this.gameWindowHeight := gameWindowHeight
+        this.y := 20
+        gameClientArea := getWindowClientArea()
+        this.gameWindowX := gameClientArea["X"]
+        this.gameWindowY := gameClientArea["Y"]
+        this.gameWindowWidth := gameClientArea["W"]
+        this.gameWindowHeight := gameClientArea["H"]
 
         pToken := Gdip_Startup()
         DetectHiddenWindows, On
-        this.hbm := CreateDIBSection(gameWindowWidth, gameWindowHeight)
+        this.hbm := CreateDIBSection(this.gameWindowWidth, this.gameWindowHeight)
         this.hdc := CreateCompatibleDC()
         this.obm := SelectObject(this.hdc, this.hbm)
         this.G := Gdip_GraphicsFromHDC(this.hdc)
@@ -62,7 +57,9 @@ class SessionTableLayer {
                 playerLevelList := playerLevelList . session.getPreciseLevel() . "`n"
                 playerNameList := playerNameList . session.playerName . "`n"
                 gameNameList := gameNameList . session.gameName . "`n"
-                xpgainedList := xpgainedList . session.getExperienceGained() . "`n"
+                formattedxp := this.GetNumberFormat(session.getExperienceGained())
+                StringTrimRight, formattedxp, formattedxp, 3
+                xpgainedList := xpgainedList . formattedxp . "`n"
                 gameTimeList := gameTimeList . this.GetDurationFormatEx(session.duration) . "`n"
             }
             
@@ -133,4 +130,18 @@ class SessionTableLayer {
         }
         return false
     }
+    GetNumberFormat(Value)
+    {
+        LCID := DllCall("GetThreadLocale", "UInt")
+        if (Size := DllCall("GetNumberFormat", "uint", Locale, "uint", 0, "str", Value, "ptr", 0, "ptr", 0, "int", 0)) {
+            VarSetCapacity(NumberStr, Size << !!A_IsUnicode, 0)
+            if (DllCall("GetNumberFormat", "uint", Locale, "uint", 0, "str", Value, "ptr", 0, "str", NumberStr, "int", Size))
+                return NumberStr
+        }
+
+
+
+        return false
+    }
 }
+

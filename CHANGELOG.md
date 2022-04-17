@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.8] - 2021-04-17
+
+- Game history XP now has number formatting (e.g. 1,745,324 instead of 1745324)
+
 ## [2.7.7] - 2021-04-16 - More bug fixes
 
 - Fixed issue with map not rotating correctly introduced last version

@@ -21,6 +21,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["alwaysShowMap"] := 0
     settings["hideTown"] := 0
     settings["edges"] := 1
+    settings["padding"] := 150
     settings["wallThickness"] := "0.5"
     settings["centerMode"] := 1
     settings["centerModeScale"] := "2.262"

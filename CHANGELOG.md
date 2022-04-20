@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 ## [2.7.8] - 2021-04-17
 
 - Game history XP now has number formatting (e.g. 1,745,324 instead of 1745324)
+- Korean localization wording has been fixed (thanks Master Delta K1)
+- Localization file is now saved as UTF-8
+- Fixed issue where certain settings were saved blank incorrectly
 
 ## [2.7.7] - 2021-04-16 - More bug fixes
 

@@ -36,13 +36,16 @@ drawExits(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
             if (exitArray[2] == "The Drifter Cavern") {
                 exitArray[2] := "Echo Chamber"
             }
-
-            exitName := localizedStrings[exitArray[2]]
-            ,exitX := (exitArray[3] * serverScale) + padding
-            ,exitY := (exitArray[4] * serverScale) + padding
-            ,correctedPos := correctPos(settings, exitX, exitY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-            ,exitX := correctedPos["x"] + centerLeftOffset
-            ,exitY := correctedPos["y"] + centerTopOffset
+            SetFormat Integer, D
+            areaLvls := getAreaLevel(exitArray[1])
+            , difficulty := gameMemoryData["difficulty"]
+            , areaLvl := areaLvls["" difficulty ""]
+            , exitName := localizedStrings[exitArray[2]] " (" areaLvl ")"
+            , exitX := (exitArray[3] * serverScale) + padding
+            , exitY := (exitArray[4] * serverScale) + padding
+            , correctedPos := correctPos(settings, exitX, exitY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+            , exitX := correctedPos["x"] + centerLeftOffset
+            , exitY := correctedPos["y"] + centerTopOffset
             drawFloatingText(unitsLayer, exitX, exitY-10, exitTextSize, exitTextColor, false, exocetFont, exitName)
         }
     }

@@ -19,7 +19,6 @@ class UIAssistLayer {
         this.drawRegionWidth := this.resistBoxWidth * 6
         this.drawRegionHeight := (gameHeight / 14)
         
-        
         pToken := Gdip_Startup()
         DetectHiddenWindows, On
         this.hbm := CreateDIBSection(this.drawRegionWidth, this.drawRegionHeight)
@@ -107,7 +106,10 @@ class UIAssistLayer {
 
     drawHealthText(fontSize, fontColor, text) {
         textx := 0
-        , texty := this.drawRegionHeight - (fontSize / 2)
+        , texty := this.drawRegionHeight - (fontSize) - 3
+        ;pPen := Gdip_CreatePen("0xccffffff", 5)
+        ;Gdip_DrawRectangle(this.G, pPen, textx, texty, this.drawRegionWidth, this.healthnumbersHeight)
+        ;Gdip_DeletePen(pPen)
         Options = x%textx% y%texty% Center vBottom c%fontColor% r8 s%fontSize%
         textx := textx + 1
         , texty := texty + 1

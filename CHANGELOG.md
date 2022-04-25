@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 - Game history XP now has number formatting (e.g. 1,745,324 instead of 1745324)
 - Monster health is shown as percentage under health bar
+- Exit names will now show area level in brackets next to it e.g. (85)
 - Korean localization wording has been fixed (thanks Master Delta K1)
 - Localization file is now saved as UTF-8
 - Fixed issue where certain settings were saved blank incorrectly

@@ -90,8 +90,8 @@ drawObjects(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageD
                 , textx := objectx - 150
                 , texty := objecty - 110
                 Options = x%textx% y%texty% Center Bold vBottom c%shrineColor% r8 s%shrineTextSize%
-                textx := textx + 2
-                , texty := texty + 2
+                textx := textx + 1
+                , texty := texty + 1
                 Options2 = x%textx% y%texty% Center Bold vBottom cff000000 r8 s%shrineTextSize%
                 Gdip_TextToGraphics(unitsLayer.G,shrineType, Options2, exocetFont, 300, 100)
                 Gdip_TextToGraphics(unitsLayer.G,shrineType, Options, exocetFont, 300, 100)

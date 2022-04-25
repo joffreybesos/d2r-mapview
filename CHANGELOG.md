@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [2.7.8] - 2021-04-17
 
 - Game history XP now has number formatting (e.g. 1,745,324 instead of 1745324)
+- Monster health is shown as percentage under health bar
 - Korean localization wording has been fixed (thanks Master Delta K1)
 - Localization file is now saved as UTF-8
 - Fixed issue where certain settings were saved blank incorrectly

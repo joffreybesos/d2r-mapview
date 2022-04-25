@@ -13,13 +13,16 @@ class UIAssistLayer {
         WinGetPos, , , gameWidth, gameHeight, %gameWindowId% 
         this.y := 0
         this.resistBoxWidth := (gameHeight / 50) * 1.2
-        this.resistBoxHeight := gameHeight / 50
+        this.resistBoxHeight := (gameHeight / 50)
         this.resistFontSize := gameHeight / 85
-        this.maxWidth := this.resistBoxWidth * 6
+        this.healthnumbersHeight := (this.resistFontSize) / 2
+        this.drawRegionWidth := this.resistBoxWidth * 6
+        this.drawRegionHeight := (gameHeight / 14)
+        
         
         pToken := Gdip_Startup()
         DetectHiddenWindows, On
-        this.hbm := CreateDIBSection(this.maxWidth, this.resistBoxHeight)
+        this.hbm := CreateDIBSection(this.drawRegionWidth, this.drawRegionHeight)
         this.hdc := CreateCompatibleDC()
         this.obm := SelectObject(this.hdc, this.hbm)
         this.G := Gdip_GraphicsFromHDC(this.hdc)
@@ -47,7 +50,7 @@ class UIAssistLayer {
             ;OutputDebug, % mob.txtFileNo " " resists["fire"] " " resists["cold"] "`n"
 
             numResists := (resists["physical"] > 0) + (resists["magic"] > 0) + (resists["fire"] > 0) + (resists["light"] > 0) + (resists["cold"] > 0) + (resists["poison"] > 0)
-            startx := (gameWidth / 2) - (this.maxWidth / 2)
+            startx := (gameWidth / 2) - (this.drawRegionWidth / 2)
             x := 0
             if (resists["physical"]) {
                 Gdip_FillRectangle(this.G, this.pBrushPhysical, x, 0, this.resistBoxWidth, this.resistBoxHeight)
@@ -65,23 +68,25 @@ class UIAssistLayer {
             }
             x := x + this.resistBoxWidth
             if (resists["light"]) {
-            Gdip_FillRectangle(this.G, this.pBrushLight, x, 0, this.resistBoxWidth, this.resistBoxHeight)
-            this.drawResistText(x, 0, resistFontSize, resists["light"])
+                Gdip_FillRectangle(this.G, this.pBrushLight, x, 0, this.resistBoxWidth, this.resistBoxHeight)
+                this.drawResistText(x, 0, resistFontSize, resists["light"])
             }
             x := x + this.resistBoxWidth
             if (resists["cold"]) {
-            Gdip_FillRectangle(this.G, this.pBrushCold, x, 0, this.resistBoxWidth, this.resistBoxHeight)
-            this.drawResistText(x, 0, resistFontSize, resists["cold"])
+                Gdip_FillRectangle(this.G, this.pBrushCold, x, 0, this.resistBoxWidth, this.resistBoxHeight)
+                this.drawResistText(x, 0, resistFontSize, resists["cold"])
             }
             x := x + this.resistBoxWidth
             if (resists["poison"]) {
-            Gdip_FillRectangle(this.G, this.pBrushPoison, x, 0, this.resistBoxWidth, this.resistBoxHeight)
-            this.drawResistText(x, 0, resistFontSize, resists["poison"])
+                Gdip_FillRectangle(this.G, this.pBrushPoison, x, 0, this.resistBoxWidth, this.resistBoxHeight)
+                this.drawResistText(x, 0, resistFontSize, resists["poison"])
             }
             x := x + this.resistBoxWidth
-            
+            healthpc := Round((mob.hp / mob.maxhp) * 100, 0) " %"
+            this.drawHealthText(this.resistFontSize * 0.8, "ffc6b276", healthpc) 
         }
-        UpdateLayeredWindow(this.UIAssistLayerHwnd, this.hdc, gamewindowx + startx, gamewindowy + this.y, this.maxWidth, this.resistBoxHeight)
+        
+        UpdateLayeredWindow(this.UIAssistLayerHwnd, this.hdc, gamewindowx + startx, gamewindowy + this.y, this.drawRegionWidth, this.drawRegionHeight)
         Gdip_GraphicsClear( this.G )
     }
 
@@ -98,6 +103,17 @@ class UIAssistLayer {
         Options2 = x%textx% y%texty% Center vCenter cff000000 r8 s%resistFontSize%
         Gdip_TextToGraphics(this.G, resistVal, Options2, formalFont, this.resistBoxWidth*2, this.resistBoxHeight)
         Gdip_TextToGraphics(this.G, resistVal, Options,  formalFont, this.resistBoxWidth*2, this.resistBoxHeight)
+    }
+
+    drawHealthText(fontSize, fontColor, text) {
+        textx := 0
+        , texty := this.drawRegionHeight - (fontSize / 2)
+        Options = x%textx% y%texty% Center vBottom c%fontColor% r8 s%fontSize%
+        textx := textx + 1
+        , texty := texty + 1
+        Options2 = x%textx% y%texty% Center vBottom cff000000 r8 s%fontSize%
+        Gdip_TextToGraphics(this.G, text, Options2, formalFont, this.drawRegionWidth, this.healthnumbersHeight)
+        Gdip_TextToGraphics(this.G, text, Options,  formalFont, this.drawRegionWidth, this.healthnumbersHeight)
     }
 
     createPens(ByRef settings) {

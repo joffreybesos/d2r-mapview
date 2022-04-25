@@ -48,12 +48,12 @@ readSettings(settingsFile, ByRef settings) {
     settings["showDeadMobs"] := 1
     settings["showMerc"] := 1
     settings["showTownNPCs"] := 1
-    settings["NPCsAsCross"] := 0
+    settings["NPCsAsCross"] := 1
     settings["showTownNPCNames"] := 1
     
     settings["showImmunities"] := 1
     settings["showPlayerDotCenter"] := 1
-    settings["playerAsCross"] := 0
+    settings["playerAsCross"] := 1
     settings["showOtherPlayers"] := 1
     settings["showOtherPlayerNames"] := 0
     settings["showShrines"] := 1

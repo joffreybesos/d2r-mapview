@@ -81,7 +81,7 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef mo
                             case 45: immunities["poison"] := statValue   ;poison resist
                         }
                         
-                        if (isBoss) {
+                        ;if (isBoss) {
                             if (statEnum == 6) {
                                 hp := statValue
                                 hp := hp >> 8
@@ -92,7 +92,7 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef mo
                                 maxhp := maxhp >> 8
                                 ; maxhp is the max hp WITHOUT any item/charm/skill boosts applied!
                             }
-                        }
+                        ;}
                     }
                     if (currentHoveringUnitId) {
                         if (currentHoveringUnitId == unitId) { ; monster currently has mouse hovering

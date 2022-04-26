@@ -39,8 +39,12 @@ drawExits(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
             SetFormat Integer, D
             areaLvls := getAreaLevel(exitArray[1])
             , difficulty := gameMemoryData["difficulty"]
-            , areaLvl := areaLvls["" difficulty ""]
-            , exitName := localizedStrings[exitArray[2]] " (" areaLvl ")"
+            , areaLvl := ""
+            if (areaLvls["" difficulty ""]) {
+                areaLvl := areaLvls["" difficulty ""]
+                areaLvl := " (" areaLvl ")"
+            }
+            exitName := localizedStrings[exitArray[2]] . areaLvl
             , exitX := (exitArray[3] * serverScale) + padding
             , exitY := (exitArray[4] * serverScale) + padding
             , correctedPos := correctPos(settings, exitX, exitY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)

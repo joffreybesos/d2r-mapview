@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.9] - 2021-04-26 - D2R Patch update
+
+- Updated offset/sigscan for game name, thanks @Rabbs
+- Game name in game history was broken by latest D2R patch
+
 ## [2.7.8] - 2021-04-26
 
 - Game history XP now has number formatting (e.g. 1,745,324 instead of 1745324)

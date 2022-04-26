@@ -27,11 +27,10 @@ PatternScan(ByRef d2r, ByRef offsets) {
     WriteLog("Scanned and found expansion offset: " expOffset)
 
     ; game data (IP and name) 
-    ; pattern := d2r.hexStringToPattern("48 83 C4 28 C3 1A DF")
-    ; patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
-    ; offsetBuffer := d2r.read(patternAddress - 0x44, "Int")
-    ; gameDataOffset := ((patternAddress - d2r.BaseAddress) + 0x145 + offsetBuffer)
-    gameDataOffset := 0x29B7A70
+    pattern := d2r.hexStringToPattern("44 88 25 ?? ?? ?? ?? 66 44 89 25 ?? ?? ?? ??")
+    patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
+    offsetBuffer := d2r.read(patternAddress + 0x3, "Int")
+    gameDataOffset := ((patternAddress - d2r.BaseAddress) - 0x121 + offsetBuffer)
     offsets["gameDataOffset"] := gameDataOffset
     WriteLog("Scanned and found game data offset: " gameDataOffset)
 

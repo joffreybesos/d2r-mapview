@@ -700,6 +700,8 @@ Update:
     gameInfoLayer := new GameInfoLayer(settings)
     partyInfoLayer.delete()
     partyInfoLayer := new PartyInfoLayer(settings)
+    uiAssistLayer.delete()
+    uiAssistLayer := new UIAssistLayer(settings)
     if (cmode != settings["centerMode"]) { ; if centermode changed
         lastlevel := "INVALIDATED"
         imageData := {}

@@ -14,7 +14,17 @@ class UIAssistLayer {
         this.y := 0
         this.resistBoxWidth := (gameHeight / 50) * 1.2
         this.resistBoxHeight := (gameHeight / 50)
-        this.resistFontSize := gameHeight / 85
+        if (settings["resistFontSize"]) {
+            this.resistFontSize := settings["resistFontSize"]
+        } else {
+            this.resistFontSize := gameHeight / 85
+        }
+        if (settings["healthFontSize"]) {
+            this.healthFontSize := settings["healthFontSize"]
+        } else {
+            this.healthFontSize := (gameHeight / 85) * 0.8
+        }
+        
         this.healthnumbersHeight := (this.resistFontSize) / 2
         this.drawRegionWidth := this.resistBoxWidth * 6
         this.drawRegionHeight := (gameHeight / 14)
@@ -41,48 +51,54 @@ class UIAssistLayer {
             gamewindowy := gameClientArea["Y"]
             gameWidth := gameClientArea["W"]
             gameHeight := gameClientArea["H"]
-            ;WinGetPos, gamewindowx, gamewindowy, gameWidth, gameHeight, %gameWindowId% 
-            resistFontSize := this.resistFontSize
             
-            resists := mob.immunities
-            ;resists := { "physical": 45, "magic": 10, "fire": 45, "light": 120, "cold": 45, "poison": 45 }
-            ;OutputDebug, % mob.txtFileNo " " resists["fire"] " " resists["cold"] "`n"
-
-            numResists := (resists["physical"] > 0) + (resists["magic"] > 0) + (resists["fire"] > 0) + (resists["light"] > 0) + (resists["cold"] > 0) + (resists["poison"] > 0)
             startx := (gameWidth / 2) - (this.drawRegionWidth / 2)
-            x := 0
-            if (resists["physical"]) {
-                Gdip_FillRectangle(this.G, this.pBrushPhysical, x, 0, this.resistBoxWidth, this.resistBoxHeight)
-                this.drawResistText(x, 0, resistFontSize, resists["physical"])
+            if (settings["showResists"]) {
+                resistFontSize := this.resistFontSize
+                
+                resists := mob.immunities
+                ;resists := { "physical": 45, "magic": 10, "fire": 45, "light": 120, "cold": 45, "poison": 45 }
+                ;OutputDebug, % mob.txtFileNo " " resists["fire"] " " resists["cold"] "`n"
+
+
+                numResists := (resists["physical"] > 0) + (resists["magic"] > 0) + (resists["fire"] > 0) + (resists["light"] > 0) + (resists["cold"] > 0) + (resists["poison"] > 0)
+                
+                x := 0
+                if (resists["physical"]) {
+                    Gdip_FillRectangle(this.G, this.pBrushPhysical, x, 0, this.resistBoxWidth, this.resistBoxHeight)
+                    this.drawResistText(x, 0, resistFontSize, resists["physical"])
+                }
+                x := x + this.resistBoxWidth
+                if (resists["magic"]) {
+                    Gdip_FillRectangle(this.G, this.pBrushMagic, x, 0, this.resistBoxWidth, this.resistBoxHeight)
+                    this.drawResistText(x, 0, resistFontSize, resists["magic"])
+                }
+                x := x + this.resistBoxWidth
+                if (resists["fire"]) {
+                    Gdip_FillRectangle(this.G, this.pBrushFire, x, 0, this.resistBoxWidth, this.resistBoxHeight)
+                    this.drawResistText(x, 0, resistFontSize, resists["fire"])
+                }
+                x := x + this.resistBoxWidth
+                if (resists["light"]) {
+                    Gdip_FillRectangle(this.G, this.pBrushLight, x, 0, this.resistBoxWidth, this.resistBoxHeight)
+                    this.drawResistText(x, 0, resistFontSize, resists["light"])
+                }
+                x := x + this.resistBoxWidth
+                if (resists["cold"]) {
+                    Gdip_FillRectangle(this.G, this.pBrushCold, x, 0, this.resistBoxWidth, this.resistBoxHeight)
+                    this.drawResistText(x, 0, resistFontSize, resists["cold"])
+                }
+                x := x + this.resistBoxWidth
+                if (resists["poison"]) {
+                    Gdip_FillRectangle(this.G, this.pBrushPoison, x, 0, this.resistBoxWidth, this.resistBoxHeight)
+                    this.drawResistText(x, 0, resistFontSize, resists["poison"])
+                }
+                x := x + this.resistBoxWidth
             }
-            x := x + this.resistBoxWidth
-            if (resists["magic"]) {
-                Gdip_FillRectangle(this.G, this.pBrushMagic, x, 0, this.resistBoxWidth, this.resistBoxHeight)
-                this.drawResistText(x, 0, resistFontSize, resists["magic"])
+            if (settings["showHealthPc"]) {
+                healthpc := Round((mob.hp / mob.maxhp) * 100, 0) " %"
+                this.drawHealthText(this.healthFontSize, "ffc6b276", healthpc) 
             }
-            x := x + this.resistBoxWidth
-            if (resists["fire"]) {
-                Gdip_FillRectangle(this.G, this.pBrushFire, x, 0, this.resistBoxWidth, this.resistBoxHeight)
-                this.drawResistText(x, 0, resistFontSize, resists["fire"])
-            }
-            x := x + this.resistBoxWidth
-            if (resists["light"]) {
-                Gdip_FillRectangle(this.G, this.pBrushLight, x, 0, this.resistBoxWidth, this.resistBoxHeight)
-                this.drawResistText(x, 0, resistFontSize, resists["light"])
-            }
-            x := x + this.resistBoxWidth
-            if (resists["cold"]) {
-                Gdip_FillRectangle(this.G, this.pBrushCold, x, 0, this.resistBoxWidth, this.resistBoxHeight)
-                this.drawResistText(x, 0, resistFontSize, resists["cold"])
-            }
-            x := x + this.resistBoxWidth
-            if (resists["poison"]) {
-                Gdip_FillRectangle(this.G, this.pBrushPoison, x, 0, this.resistBoxWidth, this.resistBoxHeight)
-                this.drawResistText(x, 0, resistFontSize, resists["poison"])
-            }
-            x := x + this.resistBoxWidth
-            healthpc := Round((mob.hp / mob.maxhp) * 100, 0) " %"
-            this.drawHealthText(this.resistFontSize * 0.8, "ffc6b276", healthpc) 
         }
         
         UpdateLayeredWindow(this.UIAssistLayerHwnd, this.hdc, gamewindowx + startx, gamewindowy + this.y, this.drawRegionWidth, this.drawRegionHeight)

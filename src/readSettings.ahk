@@ -39,8 +39,14 @@ readSettings(settingsFile, ByRef settings) {
     settings["showGameInfo"] := 1
     settings["gameInfoFontSize"] := "18"
     settings["gameInfoAlignment"] := "LEFT"
-    settings["showPartyLocations"] := 1
     settings["exitTextSize"] := "12"
+
+    settings["showPartyLocations"] := 1
+    settings["showResists"] := 1
+    settings["showHealthPc"] := 1
+    settings["partyInfoFontSize"] := 0
+    settings["resistFontSize"] := 0
+    settings["healthFontSize"] := 0
 
     settings["showNormalMobs"] := 1
     settings["showUniqueMobs"] := 1

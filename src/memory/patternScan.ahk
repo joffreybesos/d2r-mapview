@@ -68,3 +68,18 @@ PatternScan(ByRef d2r, ByRef offsets) {
     WriteLog("Scanned and found seed address: " offsets["seedAddress"])
     SetFormat, Integer, D
 }
+
+
+getMapSeedOffset(ByRef d2r) {
+    ; map seed
+    pattern := d2r.hexStringToPattern("41 8B F9 48 8D 0D ?? ?? ?? ??") 
+    patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
+    offsetAddress := d2r.read(patternAddress + 6, "UInt")
+    delta := patternAddress - d2r.BaseAddress
+    resultRelativeAddress2 := d2r.BaseAddress + delta + 0xEA + offsetAddress
+    offsetBuffer2 := d2r.read(resultRelativeAddress2, "Int64")
+    offsets["seedAddress"] := offsetBuffer2 + 0x10C0
+    WriteLog("Scanned and found seed address: " offsets["seedAddress"])
+    SetFormat, Integer, D
+    return offsetBuffer2 + 0x10C0
+}

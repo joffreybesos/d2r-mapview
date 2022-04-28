@@ -29,14 +29,18 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
         WriteLogDebug("Did not find level num using player offset " playerOffset) 
     }
     ; get the map seed
-    ;actAddress := d2rprocess.read(playerUnit + 0x28, "Int64")
-    ;, mapSeed := d2rprocess.read(actAddress + 0x1C, "UInt")
-    seedAddress :=offsets["seedAddress"]
+    actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")
+    mapSeedOld := d2rprocess.read(actAddress + 0x1C, "UInt")
+    seedAddress := offsets["seedAddress"]
+    if (seedAddress == 0x10C0) {
+        WriteLog("Found seedaddress " seedAddress " fetching a new one")
+        seedAddress := getMapSeedOffset(d2rprocess)
+        offsets["seedAddress"] := seedAddress
+    }
     mapSeed := d2rprocess.read(seedAddress, "UInt")
-    
 
     ; get the difficulty
-    , actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")
+    actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")
     , aActUnk2 := d2rprocess.read(actAddress + 0x78, "Int64")
     , difficulty := d2rprocess.read(aActUnk2 + 0x830, "UShort")
     if ((difficulty != 0) & (difficulty != 1) & (difficulty != 2)) {

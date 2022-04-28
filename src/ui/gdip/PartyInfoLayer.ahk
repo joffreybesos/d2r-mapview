@@ -28,7 +28,12 @@ class PartyInfoLayer {
             this.topMargin := this.topPadding + (gameWindowHeight / 51.5) + gameWindowY
             this.spacing := gameWindowHeight / 10.6
         }
-        this.partyInfoFontSize := this.spacing / 11
+
+		if (settings["partyInfoFontSize"]) {
+            this.partyInfoFontSize := settings["partyInfoFontSize"]
+        } else {
+            this.partyInfoFontSize := this.spacing / 11
+        }
         
         this.textBoxWidth := 200
         this.textBoxHeight := gameWindowHeight
@@ -51,9 +56,17 @@ class PartyInfoLayer {
             Gui, PartyInfo: Show, NA
         } else {
             Gui, PartyInfo: Hide
+			return
         }
+		if (settings["showPartyLocations"]) {
+			Gui, PartyInfo: Show, NA
+		} else {
+			Gui, PartyInfo: Hide
+			return
+		}
         if (readUI(d2rprocess)) {
             Gui, PartyInfo: Hide
+			return
         }
         fontSize := this.partyInfoFontSize
 

@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [2.8.0-BETA2] - 2021-04-29 - Minor improvements
 
+- Fixed issue where occasionally the map seed offset was incorrect
 - Party location can now be toggled and font size changed
 - Monster resists at the top of the screen can be toggled and font size changed
 - Monster health pecentage at top of the screen can be toggled and font size changed.

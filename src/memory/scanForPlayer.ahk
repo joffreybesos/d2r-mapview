@@ -42,16 +42,16 @@ getPlayerOffset(ByRef d2r, startingOffset, loops, settings) {
             inventory := d2r.read(pInventory, "Int64")
             if (inventory) {
                 
-                expChar := d2r.read(d2r.BaseAddress + expOffset, "UShort")
-                basecheck := (d2r.read(inventory + 0x30, "UShort")) != 1
-                if (expChar) {
-                    basecheck := (d2r.read(inventory + 0x70, "UShort")) != 0
-                }
+                ; expChar := d2r.read(d2r.BaseAddress + expOffset, "UShort")
+                ; basecheck := (d2r.read(inventory + 0x30, "UShort")) != 1
+                ; if (expChar) {
+                ;     basecheck := (d2r.read(inventory + 0x70, "UShort")) != 0
+                ; }
                 
-                if (basecheck) {
+                ; if (basecheck) {
                     pAct := playerUnit + 0x20
                     actAddress := d2r.read(pAct, "Int64")
-                    mapSeedAddress := actAddress + 0x14
+                    mapSeedAddress := actAddress + 0x1C
                     mapSeed := d2r.read(mapSeedAddress, "UInt")
 
                     pPath := playerUnit + 0x38
@@ -76,7 +76,7 @@ getPlayerOffset(ByRef d2r, startingOffset, loops, settings) {
                         found := true
                         return newOffset
                     }
-                }
+                ; }
             }
             newOffset := (playerUnit + 0x150) - d2r.BaseAddress
             playerUnit := d2r.read(playerUnit + 0x150, "Int64")  ; get next player

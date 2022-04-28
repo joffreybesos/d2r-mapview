@@ -3,7 +3,7 @@
 PatternScan(ByRef d2r, ByRef offsets) {
     SetFormat, Integer, Hex
     ; unit table
-    pattern := d2r.hexStringToPattern("48 8D ?? ?? ?? ?? ?? 8B D1")
+    pattern := d2r.hexStringToPattern("48 8D 0D ?? ?? ?? ?? 48 C1 E0 0A 48 03 C1 C3 CC")
     patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
     offsetBuffer := d2r.read(patternAddress + 3, "Int")
     playerOffset := ((patternAddress - d2r.BaseAddress) + 7 + offsetBuffer)
@@ -56,6 +56,15 @@ PatternScan(ByRef d2r, ByRef offsets) {
     rosterOffset := ((patternAddress - d2r.BaseAddress) + 1 + offsetBuffer)
     offsets["rosterOffset"] := rosterOffset
     WriteLog("Scanned and found roster offset: " rosterOffset)
-    
+
+    ; map seed
+    pattern := d2r.hexStringToPattern("41 8B F9 48 8D 0D ?? ?? ?? ??") 
+    patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
+    offsetAddress := d2r.read(patternAddress + 6, "UInt")
+    delta := patternAddress - d2r.BaseAddress
+    resultRelativeAddress2 := d2r.BaseAddress + delta + 0xEA + offsetAddress
+    offsetBuffer2 := d2r.read(resultRelativeAddress2, "Int64")
+    offsets["seedAddress"] := offsetBuffer2 + 0x10C0
+    WriteLog("Scanned and found seed address: " offsets["seedAddress"])
     SetFormat, Integer, D
 }

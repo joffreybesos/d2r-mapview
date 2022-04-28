@@ -29,12 +29,15 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
         WriteLogDebug("Did not find level num using player offset " playerOffset) 
     }
     ; get the map seed
-    actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")
-    , mapSeed := d2rprocess.read(actAddress + 0x14, "UInt")
+    ;actAddress := d2rprocess.read(playerUnit + 0x28, "Int64")
+    ;, mapSeed := d2rprocess.read(actAddress + 0x1C, "UInt")
+    seedAddress :=offsets["seedAddress"]
+    mapSeed := d2rprocess.read(seedAddress, "UInt")
+    
 
     ; get the difficulty
     , actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")
-    , aActUnk2 := d2rprocess.read(actAddress + 0x70, "Int64")
+    , aActUnk2 := d2rprocess.read(actAddress + 0x78, "Int64")
     , difficulty := d2rprocess.read(aActUnk2 + 0x830, "UShort")
     if ((difficulty != 0) & (difficulty != 1) & (difficulty != 2)) {
         WriteLogDebug("Did not find difficulty using player offset " playerOffset) 
@@ -153,4 +156,16 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     ;ElapsedTime := A_TickCount - StartTime
     ;OutputDebug, % ElapsedTime "`n"
     ;ToolTip % "`n`n`n`n" ElapsedTime
+}
+
+
+readMapSeed(ByRef d2r) {
+    ; map seed
+    pattern := d2r.hexStringToPattern("41 8B F9 48 8D 0D ?? ?? ?? ??") 
+    patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)  
+    offsetAddress := d2r.read(patternAddress + 6, "Int") ; 0x00007ff6a12172a6
+    delta := patternAddress - d2r.BaseAddress
+    seedAddress := d2r.BaseAddress + delta + 0xEA + offsetAddress
+    seed := d2r.read(seedAddress, "Int") ; 0x00007ff6a12172a6
+    return seed
 }

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.8.0-BETA] - 2021-04-28 - D2R Patch update (BETA)
+
+- Fixed changes following Blizzard update
+- To get this version to work you must start an offline game first, any offline character.
+  Then exit that game, and the MH will work like normal
+
 ## [2.7.9] - 2021-04-26 - D2R Patch update
 
 - Updated offset/sigscan for game name, thanks @Rabbs

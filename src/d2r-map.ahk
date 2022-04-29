@@ -57,7 +57,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\UnitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UIAssistLayer.ahk
 
-global version := "2.8.0"
+global version := "2.8.1"
 
 lastMap := ""
 exitArray := []

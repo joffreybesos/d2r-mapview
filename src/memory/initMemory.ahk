@@ -16,5 +16,6 @@ initMemory(gameWindowId) {
         WriteLog(gameWindowId " not found, please make sure game is running")
         ExitApp
     }
+    WriteLog("Initalised memory")
     return d2rprocess
 }

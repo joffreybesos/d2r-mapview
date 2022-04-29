@@ -10,11 +10,13 @@ checkServer(ByRef settings) {
     testUrl := baseUrl "/health"
     
     try {
+        WriteLog("Performing map server health check...")
         healthCheck(testUrl)
     } catch e {
         if (FileExist("d2-mapserver.exe")) {
             startMapServer("d2-mapserver.exe", settings)
         } else {
+            WriteLog("d2-mapserver.exe not found")
             emsg := e.message
             emsg := StrReplace(emsg, "`nSource:`t`tWinHttp.WinHttpRequest`nDescription:`t", "")
             emsg := StrReplace(emsg, "`r`n`nHelpFile:`t`t(null)`nHelpContext:`t0", "")

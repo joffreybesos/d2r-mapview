@@ -2,10 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.8.0-BETA2] - 2021-04-29 - Minor improvements
+## [2.8.0-BETA3] - 2021-04-29 - Better beta
 
+- No longer need to start offline game
 - Fixed issue where occasionally the map seed offset was incorrect
-- Party location can now be toggled and font size changed
+- Fixed issue where centered map would lock onto wrong player
+- Fixed issue with expansion offset
+
+New features:  
+
+- Party location can now be toggled and font size changed  
 - Monster resists at the top of the screen can be toggled and font size changed
 - Monster health pecentage at top of the screen can be toggled and font size changed.
 - For all 3 set the font size to 0 and it will automatically scale the font for your screen (original behaviour)

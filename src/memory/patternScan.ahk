@@ -19,10 +19,10 @@ PatternScan(ByRef d2r, ByRef offsets) {
     WriteLog("Scanned and found UI offset: " uiOffset)
 
     ; expansion
-    pattern := d2r.hexStringToPattern("C7 05 ?? ?? ?? ?? ?? ?? ?? ?? 48 85 C0 0F 84 ?? ?? ?? ?? 83 78 5C ?? 0F 84 ?? ?? ?? ?? 33 D2 41")   ;unit table offset
+    pattern := d2r.hexStringToPattern("48 8B 05 ?? ?? ?? ?? 48 8B D9 F3 0F 10 50 ??")
     patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
-    offsetBuffer := d2r.read(patternAddress - 4, "Int")
-    expOffset := ((patternAddress - d2r.BaseAddress) + offsetBuffer)
+    offsetBuffer := d2r.read(patternAddress + 3, "Int")
+    expOffset := ((patternAddress - d2r.BaseAddress) + 7 + offsetBuffer)
     offsets["expOffset"] := expOffset
     WriteLog("Scanned and found expansion offset: " expOffset)
 
@@ -57,29 +57,5 @@ PatternScan(ByRef d2r, ByRef offsets) {
     offsets["rosterOffset"] := rosterOffset
     WriteLog("Scanned and found roster offset: " rosterOffset)
 
-    ; map seed
-    pattern := d2r.hexStringToPattern("41 8B F9 48 8D 0D ?? ?? ?? ??") 
-    patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
-    offsetAddress := d2r.read(patternAddress + 6, "UInt")
-    delta := patternAddress - d2r.BaseAddress
-    resultRelativeAddress2 := d2r.BaseAddress + delta + 0xEA + offsetAddress
-    offsetBuffer2 := d2r.read(resultRelativeAddress2, "Int64")
-    offsets["seedAddress"] := offsetBuffer2 + 0x10C0
-    WriteLog("Scanned and found seed address: " offsets["seedAddress"])
-    SetFormat, Integer, D
 }
 
-
-getMapSeedOffset(ByRef d2r) {
-    ; map seed
-    pattern := d2r.hexStringToPattern("41 8B F9 48 8D 0D ?? ?? ?? ??") 
-    patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
-    offsetAddress := d2r.read(patternAddress + 6, "UInt")
-    delta := patternAddress - d2r.BaseAddress
-    resultRelativeAddress2 := d2r.BaseAddress + delta + 0xEA + offsetAddress
-    offsetBuffer2 := d2r.read(resultRelativeAddress2, "Int64")
-    offsets["seedAddress"] := offsetBuffer2 + 0x10C0
-    WriteLog("Scanned and found seed address: " offsets["seedAddress"])
-    SetFormat, Integer, D
-    return offsetBuffer2 + 0x10C0
-}

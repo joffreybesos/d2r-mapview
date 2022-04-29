@@ -5,6 +5,7 @@
 #Include %A_ScriptDir%\memory\readMissiles.ahk
 #Include %A_ScriptDir%\memory\readUI.ahk
 #Include %A_ScriptDir%\memory\readParty.ahk
+#Include %A_ScriptDir%\memory\readMapSeed.ahk
 
 readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryData) {
     global items
@@ -29,15 +30,14 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
         WriteLogDebug("Did not find level num using player offset " playerOffset) 
     }
     ; get the map seed
-    actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")
-    mapSeedOld := d2rprocess.read(actAddress + 0x1C, "UInt")
-    seedAddress := offsets["seedAddress"]
-    if (seedAddress == 0x10C0) {
-        WriteLog("Found seedaddress " seedAddress " fetching a new one")
-        seedAddress := getMapSeedOffset(d2rprocess)
-        offsets["seedAddress"] := seedAddress
+
+    ;actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")
+    ;mapSeedOld := d2rprocess.read(actAddress + 0x1C, "UInt")
+    if (!offsets["mapSeedOffset"]) {
+        getMapSeedOffset(d2rprocess)
     }
-    mapSeed := d2rprocess.read(seedAddress, "UInt")
+    mapSeedOffset := offsets["mapSeedOffset"]
+    mapSeed := d2rprocess.read(mapSeedOffset, "UInt")
 
     ; get the difficulty
     actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")

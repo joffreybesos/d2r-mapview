@@ -2,11 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.8.1] - 2021-04-29 - Normal MH for ladder
+## [2.8.1] - 2021-04-30 - Normal MH for ladder
 
 - Out of beta after positive feedback
 - Added more logging for map server start
 - Added localisation for new UI elements
+- Non-expansion characters will now work
 
 ## [2.8.0-BETA3] - 2021-04-29 - Better beta
 

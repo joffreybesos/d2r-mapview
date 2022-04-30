@@ -42,7 +42,8 @@ getPlayerOffset(ByRef d2r, startingOffset, loops, settings) {
             inventory := d2r.read(pInventory, "Int64")
             if (inventory) {
                 
-                expChar := d2r.read(d2r.BaseAddress + expOffset, "UShort")
+                expCharPtr := d2r.read(d2r.BaseAddress + expOffset, "Int64")
+                expChar := d2r.read(expCharPtr + 0x5C, "UShort")
                 basecheck := (d2r.read(inventory + 0x30, "UShort")) != 1
                 if (expChar) {
                     basecheck := (d2r.read(inventory + 0x70, "UShort")) != 0

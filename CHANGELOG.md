@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.8.2] - 2021-05-01 - Language fix
+
+- Localisation is now fixed after being broken in last release
+
 ## [2.8.1] - 2021-04-30 - Normal MH for ladder
 
 - Out of beta after positive feedback

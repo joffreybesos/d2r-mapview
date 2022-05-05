@@ -1,14 +1,15 @@
 
 CheckForUpdates() {
+    try {
     URLLatestRelease := "https://api.github.com/repos/joffreybesos/d2r-mapview/releases/latest"
-    response := GetAPIRequest(URLLatetRelease)
+    response := GetAPIRequest(URLLatestRelease)
     respJSON := JSON.Load(response)
     latesttag := respJSON.tag_name
     latesttag := StrReplace(latesttag, "v", "")
 
-    WriteLog("Latest version on Github is " latesttag " current tag is " version)
+    WriteLog("Latest version on Github is " latesttag " this version is " version)
     currenttagarr := StrSplit(version , ".")
-    latesttagarr := StrSplit(latesttag , ".")
+    latesttagarr  := StrSplit(latesttag , ".")
     foundnewer := false
     if (currenttagarr[1] < latesttagarr[1]) {
         foundnewer := true
@@ -20,11 +21,12 @@ CheckForUpdates() {
 
     if (foundnewer) {
         WriteLog("Found newer version to download")
-        MsgBox, 36,d2r-mapview, A newer version of the d2r-mapview is available. Do you want to download? (recommended)
-        IfMsgBox Yes {
+        MsgBox, 36,d2r-mapview, A newer version of the d2r-mapview is available.`nDo you want to download? (recommended)
+        IfMsgBox Yes
+        {
             
-            exeUrl := respJSON.assets[0].browser_download_url
-            filename := A_Script_Dir . "/" . respJSON.assets[0].name
+            exeUrl := respJSON.assets[1].browser_download_url
+            filename := A_ScriptDir . "/" . respJSON.assets[1].name
             WriteLog("Downloading " exeUrl " to " filename) 
             UrlDownloadToFile, %exeUrl%, %filename%
             if (FileExist(filename)) {
@@ -37,6 +39,11 @@ CheckForUpdates() {
         } else {
             WriteLog("User chose to not download newer version")
         }
+    } else {
+        WriteLog(version " is latest version")
+    }
+    } catch (e) {
+        WriteLog("Failed to check for update of d2r-mapview")
     }
 }
 

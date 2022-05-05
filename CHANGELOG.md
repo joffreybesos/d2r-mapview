@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.8.3] - 2021-05-05 - Auto update
+
+- On startup the MH will now check for and download a newer version if one is available
+- You will be prompted if you would like to download the newer version and it will run immediately
+
 ## [2.8.2] - 2021-05-01 - Language fix
 
 - Localisation is now fixed after being broken in last release

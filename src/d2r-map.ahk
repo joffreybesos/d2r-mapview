@@ -27,6 +27,7 @@ Menu, Tray, Add, Exit, ExitMH
 SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\logging.ahk
 #Include %A_ScriptDir%\include\Yaml.ahk
+#Include %A_ScriptDir%\include\JSON.ahk
 #Include %A_ScriptDir%\itemfilter\AlertList.ahk
 #Include %A_ScriptDir%\itemfilter\ItemAlert.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk
@@ -49,6 +50,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\localization.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 #Include %A_ScriptDir%\serverHealthCheck.ahk
+#Include %A_ScriptDir%\updateCheck.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
 #Include %A_ScriptDir%\ui\gdip\unitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\SessionTableLayer.ahk
@@ -57,7 +59,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\UnitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UIAssistLayer.ahk
 
-global version := "2.8.2"
+global version := "2.8.3"
 
 lastMap := ""
 exitArray := []
@@ -69,6 +71,7 @@ WriteLog("*******************************************************************")
 WriteLog("Version: " version)
 WriteLog("Working folder: " A_ScriptDir)
 WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyVW3uj")
+CheckForUpdates()
 ClearCache(A_Temp)
 global settings
 global defaultSettings

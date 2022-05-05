@@ -42,7 +42,7 @@ CheckForUpdates() {
     } else {
         WriteLog(version " is latest version")
     }
-    } catch (e) {
+    } catch e {
         WriteLog("Failed to check for update of d2r-mapview")
     }
 }

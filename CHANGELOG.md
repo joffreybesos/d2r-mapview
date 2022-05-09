@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 - On startup the MH will now check for and download a newer version if one is available
 - You will be prompted if you would like to download the newer version and it will run immediately
+- Updated localisation for zhTW (thanks 噗噗白)
 
 ## [2.8.2] - 2021-05-01 - Language fix
 

@@ -26,11 +26,10 @@ ReadOtherPlayers(ByRef d2rprocess, startingOffset, ByRef otherPlayers, ByRef par
                 , yPosOffset := yPosOffset / 65536   ; get percentage
                 , xPos := xPos + xPosOffset
                 , yPos := yPos + yPosOffset
-                , isCorpse := d2rprocess.read(playerUnit + 0x1A6, "UShort")
                 , playerNameAddress := d2rprocess.read(playerUnit + 0x10, "Int64")
                 , playerName := d2rprocess.readString(playerNameAddress, length := 0)
-                
-                if (xPos > 0 and yPos > 0) {
+                isCorpse := d2rprocess.read(playerUnit + 0x1A6, "UChar") == "1" ? true : false
+                if (xPos > 1 and yPos > 1) {
                     SetFormat Integer, D
                     otherPlayers.push({ "player": A_Index, "unitId": unitId, "playerName": playerName, "isCorpse": isCorpse, "x": xPos, "y": yPos})
                 }

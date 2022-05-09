@@ -2,12 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.8.3] - 2021-05-05 - Auto update
+## [2.8.3] - 2021-05-09 - Auto update, corpse, party member location range
 
 - On startup the MH will now check for and download a newer version if one is available
 - You will be prompted if you would like to download the newer version and it will run immediately
+- Location of players on map goes further range by using data in party struct (thanks mengqin)
+- Your corpse will now be displayed on the map, is configured with 'other player' settings
 - Updated localisation for zhTW (thanks 噗噗白)
-- Other players range now increased by using Party struct (thanks mengqin)
 
 ## [2.8.2] - 2021-05-01 - Language fix
 

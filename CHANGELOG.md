@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.8.4] - 2021-05-09 - Bug fix
+
+- Fixed problem with ghost player location
+- This release also lets me test the auto-update feature of the previous release
+
 ## [2.8.3] - 2021-05-09 - Auto update, corpse, party member location range
 
 - On startup the MH will now check for and download a newer version if one is available

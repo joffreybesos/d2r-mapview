@@ -77,12 +77,15 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
     hbm := CreateDIBSection(rotatedWidth, rotatedHeight)
     hdc := CreateCompatibleDC()
     obm := SelectObject(hdc, hbm)
-    Gdip_SetSmoothingMode(G, 4) 
+    ;Gdip_SetSmoothingMode(G, 4) 
     G := Gdip_GraphicsFromHDC(hdc)
     
     if (!imageData["prerotated"]) {
-        pBitmap := Gdip_RotateBitmapAtCenter(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
+        pBitmap := Gdip_RotateBitmapAtCenter(pBitmap, Angle, 0, 0) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
     }
+
+    ; asdf := A_TickCount - StartTime
+    ; OutputDebug, % asdf "`n"
 
     if (settings["centerMode"]) {
         ; get relative position of player in world

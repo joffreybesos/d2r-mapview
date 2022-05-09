@@ -7,7 +7,7 @@ readLastGameName(ByRef d2rprocess, ByRef gameWindowId, ByRef offsets, ByRef sess
         }
         ExitApp
     }
-    gameNameOffset := offsets["gameDataOffset"] + 0x48
+    gameNameOffset := offsets["gameDataOffset"] + 0x40
     gameNameAddress := d2rprocess.BaseAddress + gameNameOffset
     gameName := d2rprocess.readString(gameNameAddress, length := 0)
     return gameName

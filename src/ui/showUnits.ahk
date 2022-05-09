@@ -36,7 +36,7 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
     StartTime := A_TickCount
     , Angle := 45
     , opacity := 1.0
-    , padding := 150
+    , padding := settings["padding"]
     , scaledWidth := uiData["scaledWidth"]
     , scaledHeight := uiData["scaledHeight"]
     , rotatedWidth := uiData["rotatedWidth"]

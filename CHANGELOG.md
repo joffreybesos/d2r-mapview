@@ -2,9 +2,80 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.7.5] - 2021-03-29 - Party info now shows level
+## [2.8.3] - 2021-05-09 - Auto update, corpse, party member location range
 
-- Under each player icon you can now see the player level
+- On startup the MH will now check for and download a newer version if one is available
+- You will be prompted if you would like to download the newer version and it will run immediately
+- Location of players on map goes further range by using data in party struct (thanks mengqin)
+- Your corpse will now be displayed on the map, is configured with 'other player' settings
+- Updated localisation for zhTW (thanks 噗噗白)
+- Game history has a shaded border now for better readabilty
+
+## [2.8.2] - 2021-05-01 - Language fix
+
+- Localisation is now fixed after being broken in last release
+
+## [2.8.1] - 2021-04-30 - Normal MH for ladder
+
+- Out of beta after positive feedback
+- Added more logging for map server start
+- Added localisation for new UI elements
+- Non-expansion characters will now work
+
+## [2.8.0-BETA3] - 2021-04-29 - Better beta
+
+- No longer need to start offline game
+- Fixed issue where occasionally the map seed offset was incorrect
+- Fixed issue where centered map would lock onto wrong player
+- Fixed issue with expansion offset
+
+New features:  
+
+- Party location can now be toggled and font size changed  
+- Monster resists at the top of the screen can be toggled and font size changed
+- Monster health pecentage at top of the screen can be toggled and font size changed.
+- For all 3 set the font size to 0 and it will automatically scale the font for your screen (original behaviour)
+
+## [2.8.0-BETA] - 2021-04-28 - D2R Patch update (BETA)
+
+- Fixed changes following Blizzard update
+- To get this version to work you must start an offline game first, any offline character.
+  Then exit that game, and the MH will work like normal
+
+## [2.7.9] - 2021-04-26 - D2R Patch update
+
+- Updated offset/sigscan for game name, thanks @Rabbs
+- Game name in game history was broken by latest D2R patch
+
+## [2.7.8] - 2021-04-26
+
+- Game history XP now has number formatting (e.g. 1,745,324 instead of 1745324)
+- Monster health is shown as percentage under health bar
+- Exit names will now show area level in brackets next to it e.g. (85)
+- Korean localization wording has been fixed (thanks Master Delta K1)
+- Localization file is now saved as UTF-8
+- Fixed issue where certain settings were saved blank incorrectly
+- Players and NPCs will now show as a cross by default (can be changed in settings)
+
+## [2.7.7] - 2021-04-16 - More bug fixes
+
+- Fixed issue with map not rotating correctly introduced last version
+- MH will now autoretry 5 times to download the map image
+- You will no longer receive an error if you set an invalid hotkey
+
+## [2.7.6] - 2021-04-16 - Bug fixes
+
+- Fixed issue in last release where occasionally the map wouldn't show
+- Added auto-retry to downloading map images from the map server
+- Better error logging for mapserver connection issues
+- Fixed issue where you would hear item alerts from previous game session when starting new session
+- Ctrl+H help will only show when you have D2R window active
+
+## [2.7.5] - 2021-04-15 - Party info now shows level
+
+- Fixed party location broken by patch 2.4
+- Fixed game name in game history broken by patch 2.4
+- Under each player icon you can now see the player level as well as location
 - Localisation has been added to the player location (font sizes may be a bit weird)
 - Fixed issue with Kurast Shield missing from list of base items
 

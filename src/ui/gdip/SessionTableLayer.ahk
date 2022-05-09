@@ -10,21 +10,16 @@ class SessionTableLayer {
     __new(ByRef settings) {
         Gui, SessionTable: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
         this.SessionTableLayerHwnd := WinExist()
-        if (isWindowFullScreen(gameWindowId)) {
-            this.y := 20
-        } else {
-            this.y := 40
-        }
-        
-        WinGetPos, gameWindowX, gameWindowY, gameWindowWidth, gameWindowHeight, %gameWindowId% 
-        this.gameWindowX := gameWindowX
-        this.gameWindowY := gameWindowY
-        this.gameWindowWidth := gameWindowWidth
-        this.gameWindowHeight := gameWindowHeight
+        this.y := 20
+        gameClientArea := getWindowClientArea()
+        this.gameWindowX := gameClientArea["X"]
+        this.gameWindowY := gameClientArea["Y"]
+        this.gameWindowWidth := gameClientArea["W"]
+        this.gameWindowHeight := gameClientArea["H"]
 
         pToken := Gdip_Startup()
         DetectHiddenWindows, On
-        this.hbm := CreateDIBSection(gameWindowWidth, gameWindowHeight)
+        this.hbm := CreateDIBSection(this.gameWindowWidth, this.gameWindowHeight)
         this.hdc := CreateCompatibleDC()
         this.obm := SelectObject(this.hdc, this.hbm)
         this.G := Gdip_GraphicsFromHDC(this.hdc)
@@ -36,6 +31,7 @@ class SessionTableLayer {
         historyTextAlignment := settings["historyTextAlignment"]
         StringUpper, historyTextAlignment, historyTextAlignment
         this.historyTextAlignment := historyTextAlignment
+        this.bgBox := Gdip_BrushCreateSolid(0x66000000)
 
     }
 
@@ -62,7 +58,9 @@ class SessionTableLayer {
                 playerLevelList := playerLevelList . session.getPreciseLevel() . "`n"
                 playerNameList := playerNameList . session.playerName . "`n"
                 gameNameList := gameNameList . session.gameName . "`n"
-                xpgainedList := xpgainedList . session.getExperienceGained() . "`n"
+                formattedxp := this.GetNumberFormat(session.getExperienceGained())
+                StringTrimRight, formattedxp, formattedxp, 3
+                xpgainedList := xpgainedList . formattedxp . "`n"
                 gameTimeList := gameTimeList . this.GetDurationFormatEx(session.duration) . "`n"
             }
             
@@ -96,6 +94,15 @@ class SessionTableLayer {
         shadowtextx := textx + 1
         , shadowtexty := texty + 1
         Options2 = x%shadowtextx% y%shadowtexty% Left vBottom cff000000 r4 s%fontSize% Bold
+        
+        ;x|y|width|height|chars|lines
+        measuredString := Gdip_TextToGraphics(this.G, textStr, Options2, exocetFont)
+        ms := StrSplit(measuredString , "|")
+        , bgx := ms[1]
+        , bgy := ms[2] - 3
+        , bgw := ms[3]
+        , bgh := ms[4]
+        Gdip_FillRectangle(this.G, this.bgBox, bgx, bgy, bgw, bgh)
         Gdip_TextToGraphics(this.G, textStr, Options2, exocetFont)
         Gdip_TextToGraphics(this.G, textStr, Options, exocetFont)
     }
@@ -105,7 +112,14 @@ class SessionTableLayer {
         shadowtextx := textx + 1
         , shadowtexty := texty + 1
         Options2 = x%shadowtextx% y%shadowtexty% Left vTop cff000000 r4 s%fontSize%
-        Gdip_TextToGraphics(this.G, textList, Options2, exocetFont)
+        ;x|y|width|height|chars|lines
+        measuredString := Gdip_TextToGraphics(this.G, textList, Options2, exocetFont)
+        ms := StrSplit(measuredString , "|")
+        , bgx := ms[1]
+        , bgy := ms[2] - 3
+        , bgw := ms[3]
+        , bgh := ms[4]
+        Gdip_FillRectangle(this.G, this.bgBox, bgx, bgy, bgw, bgh)
         drawnArea := Gdip_TextToGraphics(this.G, textList, Options, exocetFont)
         ms := StrSplit(drawnArea , "|")
         minSize := defaultColumnWidth + textx
@@ -122,6 +136,7 @@ class SessionTableLayer {
         DeleteObject(this.hbm)
         DeleteDC(this.hdc)
         Gui, SessionTable: Destroy
+        Gdip_DeleteBrush(this.bgBox)
     }
 
     GetDurationFormatEx(Duration, Format := "m'm 's's'", LocaleName := "!x-sys-default-locale")
@@ -133,4 +148,18 @@ class SessionTableLayer {
         }
         return false
     }
+    GetNumberFormat(Value)
+    {
+        LCID := DllCall("GetThreadLocale", "UInt")
+        if (Size := DllCall("GetNumberFormat", "uint", Locale, "uint", 0, "str", Value, "ptr", 0, "ptr", 0, "int", 0)) {
+            VarSetCapacity(NumberStr, Size << !!A_IsUnicode, 0)
+            if (DllCall("GetNumberFormat", "uint", Locale, "uint", 0, "str", Value, "ptr", 0, "str", NumberStr, "int", Size))
+                return NumberStr
+        }
+
+
+
+        return false
+    }
 }
+

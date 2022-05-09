@@ -3,7 +3,7 @@
 PatternScan(ByRef d2r, ByRef offsets) {
     SetFormat, Integer, Hex
     ; unit table
-    pattern := d2r.hexStringToPattern("48 8D ?? ?? ?? ?? ?? 8B D1")
+    pattern := d2r.hexStringToPattern("48 8D 0D ?? ?? ?? ?? 48 C1 E0 0A 48 03 C1 C3 CC")
     patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
     offsetBuffer := d2r.read(patternAddress + 3, "Int")
     playerOffset := ((patternAddress - d2r.BaseAddress) + 7 + offsetBuffer)
@@ -19,18 +19,18 @@ PatternScan(ByRef d2r, ByRef offsets) {
     WriteLog("Scanned and found UI offset: " uiOffset)
 
     ; expansion
-    pattern := d2r.hexStringToPattern("C7 05 ?? ?? ?? ?? ?? ?? ?? ?? 48 85 C0 0F 84 ?? ?? ?? ?? 83 78 5C ?? 0F 84 ?? ?? ?? ?? 33 D2 41")   ;unit table offset
+    pattern := d2r.hexStringToPattern("48 8B 05 ?? ?? ?? ?? 48 8B D9 F3 0F 10 50 ??")
     patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
-    offsetBuffer := d2r.read(patternAddress - 4, "Int")
-    expOffset := ((patternAddress - d2r.BaseAddress) + offsetBuffer)
+    offsetBuffer := d2r.read(patternAddress + 3, "Int")
+    expOffset := ((patternAddress - d2r.BaseAddress) + 7 + offsetBuffer)
     offsets["expOffset"] := expOffset
     WriteLog("Scanned and found expansion offset: " expOffset)
 
-    ; game data (IP and name)
-    pattern := d2r.hexStringToPattern("E8 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 44 88 2D ?? ?? ?? ??")
+    ; game data (IP and name) 
+    pattern := d2r.hexStringToPattern("44 88 25 ?? ?? ?? ?? 66 44 89 25 ?? ?? ?? ??")
     patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
-    offsetBuffer := d2r.read(patternAddress + 8, "Int")
-    gameDataOffset := ((patternAddress - d2r.BaseAddress) + 7 - 256 + 5 + offsetBuffer)
+    offsetBuffer := d2r.read(patternAddress + 0x3, "Int")
+    gameDataOffset := ((patternAddress - d2r.BaseAddress) - 0x121 + offsetBuffer)
     offsets["gameDataOffset"] := gameDataOffset
     WriteLog("Scanned and found game data offset: " gameDataOffset)
 
@@ -56,6 +56,6 @@ PatternScan(ByRef d2r, ByRef offsets) {
     rosterOffset := ((patternAddress - d2r.BaseAddress) + 1 + offsetBuffer)
     offsets["rosterOffset"] := rosterOffset
     WriteLog("Scanned and found roster offset: " rosterOffset)
-    
-    SetFormat, Integer, D
+
 }
+

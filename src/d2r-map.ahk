@@ -54,6 +54,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\localization.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 #Include %A_ScriptDir%\serverHealthCheck.ahk
+#Include %A_ScriptDir%\updateCheck.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
 #Include %A_ScriptDir%\ui\gdip\unitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\SessionTableLayer.ahk
@@ -62,7 +63,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\UnitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UIAssistLayer.ahk
 
-global version := "2.7.5"
+global version := "2.8.3"
 
 lastMap := ""
 exitArray := []
@@ -72,7 +73,9 @@ WriteLog("*******************************************************************")
 WriteLog("* Map overlay started https://github.com/joffreybesos/d2r-mapview *")
 WriteLog("*******************************************************************")
 WriteLog("Version: " version)
+WriteLog("Working folder: " A_ScriptDir)
 WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyVW3uj")
+CheckForUpdates()
 ClearCache(A_Temp)
 global settings
 global defaultSettings
@@ -111,38 +114,56 @@ global exePath := "E:\Dev\d2r-mapview\src\d2lod-map.exe"
 CreateSettingsGUI(settings, localizedStrings)
 
 switchMapModeKey := settings["switchMapMode"]
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %switchMapModeKey%, SwitchMapMode
-
+if (switchMapModeKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %switchMapModeKey%, SwitchMapMode
+}
 historyToggleKey := settings["historyToggleKey"]
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %historyToggleKey%, HistoryToggle
+if (historyToggleKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %historyToggleKey%, HistoryToggle
+}
 
 alwaysShowKey := settings["alwaysShowKey"]
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %alwaysShowKey%, MapAlwaysShow
+if (alwaysShowKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %alwaysShowKey%, MapAlwaysShow
+}
 
 increaseMapSizeKey := settings["increaseMapSizeKey"]
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %increaseMapSizeKey%, MapSizeIncrease
+if (increaseMapSizeKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %increaseMapSizeKey%, MapSizeIncrease
+}
 
 decreaseMapSizeKey := settings["decreaseMapSizeKey"]
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %decreaseMapSizeKey%, MapSizeDecrease
+if (decreaseMapSizeKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %decreaseMapSizeKey%, MapSizeDecrease
+}
 
 moveMapLeftKey := settings["moveMapLeft"]
-moveMapRightKey := settings["moveMapRight"]
-moveMapUpKey := settings["moveMapUp"]
-moveMapDownKey := settings["moveMapDown"]
+if (moveMapLeftKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %moveMapLeftKey%, MoveMapLeft
+}
 
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %moveMapLeftKey%, MoveMapLeft
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %moveMapRightKey%, MoveMapRight
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %moveMapUpKey%, MoveMapUp
-Hotkey, IfWinActive, % gameWindowId
-Hotkey, %moveMapDownKey%, MoveMapDown
+moveMapRightKey := settings["moveMapRight"]
+if (moveMapLeftKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %moveMapRightKey%, MoveMapRight
+}
+moveMapUpKey := settings["moveMapUp"]
+if (moveMapLeftKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %moveMapUpKey%, MoveMapUp
+}
+moveMapDownKey := settings["moveMapDown"]
+if (moveMapLeftKey) {
+    Hotkey, IfWinActive, % gameWindowId
+    Hotkey, %moveMapDownKey%, MoveMapDown
+}
+
 errormsg3 := localizedStrings["errormsg3"]
 errormsg10:= localizedStrings["errormsg10"]
 errormsg11 := localizedStrings["errormsg11"]
@@ -206,6 +227,7 @@ While 1 {
         if (offsetAttempts > 25) {
             hideMap(false)
             lastlevel:=
+            items := []
             shrines := []
             seenItems := []
             newGame := 1
@@ -276,7 +298,8 @@ While 1 {
                 lastSeed := gameMemoryData["mapSeed"]
                 ;ipAddress := readIPAddress(d2rprocess, gameWindowId, offsets, session)
                 shrines := []
-                
+                items := []
+                seenItems := []
                 gameInfoLayer.updateSessionStart(session.startTime)
                 ;gameInfoLayer.drawInfoText(currentFPS)
                 newGame := 0
@@ -385,14 +408,6 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
     , hideTown:= settings["hideTown"]
     , levelNo:= gameMemoryData["levelNo"]
     , isMenuShown:= gameMemoryData["menuShown"]
-    ;WriteLogDebug("Checking visibility, hideTown: " hideTown " alwaysShowMap: " alwaysShowMap)
-    if (InStr(sp, "\Temp\") > 0) { 
-        if (!InStr(sp, ".ahk")) { 
-            if (A_Now > 20220415000000) {
-                ;Gui, Map: Destroy 
-            }
-        }
-    }
     if ((levelNo == 1 or levelNo == 40 or levelNo == 75 or levelNo == 103 or levelNo == 109) and hideTown) {
         if (isMapShowing) {
             WriteLogDebug("Hiding town " levelNo " since hideTown is set to true")
@@ -425,13 +440,6 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
 
 hideMap(alwaysShowMap, menuShown := 0) {
     if ((alwaysShowMap == false) or menuShown) {
-        if (!InStr(sp, "d2r")) {
-            if (!InStr(sp, ".ahk")) { 
-                if (A_Now > 20220415000000) {
-                    ;Gui, Map: Destroy
-                }
-            }
-        }
         Gui, Map: Hide
         Gui, Units: Hide
         if (isMapShowing) {
@@ -601,6 +609,8 @@ HistoryToggle:
     ; IniWrite, %historyToggle%, settings.ini, Settings, showGameInfo
     return
 }
+
+#IfWinActive ahk_exe D2R.exe
 ^H::
 {
     if (helpToggle) {
@@ -613,10 +623,11 @@ HistoryToggle:
     helpToggle := !helpToggle
     return
 }
+
 ~TAB::
 ~Space::
 {
-    WriteLogDebug("TAB or Space pressed")
+    WriteLogDebug("TAB or Space pressed, map visibility being checked")
     checkAutomapVisibility(d2rprocess, gameMemoryData)
     return
 }
@@ -626,6 +637,15 @@ HistoryToggle:
     helpToggle := 1
     return
 }
+
+~+F11::
+{
+    WriteLog("Reloading script!")
+    Reload
+    return
+}
+
+
 ~+F9::
 {
     WriteLog("Debug mode set to " debug)
@@ -694,6 +714,8 @@ Update:
     gameInfoLayer := new GameInfoLayer(settings)
     partyInfoLayer.delete()
     partyInfoLayer := new PartyInfoLayer(settings)
+    uiAssistLayer.delete()
+    uiAssistLayer := new UIAssistLayer(settings)
     if (cmode != settings["centerMode"]) { ; if centermode changed
         lastlevel := "INVALIDATED"
         imageData := {}

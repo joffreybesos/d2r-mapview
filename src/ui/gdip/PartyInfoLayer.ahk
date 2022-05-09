@@ -28,7 +28,12 @@ class PartyInfoLayer {
             this.topMargin := this.topPadding + (gameWindowHeight / 51.5) + gameWindowY
             this.spacing := gameWindowHeight / 10.6
         }
-        this.partyInfoFontSize := this.spacing / 11
+
+		if (settings["partyInfoFontSize"]) {
+            this.partyInfoFontSize := settings["partyInfoFontSize"]
+        } else {
+            this.partyInfoFontSize := this.spacing / 11
+        }
         
         this.textBoxWidth := 200
         this.textBoxHeight := gameWindowHeight
@@ -51,9 +56,17 @@ class PartyInfoLayer {
             Gui, PartyInfo: Show, NA
         } else {
             Gui, PartyInfo: Hide
+			return
         }
+		if (settings["showPartyLocations"]) {
+			Gui, PartyInfo: Show, NA
+		} else {
+			Gui, PartyInfo: Hide
+			return
+		}
         if (readUI(d2rprocess)) {
             Gui, PartyInfo: Hide
+			return
         }
         fontSize := this.partyInfoFontSize
 
@@ -71,7 +84,11 @@ class PartyInfoLayer {
             if (k > 1) { ; don't draw your own
                 if (v.partyId == playerPartyId) { ; only if in same party
                     levelName := getAreaName(v.area)
-					playerText := v.plevel " - " levelName
+					if (levelName) {
+						playerText := v.plevel " - " levelName
+					} else {
+						playerText := v.plevel
+					}
                     this.drawData(this.xoffset, this.yoffset + (this.spacing * (k-1)), fontSize, playerText)
                 }
             }

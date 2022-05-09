@@ -17,7 +17,7 @@ MovePlayerMap(ByRef settings, ByRef d2rprocess, ByRef pathAddress, ByRef mapHwnd
     , yPos := yPos + (yPosOffset / 65536)   ; get percentage
 
     ; calculate new position
-    , padding := 150
+    , padding := settings["padding"]
     , serverScale := settings["serverScale"]
     , scale := settings["centerModeScale"]
     WinGetPos, X, Y, Width, Height, ahk_id %mapHwnd1%

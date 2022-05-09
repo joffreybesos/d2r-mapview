@@ -44,7 +44,7 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
 
     StartTime := A_TickCount
     Angle := 45
-    padding := 150
+    padding := settings["padding"]
     If !pToken := Gdip_Startup()
     {
         MsgBox "Gdiplus failed to start. Please ensure you have gdiplus on your system"

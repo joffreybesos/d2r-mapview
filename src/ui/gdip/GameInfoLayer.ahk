@@ -179,7 +179,7 @@ getAreaLevel(levelNo) {
         case 11: return { "0": 5, "1": 38, "2": 80}     ; Hole Level 1
         case 12: return { "0": 7, "1": 39, "2": 85}     ; Pit Level 1
         case 13: return { "0": 2, "1": 37, "2": 78}     ; Cave Level 2
-        case 14: return { "0": 4, "1": 38, "2": 83}     ; Underground Passage Level 2
+        case 14: return { "0": 4, "1": 38, "2": 85}     ; Underground Passage Level 2
         case 15: return { "0": 5, "1": 39, "2": 81}     ; Hole Level 2
         case 16: return { "0": 7, "1": 40, "2": 85}     ; Pit Level 2
         case 17: return { "0": 3, "1": 36, "2": 80}     ; Burial Grounds
@@ -219,11 +219,11 @@ getAreaLevel(levelNo) {
         case 52: return { "0": 13, "1": 47, "2": 78}     ; Palace Cellar Level 1
         case 53: return { "0": 13, "1": 47, "2": 78}     ; Palace Cellar Level 2
         case 54: return { "0": 13, "1": 48, "2": 78}     ; Palace Cellar Level 3
-        case 55: return { "0": 12, "1": 44, "2": 78}     ; Stony Tomb Level 1
+        case 55: return { "0": 12, "1": 44, "2": 85}     ; Stony Tomb Level 1
         case 56: return { "0": 12, "1": 44, "2": 79}     ; Halls of the Dead Level 1
         case 57: return { "0": 13, "1": 45, "2": 81}     ; Halls of the Dead Level 2
         case 58: return { "0": 14, "1": 47, "2": 82}     ; Claw Viper Temple Level 1
-        case 59: return { "0": 12, "1": 44, "2": 79}     ; Stony Tomb Level 2
+        case 59: return { "0": 12, "1": 44, "2": 85}     ; Stony Tomb Level 2
         case 60: return { "0": 13, "1": 45, "2": 82}     ; Halls of the Dead Level 3
         case 61: return { "0": 14, "1": 47, "2": 83}     ; Claw Viper Temple Level 2
         case 62: return { "0": 17, "1": 45, "2": 84}     ; Maggot Lair Level 1
@@ -248,19 +248,19 @@ getAreaLevel(levelNo) {
         case 81: return { "0": 23, "1": 52, "2": 81}     ; Upper Kurast
         case 82: return { "0": 24, "1": 53, "2": 81}     ; Kurast Causeway
         case 83: return { "0": 24, "1": 54, "2": 82}     ; Travincal
-        case 84: return { "0": 21, "1": 50, "2": 79}     ; Arachnid Lair
+        case 84: return { "0": 21, "1": 50, "2": 85}     ; Arachnid Lair
         case 85: return { "0": 21, "1": 50, "2": 79}     ; Spider Cavern
-        case 86: return { "0": 21, "1": 51, "2": 80}     ; Swampy Pit Level 1
-        case 87: return { "0": 21, "1": 51, "2": 81}     ; Swampy Pit Level 2
+        case 86: return { "0": 21, "1": 51, "2": 85}     ; Swampy Pit Level 1
+        case 87: return { "0": 21, "1": 51, "2": 85}     ; Swampy Pit Level 2
         case 88: return { "0": 22, "1": 51, "2": 81}     ; Flayer Dungeon Level 1
         case 89: return { "0": 22, "1": 51, "2": 82}     ; Flayer Dungeon Level 2
-        case 90: return { "0": 21, "1": 51, "2": 82}     ; Swampy Pit Level 3
+        case 90: return { "0": 21, "1": 51, "2": 85}     ; Swampy Pit Level 3
         case 91: return { "0": 22, "1": 51, "2": 83}     ; Flayer Dungeon Level 3
-        case 92: return { "0": 23, "1": 52, "2": 84}     ; Sewers Level 1
+        case 92: return { "0": 23, "1": 52, "2": 85}     ; Sewers Level 1
         case 93: return { "0": 24, "1": 53, "2": 85}     ; Sewers Level 2
-        case 94: return { "0": 23, "1": 53, "2": 84}     ; Ruined Temple
-        case 95: return { "0": 23, "1": 53, "2": 84}     ; Disused Fane
-        case 96: return { "0": 23, "1": 53, "2": 84}     ; Forgotten Reliquary
+        case 94: return { "0": 23, "1": 53, "2": 85}     ; Ruined Temple
+        case 95: return { "0": 23, "1": 53, "2": 85}     ; Disused Fane
+        case 96: return { "0": 23, "1": 53, "2": 85}     ; Forgotten Reliquary
         case 97: return { "0": 24, "1": 54, "2": 85}     ; Forgotten Temple
         case 98: return { "0": 24, "1": 54, "2": 85}     ; Ruined Fane
         case 99: return { "0": 24, "1": 54, "2": 85}     ; Disused Reliquary
@@ -280,18 +280,18 @@ getAreaLevel(levelNo) {
         case 113: return { "0": 29, "1": 61, "2": 82}     ; Crystalline Passage
         case 114: return { "0": 29, "1": 61, "2": 83}     ; Frozen River
         case 115: return { "0": 29, "1": 61, "2": 83}     ; Glacial Trail
-        case 116: return { "0": 29, "1": 61, "2": 84}     ; Drifter Cavern
+        case 116: return { "0": 29, "1": 61, "2": 85}     ; Drifter Cavern
         case 117: return { "0": 27, "1": 60, "2": 81}     ; Frozen Tundra
         case 118: return { "0": 29, "1": 62, "2": 82}     ; Ancients' Way
-        case 119: return { "0": 29, "1": 62, "2": 83}     ; Icy Cellar
+        case 119: return { "0": 29, "1": 62, "2": 85}     ; Icy Cellar
         case 120: return { "0": 37, "1": 68, "2": 87}     ; Arreat Summit
         case 121: return { "0": 32, "1": 63, "2": 83}     ; Nihlathaks Temple
         case 122: return { "0": 33, "1": 63, "2": 83}     ; Halls of Anguish
         case 123: return { "0": 34, "1": 64, "2": 84}     ; Halls of Death's Calling
         case 124: return { "0": 36, "1": 64, "2": 84}     ; Halls of Vaught
-        case 125: return { "0": 39, "1": 60, "2": 81}     ; Abaddon
-        case 126: return { "0": 39, "1": 61, "2": 82}     ; Pit of Acheron
-        case 127: return { "0": 39, "1": 62, "2": 83}     ; Infernal Pit
+        case 125: return { "0": 39, "1": 60, "2": 85}     ; Abaddon
+        case 126: return { "0": 39, "1": 61, "2": 85}     ; Pit of Acheron
+        case 127: return { "0": 39, "1": 62, "2": 85}     ; Infernal Pit
         case 128: return { "0": 39, "1": 65, "2": 85}     ; Worldstone Keep Level 1
         case 129: return { "0": 40, "1": 65, "2": 85}     ; Worldstone Keep Level 2
         case 130: return { "0": 42, "1": 66, "2": 85}     ; Worldstone Keep Level 3

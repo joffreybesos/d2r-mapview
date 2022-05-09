@@ -42,7 +42,8 @@ getPlayerOffset(ByRef d2r, startingOffset, loops, settings) {
             inventory := d2r.read(pInventory, "Int64")
             if (inventory) {
                 
-                expChar := d2r.read(d2r.BaseAddress + expOffset, "UShort")
+                expCharPtr := d2r.read(d2r.BaseAddress + expOffset, "Int64")
+                expChar := d2r.read(expCharPtr + 0x5C, "UShort")
                 basecheck := (d2r.read(inventory + 0x30, "UShort")) != 1
                 if (expChar) {
                     basecheck := (d2r.read(inventory + 0x70, "UShort")) != 0
@@ -51,7 +52,7 @@ getPlayerOffset(ByRef d2r, startingOffset, loops, settings) {
                 if (basecheck) {
                     pAct := playerUnit + 0x20
                     actAddress := d2r.read(pAct, "Int64")
-                    mapSeedAddress := actAddress + 0x14
+                    mapSeedAddress := actAddress + 0x1C
                     mapSeed := d2r.read(mapSeedAddress, "UInt")
 
                     pPath := playerUnit + 0x38
@@ -69,7 +70,7 @@ getPlayerOffset(ByRef d2r, startingOffset, loops, settings) {
                     ;WriteLog(name " " xPos " " yPos " " mapSeed)
                     if (xPos > 0 and yPos > 0 and StrLen(mapSeed) > 6) {
                         if (loops > 1) {
-                            WriteLog("SUCCESS: Found current player offset: " newOffset ", at entry " attempts ", which gives map seed: " mapSeed)
+                            WriteLog("SUCCESS: Found current player offset: " newOffset ", at entry " attempts ", which gives obfuscated map seed: " mapSeed)
                         }
                         SetFormat Integer, D
                         newOffset := newOffset + 0 ;convert to decimal

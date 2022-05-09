@@ -49,11 +49,11 @@ ShowHelpText(settings) {
     s .= "`n"
     s .= "`n"
     s .= "If you paid for this program you have been scammed.`n"
-    s .= "Please consider running your own map server.`n"
     s .= "`n"
     s .= "- CTRL+H to show/hide this help`n"
+    s .= "- CTRL+O to open settings menu`n"
     s .= "- TAB to show/hide map view`n"
-    s .= "- " switchMapMode " to toggle centred map mode (BETA)`n"
+    s .= "- " switchMapMode " to toggle centred map mode`n"
     s .= "- " alwaysShowKey " key to permanently show map`n"
     s .= "- " increaseMapSizeKey " key to increase map size`n"
     s .= "- " decreaseMapSizeKey " key to decrease map size`n"
@@ -61,11 +61,11 @@ ShowHelpText(settings) {
     s .= "- " moveMapRight " key to move map right`n"
     s .= "- " moveMapUp " key to move map up`n"
     s .= "- " moveMapDown " key to move map down`n"
+    s .= "- Shift+F9 to toggle debug logging`n"
     s .= "- Shift+F10 to exit d2r-mapview`n"
+    s .= "- Shift+F11 to reload d2r-mapview`n"
     s .= "`n"
-    s .= "You can remap keys, and change colours in settings.ini`n"
-    s .= "Configuration options here:`n"
-    s .= "https://github.com/joffreybesos/d2r-mapview#configure`n"
+    s .= "You can remap keys, and change colours in settings by pressing Ctrl+O`n"
     s .= "`n"
     s .= "See log.txt for troubleshooting.`n"
     s .= "`n"
@@ -73,7 +73,7 @@ ShowHelpText(settings) {
     bmp.G.DrawString(s, whiteTextFont, 20, 20, 0, 0, textFormat)
 
     whiteTextFont := new OGdip.Font("Arial", 36)
-    bmp.G.DrawString("Press CTRL+H to hide", whiteTextFont, 15, 650, 0, 0, textFormat)
+    bmp.G.DrawString("Press CTRL+H to hide", whiteTextFont, 15, 680, 0, 0, textFormat)
 
     ; add map legend        
     WhiteBrush:= new OGdip.Brush(0xFFFFFFFF)

@@ -21,6 +21,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["alwaysShowMap"] := 0
     settings["hideTown"] := 0
     settings["edges"] := 1
+    settings["padding"] := 150
     settings["wallThickness"] := "0.5"
     settings["centerMode"] := 1
     settings["centerModeScale"] := "2.262"
@@ -38,8 +39,14 @@ readSettings(settingsFile, ByRef settings) {
     settings["showGameInfo"] := 1
     settings["gameInfoFontSize"] := "18"
     settings["gameInfoAlignment"] := "LEFT"
-    settings["showPartyLocations"] := 1
     settings["exitTextSize"] := "12"
+
+    settings["showPartyLocations"] := 1
+    settings["showResists"] := 1
+    settings["showHealthPc"] := 1
+    settings["partyInfoFontSize"] := 0
+    settings["resistFontSize"] := 0
+    settings["healthFontSize"] := 0
 
     settings["showNormalMobs"] := 1
     settings["showUniqueMobs"] := 1
@@ -47,12 +54,12 @@ readSettings(settingsFile, ByRef settings) {
     settings["showDeadMobs"] := 1
     settings["showMerc"] := 1
     settings["showTownNPCs"] := 1
-    settings["NPCsAsCross"] := 0
+    settings["NPCsAsCross"] := 1
     settings["showTownNPCNames"] := 1
     
     settings["showImmunities"] := 1
     settings["showPlayerDotCenter"] := 1
-    settings["playerAsCross"] := 0
+    settings["playerAsCross"] := 1
     settings["showOtherPlayers"] := 1
     settings["showOtherPlayerNames"] := 0
     settings["showShrines"] := 1

@@ -1,6 +1,6 @@
 
 
-ReadOtherPlayers(ByRef d2rprocess, startingOffset, ByRef otherPlayers, ByRef partyList) {
+ReadOtherPlayers(ByRef d2rprocess, startingOffset, ByRef levelNo, ByRef otherPlayers, ByRef partyList) {
     otherPlayers := []
     SetFormat Integer, D
 
@@ -47,7 +47,9 @@ ReadOtherPlayers(ByRef d2rprocess, startingOffset, ByRef otherPlayers, ByRef par
             }
         }
         if (!found) {
-            otherPlayers.push({ "player": A_Index, "unitId": unitId, "playerName": partyPlayer.name, "isCorpse": 0, "x": partyPlayer.xPos, "y": partyPlayer.yPos})
+            if (partyPlayer.area == levelNo) {
+                otherPlayers.push({ "player": A_Index, "unitId": unitId, "playerName": partyPlayer.name, "isCorpse": 0, "x": partyPlayer.xPos, "y": partyPlayer.yPos})
+            }
         }
     }
     SetFormat Integer, D

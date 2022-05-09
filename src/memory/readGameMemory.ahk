@@ -87,7 +87,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     ; get other players
     if (settings["showOtherPlayers"]) {
         ; timeStamp("ReadOtherPlayers")
-        ReadOtherPlayers(d2rprocess, startingOffset, otherPlayerData, partyList)
+        ReadOtherPlayers(d2rprocess, startingOffset, levelNo, otherPlayerData, partyList)
         ; timeStamp("ReadOtherPlayers")
     }
 

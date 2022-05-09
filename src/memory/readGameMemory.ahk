@@ -76,10 +76,18 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
         lastHoveredType := NumGet(&hoverBuffer , 0x04, "UInt")
         lastHoveredUnitId := NumGet(&hoverBuffer , 0x08, "UInt")
     }
+
+
+    ; get party
+    if (Mod(ticktock, 3)) {
+        ReadParty(d2rprocess, partyList)
+    }
+
+
     ; get other players
     if (settings["showOtherPlayers"]) {
         ; timeStamp("ReadOtherPlayers")
-        ReadOtherPlayers(d2rprocess, startingOffset, otherPlayerData)
+        ReadOtherPlayers(d2rprocess, startingOffset, otherPlayerData, partyList)
         ; timeStamp("ReadOtherPlayers")
     }
 
@@ -120,11 +128,6 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
             ReadItems(d2rprocess, startingOffset, items)
             ; timeStamp("readItems")
         }
-    }
-
-    ; get party
-    if (Mod(ticktock, 3)) {
-        ReadParty(d2rprocess, partyList)
     }
 
     ; get objects

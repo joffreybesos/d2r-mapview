@@ -31,7 +31,7 @@ class SessionTableLayer {
         historyTextAlignment := settings["historyTextAlignment"]
         StringUpper, historyTextAlignment, historyTextAlignment
         this.historyTextAlignment := historyTextAlignment
-        this.bgBox := Gdip_BrushCreateSolid(0x33000000)
+        this.bgBox := Gdip_BrushCreateSolid(0x66000000)
 
     }
 
@@ -98,10 +98,10 @@ class SessionTableLayer {
         ;x|y|width|height|chars|lines
         measuredString := Gdip_TextToGraphics(this.G, textStr, Options2, exocetFont)
         ms := StrSplit(measuredString , "|")
-        , bgx := ms[1] - 5
-        , bgy := ms[2] - 2
-        , bgw := ms[3] + 2
-        , bgh := ms[4] + 0
+        , bgx := ms[1]
+        , bgy := ms[2] - 3
+        , bgw := ms[3]
+        , bgh := ms[4]
         Gdip_FillRectangle(this.G, this.bgBox, bgx, bgy, bgw, bgh)
         Gdip_TextToGraphics(this.G, textStr, Options2, exocetFont)
         Gdip_TextToGraphics(this.G, textStr, Options, exocetFont)
@@ -115,10 +115,10 @@ class SessionTableLayer {
         ;x|y|width|height|chars|lines
         measuredString := Gdip_TextToGraphics(this.G, textList, Options2, exocetFont)
         ms := StrSplit(measuredString , "|")
-        , bgx := ms[1] - 5
-        , bgy := ms[2] - 2
-        , bgw := ms[3] + 2
-        , bgh := ms[4] + 0
+        , bgx := ms[1]
+        , bgy := ms[2] - 3
+        , bgw := ms[3]
+        , bgh := ms[4]
         Gdip_FillRectangle(this.G, this.bgBox, bgx, bgy, bgw, bgh)
         drawnArea := Gdip_TextToGraphics(this.G, textList, Options, exocetFont)
         ms := StrSplit(drawnArea , "|")

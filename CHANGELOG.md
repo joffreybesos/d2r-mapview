@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Location of players on map goes further range by using data in party struct (thanks mengqin)
 - Your corpse will now be displayed on the map, is configured with 'other player' settings
 - Updated localisation for zhTW (thanks 噗噗白)
+- Game history has a shaded border now for better readabilty
 
 ## [2.8.2] - 2021-05-01 - Language fix
 

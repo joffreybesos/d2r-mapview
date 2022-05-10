@@ -8412,3 +8412,63 @@ Gdip_ErrrorHandler(errCode, throwErrorMsg, additionalInfo:="") {
 
    Return GdipErrMsg
 }
+
+Gdip_SetBitmapTransColor(pBitmap,TransColor) {
+    static _SetBmpTrans, Ptr, PtrA
+    if !( _SetBmpTrans ) {
+        Ptr := A_PtrSize ? "UPtr" : "UInt"
+        PtrA := Ptr . "*"
+        MCode_SetBmpTrans := "
+            (LTrim Join
+            8b44240c558b6c241cc745000000000085c07e77538b5c2410568b74242033c9578b7c2414894c24288da424000000
+            0085db7e458bc18d1439b9020000008bff8a0c113a4e0275178a4c38013a4e01750e8a0a3a0e7508c644380300ff450083c0
+            0483c204b9020000004b75d38b4c24288b44241c8b5c2418034c242048894c24288944241c75a85f5e5b33c05dc3,405
+            34c8b5424388bda41c702000000004585c07e6448897c2410458bd84c8b4424304963f94c8d49010f1f800000000085db7e3
+            8498bc1488bd3660f1f440000410fb648023848017519410fb6480138087510410fb6083848ff7507c640020041ff024883c
+            00448ffca75d44c03cf49ffcb75bc488b7c241033c05bc3
+            )"
+        if ( A_PtrSize == 8 ) ; x64, after comma
+            MCode_SetBmpTrans := SubStr(MCode_SetBmpTrans,InStr(MCode_SetBmpTrans,",")+1)
+        else ; x86, before comma
+            MCode_SetBmpTrans := SubStr(MCode_SetBmpTrans,1,InStr(MCode_SetBmpTrans,",")-1)
+        VarSetCapacity(_SetBmpTrans, LEN := StrLen(MCode_SetBmpTrans)//2, 0)
+        Loop, %LEN%
+            NumPut("0x" . SubStr(MCode_SetBmpTrans,(2*A_Index)-1,2), _SetBmpTrans, A_Index-1, "uchar")
+        MCode_SetBmpTrans := ""
+        DllCall("VirtualProtect", Ptr,&_SetBmpTrans, Ptr,VarSetCapacity(_SetBmpTrans), "uint",0x40, PtrA,0)
+    }
+    If !pBitmap
+        Return -2001
+    If TransColor not between 0 and 0xFFFFFF
+        Return -2002
+    Gdip_GetImageDimensions(pBitmap,W,H)
+    If !(W && H)
+        Return -2003
+    If Gdip_LockBits(pBitmap,0,0,W,H,Stride,Scan,BitmapData)
+        Return -2004
+    ; The following code should be slower than using the MCode approach,
+    ; but will the kept here for now, just for reference.
+    /*
+    Count := 0
+    Loop, %H% {
+        Y := A_Index-1
+        Loop, %W% {
+            X := A_Index-1
+            CurrentColor := Gdip_GetLockBitPixel(Scan,X,Y,Stride)
+            If ( (CurrentColor & 0xFFFFFF) == TransColor )
+                Gdip_SetLockBitPixel(TransColor,Scan,X,Y,Stride), Count++
+        }
+    }
+    */
+    ; Thanks guest3456 for helping with the initial solution involving NumPut
+    Gdip_FromARGB(TransColor,A,R,G,B), VarSetCapacity(TransColor,0), VarSetCapacity(TransColor,3,255)
+    NumPut(B,TransColor,0,"UChar"), NumPut(G,TransColor,1,"UChar"), NumPut(R,TransColor,2,"UChar")
+    MCount := 0
+    E := DllCall(&_SetBmpTrans, Ptr,Scan, "int",W, "int",H, "int",Stride, Ptr,&TransColor, "int*",MCount, "cdecl int")
+    Gdip_UnlockBits(pBitmap,BitmapData)
+    If ( E != 0 ) {
+        ErrorLevel := E
+        Return -2005
+    }
+    Return MCount
+}

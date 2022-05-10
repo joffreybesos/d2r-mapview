@@ -97,6 +97,7 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
         correctedPos := findNewPos(xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
         xPosDot := correctedPos["x"]
         yPosDot := correctedPos["y"]
+        Gdip_SetBitmapTransColor(pBitmap, 0x000000)
 
         Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
 
@@ -114,7 +115,7 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
     ; seed := gameMemoryData["mapSeed"]
     ; sOutput := A_ScriptDir "\" seed "_" levelNo ".png"
     ; Gdip_SaveBitmapToFile(pBitmap, sOutput)
-    ; WriteLog(Width " " Height " " RWidth " " RHeight " " scale)
+    ; WriteLog(Width " " He ight " " RWidth " " RHeight " " scale)
 
     SelectObject(hdc, obm)
     DeleteObject(hbm)

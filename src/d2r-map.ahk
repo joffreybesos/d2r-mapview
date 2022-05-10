@@ -28,6 +28,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\logging.ahk
 #Include %A_ScriptDir%\include\Yaml.ahk
 #Include %A_ScriptDir%\include\JSON.ahk
+#Include %A_ScriptDir%\include\Gdip_All.ahk
 #Include %A_ScriptDir%\itemfilter\AlertList.ahk
 #Include %A_ScriptDir%\itemfilter\ItemAlert.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk
@@ -81,7 +82,7 @@ global settings
 global defaultSettings
 readSettings("settings.ini", settings)
 global localizedStrings := LoadLocalization(settings)
-checkServer(settings)
+;checkServer(settings)
 lastlevel:=""
 lastSeed:=""
 session :=
@@ -326,9 +327,6 @@ While 1 {
                     Gui, Units: Show, NA
                 }
                 
-                if (settings["enablePrefetch"]) {
-                    prefetchMaps(settings, gameMemoryData)
-                }
                 mapLoading := 0
                 Gui, LoadingText: Destroy ; remove loading text
                 

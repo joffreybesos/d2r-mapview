@@ -1,4 +1,3 @@
-#Include %A_ScriptDir%\include\Gdip_All.ahk
 
 ShowText(settings, Text, opacity) {
     

@@ -13,11 +13,12 @@ class Areas {
 
 	getArea(ByRef mapId, renderScale := 2) {
 		area := new Area(this.mapSeed, this.difficulty, mapId, this.cacheFolder)
-		area.setImage(this.stitchMapsPadding(mapId, 150, renderScale))
+		;area.setImage(this.stitchMapsPadding(mapId, 75, renderScale))
+		area.bitmap := area.rawBitmap
 		return area
 	}
 
-    stitchMapsPadding(ByRef mapId, padding := 150, renderScale := 2) {
+    stitchMapsPadding(ByRef mapId, padding := 75, renderScale := 2) {
         areasToStitch := []
         areaNosToStitch := this.getStitchedMaps(mapId)
         for k, extMapId in areaNosToStitch

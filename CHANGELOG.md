@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.8.4] - 2021-05-11 - Eth alerts
+## [2.8.5] - 2021-05-11 - Eth alerts
 
 - When an item is ethereal, it will now include it in the alert (voice and text)
 - When MH tries to start the server, it will run from source if it's available as well now

@@ -21,7 +21,9 @@ CheckForUpdates() {
 
     if (foundnewer) {
         WriteLog("Found newer version to download")
-        MsgBox, 36,d2r-mapview, A newer version of the d2r-mapview is available.`nDo you want to download? (recommended)
+        promptmsg1 := localizedStrings["errormsg25"]
+        promptmsg2 := localizedStrings["errormsg26"]
+        MsgBox, 36,d2r-mapview, %promptmsg1%`n%promptmsg2%
         IfMsgBox Yes
         {
             

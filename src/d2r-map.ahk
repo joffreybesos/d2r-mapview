@@ -64,7 +64,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\UnitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UIAssistLayer.ahk
 
-global version := "2.8.3"
+global version := "2.8.5"
 
 lastMap := ""
 exitArray := []
@@ -76,12 +76,12 @@ WriteLog("*******************************************************************")
 WriteLog("Version: " version)
 WriteLog("Working folder: " A_ScriptDir)
 WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyVW3uj")
-CheckForUpdates()
 ClearCache(A_Temp)
 global settings
 global defaultSettings
 readSettings("settings.ini", settings)
 global localizedStrings := LoadLocalization(settings)
+CheckForUpdates()
 ;checkServer(settings)
 lastlevel:=""
 lastSeed:=""

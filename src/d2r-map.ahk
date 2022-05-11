@@ -71,7 +71,6 @@ WriteLog("*******************************************************************")
 WriteLog("Version: " version)
 WriteLog("Working folder: " A_ScriptDir)
 WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyVW3uj")
-CheckForUpdates()
 ClearCache(A_Temp)
 global settings
 global defaultSettings

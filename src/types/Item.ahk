@@ -78,7 +78,7 @@ class GameItem {
             quality := ""
 
         if (this.ethereal) {
-            quality := quality " ethereal"
+            quality := quality " " localizedStrings["quality10"]
         }
         itemName := this.prefixName " " this.localizedName
         sockets := ""

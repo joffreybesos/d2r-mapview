@@ -34,6 +34,7 @@ class Area {
     saveImageToFile(ByRef filename) {
         if (this.bitmap == 0) {
             OutputDebug, % "No image found"
+            WriteLog("ERROR: Downloaded image not found")
             return
         }
         pToken := Gdip_Startup()

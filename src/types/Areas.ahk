@@ -1,3 +1,4 @@
+#Include %A_ScriptDir%\types\Area.ahk
 
 class Areas {
     mapSeed := 0
@@ -12,10 +13,9 @@ class Areas {
     }
 
 	getArea(ByRef mapId, renderScale := 2) {
-		area := new Area(this.mapSeed, this.difficulty, mapId, this.cacheFolder)
-		;area.setImage(this.stitchMapsPadding(mapId, 75, renderScale))
-		area.bitmap := area.rawBitmap
-		return area
+		thisArea := new Area(this.mapSeed, this.difficulty, mapId, this.cacheFolder)
+		thisArea.setImage(this.stitchMapsPadding(mapId, 75, renderScale))
+		return thisArea
 	}
 
     stitchMapsPadding(ByRef mapId, padding := 75, renderScale := 2) {

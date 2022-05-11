@@ -7,9 +7,9 @@ generateMapImage(ByRef settings, ByRef areas, ByRef mapId, ByRef imageData) {
     
     sFile := A_Temp . "\" . areas.mapSeed . "_" . areas.difficulty . "_" . mapId "_" renderScale ".bmp"
 
-    area := areas.getArea(mapId, renderScale)
-    respHeaders := area.getHeaders()
-    area.saveImageToFile(sFile)
+    thisArea := areas.getArea(mapId, renderScale)
+    respHeaders := thisArea.getHeaders()
+    thisArea.saveImageToFile(sFile)
 
     IniRead, levelScale, mapconfig.ini, %mapId%, scale, 1.0
     IniRead, levelxmargin, mapconfig.ini, %mapId%, x, 0

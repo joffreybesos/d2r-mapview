@@ -39,7 +39,7 @@ MovePlayerMap(ByRef settings, ByRef d2rprocess, ByRef pathAddress, ByRef mapHwnd
 
     WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
     leftMargin := (gameWidth/2) - xPosDot + (settings["centerModeXoffset"] /2) + windowLeftMargin
-    , topMargin := (gameHeight/2) - yPosDot + (settings["centerModeYoffset"] /2) + windowTopMargin
+    , topMargin := (gameHeight/2) - yPosDot + (settings["centerModeYoffset"] /2) + windowTopMargin + 50
     , regionWidth := gameWidth
     , regionHeight := gameHeight
     , regionX := 0 - leftMargin

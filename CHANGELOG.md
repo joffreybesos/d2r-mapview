@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.8.4] - 2021-05-11 - Eth alerts
+
+- When an item is ethereal, it will now include it in the alert (voice and text)
+- When MH tries to start the server, it will run from source if it's available as well now
+- Download new version prompt now has localisation
+- When the MH tries to start the mapserver itself it will delete the mapserver temp files first
+
 ## [2.8.4] - 2021-05-09 - Bug fix
 
 - Fixed problem with ghost player location

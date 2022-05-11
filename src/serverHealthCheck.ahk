@@ -15,6 +15,8 @@ checkServer(ByRef settings) {
     } catch e {
         if (FileExist("d2-mapserver.exe")) {
             startMapServer("d2-mapserver.exe", settings)
+        } else if (FileExist("startserver.bat")) {
+            startMapServer("startserver.bat", settings)
         } else {
             WriteLog("d2-mapserver.exe not found")
             emsg := e.message
@@ -37,8 +39,10 @@ startMapServer(serverExe, ByRef settings) {
     errormsg19 := localizedStrings["errormsg19"]
     errormsg20 := localizedStrings["errormsg20"]
     WriteLog("Attempting to start map server...")
-    Runwait, taskkill /im %serverExe% /f
-    Runwait, taskkill /im node.exe /f
+    Runwait, taskkill /im %serverExe% /f,, Hide
+    Runwait, taskkill /im node.exe /f,, Hide
+
+    FileRemoveDir, %A_Temp%\pkg, 1
 
     ServerLog := A_ScriptDir . "\serverlog.txt"
     FileDelete, %ServerLog%

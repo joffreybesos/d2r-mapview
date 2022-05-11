@@ -29,6 +29,9 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
                 SetFormat Integer, D
                 itemText := itemText " [" item.numSockets "]"
             }
+            if (item.ethereal) {
+                itemText := itemText " Eth. "
+            }
             acolor := "cc" . alert.color    
             ; if (item.txtFileNo == 603 or item.txtFileNo == 604 or item.txtFileNo == 605) {
             ;     item.loadStats()

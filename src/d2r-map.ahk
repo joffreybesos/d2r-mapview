@@ -77,6 +77,7 @@ global settings
 global defaultSettings
 readSettings("settings.ini", settings)
 global localizedStrings := LoadLocalization(settings)
+CheckForUpdates()
 checkServer(settings)
 lastlevel:=""
 lastSeed:=""

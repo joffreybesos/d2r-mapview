@@ -62,7 +62,7 @@ SetWorkingDir, %A_ScriptDir%
 
 
 
-global version := "2.8.8"
+global version := "2.8.7"
 
 lastMap := ""
 exitArray := []

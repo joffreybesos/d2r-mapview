@@ -7,7 +7,8 @@ enabledAlerts:
   - BaseItems
   - AllUniqueItems
   - AllSetItems
-  - Jewels
+  - MagicJewels
+  - RareJewels
   - Charms
   - Runes
   - RareHeadGear
@@ -191,12 +192,24 @@ Alerts:
       - Set
     color: 00FC00
 
-  Jewels:
+  MagicJewels:
+    quality:
+      - Magic
     items:
       - Jewel
     soundeffect: jewel.wav
     #ignoreidentified: true     # only alert if the jewel is not identified
     color: 6D6DFF
+  
+  RareJewels:
+    quality:
+      - Rare
+    items:
+      - Jewel
+    soundeffect: jewel.wav
+    #ignoreidentified: true     # only alert if the jewel is not identified
+    color: FFFF00
+    
     
   Keys:
     items:

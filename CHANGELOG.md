@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Town portals will now show the location they go to when in town
 - Town portals will show who cast them while out of town
 - Fixed Arachnids Lair not showing the level name
+- Default itemfilter updated - Rare Jewels now show up in yellow
 
 ## [2.8.6] - 2021-05-12 - Small fixes
 

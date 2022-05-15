@@ -40,11 +40,21 @@ ReadObjects(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef
                         ; if in town
                         ownerName := d2rprocess.readString(pUnitData + 0x34 , 32)
                         
-                        if (currentHoveringUnitId) {
-                            if (currentHoveringUnitId == unitId) { ; portal mouse over
-                                isHovered := true
-                            }
-                        }
+                        ; if (currentHoveringUnitId) {
+                        ;     if (currentHoveringUnitId == unitId) { ; portal mouse over
+                        ;         ; partyList := []
+                        ;         ; ReadParty(d2rprocess, partyList)
+                        ;         ; playersOtherside := ""
+                        ;         ; for k,v in partyList
+                        ;         ; {
+                        ;         ;     if (interactType == v.area) {
+                        ;         ;         playersOtherside := playersOtherside . "`n" . v.name
+                        ;         ;     }
+                        ;         ; }
+                        ;         ; OutputDebug, % playersOtherside
+                        ;         isHovered := true
+                        ;     }
+                        ; }
                     }
 
                     gameObject := {"txtFileNo": txtFileNo, "name": name, "mode": mode, "isChest": isChest, "chestState": chestState, "isPortal": isPortal, "isRedPortal": isRedPortal, "ownerName": ownerName, "interactType": interactType, "isShrine": isShrine, "shrineType": shrineType, "objectx": objectx, "objecty": objecty, "levelNo": levelNo }

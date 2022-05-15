@@ -51,33 +51,19 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
     , correctedPos := correctPos(settings, xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
     , xPosDot := correctedPos["x"]
     , yPosDot := correctedPos["y"]
-    WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
+    , gameClientArea := getWindowClientArea()
+    , windowLeftMargin := gameClientArea["X"]
+    , windowTopMargin := gameClientArea["Y"]
+    , gameWidth := gameClientArea["W"]
+    , gameHeight := gameClientArea["H"]
     
     if (settings["centerMode"]) {
-        
-        leftMargin := (gameWidth/2) - xPosDot + (settings["centerModeXoffset"] /2) + windowLeftMargin
-        , topMargin := (gameHeight/2) - yPosDot + (settings["centerModeYoffset"] /2) + windowTopMargin
-        , regionWidth := gameWidth
-        , regionHeight := gameHeight
-        , regionX := 0 - leftMargin
-        , regionY := 0 - topMargin
-        if (leftMargin > 0) {
-            regionX := windowLeftMargin
-            , regionWidth := gameWidth - leftMargin
-        }
-        if (topMargin > 0) {
-            regionY := windowTopMargin
-            , regionHeight := gameHeight - topMargin
-        }
-
-        leftDiff :=  lastLeftMargin - leftMargin
+        leftMargin := (gameWidth/2) - xPosDot + (settings["centerModeXoffset"] /2) - windowLeftMargin
+        , topMargin := (gameHeight/2) - yPosDot + (settings["centerModeYoffset"] /2) - windowTopMargin
+        , leftDiff :=  lastLeftMargin - leftMargin
         , topDiff :=  lastTopMargin - topMargin
-        ; leftDiff := 0
-        ; topDiff :=  0
         , centerLeftOffset := leftMargin + (leftDiff/2)
         , centerTopOffset := topMargin + (topDiff/2)
-
-        ;ToolTip % centerLeftOffset " " centerTopOffset
     }
     ; timeStamp("unitsStart")
     
@@ -176,7 +162,7 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
         ;ToolTip % "`n`n`n`n" regionX " " regionY " " regionWidth " " regionHeight
         WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapHwnd1%
         ;WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %unitHwnd1%
-        UpdateLayeredWindow(unitHwnd1, unitsLayer.hdc, 0, 0, gameWidth, gameHeight)
+        UpdateLayeredWindow(unitHwnd1, unitsLayer.hdc, windowLeftMargin, windowTopMargin, gameWidth, gameHeight)
         Gdip_GraphicsClear( unitsLayer.G )
     } else {
         WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 

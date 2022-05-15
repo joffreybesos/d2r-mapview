@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.8.6] - 2021-05-12 - Small fixes
+
+- Fixed windowed mode! Units now draw correctly on the window
+- In centered mode now the Win+Arrow move keys will adjust the map
+- Fixed issue where the map 'bounces' when it first loads
+- Health percentage no longer appears for town NPCs
+- Fixed Jeryhn missing as town NPC
+- Updated localisation again for zhTW (thanks @噗噗白)
+
+## [2.8.5] - 2021-05-11 - Eth alerts
+
+- When an item is ethereal, it will now include it in the alert (voice and text)
+- When MH tries to start the server, it will run from source if it's available as well now
+- Download new version prompt now has localisation
+- When the MH tries to start the mapserver itself it will delete the mapserver temp files first
+
+## [2.8.4] - 2021-05-09 - Bug fix
+
+- Fixed problem with ghost player location
+- This release also lets me test the auto-update feature of the previous release
+
+## [2.8.3] - 2021-05-09 - Auto update, corpse, party member location range
+
+- On startup the MH will now check for and download a newer version if one is available
+- You will be prompted if you would like to download the newer version and it will run immediately
+- Location of players on map goes further range by using data in party struct (thanks mengqin)
+- Your corpse will now be displayed on the map, is configured with 'other player' settings
+- Updated localisation for zhTW (thanks 噗噗白)
+- Game history has a shaded border now for better readabilty
+
 ## [2.8.2] - 2021-05-01 - Language fix
 
 - Localisation is now fixed after being broken in last release

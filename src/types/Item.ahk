@@ -77,11 +77,15 @@ class GameItem {
         if (this.qualityNo == 2)
             quality := ""
 
+        if (this.ethereal) {
+            quality := quality " " localizedStrings["quality10"]
+        }
         itemName := this.prefixName " " this.localizedName
         sockets := ""
         if (this.numSockets > 0) {
             sockets := this.getLocalizedSockets(this.numSockets)
         }
+        
         speechString := quality " " itemName " " sockets
         return speechString
     }

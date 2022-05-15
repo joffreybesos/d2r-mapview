@@ -25,23 +25,6 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
         serverScale := 2 
     }
 
-    ; WriteLog("maxGuiWidth := " maxGuiWidth)
-    ; WriteLog("scale := " scale)
-    ; WriteLog("leftMargin := " leftMargin)
-    ; WriteLog("topMargin := " topMargin)
-    ; WriteLog("opacity := " opacity)
-    ; WriteLog(imageData["sFile"])
-    ; WriteLog(imageData["leftTrimmed"])
-    ; WriteLog(imageData["topTrimmed"])
-    ; WriteLog(imageData["mapOffsetX"])
-    ; WriteLog(imageData["mapOffsety"])
-    ; WriteLog(imageData["mapwidth"])
-    ; WriteLog(imageData["mapheight"])
-    ; WriteLog(imageData["prerotated"])
-
-    ; WriteLog(gameMemoryData["xPos"])
-    ; WriteLog(gameMemoryData["yPos"])
-
     StartTime := A_TickCount
     Angle := 45
     padding := settings["padding"]
@@ -96,8 +79,12 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
         yPosDot := correctedPos["y"]
 
         Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
+        WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
+        leftMargin := (gameWidth/2) - xPosDot + (settings["centerModeXoffset"] /2) + windowLeftMargin
+        , topMargin := (gameHeight/2) - yPosDot + (settings["centerModeYoffset"] /2) + windowTopMargin
 
         UpdateLayeredWindow(mapHwnd1, hdc, 0, 0, scaledWidth, scaledHeight)
+        WinMove, ahk_id %mapHwnd1%,, leftMargin, topMargin
         ; win move is now handled in movePlayerMap.ahk
     } else {
         Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
@@ -116,6 +103,7 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
     SelectObject(hdc, obm)
     DeleteObject(hbm)
     DeleteDC(hdc)
+    
     Gdip_DeleteGraphics(G)
     Gdip_DisposeImage(pBitmap)
     ElapsedTime := A_TickCount - StartTime

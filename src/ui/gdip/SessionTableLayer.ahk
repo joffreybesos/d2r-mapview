@@ -31,6 +31,7 @@ class SessionTableLayer {
         historyTextAlignment := settings["historyTextAlignment"]
         StringUpper, historyTextAlignment, historyTextAlignment
         this.historyTextAlignment := historyTextAlignment
+        this.bgBox := Gdip_BrushCreateSolid(0x66000000)
 
     }
 
@@ -93,6 +94,15 @@ class SessionTableLayer {
         shadowtextx := textx + 1
         , shadowtexty := texty + 1
         Options2 = x%shadowtextx% y%shadowtexty% Left vBottom cff000000 r4 s%fontSize% Bold
+        
+        ;x|y|width|height|chars|lines
+        measuredString := Gdip_TextToGraphics(this.G, textStr, Options2, exocetFont)
+        ms := StrSplit(measuredString , "|")
+        , bgx := ms[1]
+        , bgy := ms[2] - 3
+        , bgw := ms[3]
+        , bgh := ms[4]
+        Gdip_FillRectangle(this.G, this.bgBox, bgx, bgy, bgw, bgh)
         Gdip_TextToGraphics(this.G, textStr, Options2, exocetFont)
         Gdip_TextToGraphics(this.G, textStr, Options, exocetFont)
     }
@@ -102,7 +112,14 @@ class SessionTableLayer {
         shadowtextx := textx + 1
         , shadowtexty := texty + 1
         Options2 = x%shadowtextx% y%shadowtexty% Left vTop cff000000 r4 s%fontSize%
-        Gdip_TextToGraphics(this.G, textList, Options2, exocetFont)
+        ;x|y|width|height|chars|lines
+        measuredString := Gdip_TextToGraphics(this.G, textList, Options2, exocetFont)
+        ms := StrSplit(measuredString , "|")
+        , bgx := ms[1]
+        , bgy := ms[2] - 3
+        , bgw := ms[3]
+        , bgh := ms[4]
+        Gdip_FillRectangle(this.G, this.bgBox, bgx, bgy, bgw, bgh)
         drawnArea := Gdip_TextToGraphics(this.G, textList, Options, exocetFont)
         ms := StrSplit(drawnArea , "|")
         minSize := defaultColumnWidth + textx
@@ -119,6 +136,7 @@ class SessionTableLayer {
         DeleteObject(this.hbm)
         DeleteDC(this.hdc)
         Gui, SessionTable: Destroy
+        Gdip_DeleteBrush(this.bgBox)
     }
 
     GetDurationFormatEx(Duration, Format := "m'm 's's'", LocaleName := "!x-sys-default-locale")

@@ -5,7 +5,7 @@ Use at your own risk, there is no warranty or responsibility taken for being pen
 
 Please follow this guide to setup your own, it's quite easy: https://github.com/joffreybesos/d2r-mapview/wiki/Setup-guide
 
-This tool is licenced under GPLv3.
+This tool is licenced under GPLv3, reselling this maphack violates the terms of the license.
 
 ## Join the discord server <https://discord.gg/qEgqyVW3uj>
 
@@ -39,9 +39,11 @@ Please read the wiki https://github.com/joffreybesos/d2r-mapview/wiki/Setup-guid
 The compiled executable will get false positives in virus scans. This is because the tool is written in Autohotkey.
 Autohotkey, while a powerful tool, has been used for all sorts of nefarious applications in the past.  
 If you look on the Autohotkey forums, you'll see this is a widely reported problem.
+On top of that it reads from memory and hooks into hotkeys which flags in virus scanners.
 
-However, you can alternatively download and install <https://www.autohotkey.com/>  
-Then you can run `src/d2r-map.ahk` directly from source.
+If you still don't trust it, you can run directly from source.
+To do so download and install <https://www.autohotkey.com/>  
+Then you can simply double click `src/d2r-map.ahk` to run from source code.
 This way you can be fully aware of what code you're executing and you don't have to trust an opaque executable.
 
 Do not accept executables for this from any other source!

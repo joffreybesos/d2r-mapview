@@ -53,11 +53,17 @@ MovePlayerMap(ByRef settings, ByRef d2rprocess, ByRef pathAddress, ByRef mapHwnd
         regionHeight := gameHeight - topMargin
     }
 
+    
     leftDiff :=  lastLeftMargin - leftMargin
     topDiff :=  lastTopMargin - topMargin
 
     ; when moving by a large amount, just update straight away
     if (leftDiff > 20 or topDiff > 20) {
+        leftDiff := 0
+        topDiff := 0
+    }
+
+    if (lastLeftMargin == 0) {
         leftDiff := 0
         topDiff := 0
     }
@@ -68,7 +74,7 @@ MovePlayerMap(ByRef settings, ByRef d2rprocess, ByRef pathAddress, ByRef mapHwnd
 
     WinMove, ahk_id %mapHwnd1%,, leftMargin + (leftDiff/2), topMargin + (topDiff/2)
     ;WinMove, ahk_id %unitHwnd1%,, leftMargin + (leftDiff/2), topMargin + (topDiff/2)
-    WinMove, ahk_id %unitHwnd1%,, 0, 0
+    ;WinMove, ahk_id %unitHwnd1%,, 0, 0
     lastLeftMargin := leftMargin
     lastTopMargin := topMargin
 

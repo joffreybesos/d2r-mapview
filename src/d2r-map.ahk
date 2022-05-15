@@ -27,6 +27,8 @@ Menu, Tray, Add, Exit, ExitMH
 SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\logging.ahk
 #Include %A_ScriptDir%\include\Yaml.ahk
+#Include %A_ScriptDir%\include\JSON.ahk
+#Include %A_ScriptDir%\include\Gdip_All.ahk
 #Include %A_ScriptDir%\itemfilter\AlertList.ahk
 #Include %A_ScriptDir%\itemfilter\ItemAlert.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk
@@ -49,6 +51,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\localization.ahk
 #Include %A_ScriptDir%\readSettings.ahk
 #Include %A_ScriptDir%\serverHealthCheck.ahk
+#Include %A_ScriptDir%\updateCheck.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
 #Include %A_ScriptDir%\ui\gdip\unitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\SessionTableLayer.ahk
@@ -57,7 +60,9 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\UnitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UIAssistLayer.ahk
 
-global version := "2.8.2"
+
+
+global version := "2.8.6"
 
 lastMap := ""
 exitArray := []
@@ -74,6 +79,7 @@ global settings
 global defaultSettings
 readSettings("settings.ini", settings)
 global localizedStrings := LoadLocalization(settings)
+CheckForUpdates()
 checkServer(settings)
 lastlevel:=""
 lastSeed:=""
@@ -546,6 +552,11 @@ MoveMapLeft:
         levelxmargin := levelxmargin - 25
         IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
         redrawMap := 1
+    } else if (levelNo and settings["centerMode"]) {
+        centerModeXoffset := settings["centerModeXoffset"] - 3
+        IniWrite, %centerModeXoffset%, settings.ini, Settings, centerModeXoffset
+        settings["centerModeXoffset"] := centerModeXoffset
+        redrawMap := 1
     }
     return
 }
@@ -558,6 +569,11 @@ MoveMapRight:
     if (levelNo and not settings["centerMode"]) {
         levelxmargin := levelxmargin + 25
         IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
+        redrawMap := 1
+    } else if (levelNo and settings["centerMode"]) {
+        centerModeXoffset := settings["centerModeXoffset"] + 3
+        IniWrite, %centerModeXoffset%, settings.ini, Settings, centerModeXoffset
+        settings["centerModeXoffset"] := centerModeXoffset
         redrawMap := 1
     }
     return
@@ -572,6 +588,11 @@ MoveMapUp:
         levelymargin := levelymargin - 25
         IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
         redrawMap := 1
+    } else if (levelNo and settings["centerMode"]) {
+        centerModeYoffset := settings["centerModeYoffset"] - 3
+        IniWrite, %centerModeYoffset%, settings.ini, Settings, centerModeYoffset
+        settings["centerModeYoffset"] := centerModeYoffset
+        redrawMap := 1
     }
     return
 }
@@ -584,6 +605,11 @@ MoveMapDown:
     if (levelNo and not settings["centerMode"]) {
         levelymargin := levelymargin + 25
         IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
+        redrawMap := 1
+    } else if (levelNo and settings["centerMode"]) {
+        centerModeYoffset := settings["centerModeYoffset"] + 3
+        IniWrite, %centerModeYoffset%, settings.ini, Settings, centerModeYoffset
+        settings["centerModeYoffset"] := centerModeYoffset
         redrawMap := 1
     }
     return

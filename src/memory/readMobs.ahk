@@ -96,7 +96,9 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef mo
                     }
                     if (currentHoveringUnitId) {
                         if (currentHoveringUnitId == unitId) { ; monster currently has mouse hovering
-                            isHovered := true
+                            if (!isTownNPC) {
+                                isHovered := true
+                            }
                         }
                     }
                 }
@@ -241,6 +243,7 @@ isTownNPC(txtFileNo) {
         case 198: return "Greiz"
         case 177: return "Drognan"
         case 178: return "Fara"
+        case 201: return "Jerhyn"
         case 202: return "Lysander"
         case 176: return "Atma"
         case 200: return "Geglash"

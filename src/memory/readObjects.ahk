@@ -1,5 +1,5 @@
 
-ReadObjects(ByRef d2rprocess, startingOffset, ByRef levelNo, ByRef gameObjects) {
+ReadObjects(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef levelNo, ByRef gameObjects) {
     ; items
     gameObjects := []
     , baseAddress := d2rprocess.BaseAddress + startingOffset + (2 * 1024)
@@ -19,15 +19,13 @@ ReadObjects(ByRef d2rprocess, startingOffset, ByRef levelNo, ByRef gameObjects) 
                 , isRedPortal := isRedPortal(txtFileNo)
                 , isChest := isChest(txtFileNo)
                 if (isPortal or isShrine or isRedPortal or isChest) {
-                    
-                    pUnitData := d2rprocess.read(objectUnit + 0x10, "Int64")
+                    unitId := d2rprocess.read(objectUnit + 0x08, "UInt")
+                    , pUnitData := d2rprocess.read(objectUnit + 0x10, "Int64")
                     ; , pObjectTxt := d2rprocess.read(pUnitData, "Int64")
                     ; , sObjectTxt := d2rprocess.readString(pObjectTxt, 16)
-                    , interactType := d2rprocess.read(pUnitData + 0x08, "UShort")
+                    , interactType := d2rprocess.read(pUnitData + 0x08, "UChar")
                     , shrineFlag := d2rprocess.read(pUnitData + 0x09, "UShort")
-                    ; , shrineTxt := d2rprocess.readString(pUnitData + 0x0c, 16)
                     , name := getObjectName(txtFileNo)
-
                     , pPath := d2rprocess.read(objectUnit + 0x38, "Int64")  
                     , objectx := d2rprocess.read(pPath + 0x10, "UShort")
                     , objecty := d2rprocess.read(pPath + 0x14, "UShort")
@@ -38,11 +36,22 @@ ReadObjects(ByRef d2rprocess, startingOffset, ByRef levelNo, ByRef gameObjects) 
                     if (isChest) {
                         chestState := chestState(interactType)
                     }
+                    if (isPortal) {
+                        ; if in town
+                        ownerName := d2rprocess.readString(pUnitData + 0x34 , 32)
+                        
+                        if (currentHoveringUnitId) {
+                            if (currentHoveringUnitId == unitId) { ; portal mouse over
+                                isHovered := true
+                            }
+                        }
+                    }
 
-                    gameObject := {"txtFileNo": txtFileNo, "name": name, "mode": mode, "isChest": isChest, "chestState": chestState, "isPortal": isPortal, "isRedPortal": isRedPortal, "isShrine": isShrine, "shrineType": shrineType, "objectx": objectx, "objecty": objecty, "levelNo": levelNo }
+                    gameObject := {"txtFileNo": txtFileNo, "name": name, "mode": mode, "isChest": isChest, "chestState": chestState, "isPortal": isPortal, "isRedPortal": isRedPortal, "ownerName": ownerName, "interactType": interactType, "isShrine": isShrine, "shrineType": shrineType, "objectx": objectx, "objecty": objecty, "levelNo": levelNo }
                     ;WriteLog("txtFileNo: " txtFileNo ", name: " name ", isPortal: " isPortal ", isShrine: " isShrine ", objectx: " objectx ", objecty: " objecty)
                     , gameObjects.push(gameObject)
                 }
+                
                 
             }
             objectUnit := d2rprocess.read(objectUnit + 0x150, "Int64")  ; get next item

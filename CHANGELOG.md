@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.8.7] - 2021-05-15 - Portal labels
+
+- Town portals will now show the location they go to when in town
+- Town portals will show who cast them while out of town
+- Fixed Arachnids Lair not showing the level name
+
 ## [2.8.6] - 2021-05-12 - Small fixes
 
 - Fixed windowed mode! Units now draw correctly on the window

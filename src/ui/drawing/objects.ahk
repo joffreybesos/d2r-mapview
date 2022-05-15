@@ -14,6 +14,13 @@ drawObjects(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageD
                     , correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                     , objectx := correctedPos["x"] + centerLeftOffset
                     , objecty := correctedPos["y"] + centerTopOffset
+                    portalColor := "ff" . settings["portalColor"]
+                    if (object["interactType"] == 1 or object["interactType"] == 40 or object["interactType"] == 75 or object["interactType"] == 103 or object["interactType"] == 109) {
+                        drawFloatingText(unitsLayer, objectx, objecty-(9.2 * scale), 8 * scale, portalColor, false, formalFont, object["ownerName"])
+                    } else {
+                        areaName := getAreaName(object["interactType"])
+                        drawFloatingText(unitsLayer, objectx, objecty-(9.2 * scale), 8 * scale, portalColor, false, formalFont, areaName)
+                    }
 
                     ;Gdip_DrawString(unitsLayer.G, text, hFont, hFormat, pBrush2, RectF)
                     if (settings["centerMode"]) {

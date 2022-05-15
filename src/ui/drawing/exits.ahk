@@ -18,7 +18,7 @@ drawExits(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
         hexOpacity += 0
         StringTrimLeft, hexOpacity, hexOpacity, 2
     }
-    exitTextColor := hexOpacity . "ffffff"
+    exitTextColor := "ffffffff"
     exitTextColorShadow := hexOpacity . "000000"
     exitTextSize := settings["exitTextSize"] * scale
     if (exitsHeader) {
@@ -27,6 +27,9 @@ drawExits(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
             exitArray := StrSplit(A_LoopField, ",")
             ;exitArray[1] ; id of exit
             ;exitArray[2] ; name of exit
+            if (exitArray[2] == "Arachnid Cave") {
+                exitArray[2] := "Arachnid Lair"
+            }
             if (exitArray[2] == "Ancient Summit") {
                 exitArray[2] := "Arreat Summit"
             }

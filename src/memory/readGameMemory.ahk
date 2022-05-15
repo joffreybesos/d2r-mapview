@@ -134,7 +134,11 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     if (settings["showShrines"] or settings["showPortals"] or settings["showChests"]) {
         if (Mod(ticktock, 6)) {
             ; timeStamp("ReadObjects")
-            ReadObjects(d2rprocess, startingOffset, levelNo, objects)
+            if (lastHoveredType == 2) {
+                ReadObjects(d2rprocess, startingOffset, lastHoveredUnitId, levelNo, objects)
+            } else {
+                ReadObjects(d2rprocess, startingOffset, 0, levelNo, objects)
+            }
             ; timeStamp("ReadObjects")
         }
     }

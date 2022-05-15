@@ -5,10 +5,11 @@ All notable changes to this project will be documented in this file.
 ## [2.8.6] - 2021-05-12 - Small fixes
 
 - Fixed windowed mode! Units now draw correctly on the window
-- In centered mode now the Win+Arrow move keys will adjust the map
+- In centered mode now the Win+Arrow move keys will adjust the map position
 - Fixed issue where the map 'bounces' when it first loads
 - Health percentage no longer appears for town NPCs
 - Fixed Jeryhn missing as town NPC
+- Default hotkey for changing map centered mode is now `\` instead of `/`
 - Updated localisation again for zhTW (thanks @噗噗白)
 
 ## [2.8.5] - 2021-05-11 - Eth alerts

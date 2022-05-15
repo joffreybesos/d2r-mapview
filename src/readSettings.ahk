@@ -116,7 +116,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["moveMapRight"] := "#Right"
     settings["moveMapUp"] := "#Up"
     settings["moveMapDown"] := "#Down"
-    settings["switchMapMode"] := "~/"
+    settings["switchMapMode"] := "~\"
     settings["historyToggleKey"] := "^g"
     settings["performanceMode"] := "-1"
     settings["enableD2ML"] := 0

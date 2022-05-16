@@ -38,23 +38,31 @@ ReadObjects(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef
                     }
                     if (isPortal) {
                         ; if in town
+                        ;OutputDebug, % "unittable "  HexAdd(baseAddress, 0) " objectUnit " HexAdd(objectUnit, 0) " pPath " HexAdd(pPath, 0) " x " objectx " " HexAdd(objectx, 0) " y " objecty " " HexAdd(objecty, 0)
                         ownerName := d2rprocess.readString(pUnitData + 0x34 , 32)
+                        destX := d2rprocess.read(objectUnit + 0x1AE + 0x0, "UShort")
+                        destY := d2rprocess.read(objectUnit + 0x1AE + 0x2 , "UShort")
+                        destMap := d2rprocess.read(objectUnit + 0x1AE + 0x4 , "UChar")
                         
-                        ; if (currentHoveringUnitId) {
-                        ;     if (currentHoveringUnitId == unitId) { ; portal mouse over
-                        ;         ; partyList := []
-                        ;         ; ReadParty(d2rprocess, partyList)
-                        ;         ; playersOtherside := ""
-                        ;         ; for k,v in partyList
-                        ;         ; {
-                        ;         ;     if (interactType == v.area) {
-                        ;         ;         playersOtherside := playersOtherside . "`n" . v.name
-                        ;         ;     }
-                        ;         ; }
-                        ;         ; OutputDebug, % playersOtherside
-                        ;         isHovered := true
-                        ;     }
-                        ; }
+                        if (currentHoveringUnitId) {
+                            if (currentHoveringUnitId == unitId) { ; portal mouse over
+                                
+                                partyList := []
+                                ReadParty(d2rprocess, partyList)
+                                ; playersOtherside := ""
+                                ; for k,v in partyList
+                                ; {
+                                ;     if (interactType == v.area) {
+                                ;         playersOtherside := playersOtherside . "`n" . v.name
+                                ;     }
+                                ; }
+                                ; OutputDebug, % plmayersOtherside
+                                tpPreviewLayer.drawMapPreview(partyList)
+                                isHovered := true
+                            } else {
+                                tpPreviewLayer.hide()
+                            }
+                        }
                     }
 
                     gameObject := {"txtFileNo": txtFileNo, "name": name, "mode": mode, "isChest": isChest, "chestState": chestState, "isPortal": isPortal, "isRedPortal": isRedPortal, "ownerName": ownerName, "interactType": interactType, "isShrine": isShrine, "shrineType": shrineType, "objectx": objectx, "objecty": objecty, "levelNo": levelNo }

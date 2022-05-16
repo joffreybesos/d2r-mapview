@@ -59,6 +59,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\PartyInfoLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UnitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UIAssistLayer.ahk
+#Include %A_ScriptDir%\ui\gdip\TPPreviewLayer.ahk
 
 
 
@@ -210,6 +211,7 @@ currentFPS := 0
 historyText := new SessionTableLayer(settings)
 gameInfoLayer := new GameInfoLayer(settings)
 partyInfoLayer := new PartyInfoLayer(settings)
+tpPreviewLayer := new TPPreviewLayer(settings)
 
 While 1 {
     frameStart:=A_TickCount

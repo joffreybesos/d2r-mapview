@@ -11,9 +11,7 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
             , correctedPos := correctPos(settings, itemx, itemy, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             , itemx := correctedPos["x"] + centerLeftOffset
             , itemy := correctedPos["y"] + centerTopOffset
-            if (alert.speak or alert.soundfile) {
-                announceItem(settings, item, alert)
-            }
+            
             pBrush1 := Gdip_BrushCreateSolid("0xffffffff")
             , pBrush2 := Gdip_BrushCreateSolid("0xee" . alert.color)
             , pBrush3 := Gdip_BrushCreateSolid("0xdd" . alert.color)
@@ -22,21 +20,30 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
             , pBrush6 := Gdip_BrushCreateSolid("0x33" . alert.color)
             , fontSize := settings["itemFontSize"] * scale
             , itemText := item.localizedName
+            , itemLogText := item.localizedName
             if (item.prefixName) {
                 itemText := item.prefixName "`n" itemText
+                , itemLogText := item.prefixName " " itemLogText
             }
             if (item.numSockets > 0) {
                 SetFormat Integer, D
                 itemText := itemText " [" item.numSockets "]"
+                , itemLogText := itemLogText " [" item.numSockets "]"
             }
             if (item.ethereal) {
-                itemText := " Eth. " itemText
+                itemText := "Eth. " itemText
+                , itemLogText := "Eth. " itemLogText
             }
             acolor := "cc" . alert.color    
             ; if (item.txtFileNo == 603 or item.txtFileNo == 604 or item.txtFileNo == 605) {
             ;     item.loadStats()
             ;     itemText := itemText "`n" item.statList
             ; }
+            item.itemLogText := itemLogText
+            item.alertColor := "ff" . alert.color    
+            if (alert.speak or alert.soundfile) {
+                announceItem(settings, item, alert)
+            }
             drawFloatingText(unitsLayer, itemx, itemy, fontSize, acolor, true, exocetFont, itemText)
 
             switch (ticktock) {
@@ -56,32 +63,35 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
 
 
 announceItem(settings, item, alert) {
-    if (settings["allowTextToSpeech"] or settings["allowItemDropSounds"]) {
+    
+    if (!seenItems[item.getHash()]) {
         if (!item.isQuestItem(item.txtFileNo)) {
-            if (!hasVal(seenItems, item.getHash())) {
-                ; seen item for the first time
-                WriteLog("ITEMLOG: Found item '" item.quality " " item.name "' matched to alert '" alert.name "'")
-                if (settings["allowTextToSpeech"]) {
-                    SetFormat Integer, D
-                    volume := Round(settings["textToSpeechVolume"] + 0)
-                    pitch := Round(settings["textToSpeechPitch"] + 0)
-                    speed := Round(settings["textToSpeechSpeed"] + 0)
-                    try {
-                        speech := "<pitch absmiddle=""" pitch """><rate absspeed=""" speed """><volume level=""" volume """>" item.getTextToSpeech() "</volume></rate></pitch>"
-                        oSpVoice.Speak(speech, 1)
-                    } catch e {
-                        WriteLog("Error with text to speech, try changing voice " speech)   
-                        WriteLog(e.message)
-                    }
+            ; seen item for the first time
+            WriteLog("ITEMLOG: Found item '" item.quality " " item.name "' matched to alert '" alert.name "'")
+            if (settings["allowTextToSpeech"]) {
+                SetFormat Integer, D
+                volume := Round(settings["textToSpeechVolume"] + 0)
+                pitch := Round(settings["textToSpeechPitch"] + 0)
+                speed := Round(settings["textToSpeechSpeed"] + 0)
+                try {
+                    speech := "<pitch absmiddle=""" pitch """><rate absspeed=""" speed """><volume level=""" volume """>" item.getTextToSpeech() "</volume></rate></pitch>"
+                    oSpVoice.Speak(speech, 1)
+                } catch e {
+                    WriteLog("Error with text to speech, try changing voice " speech)   
+                    WriteLog(e.message)
                 }
-                if (settings["allowItemDropSounds"]) {
-                    if (alert.soundfile) {
-                        soundfile := alert.soundfile
-                        SoundPlay, %soundfile%
-                    }
-                }
-                seenItems.push(item.getHash())
             }
+            if (settings["allowItemDropSounds"]) {
+                if (alert.soundfile) {
+                    soundfile := alert.soundfile
+                    SoundPlay, %soundfile%
+                }
+            }
+            item.foundTime := A_Now
+            seenItems[item.getHash()] := item
+            itemLogItems[A_Now . item.getHash()] := item
+            itemLogLayer.drawItemLog()
         }
     }
+    
 }

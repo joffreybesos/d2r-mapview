@@ -59,8 +59,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\PartyInfoLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UnitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UIAssistLayer.ahk
-
-
+#Include %A_ScriptDir%\ui\gdip\ItemLogLayer.ahk
 
 global version := "2.8.8"
 
@@ -101,6 +100,7 @@ global exocetFont := (A_ScriptDir . "\exocetblizzardot-medium.otf")
 global formalFont := (A_ScriptDir . "\formal436bt-regular.otf")
 global mapLoading := 0
 global seenItems := []
+global itemLogItems := []
 global oSpVoice := ComObjCreate("SAPI.SpVoice")
 global itemAlertList := new AlertList("itemfilter.yaml")
 global centerLeftOffset := 0
@@ -210,6 +210,7 @@ currentFPS := 0
 historyText := new SessionTableLayer(settings)
 gameInfoLayer := new GameInfoLayer(settings)
 partyInfoLayer := new PartyInfoLayer(settings)
+itemLogLayer := new ItemLogLayer(settings)
 
 While 1 {
     frameStart:=A_TickCount
@@ -227,6 +228,7 @@ While 1 {
             items := []
             shrines := []
             seenItems := []
+            itemLogItems := []
             newGame := 1
             if (session) {
                 session.setEndTime(gameEndTime)
@@ -250,6 +252,7 @@ While 1 {
             }
             gameInfoLayer.hide()
             partyInfoLayer.hide()
+            itemLogLayer.hide()
             offsetAttempts := 26
             WriteLogDebug("Offset attempts " offsetAttempts)
         }
@@ -293,6 +296,7 @@ While 1 {
                 shrines := []
                 items := []
                 seenItems := []
+                itemLogItems := []
                 gameInfoLayer.updateSessionStart(session.startTime)
                 ;gameInfoLayer.drawInfoText(currentFPS)
                 newGame := 0
@@ -387,6 +391,7 @@ While 1 {
         if (playerOffset) {
             gameInfoLayer.drawInfoText(currentFPS)
             partyInfoLayer.drawInfoText(gameMemoryData["partyList"], gameMemoryData["unitId"])
+            itemLogLayer.drawItemLog()
         }
     }
     if (frameDuration < ticksPerFrame) {
@@ -397,7 +402,7 @@ While 1 {
 checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
     uiOffset:= offsets["uiOffset"]
     , alwaysShowMap:= settings["alwaysShowMap"]
-    , hideTown:= settings["hideTown"]
+    , hideTown:= settings["hideTown"] 
     , levelNo:= gameMemoryData["levelNo"]
     , isMenuShown:= gameMemoryData["menuShown"]
     if ((levelNo == 1 or levelNo == 40 or levelNo == 75 or levelNo == 103 or levelNo == 109) and hideTown) {
@@ -728,6 +733,8 @@ Update:
     partyInfoLayer := new PartyInfoLayer(settings)
     uiAssistLayer.delete()
     uiAssistLayer := new UIAssistLayer(settings)
+    itemLogLayer.delete()
+    itemLogLayer := new ItemLogLayer(settings)
     if (cmode != settings["centerMode"]) { ; if centermode changed
         lastlevel := "INVALIDATED"
         imageData := {}

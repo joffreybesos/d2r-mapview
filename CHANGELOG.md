@@ -2,8 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.8.8] - 2021-05-15 - Portal labels
+## [2.8.8] - 2021-05-17 - Item log text
 
+- Item text log will now on the left hand side
+- You can adjust the fontsize, and turn it off the log
 - Fixed Halls of Pain exit name (thanks @Mr-Sithel)
 
 ## [2.8.7] - 2021-05-15 - Portal labels

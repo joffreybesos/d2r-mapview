@@ -72,6 +72,8 @@ readSettings(settingsFile, ByRef settings) {
 
     settings["enableItemFilter"] := 1
     settings["itemFontSize"] := 12
+    settings["itemLogFontSize"] := 18
+    settings["itemLogEnabled"] := 1
     settings["allowTextToSpeech"] := 1
     settings["textToSpeechVolume"] := 50
     settings["textToSpeechPitch"] := 4

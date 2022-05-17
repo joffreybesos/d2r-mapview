@@ -27,6 +27,9 @@ drawExits(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
             exitArray := StrSplit(A_LoopField, ",")
             ;exitArray[1] ; id of exit
             ;exitArray[2] ; name of exit
+            if (exitArray[2] == "Halls of Pain") {
+                exitArray[2] := "Halls of Death's Calling"
+            }
             if (exitArray[2] == "Arachnid Cave") {
                 exitArray[2] := "Arachnid Lair"
             }

@@ -62,7 +62,7 @@ SetWorkingDir, %A_ScriptDir%
 
 
 
-global version := "2.8.7"
+global version := "2.8.8"
 
 lastMap := ""
 exitArray := []
@@ -308,7 +308,7 @@ While 1 {
                 mapLoading := 1
                 Gui, Map: Hide ; hide map
                 Gui, Units: Hide ; hide player dot
-                ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 22 is opacity
+                ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
                 ; Download map
                 downloadMapImage(settings, gameMemoryData, imageData, 0)
 

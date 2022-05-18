@@ -62,7 +62,7 @@ Alerts:
     color: BBA45B
 
   # specific set items give a different alert
-	SpecificSetItems:
+  SpecificSetItems:
     quality:
       - Set
     items:

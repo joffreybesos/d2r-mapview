@@ -75,7 +75,11 @@ getPlayerOffset(ByRef d2r, startingOffset, loops, settings) {
                         SetFormat Integer, D
                         newOffset := newOffset + 0 ;convert to decimal
                         found := true
-                        return newOffset
+                        if ((playerUnit - d2r.BaseAddress) < 0) {
+                            return 0
+                        } else {
+                            return playerUnit - d2r.BaseAddress
+                        }
                     }
                 }
             }

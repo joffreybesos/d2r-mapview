@@ -42,6 +42,7 @@ class TPPreviewLayer {
     }
 
     drawMapPreview(ByRef partyList) {
+        Gui, TPPreview: Show, NA
         ;if (portal.isHovered) {
             this.getMousePos()
             Gdip_FillRectangle(this.G, this.brushBG, 0, 0, this.mapBoxWidth, this.mapBoxHeight)
@@ -66,6 +67,9 @@ class TPPreviewLayer {
 
     }
 
+    hide() {
+        Gui, TPPreview: Hide
+    }
 
     delete() {
         SelectObject(this.hdc, this.obm)

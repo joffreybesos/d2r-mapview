@@ -4,6 +4,7 @@ ReadObjects(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef
     gameObjects := []
     , baseAddress := d2rprocess.BaseAddress + startingOffset + (2 * 1024)
     , d2rprocess.readRaw(baseAddress, unitTableBuffer, 128*8)
+    , hidePortal := true
     Loop, 128
     {
         offset := (8 * (A_Index - 1))
@@ -57,14 +58,12 @@ ReadObjects(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef
                                 ;     }
                                 ; }
                                 ; OutputDebug, % plmayersOtherside
+                                hidePortal := false
                                 tpPreviewLayer.drawMapPreview(partyList)
                                 isHovered := true
-                            } else {
-                                tpPreviewLayer.hide()
                             }
                         }
                     }
-
                     gameObject := {"txtFileNo": txtFileNo, "name": name, "mode": mode, "isChest": isChest, "chestState": chestState, "isPortal": isPortal, "isRedPortal": isRedPortal, "ownerName": ownerName, "interactType": interactType, "isShrine": isShrine, "shrineType": shrineType, "objectx": objectx, "objecty": objecty, "levelNo": levelNo }
                     ;WriteLog("txtFileNo: " txtFileNo ", name: " name ", isPortal: " isPortal ", isShrine: " isShrine ", objectx: " objectx ", objecty: " objecty)
                     , gameObjects.push(gameObject)
@@ -75,6 +74,9 @@ ReadObjects(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef
             objectUnit := d2rprocess.read(objectUnit + 0x150, "Int64")  ; get next item
         }
     } 
+    if (hidePortal) {
+        tpPreviewLayer.hide()
+    }
     SetFormat Integer, D
 }
 

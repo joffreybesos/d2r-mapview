@@ -137,6 +137,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
             if (lastHoveredType == 2) {
                 ReadObjects(d2rprocess, startingOffset, lastHoveredUnitId, levelNo, objects)
             } else {
+                tpPreviewLayer.hide()
                 ReadObjects(d2rprocess, startingOffset, 0, levelNo, objects)
             }
             ; timeStamp("ReadObjects")

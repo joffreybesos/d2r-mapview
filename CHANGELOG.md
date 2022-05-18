@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.8.8] - 2021-05-17 - Item log text
+
+- Item log text will now on the left hand side
+  When an item drops and triggers an alert, you'll see it listed on the screen for 12 seconds
+  You can adjust the fontsize of the item log, and disable it
+- Fixed Halls of Pain exit name (thanks @Mr-Sithel)
+
 ## [2.8.7] - 2021-05-15 - Portal labels
 
 - Town portals will now show the location they go to when in town

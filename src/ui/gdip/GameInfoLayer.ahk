@@ -35,8 +35,27 @@ class GameInfoLayer {
         
         this.gameWindowX := gameWindowX
         this.gameWindowY := gameWindowY
+        this.gameWindowWidth := gameWindowWidth
+        this.gameWindowHeight := gameWindowHeight
         this.textBoxWidth := 200
         this.textBoxHeight := height
+
+        this.topMargin := gameWindowY
+        if ((gameWindowWidth / gameWindowHeight) > 2) { ;if ultrawide
+            this.leftMargin := gameWindowX
+            if (this.gameInfoAlignment == "RIGHT") {
+                this.leftMargin :=  (this.gameWindowWidth - this.textBoxWidth) + this.gameWindowX - 5
+            }
+        } else {
+            this.leftMargin := gameWindowX + (gameWindowHeight / 10)
+            if (this.gameInfoAlignment == "RIGHT") {
+                this.leftMargin :=  (this.gameWindowWidth - this.textBoxWidth) + this.gameWindowX - 5
+                this.topMargin := this.topMargin + (this.gameWindowHeight / 10)
+            }
+        }
+
+        
+        
 
         pToken := Gdip_Startup()
         DetectHiddenWindows, On
@@ -133,21 +152,26 @@ class GameInfoLayer {
         }
         if (textList) {
             this.drawData(5, this.topPadding, fontSize, textList)
-            leftMargin := this.gameWindowX
-            if (this.gameInfoAlignment == "RIGHT") {
-                leftMargin :=  this.gameWindowWidth - this.textBoxWidth + this.gameWindowX - 5
-            }
-            UpdateLayeredWindow(this.GameInfoLayerHwnd, this.hdc, leftMargin, this.gameWindowY, this.textBoxWidth, this.textBoxHeight)
+            
+            UpdateLayeredWindow(this.GameInfoLayerHwnd, this.hdc, this.leftMargin, this.topMargin, this.textBoxWidth, this.textBoxHeight)
         }
         Gdip_GraphicsClear( this.G )
     }
 
 
     drawData(textx, texty, fontSize, textList) {
-        Options = x%textx% y%texty% Left vTop cffc6b276 r4 s%fontSize%
-        textx := textx + 1
-        texty := texty + 1
-        Options2 = x%textx% y%texty% Left vTop cff000000 r4 s%fontSize%
+        if (this.gameInfoAlignment == "RIGHT") {
+            Options = x%textx% y%texty% Left vTop cffc6b276 r4 s%fontSize%
+            textx := textx + 1
+            texty := texty + 1
+            Options2 = x%textx% y%texty% Left vTop cff000000 r4 s%fontSize%
+        } else {
+            Options = x%textx% y%texty% Left vTop cffc6b276 r4 s%fontSize%
+            textx := textx + 1
+            texty := texty + 1
+            Options2 = x%textx% y%texty% Left vTop cff000000 r4 s%fontSize%
+        }
+        
         Gdip_TextToGraphics(this.G, textList, Options2, exocetFont)
         Gdip_TextToGraphics(this.G, textList, Options, exocetFont)
     }

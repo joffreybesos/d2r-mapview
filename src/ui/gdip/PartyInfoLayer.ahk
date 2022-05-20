@@ -107,6 +107,10 @@ class PartyInfoLayer {
         Gdip_TextToGraphics(this.G, textList, Options, formalFont)
     }
 
+	show() {
+        Gui, PartyInfo: Show, NA
+    }
+
     hide() {
         Gui, PartyInfo: Hide
     }

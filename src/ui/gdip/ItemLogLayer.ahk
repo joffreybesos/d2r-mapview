@@ -88,6 +88,10 @@ class ItemLogLayer {
         Gdip_TextToGraphics(this.G, itemText, Options, exocetFont)
     }
 
+    show() {
+        Gui, ItemLog: Show, NA
+    }
+
     hide() {
         Gui, ItemLog: Hide
     }

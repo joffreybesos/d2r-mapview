@@ -459,6 +459,9 @@ unHideMap() {
         WriteLogDebug("Map shown")
     }
     isMapShowing:= 1
+    itemCounterLayer.show()
+    itemLogLayer.show()
+    partyInfoLayer.show()
     if (!mapLoading) {
         Gui, Map: Show, NA
         Gui, Units: Show, NA
@@ -741,6 +744,8 @@ Update:
     uiAssistLayer := new UIAssistLayer(settings)
     itemLogLayer.delete()
     itemLogLayer := new ItemLogLayer(settings)
+    itemCounterLayer.delete()
+    itemCounterLayer := new ItemCounterLayer(settings)
     if (cmode != settings["centerMode"]) { ; if centermode changed
         lastlevel := "INVALIDATED"
         imageData := {}

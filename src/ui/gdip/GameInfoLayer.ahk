@@ -148,7 +148,7 @@ class GameInfoLayer {
             }
         }
         if (settings["showFPS"]) {
-            textList := textLIst "FPS " currentFPS
+            textList := textLIst "MH FPS " currentFPS
         }
         if (textList) {
             this.drawData(5, this.topPadding, fontSize, textList)

@@ -19,7 +19,9 @@ drawObjects(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageD
                         drawFloatingText(unitsLayer, objectx, objecty-(12 * scale), 8 * scale, portalColor, false, formalFont, object["ownerName"])
                     } else {
                         areaName := getAreaName(object["interactType"])
-                        areaName := areaName . "`n(" . object["ownerName"] . ")"
+                        if (object["ownerName"]) {
+                            areaName := areaName . "`n(" . object["ownerName"] . ")"
+                        }
                         drawFloatingText(unitsLayer, objectx, objecty-(12 * scale), 8 * scale, portalColor, false, formalFont, areaName)
                     }
 

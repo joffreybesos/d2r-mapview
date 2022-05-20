@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
   The counter is always on the middle of the right side of the screen
 - MH version now shows at top left
 - Finding the playerunit pointer should be more reliable now
+- Fixed issue where () would appear above portals
 - Peformance boost for reading items from memory
 
 ## [2.8.8] - 2021-05-17 - Item log text

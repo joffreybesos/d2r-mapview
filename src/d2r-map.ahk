@@ -38,6 +38,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\memory\readLastGameName.ahk
 #Include %A_ScriptDir%\memory\readIPAddress.ahk
 #Include %A_ScriptDir%\memory\patternScan.ahk
+#Include %A_ScriptDir%\memory\IsInGame.ahk
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
 #Include %A_ScriptDir%\ui\image\prefetchMaps.ahk
@@ -177,10 +178,7 @@ if (not WinExist(gameWindowId)) {
 global d2rprocess := initMemory(gameWindowId)
 
 patternScan(d2rprocess, offsets)
-playerOffset := offsets["playerOffset"]
-startingOffset := offsets["playerOffset"]
 uiOffset := offsets["uiOffset"]
-
 
 
 pToken := Gdip_Startup()
@@ -215,9 +213,8 @@ itemLogLayer := new ItemLogLayer(settings)
 While 1 {
     frameStart:=A_TickCount
     ; scan for the player offset
-    playerOffset := scanForPlayer(d2rprocess, playerOffset, startingOffset, settings)
-
-    if (!playerOffset) {
+    isInGame := IsInGame(d2rprocess, offsets["unitTable"])
+    if (!isInGame) {
         if (offsetAttempts == 1) {
             gameEndTime := A_TickCount
         }
@@ -260,9 +257,8 @@ While 1 {
     } else {
         offsetAttempts := 0
         ; timeStamp("readGameMemory")
-        readGameMemory(d2rprocess, settings, playerOffset, gameMemoryData)
+        readGameMemory(d2rprocess, settings, gameMemoryData)
         ; timeStamp("readGameMemory")
-        
 
         if (gameMemoryData["experience"]) {
             lastPlayerLevel:= gameMemoryData["playerLevel"]
@@ -388,7 +384,7 @@ While 1 {
         , currentFPS := Round(currentFPS, 1)
         , frameCount := 0
         , fpsTimer := A_TickCount
-        if (playerOffset) {
+        if (isInGame) {
             gameInfoLayer.drawInfoText(currentFPS)
             partyInfoLayer.drawInfoText(gameMemoryData["partyList"], gameMemoryData["unitId"])
             itemLogLayer.drawItemLog()

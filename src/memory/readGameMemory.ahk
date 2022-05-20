@@ -6,18 +6,20 @@
 #Include %A_ScriptDir%\memory\readUI.ahk
 #Include %A_ScriptDir%\memory\readParty.ahk
 #Include %A_ScriptDir%\memory\readMapSeed.ahk
+#Include %A_ScriptDir%\memory\scanForPlayer.ahk
 
-readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryData) {
+readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     global items
     static objects
     static partyList
     hoveredMob := {}
     ;StartTime := A_TickCount
-    startingOffset := offsets["playerOffset"] ;default offset
+    unitTableOffset := offsets["unitTable"] ;default offset
+    playerOffset := scanForPlayer(d2rprocess, playerOffset, unitTableOffset, settings)
 
-    ;WriteLog("Looking for Level No address at player offset " playerOffset)
-    , startingAddress := d2rprocess.BaseAddress + playerOffset
-    , playerUnit := d2rprocess.read(startingAddress, "Int64")
+    ;WriteLog("Looking for Level No address at player offset " unitTableOffset)
+    , playerAddress := d2rprocess.BaseAddress + playerOffset
+    , playerUnit := d2rprocess.read(playerAddress, "Int64")
     , unitId := d2rprocess.read(playerUnit + 0x08, "UInt")
 
     ; get the level number
@@ -44,7 +46,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     , aActUnk2 := d2rprocess.read(actAddress + 0x78, "Int64")
     , difficulty := d2rprocess.read(aActUnk2 + 0x830, "UShort")
     if ((difficulty != 0) & (difficulty != 1) & (difficulty != 2)) {
-        WriteLogDebug("Did not find difficulty using player offset " playerOffset) 
+        WriteLogDebug("Did not find difficulty using player offset " unitTableOffset) 
     }
 
     ; get playername
@@ -87,7 +89,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     ; get other players
     if (settings["showOtherPlayers"]) {
         ; timeStamp("ReadOtherPlayers")
-        ReadOtherPlayers(d2rprocess, startingOffset, levelNo, otherPlayerData, partyList)
+        ReadOtherPlayers(d2rprocess, unitTableOffset, levelNo, otherPlayerData, partyList)
         ; timeStamp("ReadOtherPlayers")
     }
 
@@ -95,11 +97,11 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     if (settings["showNormalMobs"] or settings["showUniqueMobs"] or settings["showBosses"] or settings["showDeadMobs"]) {
         if (lastHoveredType) {
             ; timeStamp("ReadMobs")
-            ReadMobs(d2rprocess, startingOffset, lastHoveredUnitId, mobs, hoveredMob)
+            ReadMobs(d2rprocess, unitTableOffset, lastHoveredUnitId, mobs, hoveredMob)
             ; timeStamp("ReadMobs")
         } else {
             ; timeStamp("ReadMobs")
-            ReadMobs(d2rprocess, startingOffset, 0, mobs, hoveredMob)
+            ReadMobs(d2rprocess, unitTableOffset, 0, mobs, hoveredMob)
             ; timeStamp("ReadMobs")
         }
     }
@@ -109,14 +111,14 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     ; PlayerMissiles
     if (settings["showPlayerMissiles"]){
         ; timeStamp("readMissiles")
-        playerMissiles := readMissiles(d2rprocess, startingOffset + (6 * 1024))
+        playerMissiles := readMissiles(d2rprocess, unitTableOffset + (6 * 1024))
         missiles.push(playerMissiles)
         ; timeStamp("readMissiles")
     }
     ; EnemyMissiles
     if (settings["showEnemyMissiles"]){
         ; timeStamp("readEnemyMissiles")
-        enemyMissiles := readMissiles(d2rprocess, startingOffset)
+        enemyMissiles := readMissiles(d2rprocess, unitTableOffset)
         missiles.push(enemyMissiles)
         ; timeStamp("readEnemyMissiles")
     }
@@ -125,7 +127,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     if (settings["enableItemFilter"]) {
         if (Mod(ticktock, 3)) {
             ; timeStamp("readItems")
-            ReadItems(d2rprocess, startingOffset, items)
+            ReadItems(d2rprocess, unitTableOffset, items)
             ; timeStamp("readItems")
         }
     }
@@ -135,9 +137,9 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
         if (Mod(ticktock, 6)) {
             ; timeStamp("ReadObjects")
             if (lastHoveredType == 2) {
-                ReadObjects(d2rprocess, startingOffset, lastHoveredUnitId, levelNo, objects)
+                ReadObjects(d2rprocess, unitTableOffset, lastHoveredUnitId, levelNo, objects)
             } else {
-                ReadObjects(d2rprocess, startingOffset, 0, levelNo, objects)
+                ReadObjects(d2rprocess, unitTableOffset, 0, levelNo, objects)
             }
             ; timeStamp("ReadObjects")
         }
@@ -159,7 +161,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, playerOffset, ByRef gameMemoryD
     , yPos := yPos + yPosOffset
 
     if (!xPos) {
-        WriteLog("Did not find player position at player offset " playerOffset) 
+        WriteLog("Did not find player position at player offset " unitTableOffset) 
     }
     ; timeStamp("playerposition")
     

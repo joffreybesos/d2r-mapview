@@ -6,9 +6,9 @@ PatternScan(ByRef d2r, ByRef offsets) {
     pattern := d2r.hexStringToPattern("48 8D 0D ?? ?? ?? ?? 48 C1 E0 0A 48 03 C1 C3 CC")
     patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
     offsetBuffer := d2r.read(patternAddress + 3, "Int")
-    playerOffset := ((patternAddress - d2r.BaseAddress) + 7 + offsetBuffer)
-    offsets["playerOffset"] := playerOffset
-    WriteLog("Scanned and found unitTable offset: " playerOffset)
+    unitTable := ((patternAddress - d2r.BaseAddress) + 7 + offsetBuffer)
+    offsets["unitTable"] := unitTable
+    WriteLog("Scanned and found unitTable offset: " unitTable)
     
     ; ui
     pattern := d2r.hexStringToPattern("40 84 ed 0f 94 05")

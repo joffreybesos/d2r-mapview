@@ -1,23 +1,16 @@
 
 scanForPlayer(ByRef d2rprocess, lastOffset, startingOffset, settings) {
+    static playerOffset
     ; check the one that previously worked, it's likely not checkLastOffset()
     
-    playerOffset := checkLastOffset(d2rprocess, lastOffset, settings)
+    playerOffset := getPlayerOffset(d2rprocess, playerOffset, 1, settings)
     if (playerOffset) {
         ;WriteLogDebug("Using last offset " playerOffset " " lastOffset)
         return playerOffset
     }
-    ; if the last offset doesn't seem valid anymore then you're in the menu or a new game
-    return scanForPlayerOffset(d2rprocess, startingOffset, settings)
-}
-
-checkLastOffset(ByRef d2rprocess, startingOffset, settings) {
-    return getPlayerOffset(d2rprocess, startingOffset, 1, settings)
-}
-
-scanForPlayerOffset(ByRef d2rprocess, startingOffset, settings) {
     WriteLogDebug("Scanning for new player offset address, starting default offset " startingOffset)
-    return getPlayerOffset(d2rprocess, startingOffset, 128, settings)
+    playerOffset := getPlayerOffset(d2rprocess, startingOffset, 128, settings)
+    return playerOffset
 }
 
 getPlayerOffset(ByRef d2r, startingOffset, loops, settings) {
@@ -75,7 +68,7 @@ getPlayerOffset(ByRef d2r, startingOffset, loops, settings) {
                         SetFormat Integer, D
                         newOffset := newOffset + 0 ;convert to decimal
                         found := true
-                        return playerUnit - d2r.BaseAddress
+                        return newOffset
                     }
                 }
             }
@@ -86,6 +79,7 @@ getPlayerOffset(ByRef d2r, startingOffset, loops, settings) {
     if (!found && loops > 1) {
         WriteLogDebug("Did not find a player offset in unit hashtable, likely in game menu.")
     }
+    return false
 }
 
 ; yes, you really have to do this in AHK to add two hex values reliably

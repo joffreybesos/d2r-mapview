@@ -4,9 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [2.8.9] - 2021-05-20 - Number of scrolls/keys in inventory shows on right
 
-- You can now see a counter for the number of Identify scrolls, Portal scrolls, and keys
-- You can disable it and change the size
-- The counter is always on the middle of the right side of the screen
+- You can now see a counter for the number of Identify scrolls, Portal scrolls, and Keys
+  You can disable it and change the size in settings
+  The counter is always on the middle of the right side of the screen
 - MH version now shows at top left
 - Finding the playerunit pointer should be more reliable now
 - Peformance boost for reading items from memory

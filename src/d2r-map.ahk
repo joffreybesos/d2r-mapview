@@ -43,6 +43,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
 #Include %A_ScriptDir%\ui\image\prefetchMaps.ahk
+#Include %A_ScriptDir%\ui\image\loadBitmaps.ahk
 #Include %A_ScriptDir%\ui\showMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
@@ -62,6 +63,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\UnitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UIAssistLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\ItemLogLayer.ahk
+#Include %A_ScriptDir%\ui\gdip\ItemCounterLayer.ahk
 
 global version := "2.8.9"
 
@@ -109,6 +111,7 @@ global centerLeftOffset := 0
 global centerTopOffset := 0
 global redrawMap := 1
 global offsets := []
+global hudBitmaps := loadBitmaps()
 
 CreateSettingsGUI(settings, localizedStrings)
 
@@ -210,6 +213,7 @@ historyText := new SessionTableLayer(settings)
 gameInfoLayer := new GameInfoLayer(settings)
 partyInfoLayer := new PartyInfoLayer(settings)
 itemLogLayer := new ItemLogLayer(settings)
+itemCounterLayer := new ItemCounterLayer(settings)
 
 While 1 {
     frameStart:=A_TickCount
@@ -251,6 +255,7 @@ While 1 {
             gameInfoLayer.hide()
             partyInfoLayer.hide()
             itemLogLayer.hide()
+            itemCounterLayer.hide()
             offsetAttempts := 26
             WriteLogDebug("Offset attempts " offsetAttempts)
         }
@@ -387,6 +392,7 @@ While 1 {
         , fpsTimer := A_TickCount
         if (isInGame) {
             readInvItems(d2rprocess, offsets["unitTable"], HUDItems)
+            itemCounterLayer.drawItemCounter(HUDItems)
             gameInfoLayer.drawInfoText(currentFPS)
             partyInfoLayer.drawInfoText(gameMemoryData["partyList"], gameMemoryData["unitId"])
             itemLogLayer.drawItemLog()
@@ -410,6 +416,7 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
         hideMap(false)
     } else if gameMemoryData["menuShown"] {
         partyInfoLayer.hide()
+        itemCounterLayer.hide()
         if (isMapShowing) {
             WriteLogDebug("Hiding since UI menu is shown")
         }
@@ -421,6 +428,7 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
         hideMap(false)
         gameInfoLayer.hide()
         partyInfoLayer.hide()
+        itemCounterLayer.hide()
     } else if (!isAutomapShown(d2rprocess, uiOffset) and !alwaysShowMap) {
         ; hidemap
         hideMap(alwaysShowMap)

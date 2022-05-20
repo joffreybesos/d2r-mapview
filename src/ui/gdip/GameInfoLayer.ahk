@@ -37,7 +37,7 @@ class GameInfoLayer {
         this.gameWindowY := gameWindowY
         this.gameWindowWidth := gameWindowWidth
         this.gameWindowHeight := gameWindowHeight
-        this.textBoxWidth := 200
+        this.textBoxWidth := 250
         this.textBoxHeight := height
 
         this.topMargin := gameWindowY
@@ -130,7 +130,7 @@ class GameInfoLayer {
         fontSize := this.gameInfoSize
         textList := ""
         if (settings["showGameInfo"]) {
-            textList := "D2R-MAPVIEW`n"
+            textList := "D2R-Mapview " version "`n"
             ; only show this text for the first 10 seconds from startup
             if (!this.hideStartupText) {
                 if (A_TickCount - this.startTime < 10000) {

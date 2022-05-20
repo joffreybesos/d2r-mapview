@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.8.9] - 2021-05-20 - Other changes
+
+- Finding the playerunit pointer should be more reliable now
+- Peformance boost for reading items from memory
+
 ## [2.8.8] - 2021-05-17 - Item log text
 
 - Item log text will now on the left hand side

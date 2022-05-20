@@ -62,7 +62,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\UIAssistLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\ItemLogLayer.ahk
 
-global version := "2.8.8"
+global version := "2.8.9"
 
 lastMap := ""
 exitArray := []

@@ -66,7 +66,23 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
                     }
                     if (settings["NPCsAsCross"]) {
                         points := createCross(mobx, moby, 5 * scale)
-                        if (mob["isPlayerMinion"] and settings["showMerc"]) {
+                        if ((mob["isPlayerMinion"] or mob["isMerc"]) and settings["showMerc"]) {
+                            hp := mob["hp"]
+                            if (hp > 128) {
+                                hp := hp >> 4
+                            }
+                            healthbarwidth := 80
+                            , healthbarheight := 20
+                            , textx := mobx-(unitsLayer.normalDotSize/2) - healthbarwidth
+                            , texty := moby-(unitsLayer.normalDotSize/2) - healthbarheight * 2
+                            , healthbarx := textx + (healthbarwidth / 2)
+                            , healthbary := texty
+                            , healthpc := hp / 128
+                            , healthPortion := healthbarwidth * healthpc
+                            , nonhealthPortion := healthbarwidth - healthPortion
+                            , nonhealthPortionx := healthbarx + healthPortion
+                            Gdip_FillRectangle(unitsLayer.G, unitsLayer.pBrushNonHealth, nonhealthPortionx, healthbary, nonhealthPortion, healthbarheight)
+                            Gdip_FillRectangle(unitsLayer.G, unitsLayer.pBrushMercHealth, healthbarx, healthbary, healthPortion, healthbarheight)
                             Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenMercCross, points)
                         } else if (mob["isTownNPC"] and !mob["isPlayerMinion"] and settings["showTownNPCs"]) {
                             fontSize := 11 * scale
@@ -80,7 +96,22 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
                             Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenNormal, mobx-(unitsLayer.normalDotSize/2), moby-(unitsLayer.normalDotSize/1.5), unitsLayer.normalDotSize, unitsLayer.normalDotSize/2)
                         }
                     } else {
-                        if (mob["isPlayerMinion"] and settings["showMerc"]) {
+                        if ((mob["isPlayerMinion"] or mob["isMerc"]) and settings["showMerc"]) {
+
+                            ;x|y|width|height|chars|lines
+                            measuredString := Gdip_TextToGraphics(unitsLayer.G, "Merc", Options2, exocetFont, 200, 100)
+                            , ms := StrSplit(measuredString , "|")
+                            , healthbarx := ms[1] - 10
+                            , healthbary := ms[2] - 5
+                            , healthbarwidth := ms[3] + 17
+                            , healthbarheight := ms[4] + 1
+                            , healthpc := mob["hp"] / mob["maxhp"]
+                            , healthPortion := healthbarwidth * healthpc
+                            , nonhealthPortion := healthbarwidth - healthPortion
+                            , nonhealthPortionx := healthbarx + healthPortion
+                            Gdip_FillRectangle(unitsLayer.G, unitsLayer.pBrushNonHealth, nonhealthPortionx, healthbary, nonhealthPortion, healthbarheight)
+                            Gdip_FillRectangle(unitsLayer.G, unitsLayer.pBrushMerc, healthbarx, healthbary, healthPortion, healthbarheight)
+
                             Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenMerc, mobx-(unitsLayer.normalDotSize/2), moby-(unitsLayer.normalDotSize/1.5), unitsLayer.normalDotSize, unitsLayer.normalDotSize/2)
                         } else if (mob["isTownNPC"] and !mob["isPlayerMinion"] and settings["showTownNPCs"]) {
                             fontSize := 11 * scale

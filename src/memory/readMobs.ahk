@@ -50,7 +50,7 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef mo
                     ; is a revive
                     isPlayerMinion := ((d2rprocess.read(pStatsListEx + 0xAC8 + 0xc, "UInt") & 31) == 1)
                 }
-
+                isMerc := getMerc(txtFileNo)
                 isTownNPC := isTownNPC(txtFileNo)
                 , hp := 0
                 , maxhp := 0
@@ -70,15 +70,16 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef mo
                                 break
                             }
                         }
-                        
-                        switch (statEnum) {
-                            ; no enums here, just bad practices instead
-                            case 36: immunities["physical"] := statValue ;physical immune
-                            case 37: immunities["magic"] := statValue    ;magic immune
-                            case 39: immunities["fire"] := statValue     ;fire resist
-                            case 41: immunities["light"] := statValue    ;light resist
-                            case 43: immunities["cold"] := statValue     ;cold resist
-                            case 45: immunities["poison"] := statValue   ;poison resist
+                        if (!isMerc) { ; dont show immunities for merc
+                            switch (statEnum) {
+                                ; no enums here, just bad practices instead
+                                case 36: immunities["physical"] := statValue ;physical immune
+                                case 37: immunities["magic"] := statValue    ;magic immune
+                                case 39: immunities["fire"] := statValue     ;fire resist
+                                case 41: immunities["light"] := statValue    ;light resist
+                                case 43: immunities["cold"] := statValue     ;cold resist
+                                case 45: immunities["poison"] := statValue   ;poison resist
+                            }
                         }
                         
                         ;if (isBoss) {
@@ -102,9 +103,12 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef mo
                         }
                     }
                 }
-                mob := {"txtFileNo": txtFileNo, "mode": mode, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "isPlayerMinion": isPlayerMinion, "textTitle": textTitle, "immunities": immunities, "hp": hp, "maxhp": maxhp, "isTownNPC": isTownNPC, "isHovered": isHovered }
+                mob := {"txtFileNo": txtFileNo, "mode": mode, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "isMerc": isMerc, "isPlayerMinion": isPlayerMinion, "textTitle": textTitle, "immunities": immunities, "hp": hp, "maxhp": maxhp, "isTownNPC": isTownNPC, "isHovered": isHovered }
                 if (isHovered) {
                     hoveredMob := mob
+                }
+                if (isMerc) {
+                    OutputDebug, % "hp: " hp " maxhp: " maxhp "`n"
                 }
                 mobs.push(mob)
             }
@@ -139,13 +143,19 @@ getBossName(txtFileNo) {
     return ""
 }
 
-getPlayerMinion(txtFileNo){
+getMerc(txtFileNo){
     switch (txtFileNo) {
         case "271": return "roguehire"
         case "338": return "act2hire"
         case "359": return "act3hire"
         case "560": return "act5hire1"
         case "561": return "act5hire2"
+    }
+    return 0
+}
+
+getPlayerMinion(txtFileNo){
+    switch (txtFileNo) {
         case "289": return "ClayGolem"
         case "290": return "BloodGolem"
         case "291": return "IronGolem"
@@ -163,7 +173,7 @@ getPlayerMinion(txtFileNo){
         case "357": return "Valkyrie"
         case "359": return "IronWolf"
     }
-    return ""
+    return 0
 }
 getSuperUniqueName(txtFileNo) {
     switch (txtFileNo) {

@@ -1,6 +1,7 @@
 
 drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageData, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset) {
     ; draw item alerts
+    SetFormat Integer, D
     items := gameMemoryData["items"]
     for index, item in items
     {

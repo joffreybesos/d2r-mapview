@@ -16,7 +16,8 @@ class GameItem {
     statCount := 0
     statBuffer := 
     statList := ""
-
+    
+    inStore := false
     identified := false
     ethereal := false
 
@@ -188,9 +189,9 @@ class GameItem {
         ; if (0x00001000 & flags) {  ; IFLAG_NOSELL
         ;     ; flagsList.push("IFLAG_NOSELL") 
         ; }
-        ; if (0x00002000 & flags) {  ; IFLAG_INSTORE
-        ;     ; flagsList.push("IFLAG_INSTORE") 
-        ; }
+        if (0x00002000 & flags) {  ; IFLAG_INSTORE
+            this.inStore := true
+        }
         ; if (0x00004000 & flags) {  ; IFLAG_NOEQUIP
         ;     ; flagsList.push("IFLAG_NOEQUIP") 
         ; }

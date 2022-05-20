@@ -39,6 +39,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\memory\readIPAddress.ahk
 #Include %A_ScriptDir%\memory\patternScan.ahk
 #Include %A_ScriptDir%\memory\IsInGame.ahk
+#Include %A_ScriptDir%\memory\readInvItems.ahk
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
 #Include %A_ScriptDir%\ui\image\prefetchMaps.ahk
@@ -385,6 +386,7 @@ While 1 {
         , frameCount := 0
         , fpsTimer := A_TickCount
         if (isInGame) {
+            readInvItems(d2rprocess, offsets["unitTable"], HUDItems)
             gameInfoLayer.drawInfoText(currentFPS)
             partyInfoLayer.drawInfoText(gameMemoryData["partyList"], gameMemoryData["unitId"])
             itemLogLayer.drawItemLog()

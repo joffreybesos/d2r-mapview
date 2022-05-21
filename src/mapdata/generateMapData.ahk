@@ -5,7 +5,7 @@ generateAllMapData(ByRef seed, ByRef difficulty, ByRef folder) {
 	OutputDebug, % "Generating map data for seed " seed " difficulty " difficulty " in " folder "`n"
 	cmd := exePath " """ d2path """ --seed " seed " --difficulty " difficulty " --edge --output-folder " folder
 	RunWait, %comspec% /c %cmd%,,hide
-	OutputDebug, % "Finished generating data`n"
+	OutputDebug, % "Finished generating data " cmd "`n"
 }
 
 ; runs a command and captures stdout without flashing a cmd window

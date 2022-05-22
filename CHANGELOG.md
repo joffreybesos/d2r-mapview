@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.0] - 2021-05-22 - Bug fixes
+
+- Fixed issue where UI would flash up while in menus/inventory
+- Fixed issue where scrolls/keys in personal stash would be counted
+
+
 ## [2.8.9] - 2021-05-20 - Number of scrolls/keys in inventory shows on right
 
 - You can now see a counter for the number of Identify scrolls, Portal scrolls, and Keys

@@ -58,16 +58,17 @@ class PartyInfoLayer {
             Gui, PartyInfo: Hide
 			return
         }
+		if (readUI(d2rprocess)) {
+            Gui, PartyInfo: Hide
+			return
+        }
 		if (settings["showPartyLocations"]) {
 			Gui, PartyInfo: Show, NA
 		} else {
 			Gui, PartyInfo: Hide
 			return
 		}
-        if (readUI(d2rprocess)) {
-            Gui, PartyInfo: Hide
-			return
-        }
+        
         fontSize := this.partyInfoFontSize
 
         ; get the current players part id

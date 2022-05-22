@@ -50,16 +50,17 @@ class ItemLogLayer {
             Gui, ItemLog: Hide
             return
         }
+        if (readUI(d2rprocess)) {
+             Gui, ItemLog: Hide
+			return
+        }
         if (WinActive(gameWindowId)) {
             Gui, ItemLog: Show, NA
         } else {
             Gui, ItemLog: Hide
 			return
         }
-        if (readUI(d2rprocess)) {
-             Gui, ItemLog: Hide
-			return
-        }
+        
         fontSize := this.itemLogFontSize
         row := 0
         for kk, item in itemLogItems {

@@ -40,19 +40,20 @@ class ItemCounterLayer {
 
     drawItemCounter(ByRef HUDItems) {
         if (!settings["itemCounterEnabled"]) {
-            Gui, ItemCounter: Hide
-            return
-        }
-        if (WinActive(gameWindowId)) {
-            Gui, ItemCounter: Show, NA
-        } else {
-            Gui, ItemCounter: Hide
+            this.hide()
             return
         }
         if (readUI(d2rprocess)) {
-            Gui, ItemCounter: Hide
+            this.hide()
             return
         }
+        if (WinActive(gameWindowId)) {
+            this.show()
+        } else {
+            this.hide()
+            return
+        }
+        
         fontSize := this.itemCounterFontSize
 
         ; pPen := Gdip_CreatePen(0xff00FF00, 2)
@@ -91,10 +92,12 @@ class ItemCounterLayer {
     }
 
     show() {
+        this.visible := true
         Gui, ItemCounter: Show, NA
     }
 
     hide() {
+        this.visible := false
         Gui, ItemCounter: Hide
     }
 

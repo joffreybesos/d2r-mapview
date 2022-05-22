@@ -20,14 +20,14 @@ class ItemLogLayer {
 
         if ((gameWindowWidth / gameWindowHeight) > 2) { ;if ultrawide
             this.leftMargin := gameWindowX + 5 ; padding
-            this.topMargin := gameWindowY + (gameWindowHeight / 12)
+            this.topMargin := gameWindowY + (gameWindowHeight / 10)
         } else {
             this.leftMargin := gameWindowX + (gameWindowHeight / 10) + 5
-            this.topMargin := gameWindowY + (gameWindowHeight / 12)
+            this.topMargin := gameWindowY + (gameWindowHeight / 10)
         }
         
         this.itemLogFontSize := settings["itemLogFontSize"]
-        this.textBoxWidth := 450
+        this.textBoxWidth := 500
         this.textBoxHeight := this.itemLogFontSize * 10
         this.xoffset := 0
         this.yoffset := 0

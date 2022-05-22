@@ -391,7 +391,7 @@ While 1 {
         , frameCount := 0
         , fpsTimer := A_TickCount
         if (isInGame) {
-            readInvItems(d2rprocess, offsets["unitTable"], HUDItems)
+            readInvItems(d2rprocess, offsets["unitTable"], HUDItems, gameMemoryData["unitId"])
             itemCounterLayer.drawItemCounter(HUDItems)
             gameInfoLayer.drawInfoText(currentFPS)
             partyInfoLayer.drawInfoText(gameMemoryData["partyList"], gameMemoryData["unitId"])

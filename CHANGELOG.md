@@ -5,8 +5,9 @@ All notable changes to this project will be documented in this file.
 ## [2.9.0] - 2021-05-22 - Bug fixes
 
 - Fixed issue where UI would flash up while in menus/inventory
-- Fixed issue where scrolls/keys in personal stash would be counted
-
+- Fixed issue where scrolls/keys were incorrectly counted
+- Moved item log text down a little (thanks @updawg)
+- Fixed quality translation for zhTW (thanks @ckhoho)
 
 ## [2.8.9] - 2021-05-20 - Number of scrolls/keys in inventory shows on right
 

@@ -22,6 +22,7 @@ Menu, Tray, Add
 Menu, Tray, Add, Reload, Reload
 Menu, Tray, Add
 Menu, Tray, Add, Exit, ExitMH
+OnExit, ExitMH
 
 
 SetWorkingDir, %A_ScriptDir%
@@ -402,7 +403,7 @@ While 1 {
         Sleep, ticksPerFrame - frameDuration
     }
 }
-
+return ; End of AHK autoexecute
 checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
     uiOffset:= offsets["uiOffset"]
     , alwaysShowMap:= settings["alwaysShowMap"]
@@ -472,8 +473,11 @@ unHideMap() {
 }
 
 
-+F10::Gosub, ExitMH
-
++F10::
+{
+    Goto, ExitMH
+    return
+}
 MapAlwaysShow:
 {
     SetFormat Integer, D
@@ -688,7 +692,7 @@ HistoryToggle:
 
 ExitMH:
 {
-    WriteLog("Pressed Shift+F10, exiting...")
+    WriteLog("Exiting...")
     session.saveEntry()
 
     ; performance stats

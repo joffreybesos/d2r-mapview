@@ -13,22 +13,12 @@ SetDefaultMouseSpeed, 0
 SetWinDelay, -1
 SetControlDelay, -1
 SendMode Input
-
-;Menu, Tray, Standard
-Menu, Tray, NoStandard ; to remove default menu
-Menu, Tray, Tip, d2r-mapview
-Menu, Tray, Add, Settings, ShowSettings
-Menu, Tray, Add
-Menu, Tray, Add, Reload, Reload
-Menu, Tray, Add
-Menu, Tray, Add, Exit, ExitMH
-
-
 SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\logging.ahk
 #Include %A_ScriptDir%\include\Yaml.ahk
 #Include %A_ScriptDir%\include\JSON.ahk
 #Include %A_ScriptDir%\include\Gdip_All.ahk
+#Include %A_ScriptDir%\init\hotkeys.ahk
 #Include %A_ScriptDir%\itemfilter\AlertList.ahk
 #Include %A_ScriptDir%\itemfilter\ItemAlert.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk
@@ -65,12 +55,17 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\ItemLogLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\ItemCounterLayer.ahk
 
-global version := "2.8.9"
+;Add right click menu in tray
+Menu, Tray, NoStandard ; to remove default menu
+Menu, Tray, Tip, d2r-mapview
+Menu, Tray, Add, Settings, ShowSettings
+Menu, Tray, Add
+Menu, Tray, Add, Reload, Reload
+Menu, Tray, Add
+Menu, Tray, Add, Exit, ExitMH
 
-lastMap := ""
-exitArray := []
-helpToggle:= true
-historyToggle := true
+global version := "2.9.1"
+
 WriteLog("*******************************************************************")
 WriteLog("* Map overlay started https://github.com/joffreybesos/d2r-mapview *")
 WriteLog("*******************************************************************")
@@ -84,12 +79,19 @@ readSettings("settings.ini", settings)
 global localizedStrings := LoadLocalization(settings)
 CheckForUpdates()
 checkServer(settings)
+lastMap := ""
+exitArray := []
+helpToggle:= true
+historyToggle := true
 lastlevel:=""
 lastSeed:=""
 session :=
 lastPlayerLevel:=
 lastPlayerExperience:=
 uidata:={}
+sessionList := []
+offsetAttempts := 2
+settingupGUI := false
 performanceMode := settings["performanceMode"]
 if (performanceMode != 0) {
     SetBatchLines, %performanceMode%
@@ -114,65 +116,14 @@ global offsets := []
 global hudBitmaps := loadBitmaps()
 
 CreateSettingsGUI(settings, localizedStrings)
+SetupHotKeys(gameWindowId, settings)
 
-switchMapModeKey := settings["switchMapMode"]
-if (switchMapModeKey) {
-    Hotkey, IfWinActive, % gameWindowId
-    Hotkey, %switchMapModeKey%, SwitchMapMode
-}
-historyToggleKey := settings["historyToggleKey"]
-if (historyToggleKey) {
-    Hotkey, IfWinActive, % gameWindowId
-    Hotkey, %historyToggleKey%, HistoryToggle
-}
-
-alwaysShowKey := settings["alwaysShowKey"]
-if (alwaysShowKey) {
-    Hotkey, IfWinActive, % gameWindowId
-    Hotkey, %alwaysShowKey%, MapAlwaysShow
-}
-
-increaseMapSizeKey := settings["increaseMapSizeKey"]
-if (increaseMapSizeKey) {
-    Hotkey, IfWinActive, % gameWindowId
-    Hotkey, %increaseMapSizeKey%, MapSizeIncrease
-}
-
-decreaseMapSizeKey := settings["decreaseMapSizeKey"]
-if (decreaseMapSizeKey) {
-    Hotkey, IfWinActive, % gameWindowId
-    Hotkey, %decreaseMapSizeKey%, MapSizeDecrease
-}
-
-moveMapLeftKey := settings["moveMapLeft"]
-if (moveMapLeftKey) {
-    Hotkey, IfWinActive, % gameWindowId
-    Hotkey, %moveMapLeftKey%, MoveMapLeft
-}
-
-moveMapRightKey := settings["moveMapRight"]
-if (moveMapLeftKey) {
-    Hotkey, IfWinActive, % gameWindowId
-    Hotkey, %moveMapRightKey%, MoveMapRight
-}
-moveMapUpKey := settings["moveMapUp"]
-if (moveMapLeftKey) {
-    Hotkey, IfWinActive, % gameWindowId
-    Hotkey, %moveMapUpKey%, MoveMapUp
-}
-moveMapDownKey := settings["moveMapDown"]
-if (moveMapLeftKey) {
-    Hotkey, IfWinActive, % gameWindowId
-    Hotkey, %moveMapDownKey%, MoveMapDown
-}
-
-errormsg3 := localizedStrings["errormsg3"]
-errormsg10:= localizedStrings["errormsg10"]
-errormsg11 := localizedStrings["errormsg11"]
-errormsg12 := localizedStrings["errormsg12"]
-
-
+; check that game is running
 if (not WinExist(gameWindowId)) {
+    errormsg3 := localizedStrings["errormsg3"]
+    errormsg10:= localizedStrings["errormsg10"]
+    errormsg11 := localizedStrings["errormsg11"]
+    errormsg12 := localizedStrings["errormsg12"]
     WriteLog(gameWindowId " not found, please make sure game is running, try running in admin if still having issues")
     Msgbox, 48, d2r-mapview %version%, %errormsg10%`n`n%errormsg11%`n%errormsg12%`n`n%errormsg3%
     ExitApp
@@ -180,12 +131,10 @@ if (not WinExist(gameWindowId)) {
 
 ; initialise memory reading
 global d2rprocess := initMemory(gameWindowId)
-
 patternScan(d2rprocess, offsets)
+
 uiOffset := offsets["uiOffset"]
-
-
-pToken := Gdip_Startup()
+Gdip_Startup()
 
 ; create GUI windows
 Gui, Map: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
@@ -194,11 +143,6 @@ global mapHwnd1 := WinExist()
 Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
 global unitHwnd1 := WinExist()
 
-uiAssistLayer := new UIAssistLayer(settings)
-
-sessionList := []
-offsetAttempts := 6
-settingupGUI := false
 
 ; performance counters
 global ticktock := 0
@@ -209,12 +153,15 @@ frameCount := 0
 fpsTimer := A_TickCount
 currentFPS := 0
 
+; ui layers
 historyText := new SessionTableLayer(settings)
 gameInfoLayer := new GameInfoLayer(settings)
 partyInfoLayer := new PartyInfoLayer(settings)
 itemLogLayer := new ItemLogLayer(settings)
 itemCounterLayer := new ItemCounterLayer(settings)
+uiAssistLayer := new UIAssistLayer(settings)
 
+; main loop
 While 1 {
     frameStart:=A_TickCount
     ; scan for the player offset
@@ -716,7 +663,7 @@ ExitMH:
     return
 }
 
-
+; open the settings window and a given position
 ShowSettings:
 {
     uix := settings["settingsUIX"]
@@ -729,6 +676,7 @@ ShowSettings:
     return
 }
 
+; update settings (triggered when clicking save settings)`
 Update:
 {
     WriteLog("Applying new settings...")
@@ -746,6 +694,7 @@ Update:
     itemLogLayer := new ItemLogLayer(settings)
     itemCounterLayer.delete()
     itemCounterLayer := new ItemCounterLayer(settings)
+    SetupHotKeys(gameWindowId, settings)
     if (cmode != settings["centerMode"]) { ; if centermode changed
         lastlevel := "INVALIDATED"
         imageData := {}
@@ -766,7 +715,7 @@ Update:
 UpdateFlag:
 {
     if (!settingupGUI) {
-        GuiControl, Show, Unsaved
+        GuiControl, Show, Unsaved6
         GuiControl, Enable, UpdateBtn
     }
     return

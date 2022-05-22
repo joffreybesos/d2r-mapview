@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.1] - 2021-05-23
+
+- Some code refactored to be a little less terrible
+
+
 ## [2.9.0] - 2021-05-22 - Bug fixes
 
 - Fixed issue where UI would flash up while in menus/inventory

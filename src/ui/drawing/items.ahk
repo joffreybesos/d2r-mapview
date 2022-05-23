@@ -47,7 +47,7 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
             if (alert.speak or alert.soundfile) {
                 announceItem(settings, item, alert)
             }
-            if (itemLoc != 2) {
+            if (itemLoc != 2) { ; if not in store
                 drawFloatingText(unitsLayer, itemx, itemy, fontSize, acolor, true, exocetFont, itemText)
                 switch (ticktock) {
                     case 1: Gdip_FillEllipse(unitsLayer.G, pBrush1, itemx-5, itemy-5, 10, 10)
@@ -94,7 +94,7 @@ announceItem(settings, item, alert) {
             item.loadStats()
             item.foundTime := A_Now
             seenItems[item.getHash()] := item
-            itemLogItems[A_Now . item.getHash()] := item
+            itemLogItems[A_Now . item.getHash()] := item.Clone()
             itemLogLayer.drawItemLog()
         }
     }

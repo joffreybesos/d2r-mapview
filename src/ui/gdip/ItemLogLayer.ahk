@@ -68,13 +68,14 @@ class ItemLogLayer {
             if (!item.droppedOffList) {
                 if ((A_Now - item.foundTime) < 30) {
                     this.drawData(this.xoffset, this.yoffset + rowYoffset, fontSize, item.alertColor, item.itemLogText)
-                    
-                    if (item.statList) {
-                        for k, stat in item.statList
-                        {
-                            rowYoffset := rowYoffset + fontSize*0.8 + 4
-                            this.drawData(this.xoffset + 30, this.yoffset + rowYoffset, fontSize*0.8, item.alertColor, stat)
-                            
+                    if (settings["showItemStats"]) {
+                        if (item.statList) {
+                            for k, stat in item.statList
+                            {
+                                rowYoffset := rowYoffset + fontSize*0.8 + 4
+                                this.drawData(this.xoffset + 30, this.yoffset + rowYoffset, fontSize*0.8, item.alertColor, stat)
+                                
+                            }
                         }
                     }
                     rowYoffset := rowYoffset + fontSize + 8

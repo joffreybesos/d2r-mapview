@@ -76,6 +76,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["itemLogEnabled"] := 1
     settings["itemCounterEnabled"] := 1
     settings["itemCounterSize"] := 75
+    settings["showItemStats"] := 0
 
     settings["allowTextToSpeech"] := 1
     settings["textToSpeechVolume"] := 50

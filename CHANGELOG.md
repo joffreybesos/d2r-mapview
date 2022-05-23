@@ -2,9 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.9.1] - 2021-05-23
+## [2.9.1] - 2021-05-23 - Item filter detects vendor items
 
+- Vendor items are now detected by item filter
+- For this to work you must first interact with the vendor, only then are items detected
 - TP/ID scrolls in belt are now included in counter on right hand side
+- Skulls added to default itemfilter.yaml (delete your itemfilter.yaml to generate a new default itemfilter)
+- Gem alerts have speech disabled in default itemfilter.yaml
 - Changing the hotkey configuration no longer requires restart
 - Some code refactored to be a little less terrible
 

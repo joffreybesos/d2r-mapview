@@ -20,6 +20,7 @@ enabledAlerts:
   - GemsRuby
   - GemsSapphire
   - GemsTopaz
+  - Skulls
 
 ##############################################
 #### Define all alerts below this section ####
@@ -273,7 +274,8 @@ Alerts:
       # - Amethyst
       # - Flawless Amethyst
       - Perfect Amethyst
-    color: 8C0088
+    color: c200bc
+    speak: false     # speech turned off for this alert
 
   GemsDiamond:
     items:
@@ -282,7 +284,8 @@ Alerts:
       # - Diamond
       # - Flawless Diamond
       - Perfect Diamond
-    color: FFFFFF
+    color: eeeeee
+    speak: false     # speech turned off for this alert
 
   GemsEmerald:
     items:
@@ -292,6 +295,7 @@ Alerts:
       # - Flawless Emerald
       - Perfect Emerald
     color: 00D612
+    speak: false     # speech turned off for this alert
 
   GemsRuby:
     items:
@@ -301,6 +305,7 @@ Alerts:
       # - Flawless Ruby
       - Perfect Ruby
     color: F7002D
+    speak: false     # speech turned off for this alert
 
   GemsSapphire:
     items:
@@ -310,6 +315,7 @@ Alerts:
       # - Flawless Sapphire
       - Perfect Sapphire
     color: 0031F7
+    speak: false     # speech turned off for this alert
 
   GemsTopaz:
     items:
@@ -319,3 +325,14 @@ Alerts:
       # - Flawless Topaz
       - Perfect Topaz
     color: F7B100
+    speak: false     # speech turned off for this alert
+
+  Skulls:
+    items:
+      # - Chipped Skull
+      # - Flawed Skull
+      # - Skull
+      # - Flawless Skull
+      - Perfect Skull
+    color: FFFFFF
+    speak: false     # speech turned off for this alert

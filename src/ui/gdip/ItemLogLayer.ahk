@@ -66,8 +66,7 @@ class ItemLogLayer {
         for kk, item in itemLogItems {
             ;OutputDebug, % item.itemLogText " " (A_Now - item.foundTime) "`n"
             if (!item.droppedOffList) {
-                if ((A_Now - item.foundTime) < 12) {
-                    
+                if ((A_Now - item.foundTime) < 20) {
                     this.drawData(this.xoffset, this.yoffset + (row * (fontSize + 8)), fontSize, item.alertColor, item.itemLogText)
                     row++
                 } else {

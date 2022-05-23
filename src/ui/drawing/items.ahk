@@ -22,6 +22,9 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
             , fontSize := settings["itemFontSize"] * scale
             , itemText := item.localizedName
             , itemLogText := item.localizedName
+            if (item.inStore) {
+                itemLogText := "(Vendor) " itemLogText
+            }
             if (item.prefixName) {
                 itemText := item.prefixName "`n" itemText
                 , itemLogText := item.prefixName " " itemLogText
@@ -31,9 +34,12 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
                 itemText := itemText " [" item.numSockets "]"
                 , itemLogText := itemLogText " [" item.numSockets "]"
             }
+            if (item.identified and !item.inStore) {
+                itemLogText := "(Identified) " itemLogText
+            }
             if (item.ethereal) {
                 itemText := "Eth. " itemText
-                , itemLogText := "Eth. " itemLogText
+                , itemLogText := "(Ethereal) " itemLogText
             }
             acolor := "cc" . alert.color    
             ; if (item.txtFileNo == 603 or item.txtFileNo == 604 or item.txtFileNo == 605) {
@@ -45,18 +51,19 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
             if (alert.speak or alert.soundfile) {
                 announceItem(settings, item, alert)
             }
-            drawFloatingText(unitsLayer, itemx, itemy, fontSize, acolor, true, exocetFont, itemText)
-
-            switch (ticktock) {
-                case 1: Gdip_FillEllipse(unitsLayer.G, pBrush1, itemx-5, itemy-5, 10, 10)
-                case 2: Gdip_FillEllipse(unitsLayer.G, pBrush2, itemx-6, itemy-6, 12, 12)
-                case 3: Gdip_FillEllipse(unitsLayer.G, pBrush3, itemx-8, itemy-8, 16, 16)
-                case 4: Gdip_FillEllipse(unitsLayer.G, pBrush4, itemx-10, itemy-10, 20, 20)
-                case 5: Gdip_FillEllipse(unitsLayer.G, pBrush5, itemx-14, itemy-14, 28, 28)
-                case 6: Gdip_FillEllipse(unitsLayer.G, pBrush6, itemx-16, itemy-16, 32, 32)
+            if (itemLoc != 2) {
+                drawFloatingText(unitsLayer, itemx, itemy, fontSize, acolor, true, exocetFont, itemText)
+                switch (ticktock) {
+                    case 1: Gdip_FillEllipse(unitsLayer.G, pBrush1, itemx-5, itemy-5, 10, 10)
+                    case 2: Gdip_FillEllipse(unitsLayer.G, pBrush2, itemx-6, itemy-6, 12, 12)
+                    case 3: Gdip_FillEllipse(unitsLayer.G, pBrush3, itemx-8, itemy-8, 16, 16)
+                    case 4: Gdip_FillEllipse(unitsLayer.G, pBrush4, itemx-10, itemy-10, 20, 20)
+                    case 5: Gdip_FillEllipse(unitsLayer.G, pBrush5, itemx-14, itemy-14, 28, 28)
+                    case 6: Gdip_FillEllipse(unitsLayer.G, pBrush6, itemx-16, itemy-16, 32, 32)
+                }
+                Gdip_FillEllipse(unitsLayer.G, pBrush2, itemx-2.5, itemy-2.5, 5, 5)
+                Gdip_DeletePen(pItemPen)
             }
-            Gdip_FillEllipse(unitsLayer.G, pBrush2, itemx-2.5, itemy-2.5, 5, 5)
-            Gdip_DeletePen(pItemPen)
         }
     }
     Gdip_DeletePen(pItemPen2)

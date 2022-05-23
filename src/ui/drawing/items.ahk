@@ -35,17 +35,13 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
                 , itemLogText := itemLogText " [" item.numSockets "]"
             }
             if (item.identified and !item.inStore) {
-                itemLogText := "(Identified) " itemLogText
+                itemLogText := itemLogText " (Identified)" 
             }
             if (item.ethereal) {
                 itemText := "Eth. " itemText
                 , itemLogText := "(Ethereal) " itemLogText
             }
             acolor := "cc" . alert.color    
-            ; if (item.txtFileNo == 603 or item.txtFileNo == 604 or item.txtFileNo == 605) {
-            ;     item.loadStats()
-            ;     itemText := itemText "`n" item.statList
-            ; }
             item.itemLogText := itemLogText
             item.alertColor := "ff" . alert.color    
             if (alert.speak or alert.soundfile) {
@@ -95,6 +91,7 @@ announceItem(settings, item, alert) {
                     SoundPlay, %soundfile%
                 }
             }
+            item.loadStats()
             item.foundTime := A_Now
             seenItems[item.getHash()] := item
             itemLogItems[A_Now . item.getHash()] := item

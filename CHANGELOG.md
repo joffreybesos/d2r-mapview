@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.2] - 2021-05-23 - Item stats in item drop log
+
+- Along with the item drop log you'll see the stats for that item
+- You can only see stats that don't require identification
+- NOTE: Some stats will appear weird (Attack rating, poison dmg) but this will be improved over time
+
 ## [2.9.1] - 2021-05-23 - Item filter detects vendor items
 
 - Vendor items are now detected by item filter

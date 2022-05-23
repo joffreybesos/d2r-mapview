@@ -103,7 +103,7 @@ class GameItem {
         statCount := this.statCount
         d2rprocess.readRaw(this.statPtr + 0x2, statBuffer, statCount*8)
         ;OutputDebug, % this.name " " statCount "`n"
-        statList := ""
+        statList := []
         Loop, %statCount%
         {
             offset := (A_Index -1) * 8
@@ -118,26 +118,26 @@ class GameItem {
                 case 194: this.numSockets := statValue
             }
             statName := this.getStatName(statEnum)
-            statList := statList " " statName " " statValue 
+            statList.push(statName " " statValue)
         }
-        ; statExCount := this.statExCount
-        ; d2rprocess.readRaw(this.statExPtr + 0x2, statBuffer, statExCount*8)
-        ; Loop, %statExCount%
-        ; {
-        ;     offset := (A_Index -1) * 8
-        ;     , statEnum := NumGet(&statBuffer, offset, Type := "UShort")
-        ;     , statValue := NumGet(&statBuffer , offset + 0x2, Type := "UInt")
-        ;     switch (statEnum) {
-        ;         case 6: statValue := statValue >> 8   ; life
-        ;         case 7: statValue := statValue >> 8   ; maxlife
-        ;         case 8: statValue := statValue >> 8   ; mana
-        ;         case 9: statValue := statValue >> 8   ; maxmana
-        ;         case 11: statValue := statValue >> 8   ; maxstamina
-        ;         case 194: this.numSockets := statValue
-        ;     }
-        ;     statName := this.getStatName(statEnum)
-        ;     statList := statList " " statName " " statValue 
-        ; }
+        statExCount := this.statExCount
+        d2rprocess.readRaw(this.statExPtr + 0x2, statBuffer, statExCount*8)
+        Loop, %statExCount%
+        {
+            offset := (A_Index -1) * 8
+            , statEnum := NumGet(&statBuffer, offset, Type := "UShort")
+            , statValue := NumGet(&statBuffer , offset + 0x2, Type := "UInt")
+            switch (statEnum) {
+                case 6: statValue := statValue >> 8   ; life
+                case 7: statValue := statValue >> 8   ; maxlife
+                case 8: statValue := statValue >> 8   ; mana
+                case 9: statValue := statValue >> 8   ; maxmana
+                case 11: statValue := statValue >> 8   ; maxstamina
+                case 194: this.numSockets := statValue
+            }
+            statName := this.getStatName(statEnum)
+            statList.push(statName " " statValue)
+        }
         this.statList := statList
     }
 

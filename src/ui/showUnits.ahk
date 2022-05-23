@@ -10,13 +10,15 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\drawing\objects.ahk
 #Include %A_ScriptDir%\ui\drawing\otherplayers.ahk
 
-ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByRef imageData, ByRef gameMemoryData, ByRef shrines, ByRef uiData) {
+ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapLayer, ByRef gameMemoryData, ByRef shrines) {
     ; timeStamp("unitsStart")
+    mapHwnd1 := mapLayer.MapLayerHwnd
+    imageData := mapLayer.imageData
     scale:= settings["scale"]
     , leftMargin:= settings["leftMargin"]
     , topMargin:= settings["topMargin"]
-    , Width := uiData["sizeWidth"]
-    , Height := uiData["sizeHeight"]
+    , Width := mapLayer.Width
+    , Height := mapLayer.Height
     , levelNo:= gameMemoryData["levelNo"]
     , levelScale := imageData["levelScale"]
     , levelxmargin := imageData["levelxmargin"]
@@ -36,11 +38,11 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
     StartTime := A_TickCount
     , Angle := 45
     , opacity := 1.0
-    , padding := settings["padding"]
-    , scaledWidth := uiData["scaledWidth"]
-    , scaledHeight := uiData["scaledHeight"]
-    , rotatedWidth := uiData["rotatedWidth"]
-    , rotatedHeight := uiData["rotatedHeight"]
+    , padding := settings["padding"]   
+    , scaledWidth := mapLayer.scaledWidth
+    , scaledHeight := mapLayer.scaledHeight
+    , rotatedWidth := mapLayer.rotatedWidth
+    , rotatedHeight := mapLayer.rotatedHeight
     , centerLeftOffset := 0
     , centerTopOffset := 0
     ; get relative position of player in world

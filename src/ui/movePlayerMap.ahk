@@ -5,8 +5,8 @@ SetWorkingDir, %A_ScriptDir%
 global lastLeftMargin := 0
 global lastTopMargin := 0
 
-MovePlayerMap(ByRef settings, ByRef d2rprocess, ByRef pathAddress, ByRef mapHwnd1, ByRef unitHwnd1, ByRef imageData, ByRef uiData) {
-
+MovePlayerMap(ByRef settings, ByRef d2rprocess, ByRef pathAddress, ByRef mapLayer, ByRef unitHwnd1, ByRef imageData, ByRef uiData) {
+    mapHwnd1 := mapLayer.MapLayerHwnd
     ; player position
     d2rprocess.readRaw(pathAddress, pPathBuffer, 16)
     , xPosOffset := NumGet(&pPathBuffer , 0x00, "UShort")
@@ -20,17 +20,18 @@ MovePlayerMap(ByRef settings, ByRef d2rprocess, ByRef pathAddress, ByRef mapHwnd
     , padding := settings["padding"]
     , serverScale := settings["serverScale"]
     , scale := settings["centerModeScale"]
-    WinGetPos, X, Y, Width, Height, ahk_id %mapHwnd1%
+    
+    WinGetPos, X, Y, , , ahk_id %mapHwnd1%
 
-    Width := uiData["sizeWidth"]
-    , Height := uiData["sizeHeight"]
-    , scaledWidth := uiData["scaledWidth"]
-    , scaledHeight := uiData["scaledHeight"]
+    Width := mapLayer.Width
+    , Height := mapLayer.Height
+    , scaledWidth := mapLayer.scaledWidth
+    , scaledHeight := mapLayer.scaledHeight
     ; get relative position of player in world
     ; xpos is absolute world pos in game
     ; each map has offset x and y which is absolute world position
-    , xPosDot := ((xPos - imageData["mapOffsetX"]) * serverScale) + padding
-    , yPosDot := ((yPos - imageData["mapOffsetY"]) * serverScale) + padding
+    , xPosDot := ((xPos - mapLayer.imageData["mapOffsetX"]) * serverScale) + padding
+    , yPosDot := ((yPos - mapLayer.imageData["mapOffsetY"]) * serverScale) + padding
     , correctedPos := findNewPos(xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
     , xPosDot := correctedPos["x"] 
     , yPosDot := correctedPos["y"] 

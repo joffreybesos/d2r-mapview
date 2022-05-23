@@ -47,6 +47,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\init\serverHealthCheck.ahk
 #Include %A_ScriptDir%\init\updateCheck.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
+#Include %A_ScriptDir%\ui\gdip\MapLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\unitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\SessionTableLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\GameInfoLayer.ahk
@@ -140,8 +141,8 @@ uiOffset := offsets["uiOffset"]
 Gdip_Startup()
 
 ; create GUI windows
-Gui, Map: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-global mapHwnd1 := WinExist()
+; Gui, Map: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+; global mapHwnd1 := WinExist()
 
 Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
 global unitHwnd1 := WinExist()
@@ -207,7 +208,6 @@ While 1 {
             itemLogLayer.hide()
             itemCounterLayer.hide()
             offsetAttempts := 26
-            WriteLogDebug("Offset attempts " offsetAttempts)
         }
         Sleep, 80 ; sleep when no offset found, you're likely in menu
     } else {
@@ -262,36 +262,36 @@ While 1 {
                 ; Show loading text
                 ;Gui, Map: Show, NA
                 mapLoading := 1
-                Gui, Map: Hide ; hide map
-                Gui, Units: Hide ; hide player dot
-                ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
+                ;Gui, Map: Hide ; hide map
+                ;Gui, Units: Hide ; hide player dot
+                ;ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
                 ; Download map
-                downloadMapImage(settings, gameMemoryData, imageData, 0)
+                ;downloadMapImage(settings, gameMemoryData, imageData, 0)
 
                 ; Show Map
-                if (lastlevel == "") {
-                    Gui, Map: Show, NA
-                    Gui, Units: Show, NA
+                 if (lastlevel == "") {
+                ;     ; Gui, Map: Show, NA
+                     Gui, Units: Show, NA
                 }
                 
-                if (settings["enablePrefetch"]) {
-                    prefetchMaps(settings, gameMemoryData)
-                }
                 mapLoading := 0
                 Gui, LoadingText: Destroy ; remove loading text
                 
                 redrawMap := 1
             }
             if (redrawMap) {
+                ; WriteLogDebug("Redrawing map")
+                ; levelNo := gameMemoryData["levelNo"]
+                ; IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
+                ; IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
+                ; IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0
+                ; imageData["levelScale"] := levelScale
+                ; imageData["levelxmargin"] := levelxmargin
+                ; imageData["levelymargin"] := levelymargin
+                ; ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
                 WriteLogDebug("Redrawing map")
-                levelNo := gameMemoryData["levelNo"]
-                IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
-                IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
-                IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0
-                imageData["levelScale"] := levelScale
-                imageData["levelxmargin"] := levelxmargin
-                imageData["levelymargin"] := levelymargin
-                ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+                mapLayer.delete()
+                mapLayer := new MapLayer(settings, gameMemoryData)
 
                 unitsLayer.delete()
                 unitsLayer := new UnitsLayer(uiData)
@@ -299,16 +299,15 @@ While 1 {
                 gameInfoLayer.updateAreaLevel(levelNo, gameMemoryData["difficulty"])
                 gameInfoLayer.updateExpLevel(levelNo, gameMemoryData["difficulty"], gameMemoryData["playerLevel"])
                 
-                
                 redrawMap := 0
             }
             ; timeStamp("ShowUnits")
-            ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
+            ShowUnits(unitsLayer, settings, unitHwnd1, mapLayer, gameMemoryData, shrines)
             ; timeStamp("ShowUnits")
             uiAssistLayer.drawMonsterBar(gameMemoryData["hoveredMob"])
 
             if (settings["centerMode"] and gameMemoryData["pathAddress"]) {
-                MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], mapHwnd1, unitHwnd1, imageData, uiData)
+                MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], mapLayer, unitHwnd1, imageData, uiData)
             }
             if (Mod(ticktock, 6)) {
                 checkAutomapVisibility(d2rprocess, gameMemoryData)
@@ -393,7 +392,8 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
 
 hideMap(alwaysShowMap, menuShown := 0) {
     if ((alwaysShowMap == false) or menuShown) {
-        Gui, Map: Hide
+        ; Gui, Map: Hide
+        mapLayer.hide()
         Gui, Units: Hide
         if (isMapShowing) {
             WriteLogDebug("Map hidden")
@@ -413,7 +413,8 @@ unHideMap() {
     itemLogLayer.show()
     partyInfoLayer.show()
     if (!mapLoading) {
-        Gui, Map: Show, NA
+        mapLayer.show()
+        ; Gui, Map: Show, NA
         Gui, Units: Show, NA
     } else {
         WriteLogDebug("Tried to show map while map loading, ignoring...")

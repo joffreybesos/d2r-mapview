@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
   You'll get weird stats such as 'Defense' twice, these values are supposed to be added together for ED
 - Fixed issue with item log entries disappearing when picked up
 - Fixed issue with items being tagged with (Vendor) incorrectly
+- Items now appear in item log for 30 seconds instead of 12
 
 ## [2.9.1] - 2021-05-23 - Item filter detects vendor items
 

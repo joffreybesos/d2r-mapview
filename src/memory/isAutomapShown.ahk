@@ -1,7 +1,4 @@
-#SingleInstance, Force
-#Include %A_ScriptDir%\include\classMemory.ahk
-#Include %A_ScriptDir%\include\logging.ahk
-SetWorkingDir, %A_ScriptDir%
+
 
 isAutomapShown(ByRef d2rprocess, ByRef uiOffset) {
 

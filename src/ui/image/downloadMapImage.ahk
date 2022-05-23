@@ -1,7 +1,3 @@
-#SingleInstance, Force
-SendMode Input
-SetWorkingDir, %A_ScriptDir%
-#Include %A_ScriptDir%\include\logging.ahk
 
 downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
     static serverisv10

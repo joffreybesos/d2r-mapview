@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [2.9.1] - 2021-05-23
 
 - Some code refactored to be a little less terrible
-
+- Changing hotkey configuration no longer requires restart
 
 ## [2.9.0] - 2021-05-22 - Bug fixes
 

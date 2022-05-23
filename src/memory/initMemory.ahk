@@ -1,6 +1,3 @@
-#SingleInstance, Force
-SendMode Input
-SetWorkingDir, %A_ScriptDir%
 
 initMemory(gameWindowId) {
     if (_ClassMemory.__Class != "_ClassMemory")

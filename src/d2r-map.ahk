@@ -14,11 +14,11 @@ SetWinDelay, -1
 SetControlDelay, -1
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
+#Include %A_ScriptDir%\include\classMemory.ahk
 #Include %A_ScriptDir%\include\logging.ahk
 #Include %A_ScriptDir%\include\Yaml.ahk
 #Include %A_ScriptDir%\include\JSON.ahk
 #Include %A_ScriptDir%\include\Gdip_All.ahk
-#Include %A_ScriptDir%\init\hotkeys.ahk
 #Include %A_ScriptDir%\itemfilter\AlertList.ahk
 #Include %A_ScriptDir%\itemfilter\ItemAlert.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk
@@ -42,9 +42,10 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\stats\GameSession.ahk
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\localization.ahk
-#Include %A_ScriptDir%\readSettings.ahk
-#Include %A_ScriptDir%\serverHealthCheck.ahk
-#Include %A_ScriptDir%\updateCheck.ahk
+#Include %A_ScriptDir%\init\hotkeys.ahk
+#Include %A_ScriptDir%\init\readSettings.ahk
+#Include %A_ScriptDir%\init\serverHealthCheck.ahk
+#Include %A_ScriptDir%\init\updateCheck.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
 #Include %A_ScriptDir%\ui\gdip\unitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\SessionTableLayer.ahk
@@ -91,7 +92,7 @@ lastPlayerExperience:=
 uidata:={}
 sessionList := []
 offsetAttempts := 2
-settingupGUI := false
+
 performanceMode := settings["performanceMode"]
 if (performanceMode != 0) {
     SetBatchLines, %performanceMode%
@@ -116,6 +117,8 @@ global offsets := []
 global hudBitmaps := loadBitmaps()
 
 CreateSettingsGUI(settings, localizedStrings)
+settingupGUI := false
+
 SetupHotKeys(gameWindowId, settings)
 
 ; check that game is running

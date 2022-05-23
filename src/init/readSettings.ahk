@@ -188,6 +188,10 @@ readSettings(settingsFile, ByRef settings) {
     WriteLog("- performanceMode: " settings["performanceMode"])
     WriteLog("- gameWindowId: " settings["gameWindowId"])
     WriteLog("- debug logging: " settings["debug"])
+    if (settings["enableD2ML"]) {
+        WriteLog("- D2ML has been enabled! using gameWindowId " gameWindowId)
+    }
+    
     if FileExist(A_Scriptdir . "\mapconfig.ini") {
         WriteLog("Found existing mapconfig.ini")
     }

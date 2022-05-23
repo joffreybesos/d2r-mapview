@@ -2,9 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.3] - 2021-05-24 - Bug fixes
+
+- Fixed bug where scrolls/key counters wouldn't render
+- 
+
 ## [2.9.3] - 2021-05-24 - Fix for latest patch
 
-- Fix for latest patch
+- Fix unit pattern scan for latest patch (thanks @Rabbs)
 - Item stats can now be toggled on or off in the item log
 - Item stats are _off_ by default
 

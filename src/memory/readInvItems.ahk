@@ -19,7 +19,7 @@ ReadInvItems(ByRef d2rprocess, startingOffset, ByRef HUDItems, ByRef unitId) {
             if (itemType == 4) { ; item is 4
                 ;itemLoc - 0 in inventory, 1 equipped, 2 in belt, 3 on ground, 4 cursor, 5 dropping, 6 socketed
                 itemLoc := NumGet(&itemStructData , 0x0C, "UInt")
-                if (itemLoc == 0) {
+                if (itemLoc == 0 or itemLoc == 2) {
                     if (ItemToTrack(txtFileNo)) {
                         pUnitDataPtr := NumGet(&itemStructData , 0x10, "Int64")
                         d2rprocess.readRaw(pUnitDataPtr, pUnitData, 80)
@@ -36,7 +36,7 @@ ReadInvItems(ByRef d2rprocess, startingOffset, ByRef HUDItems, ByRef unitId) {
                         ; , itemx := NumGet(&pPath , 0x10, "UShort")
                         ; , itemy := NumGet(&pPath , 0x14, "UShort")
                         flagText := getFlags(flags)
-                        if (unitId == dwOwnerId and invPage == 0) {
+                        if (unitId == dwOwnerId and (invPage == 0 or invPage == 255))  {
                             if (!(0x00002000 & flags)) {
                                 
                                 ; get quanitity

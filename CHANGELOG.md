@@ -4,8 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [2.9.1] - 2021-05-23
 
+- TP/ID scrolls in belt are now included in counter on right hand side
+- Changing the hotkey configuration no longer requires restart
 - Some code refactored to be a little less terrible
-- Changing hotkey configuration no longer requires restart
 
 ## [2.9.0] - 2021-05-22 - Bug fixes
 

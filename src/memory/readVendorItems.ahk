@@ -40,6 +40,7 @@ ReadVendorItems(ByRef d2rprocess, startingOffset, ByRef levelNo, ByRef items) {
                             , item.itemLoc := itemLoc
                             , item.itemx := itemx
                             , item.itemy := itemy
+                            , item.inStore := true
                             , item.statPtr := statPtr
                             , item.statCount := statCount
                             , item.statExPtr := statExPtr

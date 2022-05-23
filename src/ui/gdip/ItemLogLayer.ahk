@@ -72,8 +72,8 @@ class ItemLogLayer {
                     if (item.statList) {
                         for k, stat in item.statList
                         {
-                            rowYoffset := rowYoffset + fontSize + 2
-                            this.drawData(this.xoffset + 30, this.yoffset + rowYoffset, fontSize-2, item.alertColor, stat)
+                            rowYoffset := rowYoffset + fontSize*0.8 + 4
+                            this.drawData(this.xoffset + 30, this.yoffset + rowYoffset, fontSize*0.8, item.alertColor, stat)
                             
                         }
                     }

@@ -190,7 +190,7 @@ class GameItem {
         ;     ; flagsList.push("IFLAG_NOSELL") 
         ; }
         if (0x00002000 & flags) {  ; IFLAG_INSTORE
-            this.inStore := true
+            ;this.inStore := true
         }
         ; if (0x00004000 & flags) {  ; IFLAG_NOEQUIP
         ;     ; flagsList.push("IFLAG_NOEQUIP") 

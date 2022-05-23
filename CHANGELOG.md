@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.3] - 2021-05-24 - Fix for latest patch
+
+- Fix for latest patch
+- Item stats can now be toggled on or off in the item log
+- Item stats are _off_ by default
+
 ## [2.9.2] - 2021-05-23 - Item stats in item drop log
 
 

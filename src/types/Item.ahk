@@ -108,7 +108,7 @@ class GameItem {
         Loop, %statCount%
         {
             offset := (A_Index -1) * 8
-            , statLayer := NumGet(&statBuffer, offset, Type := "UShort")
+            , statLayer := NumGet(&statBuffer, offset, Type := "Short")
             , statEnum := NumGet(&statBuffer, offset + 0x2, Type := "UShort")
             , statValue := NumGet(&statBuffer , offset + 0x4, Type := "Int")
             switch (statEnum) {
@@ -128,8 +128,9 @@ class GameItem {
             if (statEnum == 107) {
                 skillsfound++
                 statName := statName . skillsfound
-                ;OutputDebug, % statLayer " " statEnum " " statValue "`n"
+                
             }
+            OutputDebug, % statName " " statEnum " " statLayer " " statValue "`n"
             statArray[statName] := { "statLayer": statLayer, "statValue": statValue }
         }
         statExCount := this.statExCount
@@ -137,7 +138,7 @@ class GameItem {
         Loop, %statExCount%
         {
             offset := (A_Index -1) * 8
-            , statLayer := NumGet(&statBuffer, offset, Type := "UShort")
+            , statLayer := NumGet(&statBuffer, offset, Type := "Short")
             , statEnum := NumGet(&statBuffer, offset + 0x2, Type := "UShort")
             , statValue := NumGet(&statBuffer , offset + 0x4, Type := "Int")
             switch (statEnum) {
@@ -157,8 +158,9 @@ class GameItem {
             if (statEnum == 107) {
                 skillsfound++
                 statName := statName . skillsfound
-                ;OutputDebug, % statLayer " " statEnum " " statValue "`n"
+                
             }
+            OutputDebug, % statName " " statEnum " " statLayer " " statValue "`n"
             statArray[statName] := { "statLayer": statLayer, "statValue": statValue }
         }
 
@@ -370,22 +372,22 @@ class GameItem {
                 case "item_absorbcold_percent": statList.push(Format("+{1} Cold Absorb", statArray["item_absorbcold_percent"].statValue))
                 case "item_absorbcold": statList.push(Format("Cold Absorb {1}%", statArray["item_absorbcold"].statValue))
                 case "item_slow": statList.push(Format("Slows Target by {1}%", statArray["item_slow"].statValue))
-                case "item_aura": statList.push(Format("Level {1} [Skill].statValue Aura When Equipped", statArray["item_aura"].statValue))
-                case "item_cannotbefrozen": statList.push(Format("Cannot Be Frozen", statArray["item_cannotbefrozen"].statValue))
+                case "item_aura": statList.push(Format("Level {1} {2} Aura When Equipped", statArray["item_aura"].statValue, getSkillName(statArray["item_aura"].statLayer)))
+                case "item_cannotbefrozen": statList.push(Format("Cannot Be Frozen"))
                 case "item_staminadrainpct": statList.push(Format("{1}% Slower Stamina Drain", statArray["item_staminadrainpct"].statValue))
-                case "item_reanimate": statList.push(Format("Reanimate As: [Returned].statValue", statArray["item_reanimate"].statValue))
-                case "item_pierce": statList.push(Format("Piercing Attack", statArray["item_pierce"].statValue))
-                case "item_magicarrow": statList.push(Format("Fires Magic Arrows", statArray["item_magicarrow"].statValue))
-                case "item_explosivearrow": statList.push(Format("Fires Explosive Arrows or Bolts", statArray["item_explosivearrow"].statValue))
-                case "item_addskill_tab": statList.push(Format("+{1} to [Class Skill Tab].statValue Skills", statArray["item_addskill_tab"].statValue))
+                ;case "item_reanimate": statList.push(Format("Reanimate As: [Returned].statValue", statArray["item_reanimate"].statValue))
+                case "item_pierce": statList.push(Format("Piercing Attack"))
+                case "item_magicarrow": statList.push(Format("Fires Magic Arrows"))
+                case "item_explosivearrow": statList.push(Format("Fires Explosive Arrows or Bolts"))
+                case "item_addskill_tab": statList.push(Format("+{1} to {2} Skills", statArray["item_addskill_tab"].statValue, getSkillTree(statArray["item_addskill_tab"].statLayer)))
                 case "item_numsockets": statList.push(Format("Socketed ({1})", statArray["item_numsockets"].statValue))
-                case "item_skillonattack": statList.push(Format("{1}% Chance to cast level {2} [Skill].statValue on attack", statArray["item_skillonattack"].statValue))
-                case "item_skillonkill": statList.push(Format("{1}% Chance to cast level {2} [Skill].statValue when you Kill an Enemy", statArray["item_skillonkill"].statValue))
-                case "item_skillondeath": statList.push(Format("{1}% Chance to cast level {2} [Skill].statValue when you Die", statArray["item_skillondeath"].statValue))
-                case "item_skillonhit": statList.push(Format("{1}% Chance to cast level {2} [Skill].statValue on striking", statArray["item_skillonhit"].statValue))
-                case "item_skillonlevelup": statList.push(Format("{1}% Chance to cast level {2} [Skill].statValue when you Level-Up", statArray["item_skillonlevelup"].statValue))
-                case "item_skillongethit": statList.push(Format("{1}% Chance to cast level {2} [Skill].statValue when struck", statArray["item_skillongethit"].statValue))
-                case "item_charged_skill": statList.push(Format("Level {1} [Skill].statValue ({2}/{3} Charges)", statArray["item_charged_skill"].statValue))
+                case "item_skillonattack": statList.push(Format("{1}% Chance to cast level {2} {3} on attack", statArray["item_skillonattack"].statValue, 0, getSkillName(statArray["item_skillonattack"].statLayer)))
+                case "item_skillonkill": statList.push(Format("{1}% Chance to cast level {2} {3} when you Kill an Enemy", statArray["item_skillonkill"].statValue, 0, getSkillName(statArray["item_skillonkill"].statLayer)))
+                case "item_skillondeath": statList.push(Format("{1}% Chance to cast level {2} {3} when you Die", statArray["item_skillondeath"].statValue, 0, getSkillName(statArray["item_skillondeath"].statLayer)))
+                case "item_skillonhit": statList.push(Format("{1}% Chance to cast level {2} {3} on striking", statArray["item_skillonhit"].statValue, 0, getSkillName(statArray["item_skillonhit"].statLayer)))
+                case "item_skillonlevelup": statList.push(Format("{1}% Chance to cast level {2} {3} when you Level-Up", statArray["item_skillonlevelup"].statValue, 0, getSkillName(statArray["item_skillonlevelup"].statLayer)))
+                case "item_skillongethit": statList.push(Format("{1}% Chance to cast level {2} {3} when struck", statArray["item_skillongethit"].statValue))
+                case "item_charged_skill": statList.push(Format("Level {1} {2} ({3}/{4} Charges)", statArray["item_charged_skill"].statValue, getSkillName(statArray["item_charged_skill"].statLayer)))
                 case "item_armor_perlevel": statList.push(Format("+{1} Defense (Based on Character Level)", statArray["item_armor_perlevel"].statValue))
                 case "item_armorpercent_perlevel": statList.push(Format("+{1}% Enhanced Defense (Based on Character Level)", statArray["item_armorpercent_perlevel"].statValue))
                 case "item_hp_perlevel": statList.push(Format("+{1} to Life (Based on Character Level)", statArray["item_hp_perlevel"].statValue))

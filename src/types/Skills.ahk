@@ -388,3 +388,30 @@ getSkillClass(skill) {
         case 155: return "Barbarian"
     }
 }
+
+
+getSkillTree(skilltree) {
+    switch (skilltree) {
+        case 0: return "bow and crossbow"
+        case 1: return "passive and magic"
+        case 2: return "javelin and spear"
+        case 8: return "fire"
+        case 9: return "lightning"
+        case 10: return "cold"
+        case 16: return "curses"
+        case 17: return "poison and bone"
+        case 18: return "summoning"
+        case 24: return "combat skills"
+        case 25: return "offensivea auras"
+        case 26: return "defensive auras"
+        case 32: return "combats kills"
+        case 33: return "masteries"
+        case 34: return "warcries"
+        case 40: return "summoning"
+        case 41: return "shape shifting"
+        case 42: return "elemental"
+        case 48: return "traps"
+        case 49: return "shadow disciplines"
+        case 50: return "martial arts"
+    }
+}

@@ -310,7 +310,7 @@ class GameItem {
                 case "item_healafterkill": statList.push(Format("+{1} Life after each Kill", statArray["item_healafterkill"].statValue))
                 case "item_reducedprices": statList.push(Format("Reduces all Vendor Prices {1}%", statArray["item_reducedprices"].statValue))
                 case "item_lightradius": statList.push(Format("+{1} to Light Radius", statArray["item_lightradius"].statValue))
-                case "item_req_percent": statList.push(Format("Requirements -{1}%", statArray["item_req_percent"].statValue))
+                case "item_req_percent": statList.push(Format("Requirements {1}%", statArray["item_req_percent"].statValue))
                 case "item_levelreq": statList.push(Format("Required Level: {1}", statArray["item_levelreq"].statValue))
                 case "item_fasterattackrate": statList.push(Format("+{1}% Increased Attack Speed", statArray["item_fasterattackrate"].statValue))
                 case "item_fastermovevelocity": statList.push(Format("+{1}% Faster Run/Walk", statArray["item_fastermovevelocity"].statValue))
@@ -381,13 +381,48 @@ class GameItem {
                 case "item_explosivearrow": statList.push(Format("Fires Explosive Arrows or Bolts"))
                 case "item_addskill_tab": statList.push(Format("+{1} to {2} Skills", statArray["item_addskill_tab"].statValue, getSkillTree(statArray["item_addskill_tab"].statLayer)))
                 case "item_numsockets": statList.push(Format("Socketed ({1})", statArray["item_numsockets"].statValue))
-                case "item_skillonattack": statList.push(Format("{1}% Chance to cast level {2} {3} on attack", statArray["item_skillonattack"].statValue, 0, getSkillName(statArray["item_skillonattack"].statLayer)))
-                case "item_skillonkill": statList.push(Format("{1}% Chance to cast level {2} {3} when you Kill an Enemy", statArray["item_skillonkill"].statValue, 0, getSkillName(statArray["item_skillonkill"].statLayer)))
-                case "item_skillondeath": statList.push(Format("{1}% Chance to cast level {2} {3} when you Die", statArray["item_skillondeath"].statValue, 0, getSkillName(statArray["item_skillondeath"].statLayer)))
-                case "item_skillonhit": statList.push(Format("{1}% Chance to cast level {2} {3} on striking", statArray["item_skillonhit"].statValue, 0, getSkillName(statArray["item_skillonhit"].statLayer)))
-                case "item_skillonlevelup": statList.push(Format("{1}% Chance to cast level {2} {3} when you Level-Up", statArray["item_skillonlevelup"].statValue, 0, getSkillName(statArray["item_skillonlevelup"].statLayer)))
-                case "item_skillongethit": statList.push(Format("{1}% Chance to cast level {2} {3} when struck", statArray["item_skillongethit"].statValue))
-                case "item_charged_skill": statList.push(Format("Level {1} {2} ({3}/{4} Charges)", statArray["item_charged_skill"].statValue, getSkillName(statArray["item_charged_skill"].statLayer)))
+                case "item_skillonattack":
+                    skillId := statArray["item_skillonattack"].statLayer >> 6
+                    level := Mod(statArray["item_skillonattack"].statLayer, (1 << 6))
+                    maxCharges := statArray["item_skillonattack"].statValue >> 8
+                    charges := Mod(statArray["item_skillonattack"].statValue, (1 << 8))
+                    statList.push(Format("{1}% Chance to cast level {2} {3} on attack", statArray["item_skillonattack"].statValue, level, getSkillName(skillId)))
+                case "item_skillonkill":
+                    skillId := statArray["item_skillonkill"].statLayer >> 6
+                    level := Mod(statArray["item_skillonkill"].statLayer, (1 << 6))
+                    maxCharges := statArray["item_skillonkill"].statValue >> 8
+                    charges := Mod(statArray["item_skillonkill"].statValue, (1 << 8))
+                    statList.push(Format("{1}% Chance to cast level {2} {3} when you Kill an Enemy", statArray["item_skillonkill"].statValue, level, getSkillName(skillId)))
+                case "item_skillondeath":
+                    skillId := statArray["item_skillondeath"].statLayer >> 6
+                    level := Mod(statArray["item_skillondeath"].statLayer, (1 << 6))
+                    maxCharges := statArray["item_skillondeath"].statValue >> 8
+                    charges := Mod(statArray["item_skillondeath"].statValue, (1 << 8))
+                    statList.push(Format("{1}% Chance to cast level {2} {3} when you Die", statArray["item_skillondeath"].statValue, level, getSkillName(skillId)))
+                case "item_skillonhit": 
+                    skillId := statArray["item_skillonhit"].statLayer >> 6
+                    level := Mod(statArray["item_skillonhit"].statLayer, (1 << 6))
+                    maxCharges := statArray["item_skillonhit"].statValue >> 8
+                    charges := Mod(statArray["item_skillonhit"].statValue, (1 << 8))
+                    statList.push(Format("{1}% Chance to cast level {2} {3} on striking", statArray["item_skillonhit"].statValue, level, getSkillName(skillId)))
+                case "item_skillonlevelup": 
+                    skillId := statArray["item_skillonlevelup"].statLayer >> 6
+                    level := Mod(statArray["item_skillonlevelup"].statLayer, (1 << 6))
+                    maxCharges := statArray["item_skillonlevelup"].statValue >> 8
+                    charges := Mod(statArray["item_skillonlevelup"].statValue, (1 << 8))
+                    statList.push(Format("{1}% Chance to cast level {2} {3} when you Level-Up", statArray["item_skillonlevelup"].statValue, level, getSkillName(skillId)))
+                case "item_skillongethit":
+                    skillId := statArray["item_skillongethit"].statLayer >> 6
+                    level := Mod(statArray["item_skillongethit"].statLayer, (1 << 6))
+                    maxCharges := statArray["item_skillongethit"].statValue >> 8
+                    charges := Mod(statArray["item_skillongethit"].statValue, (1 << 8))
+                    statList.push(Format("{1}% Chance to cast level {2} {3} when struck", statArray["item_skillongethit"].statValue, level, getSkillName(skillId)))
+                case "item_charged_skill": 
+                    skillId := statArray["item_charged_skill"].statLayer >> 6
+                    level := Mod(statArray["item_charged_skill"].statLayer, (1 << 6))
+                    maxCharges := statArray["item_charged_skill"].statValue >> 8
+                    charges := Mod(statArray["item_charged_skill"].statValue, (1 << 8))
+                    statList.push(Format("Level {1} {2} ({3}/{4} Charges)", level, getSkillName(skillId), charges, maxCharges))
                 case "item_armor_perlevel": statList.push(Format("+{1} Defense (Based on Character Level)", statArray["item_armor_perlevel"].statValue))
                 case "item_armorpercent_perlevel": statList.push(Format("+{1}% Enhanced Defense (Based on Character Level)", statArray["item_armorpercent_perlevel"].statValue))
                 case "item_hp_perlevel": statList.push(Format("+{1} to Life (Based on Character Level)", statArray["item_hp_perlevel"].statValue))

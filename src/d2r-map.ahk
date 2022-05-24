@@ -21,6 +21,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\Gdip_All.ahk
 #Include %A_ScriptDir%\itemfilter\AlertList.ahk
 #Include %A_ScriptDir%\itemfilter\ItemAlert.ahk
+#Include %A_ScriptDir%\types\Skills.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk
 #Include %A_ScriptDir%\memory\scanForPlayer.ahk
 #Include %A_ScriptDir%\memory\readGameMemory.ahk

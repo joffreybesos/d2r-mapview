@@ -27,7 +27,7 @@ class ItemLogLayer {
         }
         
         this.itemLogFontSize := settings["itemLogFontSize"]
-        this.textBoxWidth := 500
+        this.textBoxWidth := 550
         this.textBoxHeight := this.itemLogFontSize * 50
         this.xoffset := 0
         this.yoffset := 0
@@ -70,9 +70,10 @@ class ItemLogLayer {
                     this.drawData(this.xoffset, this.yoffset + rowYoffset, fontSize, item.alertColor, item.itemLogText)
                     if (settings["showItemStats"]) {
                         if (item.statList) {
+
                             for k, stat in item.statList
                             {
-                                rowYoffset := rowYoffset + fontSize*0.8 + 4
+                                rowYoffset := rowYoffset + fontSize*0.8 + 2
                                 this.drawData(this.xoffset + 30, this.yoffset + rowYoffset, fontSize*0.8, item.alertColor, stat)
                                 
                             }

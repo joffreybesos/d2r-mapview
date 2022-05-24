@@ -101,48 +101,339 @@ class GameItem {
     loadStats() {
         SetFormat Integer, D
         statCount := this.statCount
-        d2rprocess.readRaw(this.statPtr + 0x2, statBuffer, statCount*8)
+        d2rprocess.readRaw(this.statPtr, statBuffer, statCount*10)
         ;OutputDebug, % this.name " " statCount "`n"
-        statList := []
+        statArray := []
+        skillsfound := 0
         Loop, %statCount%
         {
             offset := (A_Index -1) * 8
-            , statEnum := NumGet(&statBuffer, offset, Type := "UShort")
-            , statValue := NumGet(&statBuffer , offset + 0x2, Type := "UInt")
+            , statLayer := NumGet(&statBuffer, offset, Type := "UShort")
+            , statEnum := NumGet(&statBuffer, offset + 0x2, Type := "UShort")
+            , statValue := NumGet(&statBuffer , offset + 0x4, Type := "Int")
             switch (statEnum) {
                 case 6: statValue := statValue >> 8   ; life
                 case 7: statValue := statValue >> 8   ; maxlife
                 case 8: statValue := statValue >> 8   ; mana
                 case 9: statValue := statValue >> 8   ; maxmana
+                case 10: statValue := statValue >> 8   ; stamina
                 case 11: statValue := statValue >> 8   ; maxstamina
+                case 216: statValue := statValue >> 8   ; item_hp_perlevel
+                case 217: statValue := statValue >> 8   ; item_mana_perlevel
+                case 56: statValue := statValue / 25   ; cold length, divided by num frames
+                case 59: statValue := statValue / 25   ; poison length
                 case 194: this.numSockets := statValue
             }
             statName := this.getStatName(statEnum)
-            statList.push(statName " " statValue)
+            if (statEnum == 107) {
+                skillsfound++
+                statName := statName . skillsfound
+                ;OutputDebug, % statLayer " " statEnum " " statValue "`n"
+            }
+            statArray[statName] := { "statLayer": statLayer, "statValue": statValue }
         }
         statExCount := this.statExCount
-        d2rprocess.readRaw(this.statExPtr + 0x2, statBuffer, statExCount*8)
+        d2rprocess.readRaw(this.statExPtr, statBuffer, statExCount*10)
         Loop, %statExCount%
         {
             offset := (A_Index -1) * 8
-            , statEnum := NumGet(&statBuffer, offset, Type := "UShort")
-            , statValue := NumGet(&statBuffer , offset + 0x2, Type := "UInt")
+            , statLayer := NumGet(&statBuffer, offset, Type := "UShort")
+            , statEnum := NumGet(&statBuffer, offset + 0x2, Type := "UShort")
+            , statValue := NumGet(&statBuffer , offset + 0x4, Type := "Int")
             switch (statEnum) {
                 case 6: statValue := statValue >> 8   ; life
                 case 7: statValue := statValue >> 8   ; maxlife
                 case 8: statValue := statValue >> 8   ; mana
                 case 9: statValue := statValue >> 8   ; maxmana
+                case 10: statValue := statValue >> 8   ; stamina
                 case 11: statValue := statValue >> 8   ; maxstamina
+                case 216: statValue := statValue >> 8   ; item_hp_perlevel
+                case 217: statValue := statValue >> 8   ; item_mana_perlevel
+                case 56: statValue := Round(statValue / 25, 0)   ; cold length, divided by num frames
+                case 59: statValue := Round(statValue / 25, 0)   ; poison length
                 case 194: this.numSockets := statValue
             }
             statName := this.getStatName(statEnum)
-            statList.push(statName " " statValue)
+            if (statEnum == 107) {
+                skillsfound++
+                statName := statName . skillsfound
+                ;OutputDebug, % statLayer " " statEnum " " statValue "`n"
+            }
+            statArray[statName] := { "statLayer": statLayer, "statValue": statValue }
         }
+
+        ; turn list of stats into readable format
+        statList := this.makeReadable(statArray)
         this.statList := statList
     }
 
     toString() {
         return "txtFileNo: " this.txtFileNo ", name: " this.name ", itemLoc: " this.itemLoc ", quality: " this.quality ", isRune: " this.isRune() ", id: " this.identified ", eth: " this.ethereal ", itemx: " this.itemx ", itemy: " this.itemy
+    }
+
+    makeReadable(statArray) {
+        statList := []
+        for statName, statVal in statArray {
+            switch (statName) {
+                case "strength":
+                    if (statArray["dexterity"].statValue and statArray["vitality"].statValue and statArray["energy"].statValue and statArray["strength"].statValue) {
+                        statList.push(Format("+{1} to all Attributes", statArray["strength"].statValue))
+                    } else {
+                        statList.push(Format("+{1} to Strength", statArray["strength"].statValue))
+                    }
+                case "energy": 
+                    if not (statArray["dexterity"].statValue and statArray["vitality"].statValue and statArray["energy"].statValue and statArray["strength"].statValue) {
+                        statList.push(Format("+{1} to Energy", statArray["energy"].statValue))
+                    }
+                case "dexterity":
+                    if not (statArray["dexterity"].statValue and statArray["vitality"].statValue and statArray["energy"].statValue and statArray["strength"].statValue) {
+                        statList.push(Format("+{1} to Dexterity", statArray["dexterity"].statValue))
+                    }
+                case "vitality": 
+                    if not (statArray["dexterity"].statValue and statArray["vitality"].statValue and statArray["energy"].statValue and statArray["strength"].statValue) {
+                        statList.push(Format("+{1} to Vitality", statArray["vitality"].statValue))
+                    }
+                case "maxhp": statList.push(Format("+{1} to Life", statArray["maxhp"].statValue))
+                case "maxmana": statList.push(Format("+{1} to Mana", statArray["maxmana"].statValue))
+                case "maxstamina": statList.push(Format("+{1} Maximum Stamina", statArray["maxstamina"].statValue))
+                case "item_armor_percent": statList.push(Format("+{1}% Enhanced Defense", statArray["item_armor_percent"].statValue))
+                case "tohit": statList.push(Format("+{1} to Attack Rating", statArray["tohit"].statValue))
+                case "toblock": statList.push(Format("{1}% Increased Chance of Blocking", statArray["toblock"].statValue))
+                ;case "mindamage": statList.push(Format("Adds {1}-{2} Damage", statArray["mindamage"].statValue))
+                case "manarecoverybonus": statList.push(Format("Regenerate Mana {1}%", statArray["manarecoverybonus"].statValue))
+                case "staminarecoverybonus": statList.push(Format("Heal Stamina Plus {1}%", statArray["staminarecoverybonus"].statValue))
+                case "armorclass": statList.push(Format("+{1} Defense", statArray["armorclass"].statValue))
+                case "armorclass_vs_missile": statList.push(Format("+{1} Defense vs. Missile", statArray["armorclass_vs_missile"].statValue))
+                case "armorclass_vs_hth": statList.push(Format("+{1} Defense vs. Melee", statArray["armorclass_vs_hth"].statValue))
+                case "normal_damage_reduction": statList.push(Format("Damage Reduced by {1}", statArray["normal_damage_reduction"].statValue))
+                case "magic_damage_reduction": statList.push(Format("Magic Damage Reduced by {1}", statArray["magic_damage_reduction"].statValue))
+                case "damageresist": statList.push(Format("Damage Reduced by {1}%", statArray["damageresist"].statValue))
+                case "magicresist": statList.push(Format("Magic Resist +{1}%", statArray["magicresist"].statValue))
+                case "maxmagicresist": statList.push(Format("+{1}% to Maximum Magic Resist", statArray["maxmagicresist"].statValue))
+                case "fireresist":
+                    if (statArray["lightresist"].statValue and statArray["poisonresist"].statValue and statArray["coldresist"].statValue and statArray["fireresist"].statValue) {
+                        statList.push(Format("All Resistances +{1}", statArray["fireresist"].statValue))
+                    } else {
+                        statList.push(Format("Fire Resist +{1}%", statArray["fireresist"].statValue))
+                    }
+                case "maxfireresist": statList.push(Format("+{1}% to Maximum Fire Resist", statArray["maxfireresist"].statValue))
+                case "lightresist": 
+                    if not (statArray["lightresist"].statValue and statArray["poisonresist"].statValue and statArray["coldresist"].statValue and statArray["fireresist"].statValue) {
+                        statList.push(Format("Lightning Resist +{1}%", statArray["lightresist"].statValue))
+                    }
+                case "maxlightresist": statList.push(Format("+{1}% to Maximum Lightning Resist", statArray["maxlightresist"].statValue))
+                case "coldresist": 
+                    if not (statArray["lightresist"].statValue and statArray["poisonresist"].statValue and statArray["coldresist"].statValue and statArray["fireresist"].statValue) {
+                        statList.push(Format("Cold Resist +{1}%", statArray["coldresist"].statValue))
+                    }
+                case "maxcoldresist": statList.push(Format("+{1}% to Maximum Cold Resist", statArray["maxcoldresist"].statValue))
+                case "poisonresist": 
+                    if not (statArray["lightresist"].statValue and statArray["poisonresist"].statValue and statArray["coldresist"].statValue and statArray["fireresist"].statValue) {
+                        statList.push(Format("Poison Resist +{1}%", statArray["poisonresist"].statValue))
+                    }
+                case "maxpoisonresist": statList.push(Format("+{1}% to Maximum Poison Resist", statArray["maxpoisonresist"].statValue))
+                ; case "firemindam": 
+                ;     if (statArray["firemindam"].statValue and statArray["firemaxdam"].statValue) {
+                ;         statList.push(Format("Adds {1}-{2} Fire/Lightning/Cold Damage", statArray["firemindam"].statValue))
+                ;     }
+                
+                case "firemindam": 
+                    if (statArray["firemindam"].statValue and statArray["firemaxdam"].statValue) {
+                        statList.push(Format("Adds {1}-{2} Fire Damage", statArray["firemindam"].statValue, statArray["firemaxdam"].statValue))
+                    } else {
+                        statList.push(Format("+{1} to Minimum Fire Damage", statArray["firemindam"].statValue))
+                    }
+                
+                case "firemaxdam": 
+                    if not (statArray["firemindam"].statValue and statArray["firemaxdam"].statValue) {
+                        statList.push(Format("+{1} to Maximum Fire Damage", statArray["firemaxdam"].statValue))
+                    }
+                case "lightmindam": 
+                    if (statArray["lightmindam"].statValue and statArray["lightmaxdam"].statValue) {
+                        statList.push(Format("Adds {1}-{2} Lightning Damage", statArray["lightmindam"].statValue, statArray["lightmaxdam"].statValue))
+                    } else {
+                        statList.push(Format("+{1} to Minimum Lightning Damage", statArray["lightmindam"].statValue))
+                    }
+                case "lightmaxdam": 
+                    if not (statArray["lightmindam"].statValue and statArray["lightmaxdam"].statValue) {
+                        statList.push(Format("+{1} to Maximum Lightning Damage", statArray["lightmaxdam"].statValue))
+                    }
+                ;case "magicmindam": statList.push(Format("Adds {1}-{2} Magic Damage", statArray["magicmindam"].statValue))
+                case "coldmindam": 
+                    if (statArray["coldmindam"].statValue and statArray["coldmaxdam"].statValue) {
+                        statList.push(Format("Adds {1}-{2} Cold Damage", statArray["coldmindam"].statValue, statArray["coldmaxdam"].statValue))
+                    } else {
+                        statList.push(Format("+{1} to Minimum Cold Damage", statArray["coldmindam"].statValue))
+                    }
+                case "coldmaxdam": 
+                    if not (statArray["coldmindam"].statValue and statArray["coldmaxdam"].statValue) {
+                        statList.push(Format("+{1} to Maximum Cold Damage", statArray["coldmaxdam"].statValue))
+                    }
+                case "poisonmindam": 
+                    if (statArray["poisonmindam"].statValue and statArray["poisonmaxdam"].statValue) {
+                        if (statArray["poisonmindam"].statValue == statArray["poisonmaxdam"].statValue) {
+                            statList.push(Format("+{1} Poison Damage Over {2} Seconds", statArray["poisonmindam"].statValue, statArray["poisonlength"].statValue))
+                        } else {
+                            statList.push(Format("Adds {1}-{2} Poison Damage Over {3} Seconds", statArray["poisonmindam"].statValue, statArray["poisonmaxdam"].statValue, Abs(statArray["poisonlength"].statValue / 3)))
+                        }
+                    } else {
+                        statList.push(Format("+{1} to Minimum Poison Damage", statArray["poisonmindam"].statValue))
+                    }
+                case "poisonmaxdam": 
+                    if not (statArray["poisonmindam"].statValue and statArray["poisonmaxdam"].statValue) {
+                        statList.push(Format("+{1} to Maximum Poison Damage", statArray["poisonmaxdam"].statValue))
+                    }
+                case "lifedrainmindam": statList.push(Format("{1}% Life stolen per hit", statArray["lifedrainmindam"].statValue))
+                case "manadrainmindam": statList.push(Format("{1}% Mana stolen per hit", statArray["manadrainmindam"].statValue))
+                ; case "maxdurability": statList.push(Format("Durability: {1} of {1}", statArray["durability"].statValue, statArray["maxdurability"].statValue))
+                case "hpregen": statList.push(Format("Replenish Life +{1}", statArray["hpregen"].statValue))
+                case "item_maxdurability_percent": statList.push(Format("Increase Maximum Durability {1}%", statArray["item_maxdurability_percent"].statValue))
+                case "item_maxhp_percent": statList.push(Format("Increase Maximum Life {1}%", statArray["item_maxhp_percent"].statValue))
+                case "item_maxmana_percent": statList.push(Format("Increase Maximum Mana {1}%", statArray["item_maxmana_percent"].statValue))
+                case "item_attackertakesdamage": statList.push(Format("Attacker Takes Damage of {1}", statArray["item_attackertakesdamage"].statValue))
+                case "item_goldbonus": statList.push(Format("{1}% Extra Gold from Monsters", statArray["item_goldbonus"].statValue))
+                case "item_magicbonus": statList.push(Format("{1}% Better Chance of Getting Magic Items", statArray["item_magicbonus"].statValue))
+                case "item_knockback": statList.push("Knockback")
+                case "item_addclassskills": ; + to class skils
+                    switch (statArray["item_addclassskills"].statLayer) {
+                        case 0: statList.push(Format("+{1} to Amazon Skill Levels", statArray["item_addclassskills"].statValue))
+                        case 1: statList.push(Format("+{1} to Sorceress Skill Levels", statArray["item_addclassskills"].statValue))
+                        case 2: statList.push(Format("+{1} to Necromancer Skill Levels", statArray["item_addclassskills"].statValue))
+                        case 3: statList.push(Format("+{1} to Paladin Skill Levels", statArray["item_addclassskills"].statValue))
+                        case 4: statList.push(Format("+{1} to Barbarian Skill Levels", statArray["item_addclassskills"].statValue))
+                        case 5: statList.push(Format("+{1} to Druid Skill Levels", statArray["item_addclassskills"].statValue))
+                        case 6: statList.push(Format("+{1} to Assassin Skill Levels", statArray["item_addclassskills"].statValue))
+                    }
+                case "item_addexperience": statList.push(Format("+{1}% to Experience Gained", statArray["item_addexperience"].statValue))
+                case "item_healafterkill": statList.push(Format("+{1} Life after each Kill", statArray["item_healafterkill"].statValue))
+                case "item_reducedprices": statList.push(Format("Reduces all Vendor Prices {1}%", statArray["item_reducedprices"].statValue))
+                case "item_lightradius": statList.push(Format("+{1} to Light Radius", statArray["item_lightradius"].statValue))
+                case "item_req_percent": statList.push(Format("Requirements -{1}%", statArray["item_req_percent"].statValue))
+                case "item_levelreq": statList.push(Format("Required Level: {1}", statArray["item_levelreq"].statValue))
+                case "item_fasterattackrate": statList.push(Format("+{1}% Increased Attack Speed", statArray["item_fasterattackrate"].statValue))
+                case "item_fastermovevelocity": statList.push(Format("+{1}% Faster Run/Walk", statArray["item_fastermovevelocity"].statValue))
+                case "item_nonclassskill1": 
+                    statList.push(Format("+{1} to {2}", statArray["item_nonclassskill1"].statValue, getSkillName(statArray["item_nonclassskill1"].statLayer)))
+                case "item_nonclassskill2": 
+                    statList.push(Format("+{1} to {2}", statArray["item_nonclassskill2"].statValue, getSkillName(statArray["item_nonclassskill2"].statLayer)))
+                case "item_nonclassskill3": 
+                    statList.push(Format("+{1} to {2}", statArray["item_nonclassskill3"].statValue, getSkillName(statArray["item_nonclassskill3"].statLayer)))
+                case "item_nonclassskill4": 
+                    statList.push(Format("+{1} to {2}", statArray["item_nonclassskill4"].statValue, getSkillName(statArray["item_nonclassskill4"].statLayer)))
+                case "item_nonclassskill5": 
+                    statList.push(Format("+{1} to {2}", statArray["item_nonclassskill5"].statValue, getSkillName(statArray["item_nonclassskill5"].statLayer)))
+                case "item_fastergethitrate": statList.push(Format("+{1}% Faster Hit Recovery", statArray["item_fastergethitrate"].statValue))
+                case "item_fasterblockrate": statList.push(Format("+{1}% Faster Block Rate", statArray["item_fasterblockrate"].statValue))
+                case "item_fastercastrate": statList.push(Format("+{1}% Faster Cast Rate", statArray["item_fastercastrate"].statValue))
+                case "item_singleskill1": 
+                    statList.push(Format("+{1} to {2} ({3} only)", statArray["item_singleskill1"].statValue, getSkillName(statArray["item_singleskill1"].statLayer), getSkillClass(statArray["item_singleskill1"].statLayer)))
+                case "item_singleskill2": 
+                    statList.push(Format("+{1} to {2} ({3} only)", statArray["item_singleskill2"].statValue, getSkillName(statArray["item_singleskill2"].statLayer), getSkillClass(statArray["item_singleskill2"].statLayer)))
+                case "item_singleskill3": 
+                    statList.push(Format("+{1} to {2} ({3} only)", statArray["item_singleskill3"].statValue, getSkillName(statArray["item_singleskill3"].statLayer), getSkillClass(statArray["item_singleskill3"].statLayer)))
+                case "item_singleskill4": 
+                    statList.push(Format("+{1} to {2} ({3} only)", statArray["item_singleskill4"].statValue, getSkillName(statArray["item_singleskill4"].statLayer), getSkillClass(statArray["item_singleskill4"].statLayer)))
+                case "item_singleskill5": 
+                    statList.push(Format("+{1} to {2} ({3} only)", statArray["item_singleskill5"].statValue, getSkillName(statArray["item_singleskill5"].statLayer), getSkillClass(statArray["item_singleskill5"].statLayer)))
+                case "item_restinpeace": statList.push("Slain Monsters Rest in Peace")
+                case "item_poisonlengthresist": statList.push(Format("Poison Length Reduced by {1}%", statArray["item_poisonlengthresist"].statValue))
+                case "item_normaldamage": statList.push(Format("Damage +{1}", statArray["item_normaldamage"].statValue))
+                case "item_howl": statList.push(Format("Hit Causes Monster to Flee {1}%", statArray["item_howl"].statValue))
+                case "item_stupidity": statList.push(Format("Hit Blinds Target +{1}", statArray["item_stupidity"].statValue))
+                case "item_damagetomana": statList.push(Format("{1}% Damage Taken Goes To Mana", statArray["item_damagetomana"].statValue))
+                case "item_ignoretargetac": statList.push(Format("Ignore Target's Defense", statArray["item_ignoretargetac"].statValue))
+                case "item_fractionaltargetac": statList.push(Format("-{1}% Target Defense", statArray["item_fractionaltargetac"].statValue))
+                case "item_preventheal": statList.push(Format("Prevent Monster Heal", statArray["item_preventheal"].statValue))
+                case "item_halffreezeduration": statList.push(Format("Half Freeze Duration", statArray["item_halffreezeduration"].statValue))
+                case "item_tohit_percent": statList.push(Format("{1}% Bonus to Attack Rating", statArray["item_tohit_percent"].statValue))
+                case "item_damagetargetac": statList.push(Format("-{1} to Monster Defense Per Hit", statArray["item_damagetargetac"].statValue))
+                case "item_demondamage_percent": statList.push(Format("+{1}% Damage to Demons", statArray["item_demondamage_percent"].statValue))
+                case "item_undeaddamage_percent": statList.push(Format("+{1}% Damage to Undead", statArray["item_undeaddamage_percent"].statValue))
+                case "item_demon_tohit": statList.push(Format("+{1} to Attack Rating against Demons", statArray["item_demon_tohit"].statValue))
+                case "item_undead_tohit": statList.push(Format("+{1} to Attack Rating against Undead", statArray["item_undead_tohit"].statValue))
+                case "item_elemskill": statList.push(Format("+{1} to Fire Skills", statArray["item_elemskill"].statValue))
+                case "item_allskills": statList.push(Format("+{1} to All Skills", statArray["item_allskills"].statValue))
+                case "item_attackertakeslightdamage": statList.push(Format("Attacker Takes Lightning Damage of {1}", statArray["item_attackertakeslightdamage"].statValue))
+                case "item_freeze": statList.push(Format("Freezes Target +{1}", statArray["item_freeze"].statValue))
+                case "item_openwounds": statList.push(Format("{1}% Chance of Open Wounds", statArray["item_openwounds"].statValue))
+                case "item_crushingblow": statList.push(Format("{1}% Chance of Crushing Blow", statArray["item_crushingblow"].statValue))
+                case "item_kickdamage": statList.push(Format("+{1} Kick Damage", statArray["item_kickdamage"].statValue))
+                case "item_manaafterkill": statList.push(Format("+{1} to Mana after each Kill", statArray["item_manaafterkill"].statValue))
+                case "item_healafterdemonkill": statList.push(Format("+{1} Life after each Demon Kill", statArray["item_healafterdemonkill"].statValue))
+                case "item_deadlystrike": statList.push(Format("{1}% Deadly Strike", statArray["item_deadlystrike"].statValue))
+                case "item_absorbfire_percent": statList.push(Format("+{1} Fire Absorb", statArray["item_absorbfire_percent"].statValue))
+                case "item_absorbfire": statList.push(Format("Fire Absorb {1}%", statArray["item_absorbfire"].statValue))
+                case "item_absorblight_percent": statList.push(Format("+{1} Lightning Absorb", statArray["item_absorblight_percent"].statValue))
+                case "item_absorblight": statList.push(Format("Lightning Absorb {1}%", statArray["item_absorblight"].statValue))
+                case "item_absorbmagic_percent": statList.push(Format("+{1} Magic Absorb", statArray["item_absorbmagic_percent"].statValue))
+                case "item_absorbmagic": statList.push(Format("Magic Absorb {1}%", statArray["item_absorbmagic"].statValue))
+                case "item_absorbcold_percent": statList.push(Format("+{1} Cold Absorb", statArray["item_absorbcold_percent"].statValue))
+                case "item_absorbcold": statList.push(Format("Cold Absorb {1}%", statArray["item_absorbcold"].statValue))
+                case "item_slow": statList.push(Format("Slows Target by {1}%", statArray["item_slow"].statValue))
+                case "item_aura": statList.push(Format("Level {1} [Skill].statValue Aura When Equipped", statArray["item_aura"].statValue))
+                case "item_cannotbefrozen": statList.push(Format("Cannot Be Frozen", statArray["item_cannotbefrozen"].statValue))
+                case "item_staminadrainpct": statList.push(Format("{1}% Slower Stamina Drain", statArray["item_staminadrainpct"].statValue))
+                case "item_reanimate": statList.push(Format("Reanimate As: [Returned].statValue", statArray["item_reanimate"].statValue))
+                case "item_pierce": statList.push(Format("Piercing Attack", statArray["item_pierce"].statValue))
+                case "item_magicarrow": statList.push(Format("Fires Magic Arrows", statArray["item_magicarrow"].statValue))
+                case "item_explosivearrow": statList.push(Format("Fires Explosive Arrows or Bolts", statArray["item_explosivearrow"].statValue))
+                case "item_addskill_tab": statList.push(Format("+{1} to [Class Skill Tab].statValue Skills", statArray["item_addskill_tab"].statValue))
+                case "item_numsockets": statList.push(Format("Socketed ({1})", statArray["item_numsockets"].statValue))
+                case "item_skillonattack": statList.push(Format("{1}% Chance to cast level {2} [Skill].statValue on attack", statArray["item_skillonattack"].statValue))
+                case "item_skillonkill": statList.push(Format("{1}% Chance to cast level {2} [Skill].statValue when you Kill an Enemy", statArray["item_skillonkill"].statValue))
+                case "item_skillondeath": statList.push(Format("{1}% Chance to cast level {2} [Skill].statValue when you Die", statArray["item_skillondeath"].statValue))
+                case "item_skillonhit": statList.push(Format("{1}% Chance to cast level {2} [Skill].statValue on striking", statArray["item_skillonhit"].statValue))
+                case "item_skillonlevelup": statList.push(Format("{1}% Chance to cast level {2} [Skill].statValue when you Level-Up", statArray["item_skillonlevelup"].statValue))
+                case "item_skillongethit": statList.push(Format("{1}% Chance to cast level {2} [Skill].statValue when struck", statArray["item_skillongethit"].statValue))
+                case "item_charged_skill": statList.push(Format("Level {1} [Skill].statValue ({2}/{3} Charges)", statArray["item_charged_skill"].statValue))
+                case "item_armor_perlevel": statList.push(Format("+{1} Defense (Based on Character Level)", statArray["item_armor_perlevel"].statValue))
+                case "item_armorpercent_perlevel": statList.push(Format("+{1}% Enhanced Defense (Based on Character Level)", statArray["item_armorpercent_perlevel"].statValue))
+                case "item_hp_perlevel": statList.push(Format("+{1} to Life (Based on Character Level)", statArray["item_hp_perlevel"].statValue))
+                case "item_mana_perlevel": statList.push(Format("+{1} to Mana (Based on Character Level)", statArray["item_mana_perlevel"].statValue))
+                case "item_maxdamage_perlevel": statList.push(Format("+{1} to Maximum Damage (Based on Character Level)", statArray["item_maxdamage_perlevel"].statValue))
+                case "item_maxdamage_percent_perlevel": statList.push(Format("+{1}% Enhanced Maximum Damage (Based on Character Level)", statArray["item_maxdamage_percent_perlevel"].statValue))
+                case "maxdamage": 
+                if not (statArray["mindamage"].statValue and statArray["maxdamage"].statValue) {
+                    statList.push(Format("+{1} to Maximum Damage", statArray["maxdamage"].statValue))
+                }
+                case "item_strength_perlevel": statList.push(Format("+{1} to Strength (Based on Character Level)", statArray["item_strength_perlevel"].statValue))
+                case "item_dexterity_perlevel": statList.push(Format("+{1} to Dexterity (Based on Character Level)", statArray["item_dexterity_perlevel"].statValue))
+                case "item_vitality_perlevel": statList.push(Format("+{1} to Vitality (Based on Character Level)", statArray["item_vitality_perlevel"].statValue))
+                case "item_tohit_perlevel": statList.push(Format("+{1} to Attack Rating (Based on Character Level)", statArray["item_tohit_perlevel"].statValue))
+                case "item_tohitpercent_perlevel": statList.push(Format("{1}% Bonus to Attack Rating (Based on Character Level)", statArray["item_tohitpercent_perlevel"].statValue))
+                case "item_resist_cold_perlevel": statList.push(Format("Cold Resist +{1}% (Based on Character Level)", statArray["item_resist_cold_perlevel"].statValue))
+                case "item_resist_fire_perlevel": statList.push(Format("Fire Resist +{1}% (Based on Character Level)", statArray["item_resist_fire_perlevel"].statValue))
+                case "item_resist_ltng_perlevel": statList.push(Format("Lightning Resist +{1}% (Based on Character Level)", statArray["item_resist_ltng_perlevel"].statValue))
+                case "item_resist_pois_perlevel": statList.push(Format("Poison Resist +{1}% (Based on Character Level)", statArray["item_resist_pois_perlevel"].statValue))
+                case "item_absorb_cold_perlevel": statList.push(Format("Absorbs Cold Damage (Based on Character Level)", statArray["item_absorb_cold_perlevel"].statValue))
+                case "item_absorb_fire_perlevel": statList.push(Format("Absorbs Fire Damage (Based on Character Level)", statArray["item_absorb_fire_perlevel"].statValue))
+                case "item_thorns_perlevel": statList.push(Format("Attacker Takes Damage of {1} (Based on Character Level)", statArray["item_thorns_perlevel"].statValue))
+                case "item_find_gold_perlevel": statList.push(Format("{1}% Extra Gold from Monsters (Based on Character Level)", statArray["item_find_gold_perlevel"].statValue))
+                case "item_find_magic_perlevel": statList.push(Format("{1}% Better Chance of Getting Magic Items (Based on Character Level)", statArray["item_find_magic_perlevel"].statValue))
+                case "item_regenstamina_perlevel": statList.push(Format("Heal Stamina Plus {1}% (Based on Character Level)", statArray["item_regenstamina_perlevel"].statValue))
+                case "item_stamina_perlevel": statList.push(Format("+{1} Maximum Stamina (Based on Character Level)", statArray["item_stamina_perlevel"].statValue))
+                case "item_damage_demon_perlevel": statList.push(Format("+{1}% Damage to Demons (Based on Character Level)", statArray["item_damage_demon_perlevel"].statValue))
+                case "item_damage_undead_perlevel": statList.push(Format("+{1}% Damage to Undead (Based on Character Level)", statArray["item_damage_undead_perlevel"].statValue))
+                case "item_tohit_demon_perlevel": statList.push(Format("+{1} to Attack Rating against Demons (Based on Character Level)", statArray["item_tohit_demon_perlevel"].statValue))
+                case "item_tohit_undead_perlevel": statList.push(Format("+{1} to Attack Rating against Undead (Based on Character Level)", statArray["item_tohit_undead_perlevel"].statValue))
+                case "item_deadlystrike_perlevel": statList.push(Format("{1}% Deadly Strike (Based on Character Level)", statArray["item_deadlystrike_perlevel"].statValue))
+                case "item_replenish_durability": statList.push(Format("Repairs 1 durability in {1} seconds", statArray["item_replenish_durability"].statValue))
+                case "item_replenish_quantity": statList.push(Format("Replenishes quantity", statArray["item_replenish_quantity"].statValue))
+                case "item_extra_stack": statList.push("Increased Stack Size")
+                case "passive_fire_mastery": statList.push(Format("+{1}% to Fire Skill Damage", statArray["passive_fire_mastery"].statValue))
+                case "passive_ltng_mastery": statList.push(Format("+{1}% to Lightning Skill Damage", statArray["passive_ltng_mastery"].statValue))
+                case "passive_cold_mastery": statList.push(Format("+{1}% to Cold Skill Damage", statArray["passive_cold_mastery"].statValue))
+                case "passive_pois_mastery": statList.push(Format("+{1}% to Poison Skill Damage", statArray["passive_pois_mastery"].statValue))
+                case "passive_fire_pierce": statList.push(Format("-{1}% to Enemy Fire Resistance", statArray["passive_fire_pierce"].statValue))
+                case "passive_ltng_pierce": statList.push(Format("-{1}% to Enemy Lightning Resistance", statArray["passive_ltng_pierce"].statValue))
+                case "passive_cold_pierce": statList.push(Format("-{1}% to Enemy Cold Resistance", statArray["passive_cold_pierce"].statValue))
+                case "passive_pois_pierce": statList.push(Format("-{1}% to Enemy Poison Resistance", statArray["passive_pois_pierce"].statValue))
+
+                
+
+            }
+        }
+        return statList
     }
 
     calculateFlags(flags) {
@@ -3264,366 +3555,369 @@ class GameItem {
 
     getStatName(statEnum) {
         switch (statEnum) {
-            case 0: return "Strength"
-            case 1: return "Energy"
-            case 2: return "Dexterity"
-            case 3: return "Vitality"
-            case 4: return "StatPoints"
-            case 5: return "SkillPoints"
-            case 6: return "Life"
-            case 7: return "MaxLife"
-            case 8: return "Mana"
-            case 9: return "MaxMana"
-            case 10: return "Stamina"
-            case 11: return "MaxStamina"
-            case 12: return "Level"
-            case 13: return "Experience"
-            case 14: return "Gold"
-            case 15: return "StashGold"
-            case 16: return "ArmorPercent"
-            case 17: return "EnhancedDamageMax"
-            case 18: return "EnhancedDamage"
-            case 19: return "AttackRating"
-            case 20: return "ChanceToBlock"
-            case 21: return "MinDamage"
-            case 22: return "MaxDamage"
-            case 23: return "SecondMinDamage"
-            case 24: return "SecMaxDamage"
-            case 25: return "DamagePercent"
-            case 26: return "ManaRecovery"
-            case 27: return "ManaRecoveryBonus"
-            case 28: return "StaminaRecoveryBonus"
-            case 29: return "LastExp"
-            case 30: return "NextExp"
-            case 31: return "Defense"
-            case 32: return "DefenseVsMissiles"
-            case 33: return "DefenseVsHth"
-            case 34: return "NormalDamageReduction"
-            case 35: return "MagicDamageReduction"
-            case 36: return "DamageReduced"
-            case 37: return "MagicResist"
-            case 38: return "MaxMagicResist"
-            case 39: return "FireResist"
-            case 40: return "MaxFireResist"
-            case 41: return "LightningResist"
-            case 42: return "MaxLightningResist"
-            case 43: return "ColdResist"
-            case 44: return "MaxColdResist"
-            case 45: return "PoisonResist"
-            case 46: return "MaxPoisonResist"
-            case 47: return "DamageAura"
-            case 48: return "FireMinDamage"
-            case 49: return "FireMaxDamage"
-            case 50: return "LightningMinDamage"
-            case 51: return "LightningMaxDamage"
-            case 52: return "MagicMinDamage"
-            case 53: return "MagicMaxDamage"
-            case 54: return "ColdMinDamage"
-            case 55: return "ColdMaxDamage"
-            case 56: return "ColdLength"
-            case 57: return "PoisonMinDamage"
-            case 58: return "PoisonMaxDamage"
-            case 59: return "PoisonLength"
-            case 60: return "LifeSteal"
-            case 61: return "LifeStealMax"
-            case 62: return "ManaSteal"
-            case 63: return "ManaStealMax"
-            case 64: return "StaminaDrainMinDamage"
-            case 65: return "StaminaDrainMaxDamage"
-            case 66: return "StunLength"
-            case 67: return "VelocityPercent"
-            case 68: return "AttackRate"
-            case 69: return "OtherAnimRate"
-            case 70: return "Quantity"
-            case 71: return "Value"
-            case 72: return "Durability"
-            case 73: return "MaxDurability"
-            case 74: return "HPRegen"
-            case 75: return "MaxDurabilityPercent"
-            case 76: return "MaxHPPercent"
-            case 77: return "MaxManaPercent"
-            case 78: return "AttackerTakesDamage"
-            case 79: return "GoldFind"
-            case 80: return "MagicFind"
-            case 81: return "Knockback"
-            case 82: return "TimeDuration"
-            case 83: return "AddClassSkills"
-            case 84: return "Unused84"
-            case 85: return "AddExperience"
-            case 86: return "HealAfterKill"
-            case 87: return "ReducePrices"
-            case 88: return "DoubleHerbDuration"
-            case 89: return "LightRadius"
-            case 90: return "LightColor"
-            case 91: return "RequirementPercent"
-            case 92: return "LevelRequire"
-            case 93: return "IncreasedAttackSpeed"
-            case 94: return "LevelRequirePercent"
-            case 95: return "LastBlockFrame"
-            case 96: return "FasterRunWalk"
-            case 97: return "NonClassSkill"
-            case 98: return "State"
-            case 99: return "FasterHitRecovery"
-            case 100: return "PlayerCount"
-            case 101: return "PoisonOverrideLength"
-            case 102: return "FasterBlockRate"
-            case 103: return "BypassUndead"
-            case 104: return "BypassDemons"
-            case 105: return "FasterCastRate"
-            case 106: return "BypassBeasts"
-            case 107: return "SingleSkill"
-            case 108: return "SlainMonstersRestInPeace"
-            case 109: return "CurseResistance"
-            case 110: return "PoisonLengthResist"
-            case 111: return "NormalDamage"
-            case 112: return "Howl"
-            case 113: return "Stupidity"
-            case 114: return "DamageTakenGoesToMana"
-            case 115: return "IgnoreTargetsAR"
-            case 116: return "FractionalTargetAC"
-            case 117: return "PreventMonsterHeal"
-            case 118: return "HalfFreezeDuration"
-            case 119: return "AttackRatingPercent"
-            case 120: return "DamageTargetAC"
-            case 121: return "DemonDamagePercent"
-            case 122: return "UndeadDamagePercent"
-            case 123: return "DemonAttackRating"
-            case 124: return "UndeadAttackRating"
-            case 125: return "Throwable"
-            case 126: return "ElemSkills"
-            case 127: return "AllSkills"
-            case 128: return "AttackerTakesLightDamage"
-            case 129: return "IronMaidenLevel"
-            case 130: return "LifeTapLevel"
-            case 131: return "ThornsPercent"
-            case 132: return "BoneArmor"
-            case 133: return "BoneArmorMax"
-            case 134: return "Freeze"
-            case 135: return "OpenWounds"
-            case 136: return "CrushingBlow"
-            case 137: return "KickDamage"
-            case 138: return "ManaAfterKill"
-            case 139: return "HealAfterDemonKill"
-            case 140: return "ExtraBlood"
-            case 141: return "DeadlyStrike"
-            case 142: return "AbsorbFirePercent"
-            case 143: return "AbsorbFire"
-            case 144: return "AbsorbLightningPercent"
-            case 145: return "AbsorbLightning"
-            case 146: return "AbsorbMagicPercent"
-            case 147: return "AbsorbMagic"
-            case 148: return "AbsorbColdPercent"
-            case 149: return "AbsorbCold"
-            case 150: return "Slow"
-            case 151: return "Aura"
-            case 152: return "Indestructible"
-            case 153: return "CannotBeFrozen"
-            case 154: return "StaminaDrainPercent"
-            case 155: return "Reanimate"
-            case 156: return "Pierce"
-            case 157: return "MagicAarow"
-            case 158: return "ExplosiveAarow"
-            case 159: return "ThrowMinDamage"
-            case 160: return "ThrowMaxDamage"
-            case 161: return "SkillHandofAthena"
-            case 162: return "SkillStaminaPercent"
-            case 163: return "SkillPassiveStaminaPercent"
-            case 164: return "SkillConcentration"
-            case 165: return "SkillEnchant"
-            case 166: return "SkillPierce"
-            case 167: return "SkillConviction"
-            case 168: return "SkillChillingArmor"
-            case 169: return "SkillFrenzy"
-            case 170: return "SkillDecrepify"
-            case 171: return "SkillArmorPercent"
-            case 172: return "Alignment"
-            case 173: return "Target0"
-            case 174: return "Target1"
-            case 175: return "GoldLost"
-            case 176: return "ConverisonLevel"
-            case 177: return "ConverisonMaxHP"
-            case 178: return "UnitDooverlay"
-            case 179: return "AttackVsMonType"
-            case 180: return "DamageVsMonType"
-            case 181: return "Fade"
-            case 182: return "ArmorOverridePercent"
-            case 183: return "Unused183"
-            case 184: return "Unused184"
-            case 185: return "Unused185"
-            case 186: return "Unused186"
-            case 187: return "Unused187"
-            case 188: return "AddSkillTab"
-            case 189: return "Unused189"
-            case 190: return "Unused190"
-            case 191: return "Unused191"
-            case 192: return "Unused192"
-            case 193: return "Unused193"
-            case 194: return "NumSockets"
-            case 195: return "SkillOnAttack"
-            case 196: return "SkillOnKill"
-            case 197: return "SkillOnDeath"
-            case 198: return "SkillOnHit"
-            case 199: return "SkillOnLevelUp"
-            case 200: return "Unused200"
-            case 201: return "SkillOnGetHit"
-            case 202: return "Unused202"
-            case 203: return "Unused203"
-            case 204: return "ItemChargedSkill"
-            case 205: return "Unused205"
-            case 206: return "Unused206"
-            case 207: return "Unused207"
-            case 208: return "Unused208"
-            case 209: return "Unused209"
-            case 210: return "Unused210"
-            case 211: return "Unused211"
-            case 212: return "Unused212"
-            case 213: return "Unused213"
-            case 214: return "ArmorPerLevel"
-            case 215: return "ArmorPercentPerLevel"
-            case 216: return "LifePerLevel"
-            case 217: return "ManaPerLevel"
-            case 218: return "MaxDamagePerLevel"
-            case 219: return "MaxDamagePercentPerLevel"
-            case 220: return "StrengthPerLevel"
-            case 221: return "DexterityPerLevel"
-            case 222: return "EnergyPerLevel"
-            case 223: return "VitalityPerLevel"
-            case 224: return "AttackRatingPerLevel"
-            case 225: return "AttackRatingPercentPerLevel"
-            case 226: return "ColdDamageMaxPerLevel"
-            case 227: return "FireDamageMaxPerLevel"
-            case 228: return "LightningDamageMaxPerLevel"
-            case 229: return "PoisonDamageMaxPerLevel"
-            case 230: return "ResistColdPerLevel"
-            case 231: return "ResistFirePerLevel"
-            case 232: return "ResistLightningPerLevel"
-            case 233: return "ResistPoisonPerLevel"
-            case 234: return "AbsorbColdPerLevel"
-            case 235: return "AbsorbFirePerLevel"
-            case 236: return "AbsorbLightningPerLevel"
-            case 237: return "AbsorbPoisonPerLevel"
-            case 238: return "ThornsPerLevel"
-            case 239: return "FindGoldPerLevel"
-            case 240: return "MagicFindPerLevel"
-            case 241: return "RegenStaminaPerLevel"
-            case 242: return "StaminaPerLevel"
-            case 243: return "DamageDemonPerLevel"
-            case 244: return "DamageUndeadPerLevel"
-            case 245: return "AttackRatingDemonPerLevel"
-            case 246: return "AttackRatingUndeadPerLevel"
-            case 247: return "CrushingBlowPerLevel"
-            case 248: return "OpenWoundsPerLevel"
-            case 249: return "KickDamagePerLevel"
-            case 250: return "DeadlyStrikePerLevel"
-            case 251: return "FindGemsPerLevel"
-            case 252: return "ReplenishDurability"
-            case 253: return "ReplenishQuantity"
-            case 254: return "ExtraStack"
-            case 255: return "FindItem"
-            case 256: return "SlashDamage"
-            case 257: return "SlashDamagePercent"
-            case 258: return "CrushDamage"
-            case 259: return "CrushDamagePercent"
-            case 260: return "ThrustDamage"
-            case 261: return "ThrustDamagePercent"
-            case 262: return "AbsorbSlash"
-            case 263: return "AbsorbCrush"
-            case 264: return "AbsorbThrust"
-            case 265: return "AbsorbSlashPercent"
-            case 266: return "AbsorbCrushPercent"
-            case 267: return "AbsorbThrustPercent"
-            case 268: return "ArmorByTime"
-            case 269: return "ArmorPercentByTime"
-            case 270: return "LifeByTime"
-            case 271: return "ManaByTime"
-            case 272: return "MaxDamageByTime"
-            case 273: return "MaxDamagePercentByTime"
-            case 274: return "StrengthByTime"
-            case 275: return "DexterityByTime"
-            case 276: return "EnergyByTime"
-            case 277: return "VitalityByTime"
-            case 278: return "AttackRatingByTime"
-            case 279: return "AttackRatingPercentByTime"
-            case 280: return "ColdDamageMaxByTime"
-            case 281: return "FireDamageMaxByTime"
-            case 282: return "LightningDamageMaxByTime"
-            case 283: return "PoisonDamageMaxByTime"
-            case 284: return "ResistColdByTime"
-            case 285: return "ResistFireByTime"
-            case 286: return "ResistLightningByTime"
-            case 287: return "ResistPoisonByTime"
-            case 288: return "AbsorbColdByTime"
-            case 289: return "AbsorbFireByTime"
-            case 290: return "AbsorbLightningByTime"
-            case 291: return "AbsorbPoisonByTime"
-            case 292: return "FindGoldByTime"
-            case 293: return "MagicFindByTime"
-            case 294: return "RegenStaminaByTime"
-            case 295: return "StaminaByTime"
-            case 296: return "DamageDemonByTime"
-            case 297: return "DamageUndeadByTime"
-            case 298: return "AttackRatingDemonByTime"
-            case 299: return "AttackRatingUndeadByTime"
-            case 300: return "CrushingBlowByTime"
-            case 301: return "OpenWoundsByTime"
-            case 302: return "KickDamageByTime"
-            case 303: return "DeadlyStrikeByTime"
-            case 304: return "FindGemsByTime"
-            case 305: return "PierceCold"
-            case 306: return "PierceFire"
-            case 307: return "PierceLightning"
-            case 308: return "PiercePoison"
-            case 309: return "DamageVsMonster"
-            case 310: return "DamagePercentVsMonster"
-            case 311: return "AttackRatingVsMonster"
-            case 312: return "AttackRatingPercentVsMonster"
-            case 313: return "AcVsMonster"
-            case 314: return "AcPercentVsMonster"
-            case 315: return "FireLength"
-            case 316: return "BurningMin"
-            case 317: return "BurningMax"
-            case 318: return "ProgressiveDamage"
-            case 319: return "ProgressiveSteal"
-            case 320: return "ProgressiveOther"
-            case 321: return "ProgressiveFire"
-            case 322: return "ProgressiveCold"
-            case 323: return "ProgressiveLightning"
-            case 324: return "ExtraCharges"
-            case 325: return "ProgressiveAttackRating"
-            case 326: return "PoisonCount"
-            case 327: return "DamageFrameRate"
-            case 328: return "PierceIdx"
-            case 329: return "FireSkillDamage"
-            case 330: return "LightningSkillDamage"
-            case 331: return "ColdSkillDamage"
-            case 332: return "PoisonSkillDamage"
-            case 333: return "EnemyFireResist"
-            case 334: return "EnemyLightningResist"
-            case 335: return "EnemyColdResist"
-            case 336: return "EnemyPoisonResist"
-            case 337: return "PassiveCriticalStrike"
-            case 338: return "PassiveDodge"
-            case 339: return "PassiveAvoid"
-            case 340: return "PassiveEvade"
-            case 341: return "PassiveWarmth"
-            case 342: return "PassiveMasteryMeleeAttackRating"
-            case 343: return "PassiveMasteryMeleeDamage"
-            case 344: return "PassiveMasteryMeleeCritical"
-            case 345: return "PassiveMasteryThrowAttackRating"
-            case 346: return "PassiveMasteryThrowDamage"
-            case 347: return "PassiveMasteryThrowCritical"
-            case 348: return "PassiveWeaponBlock"
-            case 349: return "SummonResist"
-            case 350: return "ModifierListSkill"
-            case 351: return "ModifierListLevel"
-            case 352: return "LastSentHPPercent"
-            case 353: return "SourceUnitType"
-            case 354: return "SourceUnitID"
-            case 355: return "ShortParam1"
-            case 356: return "QuestItemDifficulty"
-            case 357: return "PassiveMagicMastery"
-            case 358: return "PassiveMagicPierce"
+            case 0: return "strength"
+            case 1: return "energy"
+            case 2: return "dexterity"
+            case 3: return "vitality"
+            case 4: return "statpts"
+            case 5: return "newskills"
+            case 6: return "hitpoints"
+            case 7: return "maxhp"
+            case 8: return "mana"
+            case 9: return "maxmana"
+            case 10: return "stamina"
+            case 11: return "maxstamina"
+            case 12: return "level"
+            case 13: return "experience"
+            case 14: return "gold"
+            case 15: return "goldbank"
+            case 16: return "item_armor_percent"
+            case 17: return "item_maxdamage_percent"
+            case 18: return "item_mindamage_percent"
+            case 19: return "tohit"
+            case 20: return "toblock"
+            case 21: return "mindamage"
+            case 22: return "maxdamage"
+            case 23: return "secondary_mindamage"
+            case 24: return "secondary_maxdamage"
+            case 25: return "damagepercent"
+            case 26: return "manarecovery"
+            case 27: return "manarecoverybonus"
+            case 28: return "staminarecoverybonus"
+            case 29: return "lastexp"
+            case 30: return "nextexp"
+            case 31: return "armorclass"
+            case 32: return "armorclass_vs_missile"
+            case 33: return "armorclass_vs_hth"
+            case 34: return "normal_damage_reduction"
+            case 35: return "magic_damage_reduction"
+            case 36: return "damageresist"
+            case 37: return "magicresist"
+            case 38: return "maxmagicresist"
+            case 39: return "fireresist"
+            case 40: return "maxfireresist"
+            case 41: return "lightresist"
+            case 42: return "maxlightresist"
+            case 43: return "coldresist"
+            case 44: return "maxcoldresist"
+            case 45: return "poisonresist"
+            case 46: return "maxpoisonresist"
+            case 47: return "damageaura"
+            case 48: return "firemindam"
+            case 49: return "firemaxdam"
+            case 50: return "lightmindam"
+            case 51: return "lightmaxdam"
+            case 52: return "magicmindam"
+            case 53: return "magicmaxdam"
+            case 54: return "coldmindam"
+            case 55: return "coldmaxdam"
+            case 56: return "coldlength"
+            case 57: return "poisonmindam"
+            case 58: return "poisonmaxdam"
+            case 59: return "poisonlength"
+            case 60: return "lifedrainmindam"
+            case 61: return "lifedrainmaxdam"
+            case 62: return "manadrainmindam"
+            case 63: return "manadrainmaxdam"
+            case 64: return "stamdrainmindam"
+            case 65: return "stamdrainmaxdam"
+            case 66: return "stunlength"
+            case 67: return "velocitypercent"
+            case 68: return "attackrate"
+            case 69: return "other_animrate"
+            case 70: return "quantity"
+            case 71: return "value"
+            case 72: return "durability"
+            case 73: return "maxdurability"
+            case 74: return "hpregen"
+            case 75: return "item_maxdurability_percent"
+            case 76: return "item_maxhp_percent"
+            case 77: return "item_maxmana_percent"
+            case 78: return "item_attackertakesdamage"
+            case 79: return "item_goldbonus"
+            case 80: return "item_magicbonus"
+            case 81: return "item_knockback"
+            case 82: return "item_timeduration"
+            case 83: return "item_addclassskills"
+            case 84: return "unsentparam1"
+            case 85: return "item_addexperience"
+            case 86: return "item_healafterkill"
+            case 87: return "item_reducedprices"
+            case 88: return "item_doubleherbduration"
+            case 89: return "item_lightradius"
+            case 90: return "item_lightcolor"
+            case 91: return "item_req_percent"
+            case 92: return "item_levelreq"
+            case 93: return "item_fasterattackrate"
+            case 94: return "item_levelreqpct"
+            case 95: return "lastblockframe"
+            case 96: return "item_fastermovevelocity"
+            case 97: return "item_nonclassskill"
+            case 98: return "state"
+            case 99: return "item_fastergethitrate"
+            case 100: return "monster_playercount"
+            case 101: return "skill_poison_override_length"
+            case 102: return "item_fasterblockrate"
+            case 103: return "skill_bypass_undead"
+            case 104: return "skill_bypass_demons"
+            case 105: return "item_fastercastrate"
+            case 106: return "skill_bypass_beasts"
+            case 107: return "item_singleskill"
+            case 108: return "item_restinpeace"
+            case 109: return "curse_resistance"
+            case 110: return "item_poisonlengthresist"
+            case 111: return "item_normaldamage"
+            case 112: return "item_howl"
+            case 113: return "item_stupidity"
+            case 114: return "item_damagetomana"
+            case 115: return "item_ignoretargetac"
+            case 116: return "item_fractionaltargetac"
+            case 117: return "item_preventheal"
+            case 118: return "item_halffreezeduration"
+            case 119: return "item_tohit_percent"
+            case 120: return "item_damagetargetac"
+            case 121: return "item_demondamage_percent"
+            case 122: return "item_undeaddamage_percent"
+            case 123: return "item_demon_tohit"
+            case 124: return "item_undead_tohit"
+            case 125: return "item_throwable"
+            case 126: return "item_elemskill"
+            case 127: return "item_allskills"
+            case 128: return "item_attackertakeslightdamage"
+            case 129: return "ironmaiden_level"
+            case 130: return "lifetap_level"
+            case 131: return "thorns_percent"
+            case 132: return "bonearmor"
+            case 133: return "bonearmormax"
+            case 134: return "item_freeze"
+            case 135: return "item_openwounds"
+            case 136: return "item_crushingblow"
+            case 137: return "item_kickdamage"
+            case 138: return "item_manaafterkill"
+            case 139: return "item_healafterdemonkill"
+            case 140: return "item_extrablood"
+            case 141: return "item_deadlystrike"
+            case 142: return "item_absorbfire_percent"
+            case 143: return "item_absorbfire"
+            case 144: return "item_absorblight_percent"
+            case 145: return "item_absorblight"
+            case 146: return "item_absorbmagic_percent"
+            case 147: return "item_absorbmagic"
+            case 148: return "item_absorbcold_percent"
+            case 149: return "item_absorbcold"
+            case 150: return "item_slow"
+            case 151: return "item_aura"
+            case 152: return "item_indesctructible"
+            case 153: return "item_cannotbefrozen"
+            case 154: return "item_staminadrainpct"
+            case 155: return "item_reanimate"
+            case 156: return "item_pierce"
+            case 157: return "item_magicarrow"
+            case 158: return "item_explosivearrow"
+            case 159: return "item_throw_mindamage"
+            case 160: return "item_throw_maxdamage"
+            case 161: return "skill_handofathena"
+            case 162: return "skill_staminapercent"
+            case 163: return "skill_passive_staminapercent"
+            case 164: return "skill_concentration"
+            case 165: return "skill_enchant"
+            case 166: return "skill_pierce"
+            case 167: return "skill_conviction"
+            case 168: return "skill_chillingarmor"
+            case 169: return "skill_frenzy"
+            case 170: return "skill_decrepify"
+            case 171: return "skill_armor_percent"
+            case 172: return "alignment"
+            case 173: return "target0"
+            case 174: return "target1"
+            case 175: return "goldlost"
+            case 176: return "conversion_level"
+            case 177: return "conversion_maxhp"
+            case 178: return "unit_dooverlay"
+            case 179: return "attack_vs_montype"
+            case 180: return "damage_vs_montype"
+            case 181: return "fade"
+            case 182: return "armor_override_percent"
+            case 183: return "unused183"
+            case 184: return "unused184"
+            case 185: return "unused185"
+            case 186: return "unused186"
+            case 187: return "unused187"
+            case 188: return "item_addskill_tab"
+            case 189: return "unused189"
+            case 190: return "unused190"
+            case 191: return "unused191"
+            case 192: return "unused192"
+            case 193: return "unused193"
+            case 194: return "item_numsockets"
+            case 195: return "item_skillonattack"
+            case 196: return "item_skillonkill"
+            case 197: return "item_skillondeath"
+            case 198: return "item_skillonhit"
+            case 199: return "item_skillonlevelup"
+            case 200: return "unused200"
+            case 201: return "item_skillongethit"
+            case 202: return "unused202"
+            case 203: return "unused203"
+            case 204: return "item_charged_skill"
+            case 205: return "unused205"
+            case 206: return "unused206"
+            case 207: return "unused207"
+            case 208: return "unused208"
+            case 209: return "unused209"
+            case 210: return "unused210"
+            case 211: return "unused211"
+            case 213: return "passive_mastery_gethit_rate"
+            case 213: return "passive_mastery_attack_speed"
+            case 214: return "item_armor_perlevel"
+            case 215: return "item_armorpercent_perlevel"
+            case 216: return "item_hp_perlevel"
+            case 217: return "item_mana_perlevel"
+            case 218: return "item_maxdamage_perlevel"
+            case 219: return "item_maxdamage_percent_perlevel"
+            case 220: return "item_strength_perlevel"
+            case 221: return "item_dexterity_perlevel"
+            case 222: return "item_energy_perlevel"
+            case 223: return "item_vitality_perlevel"
+            case 224: return "item_tohit_perlevel"
+            case 225: return "item_tohitpercent_perlevel"
+            case 226: return "item_cold_damagemax_perlevel"
+            case 227: return "item_fire_damagemax_perlevel"
+            case 228: return "item_ltng_damagemax_perlevel"
+            case 229: return "item_pois_damagemax_perlevel"
+            case 230: return "item_resist_cold_perlevel"
+            case 231: return "item_resist_fire_perlevel"
+            case 232: return "item_resist_ltng_perlevel"
+            case 233: return "item_resist_pois_perlevel"
+            case 234: return "item_absorb_cold_perlevel"
+            case 235: return "item_absorb_fire_perlevel"
+            case 236: return "item_absorb_ltng_perlevel"
+            case 237: return "item_absorb_pois_perlevel"
+            case 238: return "item_thorns_perlevel"
+            case 239: return "item_find_gold_perlevel"
+            case 240: return "item_find_magic_perlevel"
+            case 241: return "item_regenstamina_perlevel"
+            case 242: return "item_stamina_perlevel"
+            case 243: return "item_damage_demon_perlevel"
+            case 244: return "item_damage_undead_perlevel"
+            case 245: return "item_tohit_demon_perlevel"
+            case 246: return "item_tohit_undead_perlevel"
+            case 247: return "item_crushingblow_perlevel"
+            case 248: return "item_openwounds_perlevel"
+            case 249: return "item_kick_damage_perlevel"
+            case 250: return "item_deadlystrike_perlevel"
+            case 251: return "item_find_gems_perlevel"
+            case 252: return "item_replenish_durability"
+            case 253: return "item_replenish_quantity"
+            case 254: return "item_extra_stack"
+            case 255: return "item_find_item"
+            case 256: return "item_slash_damage"
+            case 257: return "item_slash_damage_percent"
+            case 258: return "item_crush_damage"
+            case 259: return "item_crush_damage_percent"
+            case 260: return "item_thrust_damage"
+            case 261: return "item_thrust_damage_percent"
+            case 262: return "item_absorb_slash"
+            case 263: return "item_absorb_crush"
+            case 264: return "item_absorb_thrust"
+            case 265: return "item_absorb_slash_percent"
+            case 266: return "item_absorb_crush_percent"
+            case 267: return "item_absorb_thrust_percent"
+            case 268: return "item_armor_bytime"
+            case 269: return "item_armorpercent_bytime"
+            case 270: return "item_hp_bytime"
+            case 271: return "item_mana_bytime"
+            case 272: return "item_maxdamage_bytime"
+            case 273: return "item_maxdamage_percent_bytime"
+            case 274: return "item_strength_bytime"
+            case 275: return "item_dexterity_bytime"
+            case 276: return "item_energy_bytime"
+            case 277: return "item_vitality_bytime"
+            case 278: return "item_tohit_bytime"
+            case 279: return "item_tohitpercent_bytime"
+            case 280: return "item_cold_damagemax_bytime"
+            case 281: return "item_fire_damagemax_bytime"
+            case 282: return "item_ltng_damagemax_bytime"
+            case 283: return "item_pois_damagemax_bytime"
+            case 284: return "item_resist_cold_bytime"
+            case 285: return "item_resist_fire_bytime"
+            case 286: return "item_resist_ltng_bytime"
+            case 287: return "item_resist_pois_bytime"
+            case 288: return "item_absorb_cold_bytime"
+            case 289: return "item_absorb_fire_bytime"
+            case 290: return "item_absorb_ltng_bytime"
+            case 291: return "item_absorb_pois_bytime"
+            case 292: return "item_find_gold_bytime"
+            case 293: return "item_find_magic_bytime"
+            case 294: return "item_regenstamina_bytime"
+            case 295: return "item_stamina_bytime"
+            case 296: return "item_damage_demon_bytime"
+            case 297: return "item_damage_undead_bytime"
+            case 298: return "item_tohit_demon_bytime"
+            case 299: return "item_tohit_undead_bytime"
+            case 300: return "item_crushingblow_bytime"
+            case 301: return "item_openwounds_bytime"
+            case 302: return "item_kick_damage_bytime"
+            case 303: return "item_deadlystrike_bytime"
+            case 304: return "item_find_gems_bytime"
+            case 305: return "item_pierce_cold"
+            case 306: return "item_pierce_fire"
+            case 307: return "item_pierce_ltng"
+            case 308: return "item_pierce_pois"
+            case 309: return "item_damage_vs_monster"
+            case 310: return "item_damage_percent_vs_monster"
+            case 311: return "item_tohit_vs_monster"
+            case 312: return "item_tohit_percent_vs_monster"
+            case 313: return "item_ac_vs_monster"
+            case 314: return "item_ac_percent_vs_monster"
+            case 315: return "firelength"
+            case 316: return "burningmin"
+            case 317: return "burningmax"
+            case 318: return "progressive_damage"
+            case 319: return "progressive_steal"
+            case 320: return "progressive_other"
+            case 321: return "progressive_fire"
+            case 322: return "progressive_cold"
+            case 323: return "progressive_lightning"
+            case 324: return "item_extra_charges"
+            case 325: return "progressive_tohit"
+            case 326: return "poison_count"
+            case 327: return "damage_framerate"
+            case 328: return "pierce_idx"
+            case 329: return "passive_fire_mastery"
+            case 330: return "passive_ltng_mastery"
+            case 331: return "passive_cold_mastery"
+            case 332: return "passive_pois_mastery"
+            case 333: return "passive_fire_pierce"
+            case 334: return "passive_ltng_pierce"
+            case 335: return "passive_cold_pierce"
+            case 336: return "passive_pois_pierce"
+            case 337: return "passive_critical_strike"
+            case 338: return "passive_dodge"
+            case 339: return "passive_avoid"
+            case 340: return "passive_evade"
+            case 341: return "passive_warmth"
+            case 342: return "passive_mastery_melee_th"
+            case 343: return "passive_mastery_melee_dmg"
+            case 344: return "passive_mastery_melee_crit"
+            case 345: return "passive_mastery_throw_th"
+            case 346: return "passive_mastery_throw_dmg"
+            case 347: return "passive_mastery_throw_crit"
+            case 348: return "passive_weaponblock"
+            case 349: return "passive_summon_resist"
+            case 350: return "modifierlist_skill"
+            case 351: return "modifierlist_level"
+            case 352: return "last_sent_hp_pct"
+            case 353: return "source_unit_type"
+            case 354: return "source_unit_id"
+            case 355: return "shortparam1"
+            case 356: return "questitemdifficulty"
+            case 357: return "passive_mag_mastery"
+            case 358: return "passive_mag_pierce"
+            case 359: return "skill_cooldown"
+            case 360: return "skill_missile_damage_scale"
         }
+        return statEnum
     }
 
     getAbbrevStatName(statEnum) {

@@ -2,10 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.9.3] - 2021-05-24 - Bug fixes
+## [2.9.4] - 2021-05-24 - Item stats formatting
 
+- Item stats are now formatted correctly
+- Item stats are turned _off_ by default in settings to reduce clutter
 - Fixed bug where scrolls/key counters wouldn't render
-- 
 
 ## [2.9.3] - 2021-05-24 - Fix for latest patch
 

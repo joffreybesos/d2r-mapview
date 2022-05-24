@@ -130,7 +130,7 @@ class GameItem {
                 statName := statName . skillsfound
                 
             }
-            OutputDebug, % statName " " statEnum " " statLayer " " statValue "`n"
+            ;OutputDebug, % statName " " statEnum " " statLayer " " statValue "`n"
             statArray[statName] := { "statLayer": statLayer, "statValue": statValue }
         }
         statExCount := this.statExCount
@@ -160,7 +160,7 @@ class GameItem {
                 statName := statName . skillsfound
                 
             }
-            OutputDebug, % statName " " statEnum " " statLayer " " statValue "`n"
+            ;OutputDebug, % statName " " statEnum " " statLayer " " statValue "`n"
             statArray[statName] := { "statLayer": statLayer, "statValue": statValue }
         }
 

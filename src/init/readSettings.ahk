@@ -126,7 +126,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["historyToggleKey"] := "^g"
     settings["performanceMode"] := "-1"
     settings["enableD2ML"] := 0
-    settings["windowTitle"] := "D2R:main"
+    settings["windowTitle"] := "Diablo II: Resurrected"
     settings["debug"] := 0
     settings["fpscap"] := 60
     

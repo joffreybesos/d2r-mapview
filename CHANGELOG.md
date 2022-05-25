@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.5] - 2021-05-25
+
+- Changed default window title for multi session mode to `Diablo II: Resurrected`
+
 ## [2.9.4] - 2021-05-24 - Item stats formatting
 
 - Item stats are now formatted correctly

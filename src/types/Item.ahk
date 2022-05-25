@@ -178,7 +178,7 @@ class GameItem {
         for statName, statVal in statArray {
             switch (statName) {
                 case "strength":
-                    if (statArray["dexterity"].statValue and statArray["vitality"].statValue and statArray["energy"].statValue and statArray["strength"].statValue) {
+                    if ((statArray["strength"].statValue == statArray["vitality"].statValue) and (statArray["energy"].statValue == statArray["fireresist"].statValue) and (statArray["strength"].statValue == statArray["fireresist"].statValue)) {
                         statList.push(Format("+{1} to all Attributes", statArray["strength"].statValue))
                     } else {
                         if (statArray["strength"].statValue > 0) {
@@ -186,16 +186,22 @@ class GameItem {
                         }
                     }
                 case "energy": 
-                    if not (statArray["dexterity"].statValue and statArray["vitality"].statValue and statArray["energy"].statValue and statArray["strength"].statValue) {
-                        statList.push(Format("+{1} to Energy", statArray["energy"].statValue))
+                    if not ((statArray["strength"].statValue == statArray["vitality"].statValue) and (statArray["energy"].statValue == statArray["fireresist"].statValue) and (statArray["strength"].statValue == statArray["fireresist"].statValue)) {
+                        if (statArray["energy"].statValue > 0) {
+                            statList.push(Format("+{1} to Energy", statArray["energy"].statValue))
+                        }
                     }
                 case "dexterity":
-                    if not (statArray["dexterity"].statValue and statArray["vitality"].statValue and statArray["energy"].statValue and statArray["strength"].statValue) {
-                        statList.push(Format("+{1} to Dexterity", statArray["dexterity"].statValue))
+                    if not ((statArray["strength"].statValue == statArray["vitality"].statValue) and (statArray["energy"].statValue == statArray["fireresist"].statValue) and (statArray["strength"].statValue == statArray["fireresist"].statValue)) {
+                        if (statArray["dexterity"].statValue > 0) {
+                            statList.push(Format("+{1} to Dexterity", statArray["dexterity"].statValue))
+                        }
                     }
                 case "vitality": 
-                    if not (statArray["dexterity"].statValue and statArray["vitality"].statValue and statArray["energy"].statValue and statArray["strength"].statValue) {
-                        statList.push(Format("+{1} to Vitality", statArray["vitality"].statValue))
+                    if not ((statArray["strength"].statValue == statArray["vitality"].statValue) and (statArray["energy"].statValue == statArray["fireresist"].statValue) and (statArray["strength"].statValue == statArray["fireresist"].statValue)) {
+                        if (statArray["vitality"].statValue > 0) {
+                            statList.push(Format("+{1} to Vitality", statArray["vitality"].statValue))
+                        }
                     }
                 case "maxhp": statList.push(Format("+{1} to Life", statArray["maxhp"].statValue))
                 case "maxmana": statList.push(Format("+{1} to Mana", statArray["maxmana"].statValue))

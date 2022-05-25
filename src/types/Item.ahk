@@ -181,7 +181,9 @@ class GameItem {
                     if (statArray["dexterity"].statValue and statArray["vitality"].statValue and statArray["energy"].statValue and statArray["strength"].statValue) {
                         statList.push(Format("+{1} to all Attributes", statArray["strength"].statValue))
                     } else {
-                        statList.push(Format("+{1} to Strength", statArray["strength"].statValue))
+                        if (statArray["strength"].statValue > 0) {
+                            statList.push(Format("+{1} to Strength", statArray["strength"].statValue))
+                        }
                     }
                 case "energy": 
                     if not (statArray["dexterity"].statValue and statArray["vitality"].statValue and statArray["energy"].statValue and statArray["strength"].statValue) {
@@ -213,24 +215,24 @@ class GameItem {
                 case "magicresist": statList.push(Format("Magic Resist +{1}%", statArray["magicresist"].statValue))
                 case "maxmagicresist": statList.push(Format("+{1}% to Maximum Magic Resist", statArray["maxmagicresist"].statValue))
                 case "fireresist":
-                    if (statArray["lightresist"].statValue and statArray["poisonresist"].statValue and statArray["coldresist"].statValue and statArray["fireresist"].statValue) {
+                    if ((statArray["lightresist"].statValue == statArray["poisonresist"].statValue) and (statArray["coldresist"].statValue == statArray["fireresist"].statValue) and (statArray["lightresist"].statValue == statArray["fireresist"].statValue)) {
                         statList.push(Format("All Resistances +{1}", statArray["fireresist"].statValue))
                     } else {
                         statList.push(Format("Fire Resist +{1}%", statArray["fireresist"].statValue))
                     }
                 case "maxfireresist": statList.push(Format("+{1}% to Maximum Fire Resist", statArray["maxfireresist"].statValue))
                 case "lightresist": 
-                    if not (statArray["lightresist"].statValue and statArray["poisonresist"].statValue and statArray["coldresist"].statValue and statArray["fireresist"].statValue) {
+                    if not ((statArray["lightresist"].statValue == statArray["poisonresist"].statValue) and (statArray["coldresist"].statValue == statArray["fireresist"].statValue) and (statArray["lightresist"].statValue == statArray["fireresist"].statValue)) {
                         statList.push(Format("Lightning Resist +{1}%", statArray["lightresist"].statValue))
                     }
                 case "maxlightresist": statList.push(Format("+{1}% to Maximum Lightning Resist", statArray["maxlightresist"].statValue))
                 case "coldresist": 
-                    if not (statArray["lightresist"].statValue and statArray["poisonresist"].statValue and statArray["coldresist"].statValue and statArray["fireresist"].statValue) {
+                    if not ((statArray["lightresist"].statValue == statArray["poisonresist"].statValue) and (statArray["coldresist"].statValue == statArray["fireresist"].statValue) and (statArray["lightresist"].statValue == statArray["fireresist"].statValue)) {
                         statList.push(Format("Cold Resist +{1}%", statArray["coldresist"].statValue))
                     }
                 case "maxcoldresist": statList.push(Format("+{1}% to Maximum Cold Resist", statArray["maxcoldresist"].statValue))
                 case "poisonresist": 
-                    if not (statArray["lightresist"].statValue and statArray["poisonresist"].statValue and statArray["coldresist"].statValue and statArray["fireresist"].statValue) {
+                    if not ((statArray["lightresist"].statValue == statArray["poisonresist"].statValue) and (statArray["coldresist"].statValue == statArray["fireresist"].statValue) and (statArray["lightresist"].statValue == statArray["fireresist"].statValue)) {
                         statList.push(Format("Poison Resist +{1}%", statArray["poisonresist"].statValue))
                     }
                 case "maxpoisonresist": statList.push(Format("+{1}% to Maximum Poison Resist", statArray["maxpoisonresist"].statValue))
@@ -340,7 +342,7 @@ class GameItem {
                 case "item_restinpeace": statList.push("Slain Monsters Rest in Peace")
                 case "item_poisonlengthresist": statList.push(Format("Poison Length Reduced by {1}%", statArray["item_poisonlengthresist"].statValue))
                 case "item_normaldamage": statList.push(Format("Damage +{1}", statArray["item_normaldamage"].statValue))
-                case "item_howl": statList.push(Format("Hit Causes Monster to Flee {1}%", statArray["item_howl"].statValue))
+                case "item_howl": statList.push(Format("Hit Causes Monster to Flee {1}%", Round(statArray["item_howl"].statValue) / 1.28))
                 case "item_stupidity": statList.push(Format("Hit Blinds Target +{1}", statArray["item_stupidity"].statValue))
                 case "item_damagetomana": statList.push(Format("{1}% Damage Taken Goes To Mana", statArray["item_damagetomana"].statValue))
                 case "item_ignoretargetac": statList.push(Format("Ignore Target's Defense", statArray["item_ignoretargetac"].statValue))
@@ -423,20 +425,20 @@ class GameItem {
                     maxCharges := statArray["item_charged_skill"].statValue >> 8
                     charges := Mod(statArray["item_charged_skill"].statValue, (1 << 8))
                     statList.push(Format("Level {1} {2} ({3}/{4} Charges)", level, getSkillName(skillId), charges, maxCharges))
-                case "item_armor_perlevel": statList.push(Format("+{1} Defense (Based on Character Level)", statArray["item_armor_perlevel"].statValue))
+                case "item_armor_perlevel": statList.push(Format("+{1} Defense (Based on Character Level)", Round(statArray["item_armor_perlevel"].statValue) / 8))
                 case "item_armorpercent_perlevel": statList.push(Format("+{1}% Enhanced Defense (Based on Character Level)", statArray["item_armorpercent_perlevel"].statValue))
-                case "item_hp_perlevel": statList.push(Format("+{1} to Life (Based on Character Level)", statArray["item_hp_perlevel"].statValue))
-                case "item_mana_perlevel": statList.push(Format("+{1} to Mana (Based on Character Level)", statArray["item_mana_perlevel"].statValue))
-                case "item_maxdamage_perlevel": statList.push(Format("+{1} to Maximum Damage (Based on Character Level)", statArray["item_maxdamage_perlevel"].statValue))
-                case "item_maxdamage_percent_perlevel": statList.push(Format("+{1}% Enhanced Maximum Damage (Based on Character Level)", statArray["item_maxdamage_percent_perlevel"].statValue))
+                case "item_hp_perlevel": statList.push(Format("+{1} to Life (Based on Character Level)", Round(statArray["item_hp_perlevel"].statValue) / 2048))
+                case "item_mana_perlevel": statList.push(Format("+{1} to Mana (Based on Character Level)", Round(statArray["item_mana_perlevel"].statValue) / 2048))
+                case "item_maxdamage_perlevel": statList.push(Format("+{1} to Maximum Damage (Based on Character Level)", Round(statArray["item_maxdamage_perlevel"].statValue) / 8))
+                case "item_maxdamage_percent_perlevel": statList.push(Format("+{1}% Enhanced Maximum Damage (Based on Character Level)", Round(statArray["item_maxdamage_percent_perlevel"].statValue) / 8))
                 case "maxdamage": 
                 if not (statArray["mindamage"].statValue and statArray["maxdamage"].statValue) {
                     statList.push(Format("+{1} to Maximum Damage", statArray["maxdamage"].statValue))
                 }
-                case "item_strength_perlevel": statList.push(Format("+{1} to Strength (Based on Character Level)", statArray["item_strength_perlevel"].statValue))
-                case "item_dexterity_perlevel": statList.push(Format("+{1} to Dexterity (Based on Character Level)", statArray["item_dexterity_perlevel"].statValue))
-                case "item_vitality_perlevel": statList.push(Format("+{1} to Vitality (Based on Character Level)", statArray["item_vitality_perlevel"].statValue))
-                case "item_tohit_perlevel": statList.push(Format("+{1} to Attack Rating (Based on Character Level)", statArray["item_tohit_perlevel"].statValue))
+                case "item_strength_perlevel": statList.push(Format("+{1} to Strength (Based on Character Level)", Round(statArray["item_strength_perlevel"].statValue) / 8))
+                case "item_dexterity_perlevel": statList.push(Format("+{1} to Dexterity (Based on Character Level)", Round(statArray["item_dexterity_perlevel"].statValue) / 8))
+                case "item_vitality_perlevel": statList.push(Format("+{1} to Vitality (Based on Character Level)", Round(statArray["item_vitality_perlevel"].statValue) / 8))
+                case "item_tohit_perlevel": statList.push(Format("+{1} to Attack Rating (Based on Character Level)", Round(statArray["item_tohit_perlevel"].statValue) / 8))
                 case "item_tohitpercent_perlevel": statList.push(Format("{1}% Bonus to Attack Rating (Based on Character Level)", statArray["item_tohitpercent_perlevel"].statValue))
                 case "item_resist_cold_perlevel": statList.push(Format("Cold Resist +{1}% (Based on Character Level)", statArray["item_resist_cold_perlevel"].statValue))
                 case "item_resist_fire_perlevel": statList.push(Format("Fire Resist +{1}% (Based on Character Level)", statArray["item_resist_fire_perlevel"].statValue))
@@ -452,9 +454,9 @@ class GameItem {
                 case "item_damage_demon_perlevel": statList.push(Format("+{1}% Damage to Demons (Based on Character Level)", statArray["item_damage_demon_perlevel"].statValue))
                 case "item_damage_undead_perlevel": statList.push(Format("+{1}% Damage to Undead (Based on Character Level)", statArray["item_damage_undead_perlevel"].statValue))
                 case "item_tohit_demon_perlevel": statList.push(Format("+{1} to Attack Rating against Demons (Based on Character Level)", statArray["item_tohit_demon_perlevel"].statValue))
-                case "item_tohit_undead_perlevel": statList.push(Format("+{1} to Attack Rating against Undead (Based on Character Level)", statArray["item_tohit_undead_perlevel"].statValue))
-                case "item_deadlystrike_perlevel": statList.push(Format("{1}% Deadly Strike (Based on Character Level)", statArray["item_deadlystrike_perlevel"].statValue))
-                case "item_replenish_durability": statList.push(Format("Repairs 1 durability in {1} seconds", statArray["item_replenish_durability"].statValue))
+                case "item_tohit_undead_perlevel": statList.push(Format("+{1} to Attack Rating against Undead (Based on Character Level)", Round(statArray["item_tohit_undead_perlevel"].statValue) / 2))
+                case "item_deadlystrike_perlevel": statList.push(Format("{1}% Deadly Strike (Based on Character Level)", Round(statArray["item_deadlystrike_perlevel"].statValue) / 0.8))
+                case "item_replenish_durability": statList.push(Format("Repairs 1 durability in {1} seconds", Round(100 / statArray["item_replenish_durability"].statValue)))
                 case "item_replenish_quantity": statList.push(Format("Replenishes quantity", statArray["item_replenish_quantity"].statValue))
                 case "item_extra_stack": statList.push("Increased Stack Size")
                 case "passive_fire_mastery": statList.push(Format("+{1}% to Fire Skill Damage", statArray["passive_fire_mastery"].statValue))

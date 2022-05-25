@@ -128,7 +128,7 @@ if (not WinExist(gameWindowId)) {
     errormsg10:= localizedStrings["errormsg10"]
     errormsg11 := localizedStrings["errormsg11"]
     errormsg12 := localizedStrings["errormsg12"]
-    WriteLog(gameWindowId " not found, please make sure game is running, try running in admin if still having issues")
+    WriteLog(gameWindowId " not found, please make sure game is running, try running MH as admin if still having issues")
     Msgbox, 48, d2r-mapview %version%, %errormsg10%`n`n%errormsg11%`n%errormsg12%`n`n%errormsg3%
     ExitApp
 }

@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [2.9.5] - 2021-05-25
 
+- Game history now shows XP per minute
+- Updated some stats which were not appearing correctly
 - Changed default window title for multi session mode to `Diablo II: Resurrected`
 
 ## [2.9.4] - 2021-05-24 - Item stats formatting
@@ -19,7 +21,6 @@ All notable changes to this project will be documented in this file.
 - Item stats are _off_ by default
 
 ## [2.9.2] - 2021-05-23 - Item stats in item drop log
-
 
 - Along with the item drop log you'll see the stats for that item
 - You can only see stats that don't require identification

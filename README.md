@@ -17,9 +17,9 @@ This tool is licenced under GPLv3, reselling this maphack violates the terms of 
 
 ## Map examples
 
-|    Stony Field     |   Lower Kurast     |        Travincal         | Rogue Encampment    |
+|    Stony Field     |   Lower Kurast     |        Travincal         | Harrogath    |
 | :---------------: | :------------------: | :----------------------: | :-----------------: |
-| ![image](https://user-images.githubusercontent.com/93067706/170401476-5f13bdf9-57eb-40a4-a736-a508c21d854a.png)| ![image](https://user-images.githubusercontent.com/93067706/170401546-4bb935f1-722f-429b-bf1a-07701db672c3.png) |![image](https://user-images.githubusercontent.com/93067706/170401603-170e38f0-864d-4375-8db8-1a3ed1fbcc75.png) | ![image](https://user-images.githubusercontent.com/93067706/170403000-f818ad9f-a85b-4d85-8aca-ac8c50dd0a5a.png)
+| ![image](https://user-images.githubusercontent.com/93067706/170401476-5f13bdf9-57eb-40a4-a736-a508c21d854a.png)| ![image](https://user-images.githubusercontent.com/93067706/170401546-4bb935f1-722f-429b-bf1a-07701db672c3.png) |![image](https://user-images.githubusercontent.com/93067706/170401603-170e38f0-864d-4375-8db8-1a3ed1fbcc75.png) | ![image](https://user-images.githubusercontent.com/93067706/170441186-e7bd7813-48ae-4355-8491-30f0a19c0222.png)
 |
 
 ## Setup

@@ -9,7 +9,7 @@
 #Include %A_ScriptDir%\memory\scanForPlayer.ahk
 
 readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
-    global items
+    static items
     static objects
     static partyList
     hoveredMob := {}
@@ -130,6 +130,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
             ReadItems(d2rprocess, unitTableOffset, items)
             ; timeStamp("readItems")
         }
+        
     }
 
     ; get objects

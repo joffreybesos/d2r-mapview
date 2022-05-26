@@ -3,6 +3,7 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
     ; draw item alerts
     SetFormat Integer, D
     items := gameMemoryData["items"]
+    
     for index, item in items
     {
         alert := itemAlertList.findAlert(item)
@@ -35,23 +36,19 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
                 , itemLogText := itemLogText " [" item.numSockets "]"
             }
             if (item.identified and !item.inStore) {
-                itemLogText := "(Identified) " itemLogText
+                itemLogText := itemLogText " (Identified)" 
             }
             if (item.ethereal) {
                 itemText := "Eth. " itemText
                 , itemLogText := "(Ethereal) " itemLogText
             }
             acolor := "cc" . alert.color    
-            ; if (item.txtFileNo == 603 or item.txtFileNo == 604 or item.txtFileNo == 605) {
-            ;     item.loadStats()
-            ;     itemText := itemText "`n" item.statList
-            ; }
             item.itemLogText := itemLogText
             item.alertColor := "ff" . alert.color    
             if (alert.speak or alert.soundfile) {
                 announceItem(settings, item, alert)
             }
-            if (itemLoc != 2) {
+            if (itemLoc != 2) { ; if not in store
                 drawFloatingText(unitsLayer, itemx, itemy, fontSize, acolor, true, exocetFont, itemText)
                 switch (ticktock) {
                     case 1: Gdip_FillEllipse(unitsLayer.G, pBrush1, itemx-5, itemy-5, 10, 10)
@@ -75,7 +72,7 @@ announceItem(settings, item, alert) {
     if (!seenItems[item.getHash()]) {
         if (!item.isQuestItem(item.txtFileNo)) {
             ; seen item for the first time
-            WriteLog("ITEMLOG: Found item '" item.quality " " item.name "' matched to alert '" alert.name "'")
+            WriteLog("ITEMLOG: Found item '" item.getTextToSpeech() "' at '" item.itemx ", " item.itemy "' matched to alert '" alert.name "'")
             if (settings["allowTextToSpeech"]) {
                 SetFormat Integer, D
                 volume := Round(settings["textToSpeechVolume"] + 0)
@@ -95,9 +92,10 @@ announceItem(settings, item, alert) {
                     SoundPlay, %soundfile%
                 }
             }
+            item.loadStats()
             item.foundTime := A_Now
             seenItems[item.getHash()] := item
-            itemLogItems[A_Now . item.getHash()] := item
+            itemLogItems[A_Now . item.getHash()] := item.Clone()
             itemLogLayer.drawItemLog()
         }
     }

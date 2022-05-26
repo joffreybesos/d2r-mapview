@@ -76,6 +76,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["itemLogEnabled"] := 1
     settings["itemCounterEnabled"] := 1
     settings["itemCounterSize"] := 75
+    settings["showItemStats"] := 0
 
     settings["allowTextToSpeech"] := 1
     settings["textToSpeechVolume"] := 50
@@ -125,7 +126,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["historyToggleKey"] := "^g"
     settings["performanceMode"] := "-1"
     settings["enableD2ML"] := 0
-    settings["windowTitle"] := "D2R:main"
+    settings["windowTitle"] := "Diablo II: Resurrected"
     settings["debug"] := 0
     settings["fpscap"] := 60
     

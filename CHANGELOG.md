@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.5] - 2021-05-25 - XP per second in game history
+
+- Game history now shows XP per second
+- Item stats are now listed in the correct sort order
+- Updated some stats which were not appearing correctly
+- Improved performance with reading vendor items
+- Changed default window title for multi session mode to `Diablo II: Resurrected`
+
+## [2.9.4] - 2021-05-24 - Item stats formatting
+
+- Item stats are now formatted correctly
+- Item stats are turned _off_ by default in settings to reduce clutter
+- Fixed bug where scrolls/key counters wouldn't render
+
+## [2.9.3] - 2021-05-24 - Fix for latest patch
+
+- Fix unit pattern scan for latest patch (thanks @Rabbs)
+- Item stats can now be toggled on or off in the item log
+- Item stats are _off_ by default
+
+## [2.9.2] - 2021-05-23 - Item stats in item drop log
+
+- Along with the item drop log you'll see the stats for that item
+- You can only see stats that don't require identification
+- NOTE: Some stats will appear weird (Attack rating, poison dmg) but this will be improved over time
+  You'll get weird stats such as 'Defense' twice, these values are supposed to be added together for ED
+- Fixed issue with item log entries disappearing when picked up
+- Fixed issue with items being tagged with (Vendor) incorrectly
+- Items now appear in item log for 30 seconds instead of 12
+
 ## [2.9.1] - 2021-05-23 - Item filter detects vendor items
 
 - Vendor items are now detected by item filter

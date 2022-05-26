@@ -21,6 +21,8 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\Gdip_All.ahk
 #Include %A_ScriptDir%\itemfilter\AlertList.ahk
 #Include %A_ScriptDir%\itemfilter\ItemAlert.ahk
+#Include %A_ScriptDir%\types\Stats.ahk
+#Include %A_ScriptDir%\types\Skills.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk
 #Include %A_ScriptDir%\memory\scanForPlayer.ahk
 #Include %A_ScriptDir%\memory\readGameMemory.ahk
@@ -30,6 +32,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\memory\patternScan.ahk
 #Include %A_ScriptDir%\memory\IsInGame.ahk
 #Include %A_ScriptDir%\memory\readInvItems.ahk
+#Include %A_ScriptDir%\memory\readVendorItems.ahk
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
 #Include %A_ScriptDir%\ui\image\prefetchMaps.ahk
@@ -66,7 +69,7 @@ Menu, Tray, Add, Reload, Reload
 Menu, Tray, Add
 Menu, Tray, Add, Exit, ExitMH
 
-global version := "2.9.1"
+global version := "2.9.5"
 
 WriteLog("*******************************************************************")
 WriteLog("* Map overlay started https://github.com/joffreybesos/d2r-mapview *")
@@ -109,6 +112,7 @@ global formalFont := (A_ScriptDir . "\formal436bt-regular.otf")
 global mapLoading := 0
 global seenItems := []
 global itemLogItems := []
+global vendorItems := []
 global oSpVoice := ComObjCreate("SAPI.SpVoice")
 global itemAlertList := new AlertList("itemfilter.yaml")
 global centerLeftOffset := 0
@@ -128,7 +132,7 @@ if (not WinExist(gameWindowId)) {
     errormsg10:= localizedStrings["errormsg10"]
     errormsg11 := localizedStrings["errormsg11"]
     errormsg12 := localizedStrings["errormsg12"]
-    WriteLog(gameWindowId " not found, please make sure game is running, try running in admin if still having issues")
+    WriteLog(gameWindowId " not found, please make sure game is running, try running MH as admin if still having issues")
     Msgbox, 48, d2r-mapview %version%, %errormsg10%`n`n%errormsg11%`n%errormsg12%`n`n%errormsg3%
     ExitApp
 }
@@ -182,6 +186,7 @@ While 1 {
             shrines := []
             seenItems := []
             itemLogItems := []
+            vendorItems := []
             newGame := 1
             if (session) {
                 session.setEndTime(gameEndTime)
@@ -344,6 +349,12 @@ While 1 {
             itemCounterLayer.drawItemCounter(HUDItems)
             gameInfoLayer.drawInfoText(currentFPS)
             partyInfoLayer.drawInfoText(gameMemoryData["partyList"], gameMemoryData["unitId"])
+            ReadVendorItems(d2rprocess, unitTableOffset, levelNo, vendorItems)
+            if (vendorItems.length() > 0) {
+                for k, vitem in vendorItems {
+                    gameMemoryData["items"].push(vitem)
+                }
+            }
             itemLogLayer.drawItemLog()
         }
     }

@@ -51,6 +51,7 @@ class SessionTableLayer {
             gameNameList :=
             gameTimeList :=
             xpgainedList :=
+            xpperminList :=
             Loop %max%
             {
                 session := sessionList[(max-A_Index+1)]
@@ -61,6 +62,8 @@ class SessionTableLayer {
                 formattedxp := this.GetNumberFormat(session.getExperienceGained())
                 StringTrimRight, formattedxp, formattedxp, 3
                 xpgainedList := xpgainedList . formattedxp . "`n"
+                xpperminformatted := this.GetNumberFormat(session.getExperienceGained() / (session.duration))
+                xpperminList := xpperminList . xpperminformatted . "`n"
                 gameTimeList := gameTimeList . this.GetDurationFormatEx(session.duration) . "`n"
             }
             
@@ -70,6 +73,7 @@ class SessionTableLayer {
             col5 := this.drawData(col4, headery, fontSize, gameNameList, 7 * fontSize)
             col6 := this.drawData(col5, headery, fontSize, gameTimeList, 6 * fontSize)
             col7 := this.drawData(col6, headery, fontSize, xpgainedList, 2 * fontSize)
+            col8 := this.drawData(col7, headery, fontSize, xpperminList, 2 * fontSize)
 
             this.drawHeader(col1, datay, fontSize, "#")
             this.drawHeader(col2, datay, fontSize, "Lvl")
@@ -77,6 +81,7 @@ class SessionTableLayer {
             this.drawHeader(col4, datay, fontSize, "Game Name")
             this.drawHeader(col5, datay, fontSize, "Duration")
             this.drawHeader(col6, datay, fontSize, "+XP")
+            this.drawHeader(col7, datay, fontSize, "XP/sec")
 
             leftMargin := this.gameWindowX
             if (this.historyTextAlignment == "RIGHT") {

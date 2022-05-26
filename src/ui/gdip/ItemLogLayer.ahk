@@ -27,8 +27,8 @@ class ItemLogLayer {
         }
         
         this.itemLogFontSize := settings["itemLogFontSize"]
-        this.textBoxWidth := 500
-        this.textBoxHeight := this.itemLogFontSize * 10
+        this.textBoxWidth := 550
+        this.textBoxHeight := this.itemLogFontSize * 50
         this.xoffset := 0
         this.yoffset := 0
         ; this.leftMargin := gameWindowX + 5 ; padding
@@ -50,10 +50,10 @@ class ItemLogLayer {
             Gui, ItemLog: Hide
             return
         }
-        if (readUI(d2rprocess)) {
-             Gui, ItemLog: Hide
-			return
-        }
+        ; if (readUI(d2rprocess)) {
+        ;      Gui, ItemLog: Hide
+		; 	return
+        ; }
         if (WinActive(gameWindowId)) {
             Gui, ItemLog: Show, NA
         } else {
@@ -62,13 +62,23 @@ class ItemLogLayer {
         }
         
         fontSize := this.itemLogFontSize
-        row := 0
+        rowYoffset := 0
         for kk, item in itemLogItems {
             ;OutputDebug, % item.itemLogText " " (A_Now - item.foundTime) "`n"
             if (!item.droppedOffList) {
-                if ((A_Now - item.foundTime) < 20) {
-                    this.drawData(this.xoffset, this.yoffset + (row * (fontSize + 8)), fontSize, item.alertColor, item.itemLogText)
-                    row++
+                if ((A_Now - item.foundTime) < 30) {
+                    this.drawData(this.xoffset, this.yoffset + rowYoffset, fontSize, item.alertColor, item.itemLogText)
+                    if (settings["showItemStats"]) {
+                        if (item.statList) {
+
+                            for k, stat in item.statList
+                            {
+                                rowYoffset := rowYoffset + fontSize*0.8 + 2
+                                this.drawData(this.xoffset + 30, this.yoffset + rowYoffset, fontSize*0.8, item.alertColor, stat)
+                            }
+                        }
+                    }
+                    rowYoffset := rowYoffset + fontSize + 8
                 } else {
                     item.droppedOffList := true ; don't show on the drop list anymore`
                 }

@@ -3,10 +3,9 @@
 PatternScan(ByRef d2r, ByRef offsets) {
     SetFormat, Integer, Hex
     ; unit table
-    pattern := d2r.hexStringToPattern("48 8D 0D ?? ?? ?? ?? 48 C1 E0 0A 48 03 C1 C3 CC")
+    pattern := d2r.hexStringToPattern("48 03 C7 49 8B 8C C6")
     patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
-    offsetBuffer := d2r.read(patternAddress + 3, "Int")
-    unitTable := ((patternAddress - d2r.BaseAddress) + 7 + offsetBuffer)
+    unitTable := d2r.read(patternAddress + 7, "Int")
     offsets["unitTable"] := unitTable
     WriteLog("Scanned and found unitTable offset: " unitTable)
     

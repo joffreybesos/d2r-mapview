@@ -1,7 +1,8 @@
 
 
-ReadVendorItems(ByRef d2rprocess, startingOffset, ByRef levelNo, ByRef items) {
+ReadVendorItems(ByRef d2rprocess, startingOffset, ByRef levelNo, ByRef vendorItems) {
     ; items
+    vendorItems := []
     SetFormat Integer, D
     if (levelNo == 1 or levelNo == 40 or levelNo == 75 or levelNo == 103 or levelNo == 109) { ; only in town
         baseAddress := d2rprocess.BaseAddress + startingOffset + (4 * 1024)
@@ -14,9 +15,9 @@ ReadVendorItems(ByRef d2rprocess, startingOffset, ByRef levelNo, ByRef items) {
                 d2rprocess.readRaw(itemUnit, itemStructData, 144)
                 , itemType := NumGet(&itemStructData , 0x00, "UInt")
                 , txtFileNo := NumGet(&itemStructData , 0x04, "UInt")
-                ;itemLoc - 0 in inventory, 1 equipped, 2 in belt, 3 on ground, 4 cursor, 5 dropping, 6 socketed
-                , itemLoc := NumGet(&itemStructData , 0x0C, "UInt")
                 if (itemType == 4) { ; item is 4
+                    ;itemLoc - 0 in inventory, 1 equipped, 2 in belt, 3 on ground, 4 cursor, 5 dropping, 6 socketed
+                    itemLoc := NumGet(&itemStructData , 0x0C, "UInt")
                     if (itemLoc == 3 or itemLoc == 5 or itemLoc == 0) { ; on ground, dropping or vendor
                         pUnitDataPtr := NumGet(&itemStructData , 0x10, "Int64")
                         ; invPage := d2rprocess.read(pUnitDataPtr + 0x55, "UChar")
@@ -46,7 +47,7 @@ ReadVendorItems(ByRef d2rprocess, startingOffset, ByRef levelNo, ByRef items) {
                             , item.statExPtr := statExPtr
                             , item.statExCount := statExCount
                             , item.calculateFlags(flags)
-                            , items.push(item)
+                            , vendorItems.push(item)
                         }
                     }
                 }

@@ -3,6 +3,7 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
     ; draw item alerts
     SetFormat Integer, D
     items := gameMemoryData["items"]
+    
     for index, item in items
     {
         alert := itemAlertList.findAlert(item)

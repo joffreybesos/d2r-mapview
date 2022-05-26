@@ -6,11 +6,10 @@
 #Include %A_ScriptDir%\memory\readUI.ahk
 #Include %A_ScriptDir%\memory\readParty.ahk
 #Include %A_ScriptDir%\memory\readMapSeed.ahk
-#Include %A_ScriptDir%\memory\readVendorItems.ahk
 #Include %A_ScriptDir%\memory\scanForPlayer.ahk
 
 readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
-    global items
+    static items
     static objects
     static partyList
     hoveredMob := {}
@@ -131,9 +130,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
             ReadItems(d2rprocess, unitTableOffset, items)
             ; timeStamp("readItems")
         }
-        if (ticktock == 1) {
-            ReadVendorItems(d2rprocess, unitTableOffset, levelNo, items)
-        }
+        
     }
 
     ; get objects

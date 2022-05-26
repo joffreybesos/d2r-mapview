@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Game history now shows XP per second
 - Item stats are now listed in the correct sort order
 - Updated some stats which were not appearing correctly
+- Improved performance with reading vendor items
 - Changed default window title for multi session mode to `Diablo II: Resurrected`
 
 ## [2.9.4] - 2021-05-24 - Item stats formatting

@@ -75,7 +75,6 @@ class ItemLogLayer {
                             {
                                 rowYoffset := rowYoffset + fontSize*0.8 + 2
                                 this.drawData(this.xoffset + 30, this.yoffset + rowYoffset, fontSize*0.8, item.alertColor, stat)
-                                
                             }
                         }
                     }

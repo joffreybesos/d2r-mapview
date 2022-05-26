@@ -2,9 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.9.5] - 2021-05-25
+## [2.9.5] - 2021-05-25 - XP per second in game history
 
-- Game history now shows XP per minute
+- Game history now shows XP per second
+- Item stats are now listed in the correct sort order
 - Updated some stats which were not appearing correctly
 - Changed default window title for multi session mode to `Diablo II: Resurrected`
 

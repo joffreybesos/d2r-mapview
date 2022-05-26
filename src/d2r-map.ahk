@@ -231,7 +231,7 @@ While 1 {
 
         if ((gameMemoryData["difficulty"] == "0" or gameMemoryData["difficulty"] == "1" or gameMemoryData["difficulty"] == "2") and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
             if (gameMemoryData["mapSeed"] != lastSeed or newGame) {
-                gameStartTime := A_TickCount    
+                gameStartTime := A_TickCount
                 currentGameName := readLastGameName(d2rprocess, gameWindowId, offsets, session)
 
                 if (session) {
@@ -267,8 +267,8 @@ While 1 {
                 ; Show loading text
                 ;Gui, Map: Show, NA
                 mapLoading := 1
-                ;Gui, Map: Hide ; hide map
-                ;Gui, Units: Hide ; hide player dot
+                Gui, Map: Hide ; hide map
+                Gui, Units: Hide ; hide player dot
                 ;ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
                 ; Download map
                 ;downloadMapImage(settings, gameMemoryData, imageData, 0)

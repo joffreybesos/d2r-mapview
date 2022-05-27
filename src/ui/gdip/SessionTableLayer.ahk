@@ -85,7 +85,7 @@ class SessionTableLayer {
 
             leftMargin := this.gameWindowX
             if (this.historyTextAlignment == "RIGHT") {
-                leftMargin :=  this.gameWindowWidth - col7 +  this.gameWindowX - 5
+                leftMargin :=  this.gameWindowWidth - col8 +  this.gameWindowX - 5
             }
             UpdateLayeredWindow(this.SessionTableLayerHwnd, this.hdc, leftMargin, this.gameWindowY, this.gameWindowWidth, this.gameWindowHeight)
         } else {

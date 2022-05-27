@@ -9,7 +9,7 @@ This tool is licenced under GPLv3, reselling this maphack violates the terms of 
 
 ## Join the discord server <https://discord.gg/qEgqyVW3uj>
 
-![Durance of Hate Level 2](duranceofhate2.png)
+![Worldstone Keep level 2](https://user-images.githubusercontent.com/93067706/170401221-10e7a71e-7cad-488d-98e0-69f4d3617332.png)
 
 ## Demonstration
 
@@ -17,22 +17,21 @@ This tool is licenced under GPLv3, reselling this maphack violates the terms of 
 
 ## Map examples
 
-|     Dark Wood     |    Halls of Pain     |        Travincal         |
-| :---------------: | :------------------: | :----------------------: |
-| ![](darkwood.png) | ![](hallsofpain.png) | ![](canyonofthemagi.png) |
+|    Stony Field     |   Lower Kurast     |        Travincal         | Harrogath    |
+| :---------------: | :------------------: | :----------------------: | :-----------------: |
+| ![image](https://user-images.githubusercontent.com/93067706/170401476-5f13bdf9-57eb-40a4-a736-a508c21d854a.png)| ![image](https://user-images.githubusercontent.com/93067706/170401546-4bb935f1-722f-429b-bf1a-07701db672c3.png) |![image](https://user-images.githubusercontent.com/93067706/170401603-170e38f0-864d-4375-8db8-1a3ed1fbcc75.png) | ![image](https://user-images.githubusercontent.com/93067706/170441186-e7bd7813-48ae-4355-8491-30f0a19c0222.png)
+|
 
 ## Setup
 
 Set up guide has moved to the wiki:
 https://github.com/joffreybesos/d2r-mapview/wiki/Setup-guide
 
-Press Ctrl+H in game for a help menu
-Press Ctrl+O for in game options
+- Press Ctrl+H in game for a help menu
+- Press Ctrl+O for in game options
 
 The executable does _not_ require administrator privileges unless you are running the game as administrator. Refer to troubleshooting below if you have issues.  
 Sometimes windows defender can intercept the download, try a different browser if this happens.
-
-Please read the wiki https://github.com/joffreybesos/d2r-mapview/wiki/Setup-guide
 
 ### Virustotal gave me an alert
 
@@ -50,11 +49,10 @@ Do not accept executables for this from any other source!
 
 ## Features
 
-- The map will show positions of:
+- The map will show:
   - Players
-  - Monsters as a white dot
-  - Unique/champion/superunique monsters as a larger gold dot
-  - Monster immunities
+  - Monsters
+  - Immunities
   - Item drop alerts with a customisable filter
   - Text to speech to announce dropped special items defined in your item filter
   - Shows shrines and their type
@@ -64,20 +62,28 @@ Do not accept executables for this from any other source!
   - A yellow line drawn to the waypoint
   - A red line drawn to the nearest boss (Nihlithak, summoner etc)
   - All quest items, marked in green (Stones, Hellforge, Altars etc)
-- Can have map in corner of the screen or in the center like the normal automap
-- Saves game session history including game names, xp gained, duration into a CSV
-- Shows server IP in the corner of the window
-- Displays game history in game menu:
-  ![Game History](prevgame.png)
-- Highly configurable, size, color, position, opacity etc
-- Can change map size and position with key shortcuts while in game
+- Displays game history in game menu (which is also saved to a file)  
+  ![Game History](https://user-images.githubusercontent.com/93067706/170401732-01bdc8b0-f3bf-4e6e-9fac-99be2df5b078.png)  
+- Counters onthe side to show number of scrolls and keys  
+  ![Item counters](https://user-images.githubusercontent.com/93067706/170401856-23dee23d-f9ad-47fc-bcfe-3360bc33433a.png)
+- Party member locations and plevel are added under their icon  
+  ![Party Members](https://user-images.githubusercontent.com/93067706/170402837-79ede3d2-06a0-406b-9764-212a3f8d073c.png)
+- Shows health bars above bosses on the map  
+  ![Boss health bart](https://user-images.githubusercontent.com/93067706/170402107-af6de885-802f-49e0-aabb-366bcaddc831.png)  
+- When you mouse over a monster, you can see their resistances and health percentage  
+  ![Resists](https://user-images.githubusercontent.com/93067706/170402204-9bfe6cf9-9043-4a20-8ea0-5a3455bf4631.png)  
+- When items drop that match the item filter it can display all of the stats of that item  
+  ![Item stats](https://user-images.githubusercontent.com/93067706/170402401-388dd690-a011-48ce-b497-8c4487a98277.png)  
+- Highly configurable, size, color, position, opacity etc  
+- Can change map size and position with key shortcuts while in game  
 
 **Other notes**
 
 - Press `Ctrl+H` to see help in game, including a map legend
 - Press `Ctrl+O` for in game options
-- Press `/` (the one next to your shift key) to switch map to centered mode.
+- Press `\` to switch map to the left corner.
 - You can exit the maphack with `Shift+F10`
+- You can reload the maphack with `Shift+F11`
 - You can also right click the icon in the system tray.
 - This MH will automatically exit when you exit D2R.
 
@@ -96,13 +102,7 @@ D2JSP forum gold: <https://forums.d2jsp.org/user.php?i=1294529>
 
 ### Configure
 
-In `settings.ini` you can declare any of the below settings to override the built-in default setting.
-
-e.g. to turn off immunities add the following line in `settings.ini`:
-
-```
-showImmunities=false
-```
+Press Ctrl+O in game for settings, and you can delete your settings.ini to restore all settings to defaults.
 
 #### General settings
 
@@ -264,10 +264,8 @@ To better understand the keyboard shortcut format, refer to <https://www.autohot
 
 ## Map Server
 
-### Use the hosted free map server
-
-I offer a free to use map server but it is shutting down Feb 14.
-Please run your own, it's very easy and I've created this guide: [INSTALLATION.md](https://github.com/joffreybesos/d2-mapserver/blob/master/INSTALLATION.md)
+This tool relies on a mapserver which is a separate project https://github.com/joffreybesos/d2-mapserver  
+However you can download the bundle from the setup guide or from discord which includes everything you need.
 
 ## Is it safe?
 
@@ -294,5 +292,5 @@ Violations of the licence may make you liable for DMCA takedowns.
 ## Kudos
 
 - @blacha and his [Diablo 2 map package](https://github.com/blacha/diablo2/tree/master/packages/map)
-- @OneXDeveloper and others at [MapAssist](https://github.com/OneXDeveloper/MapAssist)
+- @OneXDeveloper @ItzRabbs and others at [MapAssist](https://github.com/OneXDeveloper/MapAssist)
 - @noah- and [d2bs project](https://github.com/noah-/d2bs/blob/master/D2Structs.h)

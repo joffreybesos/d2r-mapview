@@ -1,5 +1,5 @@
 
-downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
+downloadMapImage(settings, gameMemoryData, levelNo, ByRef mapData, tries) {
     static serverisv10
     errormsg1 := localizedStrings["errormsg1"]
     errormsg2 := localizedStrings["errormsg2"]
@@ -18,9 +18,9 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
     if (t < 1)
         t := 1
     
-    imageUrl := baseUrl . "/v1/map/" . gameMemoryData["mapSeed"] . "/" . gameMemoryData["difficulty"] . "/" . gameMemoryData["levelNo"] . "/image?wallthickness=" . t
-    sFile := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . gameMemoryData["levelNo"]
-    sFileTxt := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . gameMemoryData["levelNo"]
+    imageUrl := baseUrl . "/v1/map/" . gameMemoryData["mapSeed"] . "/" . gameMemoryData["difficulty"] . "/" . levelNo . "/image?wallthickness=" . t
+    sFile := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . levelNo
+    sFileTxt := A_Temp . "\" . gameMemoryData["mapSeed"] . "_" . gameMemoryData["difficulty"] . "_" . levelNo
     imageUrl := imageUrl . "&rotate=true&showTextLabels=false"
     imageUrl := imageUrl . "&padding=" . settings["padding"]
     if (settings["edges"]) {
@@ -35,7 +35,6 @@ downloadMapImage(settings, gameMemoryData, ByRef mapData, tries) {
     sFile .= ".png"
     sFileTxt .= ".txt"
 
-    levelNo := gameMemoryData["levelNo"]
     IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
     IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
     IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0

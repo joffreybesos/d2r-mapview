@@ -21,6 +21,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\include\Gdip_All.ahk
 #Include %A_ScriptDir%\itemfilter\AlertList.ahk
 #Include %A_ScriptDir%\itemfilter\ItemAlert.ahk
+#Include %A_ScriptDir%\types\Areas.ahk
 #Include %A_ScriptDir%\types\Stats.ahk
 #Include %A_ScriptDir%\types\Skills.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk
@@ -87,7 +88,7 @@ lastMap := ""
 exitArray := []
 helpToggle:= true
 historyToggle := true
-lastlevel:=""
+lastLevelList:=[]
 lastSeed:=""
 session :=
 lastPlayerLevel:=
@@ -144,8 +145,32 @@ uiOffset := offsets["uiOffset"]
 Gdip_Startup()
 
 ; create GUI windows
-Gui, Map: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+Gui, Map1: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
 global mapHwnd1 := WinExist()
+
+Gui, Map2: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+global mapHwnd2 := WinExist()
+
+Gui, Map3: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+global mapHwnd3 := WinExist()
+
+Gui, Map4: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+global mapHwnd4 := WinExist()
+
+Gui, Map5: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+global mapHwnd5 := WinExist()
+
+Gui, Map6: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+global mapHwnd6 := WinExist()
+
+Gui, Map7: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+global mapHwnd7 := WinExist()
+
+Gui, Map8: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+global mapHwnd8 := WinExist()
+
+Gui, Map9: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+global mapHwnd9 := WinExist()
 
 Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
 global unitHwnd1 := WinExist()
@@ -180,7 +205,7 @@ While 1 {
         offsetAttempts += 1
         if (offsetAttempts > 25) {
             hideMap(false)
-            lastlevel:=
+            lastLevelList:=[]
             items := []
             shrines := []
             seenItems := []
@@ -263,25 +288,43 @@ While 1 {
             historyToggle := true
 
             ; if there's a level num then the player is in a map
-            if (gameMemoryData["levelNo"] != lastlevel) { ; only redraw map when it changes
+            listdifferent := false
+            mapList := getStitchedMaps(gameMemoryData["levelNo"])
+            Loop, % mapList.length()
+            {
+                if (mapList[A_Index] != lastLevelList[A_Index]) {
+                    listdifferent := true
+                    break
+                }
+            }
+            if (listdifferent) { ; only redraw map when it changes
                 ; Show loading text
                 ;Gui, Map: Show, NA
                 mapLoading := 1
-                Gui, Map: Hide ; hide map
+                Gui, Map1: Hide ; hide map
+                Gui, Map2: Hide ; hide map
+                Gui, Map3: Hide ; hide map
+                Gui, Map4: Hide ; hide map
+                Gui, Map5: Hide ; hide map
+                Gui, Map6: Hide ; hide map
+                Gui, Map7: Hide ; hide map
+                Gui, Map8: Hide ; hide map
+                Gui, Map9: Hide ; hide map
                 Gui, Units: Hide ; hide player dot
-                ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
-                ; Download map
-                downloadMapImage(settings, gameMemoryData, imageData, 0)
-
-                ; Show Map
-                if (lastlevel == "") {
-                    Gui, Map: Show, NA
-                    Gui, Units: Show, NA
+                Loop, 9 {
+                    k := A_Index
+                    imageData%k% := {}
                 }
                 
-                if (settings["enablePrefetch"]) {
-                    prefetchMaps(settings, gameMemoryData)
+                ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
+                ; Download map
+                for k, thisLevelNo in mapList
+                {
+                    downloadMapImage(settings, gameMemoryData, thisLevelNo, imageData%k%, 0)
+                    Gui, Map%k%: Show, NA
                 }
+                
+                
                 mapLoading := 0
                 Gui, LoadingText: Destroy ; remove loading text
                 
@@ -289,41 +332,49 @@ While 1 {
             }
             if (redrawMap) {
                 WriteLogDebug("Redrawing map")
-                levelNo := gameMemoryData["levelNo"]
-                IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
-                IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
-                IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0
-                imageData["levelScale"] := levelScale
-                imageData["levelxmargin"] := levelxmargin
-                imageData["levelymargin"] := levelymargin
-                ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+                for k, thisLevelNo in mapList
+                {
+                    IniRead, levelScale, mapconfig.ini, %thisLevelNo%, scale, 1.0
+                    IniRead, levelxmargin, mapconfig.ini, %thisLevelNo%, x, 0
+                    IniRead, levelymargin, mapconfig.ini, %thisLevelNo%, y, 0
+                    imageData%k%["levelScale"] := levelScale
+                    imageData%k%["levelxmargin"] := levelxmargin
+                    imageData%k%["levelymargin"] := levelymargin
+                }
+                
+                Loop, 9 {
+                    k := A_Index
+                    
+                    if (imageData%k%.count()) {
+                        ShowMap(settings, mapHwnd%k%, imageData%k%, gameMemoryData, uiData%k%)
+                    } else {
+                        Gui, Map%k%: Hide
+                    }
+                }
 
                 unitsLayer.delete()
-                unitsLayer := new UnitsLayer(uiData)
-                
+                unitsLayer := new UnitsLayer(uiData1)
                 gameInfoLayer.updateAreaLevel(levelNo, gameMemoryData["difficulty"])
                 gameInfoLayer.updateExpLevel(levelNo, gameMemoryData["difficulty"], gameMemoryData["playerLevel"])
-                
-                
                 redrawMap := 0
             }
             ; timeStamp("ShowUnits")
-            ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
+            ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData1, gameMemoryData, shrines, uiData1)
             ; timeStamp("ShowUnits")
             uiAssistLayer.drawMonsterBar(gameMemoryData["hoveredMob"])
 
             if (settings["centerMode"] and gameMemoryData["pathAddress"]) {
-                MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], mapHwnd1, unitHwnd1, imageData, uiData)
+                MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], imageData1, uiData1)
             }
             if (Mod(ticktock, 6)) {
                 checkAutomapVisibility(d2rprocess, gameMemoryData)
             }
             
-            lastlevel := gameMemoryData["levelNo"]
+            lastLevelList := mapList
         } else {
             WriteLog("In Menu - no valid difficulty, levelno, or mapseed found '" gameMemoryData["difficulty"] "' '" gameMemoryData["levelNo"] "' '" gameMemoryData["mapSeed"] "'")
             hideMap(false)
-            lastlevel:=
+            lastLevelList:=[]
         }
     }
     if (not WinExist(gameWindowId)) {
@@ -404,7 +455,9 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
 
 hideMap(alwaysShowMap, menuShown := 0) {
     if ((alwaysShowMap == false) or menuShown) {
-        Gui, Map: Hide
+        Gui, Map1: hide
+        Gui, Map2: Hide
+        Gui, Map3: Hide
         Gui, Units: Hide
         if (isMapShowing) {
             WriteLogDebug("Map hidden")
@@ -424,7 +477,9 @@ unHideMap() {
     itemLogLayer.show()
     partyInfoLayer.show()
     if (!mapLoading) {
-        Gui, Map: Show, NA
+        Gui, Map1: Show, NA
+        Gui, Map2: Show, NA
+        Gui, Map3: Show, NA
         Gui, Units: Show, NA
     } else {
         WriteLogDebug("Tried to show map while map loading, ignoring...")
@@ -455,7 +510,7 @@ MapSizeIncrease:
 {
     SetFormat Integer, D
     levelNo := gameMemoryData["levelNo"] + 0
-    levelScale := imageData["levelScale"] + 0
+    levelScale := imageData1["levelScale"] + 0
     if (levelNo and levelScale and not settings["centerMode"]) {
         levelScale := levelScale + 0.05
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
@@ -477,7 +532,7 @@ MapSizeDecrease:
 {
     SetFormat Integer, D
     levelNo := gameMemoryData["levelNo"] + 0
-    levelScale := imageData["levelScale"] + 0
+    levelScale := imageData1["levelScale"] + 0
     if (levelNo and levelScale and not settings["centerMode"]) {
         levelScale := levelScale - 0.05
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
@@ -503,14 +558,24 @@ SwitchMapMode:
     } else {
         WriteLog("Turn off centered mode")
     }
-    lastlevel := "INVALIDATED"
+    lastLevelList :=[]
 
-    imageData := {}
+    imageData1 := {}
+    imageData2 := {}
+    imageData3 := {}
+    imageData4 := {}
+    imageData5 := {}
+    imageData6 := {}
+    imageData7 := {}
+    imageData8 := {}
+    imageData9 := {}
     gameMemoryData  := {}
     uiData := {}
     WinSet, Region, , ahk_id %mapHwnd1%
     WinSet, Region, , ahk_id %unitHwnd1%
-    Gui, Map: Hide
+    Gui, Map1: Hide
+    Gui, Map2: Hide
+    Gui, Map3: Hide
     Gui, Units: Hide
     mapShowing := 0
     GuiControl, Settings:, centerMode, % settings["centerMode"]
@@ -521,8 +586,8 @@ MoveMapLeft:
 {
     SetFormat Integer, D
     levelNo := gameMemoryData["levelNo"] + 0
-    levelxmargin := imageData["levelxmargin"] + 0
-    levelymargin := imageData["levelymargin"] + 0
+    levelxmargin := imageData1["levelxmargin"] + 0
+    levelymargin := imageData1["levelymargin"] + 0
     if (levelNo and not settings["centerMode"]) {
         levelxmargin := levelxmargin - 25
         IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
@@ -539,8 +604,8 @@ MoveMapRight:
 {
     SetFormat Integer, D
     levelNo := gameMemoryData["levelNo"] + 0
-    levelxmargin := imageData["levelxmargin"] + 0
-    levelymargin := imageData["levelymargin"] + 0
+    levelxmargin := imageData1["levelxmargin"] + 0
+    levelymargin := imageData1["levelymargin"] + 0
     if (levelNo and not settings["centerMode"]) {
         levelxmargin := levelxmargin + 25
         IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
@@ -557,8 +622,8 @@ MoveMapUp:
 {
     SetFormat Integer, D
     levelNo := gameMemoryData["levelNo"] + 0
-    levelxmargin := imageData["levelxmargin"] + 0
-    levelymargin := imageData["levelymargin"] + 0
+    levelxmargin := imageData1["levelxmargin"] + 0
+    levelymargin := imageData1["levelymargin"] + 0
     if (levelNo and not settings["centerMode"]) {
         levelymargin := levelymargin - 25
         IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
@@ -575,8 +640,8 @@ MoveMapDown:
 {
     SetFormat Integer, D
     levelNo := gameMemoryData["levelNo"] + 0
-    levelxmargin := imageData["levelxmargin"] + 0
-    levelymargin := imageData["levelymargin"] + 0
+    levelxmargin := imageData1["levelxmargin"] + 0
+    levelymargin := imageData1["levelymargin"] + 0
     if (levelNo and not settings["centerMode"]) {
         levelymargin := levelymargin + 25
         IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
@@ -710,13 +775,29 @@ Update:
     itemCounterLayer := new ItemCounterLayer(settings)
     SetupHotKeys(gameWindowId, settings)
     if (cmode != settings["centerMode"]) { ; if centermode changed
-        lastlevel := "INVALIDATED"
-        imageData := {}
+        lastLevelList := []
+        imageData1 := {}
+        imageData2 := {}
+        imageData3 := {}
+        imageData4 := {}
+        imageData5 := {}
+        imageData6 := {}
+        imageData7 := {}
+        imageData8 := {}
+        imageData9 := {}
         gameMemoryData  := {}
         uiData := {}
         WinSet, Region, , ahk_id %mapHwnd1%
         WinSet, Region, , ahk_id %unitHwnd1%
-        Gui, Map: Hide
+        Gui, Map1: Hide
+        Gui, Map2: Hide
+        Gui, Map3: Hide
+        Gui, Map4: Hide
+        Gui, Map5: Hide
+        Gui, Map6: Hide
+        Gui, Map7: Hide
+        Gui, Map8: Hide
+        Gui, Map9: Hide
         Gui, Units: Hide
         mapShowing := 0
     }

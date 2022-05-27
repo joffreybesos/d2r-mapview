@@ -5,7 +5,7 @@ SetWorkingDir, %A_ScriptDir%
 global lastLeftMargin := 0
 global lastTopMargin := 0
 
-MovePlayerMap(ByRef settings, ByRef d2rprocess, ByRef pathAddress, ByRef mapHwnd1, ByRef unitHwnd1, ByRef imageData, ByRef uiData) {
+MovePlayerMap(ByRef settings, ByRef d2rprocess, ByRef pathAddress, ByRef imageData, ByRef uiData) {
 
     ; player position
     d2rprocess.readRaw(pathAddress, pPathBuffer, 16)
@@ -71,8 +71,31 @@ MovePlayerMap(ByRef settings, ByRef d2rprocess, ByRef pathAddress, ByRef mapHwnd
     ; leftDiff :=  0
     ; topDiff :=  0
 
+    WinGetPos, X1, Y1, , , ahk_id %mapHwnd1%
+    WinGetPos, X2, Y2, , , ahk_id %mapHwnd2%
+    WinGetPos, X3, Y3, , , ahk_id %mapHwnd3%
+    WinGetPos, X4, Y4, , , ahk_id %mapHwnd4%
+    WinGetPos, X5, Y5, , , ahk_id %mapHwnd5%
+    WinGetPos, X6, Y6, , , ahk_id %mapHwnd6%
+    WinGetPos, X7, Y7, , , ahk_id %mapHwnd7%
+    WinGetPos, X8, Y8, , , ahk_id %mapHwnd8%
+    WinGetPos, X9, Y9, , , ahk_id %mapHwnd9%
 
-    WinMove, ahk_id %mapHwnd1%,, leftMargin + (leftDiff/2), topMargin + (topDiff/2)
+    newX := Round(leftMargin + (leftDiff/2))
+    newY := Round(topMargin + (topDiff/2))
+    newXdiff := newX - X1
+    newYdiff := newY - Y1
+    WinMove, ahk_id %mapHwnd1%,, newX, newY
+    WinMove, ahk_id %mapHwnd2%,, X2 + newXdiff, Y2 + newYdiff
+    WinMove, ahk_id %mapHwnd3%,, X3 + newXdiff, Y3 + newYdiff
+    WinMove, ahk_id %mapHwnd4%,, X4 + newXdiff, Y4 + newYdiff
+    WinMove, ahk_id %mapHwnd5%,, X5 + newXdiff, Y5 + newYdiff
+    WinMove, ahk_id %mapHwnd6%,, X6 + newXdiff, Y6 + newYdiff
+    WinMove, ahk_id %mapHwnd7%,, X7 + newXdiff, Y7 + newYdiff
+    WinMove, ahk_id %mapHwnd8%,, X8 + newXdiff, Y8 + newYdiff
+    WinMove, ahk_id %mapHwnd9%,, X9 + newXdiff, Y9 + newYdiff
+
+    
     ;WinMove, ahk_id %unitHwnd1%,, leftMargin + (leftDiff/2), topMargin + (topDiff/2)
     ;WinMove, ahk_id %unitHwnd1%,, 0, 0
     lastLeftMargin := leftMargin

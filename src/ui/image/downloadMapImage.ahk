@@ -148,7 +148,73 @@ downloadMapImage(settings, gameMemoryData, levelNo, ByRef mapData, tries) {
             prerotated := true
         }
     }
-    mapData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "levelScale": levelScale, "levelxmargin": levelxmargin, "levelymargin": levelymargin, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight, "exits": exits, "waypoint": waypoint, "bosses": bosses, "quests": quests, "prerotated": prerotated, "originalwidth": originalwidth, "originalheight": originalheight }
+
+    exitList := []
+    Loop, parse, exits, `|
+    {
+        exitArray := StrSplit(A_LoopField, ",")
+        if (exitArray[1] and exitArray[2]) {
+            if (exitArray[2] == "Halls of Pain") {
+                exitArray[2] := "Halls of Death's Calling"
+            }
+            if (exitArray[2] == "Arachnid Cave") {
+                exitArray[2] := "Arachnid Lair"
+            }
+            if (exitArray[2] == "Ancient Summit") {
+                exitArray[2] := "Arreat Summit"
+            }
+            if (exitArray[2] == "The Ancients Way") {
+                exitArray[2] := "Ancients' Way"
+            }
+            if (exitArray[2] == "The Drifter Cavern") {
+                exitArray[2] := "Echo Chamber"
+            }
+            areaLvls := getAreaLevel(exitArray[1])
+            , difficulty := gameMemoryData["difficulty"]
+            , areaLvl := ""
+            if (areaLvls["" difficulty ""]) {
+                areaLvl := areaLvls["" difficulty ""]
+                areaLvl := " (" areaLvl ")"
+            }
+            exitName := localizedStrings[exitArray[2]] . areaLvl
+            thisExit := { "id": exitArray[1], "name": exitName, "x": exitArray[3] + mapOffsetX, "y": exitArray[4] + mapOffsetY }
+            exitList.push(thisExit)
+        }
+    }
+
+    waypointList := []
+    Loop, parse, waypoint, `|
+    {
+        wparray := StrSplit(A_LoopField, ",")
+        if (wparray[1] and wparray[2]) {
+
+            thisWP := { "x": wparray[1] + mapOffsetX, "y": wparray[2] + mapOffsetY }
+            waypointList.push(thisWP)
+        }
+    }
+
+    bossList := []
+    Loop, parse, bosses, `|
+    {
+        bossesArr := StrSplit(A_LoopField, ",")
+        if (bossesArr[1] and bossesArr[2]) {
+
+            thisBoss := { "x": bossesArr[1] + mapOffsetX, "y": bossesArr[2] + mapOffsetY }
+            bossList.push(thisBoss)
+        }
+    }
+
+    questList := []
+    Loop, parse, quests, `|
+    {
+        questsArr := StrSplit(A_LoopField, ",")
+        if (questsArr[2] and questsArr[3]) {
+
+            thisQuest := { "name": questsArr[1], "x": questsArr[2] + mapOffsetX, "y": questsArr[3] + mapOffsetY }
+            questList.push(thisQuest)
+        }
+    }
+    mapData := { "sFile": sFile, "leftTrimmed" : leftTrimmed, "topTrimmed" : topTrimmed, "levelScale": levelScale, "levelxmargin": levelxmargin, "levelymargin": levelymargin, "mapOffsetX" : mapOffsetX, "mapOffsety" : mapOffsety, "mapwidth" : mapwidth, "mapheight" : mapheight, "exits": exitList, "waypoint": waypointList, "bosses": bossList, "quests": questList, "prerotated": prerotated, "originalwidth": originalwidth, "originalheight": originalheight }
 } 
 
 

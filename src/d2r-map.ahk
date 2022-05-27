@@ -69,7 +69,7 @@ Menu, Tray, Add, Reload, Reload
 Menu, Tray, Add
 Menu, Tray, Add, Exit, ExitMH
 
-global version := "2.9.5"
+global version := "2.9.6"
 
 WriteLog("*******************************************************************")
 WriteLog("* Map overlay started https://github.com/joffreybesos/d2r-mapview *")
@@ -289,7 +289,17 @@ While 1 {
 
             ; if there's a level num then the player is in a map
             listdifferent := false
-            mapList := getStitchedMaps(gameMemoryData["levelNo"])
+            if (settings["centerMode"]) {
+                mapList := getStitchedMaps(gameMemoryData["levelNo"])
+                settings["padding"] := defaultSettings["padding"]
+            } else {
+                mapList := [gameMemoryData["levelNo"]]
+                settings["padding"] := 150
+                Loop, 8 {
+                    k := A_Index + 1
+                    Gui, Map%k%: Hide ; hide map
+                }
+            }
             Loop, % mapList.length()
             {
                 if (mapList[A_Index] != lastLevelList[A_Index]) {
@@ -301,15 +311,10 @@ While 1 {
                 ; Show loading text
                 ;Gui, Map: Show, NA
                 mapLoading := 1
-                Gui, Map1: Hide ; hide map
-                Gui, Map2: Hide ; hide map
-                Gui, Map3: Hide ; hide map
-                Gui, Map4: Hide ; hide map
-                Gui, Map5: Hide ; hide map
-                Gui, Map6: Hide ; hide map
-                Gui, Map7: Hide ; hide map
-                Gui, Map8: Hide ; hide map
-                Gui, Map9: Hide ; hide map
+                Loop, 9 {
+                    k := A_Index
+                    Gui, Map%k%: Hide ; hide map
+                }
                 Gui, Units: Hide ; hide player dot
                 Loop, 9 {
                     k := A_Index
@@ -321,10 +326,32 @@ While 1 {
                 for k, thisLevelNo in mapList
                 {
                     downloadMapImage(settings, gameMemoryData, thisLevelNo, imageData%k%, 0)
+                }
+                for k, thisLevelNo in mapList
+                {
                     Gui, Map%k%: Show, NA
                 }
-                
-                
+                Loop, 8
+                {
+                    k := A_Index + 1
+
+                    for j, thisExit in imageData%k%["exits"] 
+                    {
+                        imageData1["exits"].push(thisExit)
+                    }
+                    for j, thisQuest in imageData%k%["quests"] 
+                    {
+                        imageData1["quests"].push(thisQuest)
+                    }
+                    for j, thisBoss in imageData%k%["bosses"] 
+                    {
+                        imageData1["bosses"].push(thisBoss)
+                    }
+                    for j, thiswp in imageData%k%["waypoint"] 
+                    {
+                        imageData1["waypoint"].push(thiswp)
+                    }
+                }
                 mapLoading := 0
                 Gui, LoadingText: Destroy ; remove loading text
                 
@@ -455,9 +482,10 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
 
 hideMap(alwaysShowMap, menuShown := 0) {
     if ((alwaysShowMap == false) or menuShown) {
-        Gui, Map1: hide
-        Gui, Map2: Hide
-        Gui, Map3: Hide
+        Loop, 9 {
+            k := A_Index
+            Gui, Map%k%: Hide ; hide map
+        }
         Gui, Units: Hide
         if (isMapShowing) {
             WriteLogDebug("Map hidden")
@@ -477,9 +505,14 @@ unHideMap() {
     itemLogLayer.show()
     partyInfoLayer.show()
     if (!mapLoading) {
-        Gui, Map1: Show, NA
-        Gui, Map2: Show, NA
-        Gui, Map3: Show, NA
+        if (settings["centerMode"]) {
+            Loop, 9 {
+                k := A_Index
+                Gui, Map%k%: Show, NA
+            }
+        } else {
+            Gui, Map1: Show, NA
+        }
         Gui, Units: Show, NA
     } else {
         WriteLogDebug("Tried to show map while map loading, ignoring...")
@@ -555,27 +588,26 @@ SwitchMapMode:
     settings["centerMode"] := !settings["centerMode"]
     if (settings["centerMode"]) {
         WriteLog("Switched to centered mode")
+        settings["padding"] := 150
+                
     } else {
         WriteLog("Turn off centered mode")
+        settings["padding"] := defaultSettings["padding"]
     }
     lastLevelList :=[]
 
-    imageData1 := {}
-    imageData2 := {}
-    imageData3 := {}
-    imageData4 := {}
-    imageData5 := {}
-    imageData6 := {}
-    imageData7 := {}
-    imageData8 := {}
-    imageData9 := {}
+    Loop, 9 {
+        k := A_Index
+        imageData%k% := {}
+    }
     gameMemoryData  := {}
     uiData := {}
     WinSet, Region, , ahk_id %mapHwnd1%
     WinSet, Region, , ahk_id %unitHwnd1%
-    Gui, Map1: Hide
-    Gui, Map2: Hide
-    Gui, Map3: Hide
+    Loop, 9 {
+        k := A_Index
+        Gui, Map%k%: Hide ; hide map
+    }
     Gui, Units: Hide
     mapShowing := 0
     GuiControl, Settings:, centerMode, % settings["centerMode"]
@@ -776,28 +808,18 @@ Update:
     SetupHotKeys(gameWindowId, settings)
     if (cmode != settings["centerMode"]) { ; if centermode changed
         lastLevelList := []
-        imageData1 := {}
-        imageData2 := {}
-        imageData3 := {}
-        imageData4 := {}
-        imageData5 := {}
-        imageData6 := {}
-        imageData7 := {}
-        imageData8 := {}
-        imageData9 := {}
+        Loop, 9 {
+            k := A_Index
+            imageData%k% := {}
+        }
         gameMemoryData  := {}
         uiData := {}
         WinSet, Region, , ahk_id %mapHwnd1%
         WinSet, Region, , ahk_id %unitHwnd1%
-        Gui, Map1: Hide
-        Gui, Map2: Hide
-        Gui, Map3: Hide
-        Gui, Map4: Hide
-        Gui, Map5: Hide
-        Gui, Map6: Hide
-        Gui, Map7: Hide
-        Gui, Map8: Hide
-        Gui, Map9: Hide
+        Loop, 9 {
+            k := A_Index
+            Gui, Map%k%: Hide ; hide map
+        }
         Gui, Units: Hide
         mapShowing := 0
     }

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.6] - 2021-05-28 - Performance improvements
+
+- Items such as Runes will no longer say (Identified) in item log
+- Checking vendors for items can be turned off
+- Item filter performance improvements
+
 ## [2.9.5] - 2021-05-25 - XP per second in game history
 
 - Game history now shows XP per second

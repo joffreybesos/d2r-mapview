@@ -1,6 +1,8 @@
 class AlertList {
     alerts := []  ; list of Alerts
 
+    baseItemsWithAlert := []
+
     __new(yamlFile) {
         
         yamlObj := Yaml(yamlFile, isfile:=1) ;isfile is set to 1 by default
@@ -26,18 +28,6 @@ class AlertList {
                 alert.hasQualities := true
             }
             
-            numItems := yamlAlert.items.()
-            if (numItems > 0) {
-                items := yamlAlert.items.Dump(3)
-                Loop, Parse, items, `n
-                {
-                    item := StrReplace(A_LoopField, "- ", "")
-                    item := StrReplace(item, """", "")
-                    alert.items.Push(item)   
-                }
-                alert.hasItems := true
-            }
-
             if (yamlAlert.soundeffect) {
                 alert.soundfile := Trim(yamlAlert.soundeffect)
             }
@@ -74,7 +64,21 @@ class AlertList {
                     alert.speak := false
                 }
             }
-            this.alerts.Push(alert)
+
+            numItems := yamlAlert.items.()
+            if (numItems > 0) {
+                items := yamlAlert.items.Dump(3)
+                Loop, Parse, items, `n
+                {
+                    item := StrReplace(A_LoopField, "- ", "")
+                    item := StrReplace(item, """", "")
+                    alert.items.Push(item)   
+                    itemArr := StrSplit(item, ",")
+                    this.baseItemsWithAlert[itemArr[1]] := 1
+                }
+                alert.hasItems := true
+            }
+            this.alerts.push(alert)
         }
     }
 
@@ -88,87 +92,89 @@ class AlertList {
     }
 
     findAlert(item) {       
-        for index, alert in this.alerts
-        {
-            ; check quality
-            foundQuality := true
-            
-            if (alert.hasQualities) {
-                ;WriteLog(item.quality " " item.name)
+        if (this.baseItemsWithAlert[item.name] or item.qualityNo > 2) {
+            for index, alert in this.alerts
+            {
+                ; check quality
+                foundQuality := true
                 
-                foundQuality := false
-                for index, checkqual in alert.qualities
-                {
-                    if (item.quality == checkqual) {
-                        ; matched quality
-                        foundQuality := true
-                    }
-                }
-            }
-
-            ; check item name
-            foundItemName := true
-            if (alert.hasItems) {
-                foundItemName := false
-                for index, it in alert.items
-                {
-                    itarr := StrSplit(it , ",")
-                    ;msgbox % itarr[1] " " item.name
-                    if (item.name == itarr[1]) {
-                        ; matched item
-                        
-                        if (itarr[2] != "") { ; if sockets are defined
-                            
-                            if (itarr[2] == item.getNumSockets()) {
-                                foundItemName := true
-                            }
-                        } else {
-                            foundItemName := true
+                if (alert.hasQualities) {
+                    ;WriteLog(item.quality " " item.name)
+                    
+                    foundQuality := false
+                    for index, checkqual in alert.qualities
+                    {
+                        if (item.quality == checkqual) {
+                            ; matched quality
+                            foundQuality := true
                         }
                     }
                 }
-            }
 
-            ; check ethereal
-            iseth := true
-            if (alert.onlyethereal) {
-                if (item.ethereal) {
-                    iseth := true
-                } else {
-                    iseth := false
+                ; check item name
+                foundItemName := true
+                if (alert.hasItems) {
+                    foundItemName := false
+                    for index, it in alert.items
+                    {
+                        itarr := StrSplit(it , ",")
+                        ;msgbox % itarr[1] " " item.name
+                        if (item.name == itarr[1]) {
+                            ; matched item
+                            
+                            if (itarr[2] != "") { ; if sockets are defined
+                                
+                                if (itarr[2] == item.getNumSockets()) {
+                                    foundItemName := true
+                                }
+                            } else {
+                                foundItemName := true
+                            }
+                        }
+                    }
                 }
-            }
 
-            noneth := true
-            if (alert.ignoreethereal) {
-                if (item.ethereal) {
-                    noneth := false
-                } else {
-                    noneth := true
+                ; check ethereal
+                iseth := true
+                if (alert.onlyethereal) {
+                    if (item.ethereal) {
+                        iseth := true
+                    } else {
+                        iseth := false
+                    }
                 }
-            }
 
-            ; identified
-            iden := true
-            if (alert.ignoreidentified) {
-                if (item.identified) {
-                    iden := false
-                } else {
-                    iden := true
+                noneth := true
+                if (alert.ignoreethereal) {
+                    if (item.ethereal) {
+                        noneth := false
+                    } else {
+                        noneth := true
+                    }
                 }
-            }
 
-            unid := true
-            if (alert.ignoreunidentified) {
-                if (item.identified) {
-                    unid := true
-                } else {
-                    unid := false
+                ; identified
+                iden := true
+                if (alert.ignoreidentified) {
+                    if (item.identified) {
+                        iden := false
+                    } else {
+                        iden := true
+                    }
                 }
-            }
 
-            if (foundItemName && foundQuality && iseth && noneth && iden && unid) {
-                return alert
+                unid := true
+                if (alert.ignoreunidentified) {
+                    if (item.identified) {
+                        unid := true
+                    } else {
+                        unid := false
+                    }
+                }
+
+                if (foundItemName && foundQuality && iseth && noneth && iden && unid) {
+                    return alert
+                }
             }
         }
         return ""

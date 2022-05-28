@@ -12,14 +12,15 @@ drawLines(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
             if (wpList) {
                 for k, wp in wpList
                 {
-                
-                    waypointX := ((wp.x - imageData["mapOffsetX"]) * serverScale) + padding
-                    , wayPointY := ((wp.y - imageData["mapOffsetY"]) * serverScale) + padding
-                    , correctedPos := correctPos(settings, waypointX, wayPointY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-                    , waypointX := correctedPos["x"] + centerLeftOffset
-                    , wayPointY := correctedPos["y"] + centerTopOffset
-                    drawLineWithArrow(unitsLayer, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, waypointX, wayPointY, scale, unitsLayer.pLineWP, unitsLayer.pBrushLineWP)
-                    ;Gdip_DrawLine(unitsLayer.G, unitsLayer.pLineWP, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, waypointX, wayPointY)
+                    if (gameMemoryData["levelNo"] == wp.levelNo) {
+                        waypointX := ((wp.x - imageData["mapOffsetX"]) * serverScale) + padding
+                        , wayPointY := ((wp.y - imageData["mapOffsetY"]) * serverScale) + padding
+                        , correctedPos := correctPos(settings, waypointX, wayPointY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                        , waypointX := correctedPos["x"] + centerLeftOffset
+                        , wayPointY := correctedPos["y"] + centerTopOffset
+                        drawLineWithArrow(unitsLayer, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, waypointX, wayPointY, scale, unitsLayer.pLineWP, unitsLayer.pBrushLineWP)
+                        ;Gdip_DrawLine(unitsLayer.G, unitsLayer.pLineWP, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, waypointX, wayPointY)
+                    }
                 }
             }
         }
@@ -32,15 +33,17 @@ drawLines(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
             for k, exitLabel in exitList
             {
                 ; only draw the line if it's a 'next' exit
-                if (isNextExit(gameMemoryData["levelNo"]) == exitLabel.id) {
-                    exitX := ((exitLabel.x - imageData["mapOffsetX"]) * serverScale) + padding
-                    , exitY := ((exitLabel.y - imageData["mapOffsetY"]) * serverScale) + padding
-                    , correctedPos := correctPos(settings, exitX, exitY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-                    , exitX := correctedPos["x"] + centerLeftOffset
-                    , exitY := correctedPos["y"] + centerTopOffset
+                if (gameMemoryData["levelNo"] == exitLabel.levelNo) {
+                    if (isNextExit(gameMemoryData["levelNo"]) == exitLabel.id) {
+                        exitX := ((exitLabel.x - imageData["mapOffsetX"]) * serverScale) + padding
+                        , exitY := ((exitLabel.y - imageData["mapOffsetY"]) * serverScale) + padding
+                        , correctedPos := correctPos(settings, exitX, exitY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                        , exitX := correctedPos["x"] + centerLeftOffset
+                        , exitY := correctedPos["y"] + centerTopOffset
 
-                    drawLineWithArrow(unitsLayer, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, exitX, exitY, scale, unitsLayer.pLineExit, unitsLayer.pBrushLineExit)
-                    ;Gdip_DrawLine(unitsLayer.G, unitsLayer.pLineExit, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, exitX, exitY)
+                        drawLineWithArrow(unitsLayer, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, exitX, exitY, scale, unitsLayer.pLineExit, unitsLayer.pBrushLineExit)
+                        ;Gdip_DrawLine(unitsLayer.G, unitsLayer.pLineExit, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, exitX, exitY)
+                    }
                 }
             }
         }
@@ -53,13 +56,15 @@ drawLines(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
             for k, boss in bossList
             {
                 ;bossArray[1] ; name of boss
-                bossX := ((boss.x - imageData["mapOffsetX"]) * serverScale) + padding
-                , bossY := ((boss.y - imageData["mapOffsetY"]) * serverScale) + padding
-                , correctedPos := correctPos(settings, bossX, bossY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-                , bossX := correctedPos["x"] + centerLeftOffset
-                , bossY := correctedPos["y"] + centerTopOffset
-                drawLineWithArrow(unitsLayer, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, bossX, bossY, scale, unitsLayer.pLineBoss, unitsLayer.pBrushLineBoss)
-                ;Gdip_DrawLine(unitsLayer.G, unitsLayer.pLineBoss, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, bossX, bossY)
+                if (gameMemoryData["levelNo"] == boss.levelNo) {
+                    bossX := ((boss.x - imageData["mapOffsetX"]) * serverScale) + padding
+                    , bossY := ((boss.y - imageData["mapOffsetY"]) * serverScale) + padding
+                    , correctedPos := correctPos(settings, bossX, bossY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                    , bossX := correctedPos["x"] + centerLeftOffset
+                    , bossY := correctedPos["y"] + centerTopOffset
+                    drawLineWithArrow(unitsLayer, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, bossX, bossY, scale, unitsLayer.pLineBoss, unitsLayer.pBrushLineBoss)
+                    ;Gdip_DrawLine(unitsLayer.G, unitsLayer.pLineBoss, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, bossX, bossY)
+                }
             }
         }
     }
@@ -71,13 +76,15 @@ drawLines(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
         if (questsList) {
             for k, quest in questsList
             {
-                questX := ((quest.x - imageData["mapOffsetX"]) * serverScale) + padding
-                , questY := ((quest.y - imageData["mapOffsetY"]) * serverScale) + padding
-                , correctedPos := correctPos(settings, questX, questY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-                , questX := correctedPos["x"] + centerLeftOffset
-                , questY := correctedPos["y"] + centerTopOffset
-                drawLineWithArrow(unitsLayer, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, questX, questY, scale, unitsLayer.pLineQuest, unitsLayer.pBrushLineQuest)
-                ; Gdip_DrawLine(unitsLayer.G, unitsLayer.pLineQuest, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, questX, questY)
+                if (gameMemoryData["levelNo"] == quest.level) {
+                    questX := ((quest.x - imageData["mapOffsetX"]) * serverScale) + padding
+                    , questY := ((quest.y - imageData["mapOffsetY"]) * serverScale) + padding
+                    , correctedPos := correctPos(settings, questX, questY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
+                    , questX := correctedPos["x"] + centerLeftOffset
+                    , questY := correctedPos["y"] + centerTopOffset
+                    drawLineWithArrow(unitsLayer, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, questX, questY, scale, unitsLayer.pLineQuest, unitsLayer.pBrushLineQuest)
+                    ; Gdip_DrawLine(unitsLayer.G, unitsLayer.pLineQuest, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, questX, questY)
+                }
             }
         }
     }

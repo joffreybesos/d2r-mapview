@@ -177,7 +177,7 @@ downloadMapImage(settings, gameMemoryData, levelNo, ByRef mapData, tries) {
                 areaLvl := " (" areaLvl ")"
             }
             exitName := localizedStrings[exitArray[2]] . areaLvl
-            thisExit := { "id": exitArray[1], "name": exitName, "x": exitArray[3] + mapOffsetX, "y": exitArray[4] + mapOffsetY }
+            thisExit := { "levelNo": levelNo, "id": exitArray[1], "name": exitName, "x": exitArray[3] + mapOffsetX, "y": exitArray[4] + mapOffsetY }
             exitList.push(thisExit)
         }
     }
@@ -188,7 +188,7 @@ downloadMapImage(settings, gameMemoryData, levelNo, ByRef mapData, tries) {
         wparray := StrSplit(A_LoopField, ",")
         if (wparray[1] and wparray[2]) {
 
-            thisWP := { "x": wparray[1] + mapOffsetX, "y": wparray[2] + mapOffsetY }
+            thisWP := { "levelNo": levelNo, "x": wparray[1] + mapOffsetX, "y": wparray[2] + mapOffsetY }
             waypointList.push(thisWP)
         }
     }
@@ -199,7 +199,7 @@ downloadMapImage(settings, gameMemoryData, levelNo, ByRef mapData, tries) {
         bossesArr := StrSplit(A_LoopField, ",")
         if (bossesArr[1] and bossesArr[2]) {
 
-            thisBoss := { "x": bossesArr[1] + mapOffsetX, "y": bossesArr[2] + mapOffsetY }
+            thisBoss := { "levelNo": levelNo, "name": bossesArr[1], "x": bossesArr[2] + mapOffsetX, "y": bossesArr[3] + mapOffsetY }
             bossList.push(thisBoss)
         }
     }
@@ -210,7 +210,7 @@ downloadMapImage(settings, gameMemoryData, levelNo, ByRef mapData, tries) {
         questsArr := StrSplit(A_LoopField, ",")
         if (questsArr[2] and questsArr[3]) {
 
-            thisQuest := { "name": questsArr[1], "x": questsArr[2] + mapOffsetX, "y": questsArr[3] + mapOffsetY }
+            thisQuest := { "levelNo": levelNo, "name": questsArr[1], "x": questsArr[2] + mapOffsetX, "y": questsArr[3] + mapOffsetY }
             questList.push(thisQuest)
         }
     }

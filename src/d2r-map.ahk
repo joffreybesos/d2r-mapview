@@ -291,14 +291,8 @@ While 1 {
             listdifferent := false
             if (settings["centerMode"]) {
                 mapList := getStitchedMaps(gameMemoryData["levelNo"])
-                settings["padding"] := defaultSettings["padding"]
             } else {
                 mapList := [gameMemoryData["levelNo"]]
-                settings["padding"] := 150
-                Loop, 8 {
-                    k := A_Index + 1
-                    Gui, Map%k%: Hide ; hide map
-                }
             }
             Loop, % mapList.length()
             {

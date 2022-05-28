@@ -35,7 +35,7 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
                 itemText := itemText " [" item.numSockets "]"
                 , itemLogText := itemLogText " [" item.numSockets "]"
             }
-            if (item.identified and !item.inStore) {
+            if (item.identified and !item.inStore and item.txtFileNo < 508) {
                 itemLogText := itemLogText " (Identified)" 
             }
             if (item.ethereal) {

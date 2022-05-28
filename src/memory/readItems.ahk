@@ -25,29 +25,32 @@ ReadItems(ByRef d2rprocess, startingOffset, ByRef items) {
                     d2rprocess.readRaw(pUnitDataPtr, pUnitData, 144)
                     , flags := NumGet(&pUnitData, 0x18, "UInt")
                     , itemQuality := NumGet(&pUnitData, 0x00, "UInt")
-                    , dwOwnerId := NumGet(&pUnitData, 0x0C, "UInt")
-                    , uniqueOrSetId := NumGet(&pUnitData, 0x34, "UInt")
-                    
-                    , pPathPtr := NumGet(&itemStructData , 0x38, "Int64")
-                    , d2rprocess.readRaw(pPathPtr, pPath, 144)
-                    , itemx := NumGet(&pPath , 0x10, "UShort")
-                    , itemy := NumGet(&pPath , 0x14, "UShort")
-                    , pStatsListExPtr := NumGet(&itemStructData , 0x88, "Int64")
-                    d2rprocess.readRaw(pStatsListExPtr, pStatsListEx, 144)
-                    , statPtr := NumGet(&pStatsListEx , 0x30, "Int64")
-                    , statCount := NumGet(&pStatsListEx , 0x38, "Int64")
-                    , statExPtr := NumGet(&pStatsListEx , 0x80, "Int64")
-                    , statExCount := NumGet(&pStatsListEx , 0x88, "Int64")
-                    , item := new GameItem(txtFileNo, itemQuality, uniqueOrSetId)
-                    , item.itemLoc := itemLoc
-                    , item.itemx := itemx
-                    , item.itemy := itemy
-                    , item.statPtr := statPtr
-                    , item.statCount := statCount
-                    , item.statExPtr := statExPtr
-                    , item.statExCount := statExCount
-                    , item.calculateFlags(flags)
-                    , items.push(item)
+                    , name := getItemBaseName(txtFileNo)
+                    if (itemALertList.baseItemsWithAlert[name] or itemQuality > 2) {
+                        dwOwnerId := NumGet(&pUnitData, 0x0C, "UInt")
+                        , uniqueOrSetId := NumGet(&pUnitData, 0x34, "UInt")
+                        , pPathPtr := NumGet(&itemStructData , 0x38, "Int64")
+                        , d2rprocess.readRaw(pPathPtr, pPath, 144)
+                        , itemx := NumGet(&pPath , 0x10, "UShort")
+                        , itemy := NumGet(&pPath , 0x14, "UShort")
+                        , pStatsListExPtr := NumGet(&itemStructData , 0x88, "Int64")
+                        d2rprocess.readRaw(pStatsListExPtr, pStatsListEx, 144)
+                        , statPtr := NumGet(&pStatsListEx , 0x30, "Int64")
+                        , statCount := NumGet(&pStatsListEx , 0x38, "Int64")
+                        , statExPtr := NumGet(&pStatsListEx , 0x80, "Int64")
+                        , statExCount := NumGet(&pStatsListEx , 0x88, "Int64")
+                        , item := new GameItem(txtFileNo, itemQuality, uniqueOrSetId)
+                        , item.name := name
+                        , item.itemLoc := itemLoc
+                        , item.itemx := itemx
+                        , item.itemy := itemy
+                        , item.statPtr := statPtr
+                        , item.statCount := statCount
+                        , item.statExPtr := statExPtr
+                        , item.statExCount := statExCount
+                        , item.calculateFlags(flags)
+                        , items.push(item)
+                    }
                 }
             }
             itemUnit := d2rprocess.read(itemUnit + 0x150, "Int64")  ; get next item

@@ -77,6 +77,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["itemCounterEnabled"] := 1
     settings["itemCounterSize"] := 75
     settings["showItemStats"] := 0
+    settings["includeVendorItems"] := 1
 
     settings["allowTextToSpeech"] := 1
     settings["textToSpeechVolume"] := 50

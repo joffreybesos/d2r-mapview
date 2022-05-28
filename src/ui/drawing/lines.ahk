@@ -76,7 +76,7 @@ drawLines(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
         if (questsList) {
             for k, quest in questsList
             {
-                if (gameMemoryData["levelNo"] == quest.level) {
+                if (gameMemoryData["levelNo"] == quest.levelNo) {
                     questX := ((quest.x - imageData["mapOffsetX"]) * serverScale) + padding
                     , questY := ((quest.y - imageData["mapOffsetY"]) * serverScale) + padding
                     , correctedPos := correctPos(settings, questX, questY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)

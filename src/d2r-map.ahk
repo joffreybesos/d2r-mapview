@@ -250,7 +250,7 @@ While 1 {
             lastPlayerLevel:= gameMemoryData["playerLevel"]
             lastPlayerExperience:=gameMemoryData["experience"]
         }
-        if (!levelNo) {
+        if (!gameMemoryData["levelNo"]) {
             partyInfoLayer.hide()
         }
 

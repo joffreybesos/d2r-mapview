@@ -2,8 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.9.6] - 2021-05-28 - Performance improvements
+## [2.9.6] - 2021-05-28 - Current buffs/auras
 
+- Currently active buffs/auras will now show at the bottom of the screen
+- You can disable this buff bar in settings
+- You can also change the icon size of the buff bar in settings
 - Items such as Runes will no longer say (Identified) in item log
 - Checking vendors for items can be turned off
 - Item filter performance improvements

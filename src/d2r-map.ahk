@@ -722,6 +722,8 @@ Update:
     itemLogLayer := new ItemLogLayer(settings)
     itemCounterLayer.delete()
     itemCounterLayer := new ItemCounterLayer(settings)
+    buffBarLayer.delete()
+    buffBarLayer := new BuffBarLayer(settings)
     SetupHotKeys(gameWindowId, settings)
     if (cmode != settings["centerMode"]) { ; if centermode changed
         lastlevel := "INVALIDATED"

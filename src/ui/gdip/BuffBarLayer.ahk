@@ -17,7 +17,7 @@ class BuffBarLayer {
 
         Gui, BuffBar: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
         this.buffBarLayerHwnd := WinExist()
-        this.imageSize := 90 ;settings["BuffBarSize"]
+        this.imageSize := settings["buffBarIconSize"]
         this.textBoxWidth := this.imageSize * 15  ; 10 icons wide max
         this.textBoxHeight := this.imageSize
 
@@ -39,10 +39,10 @@ class BuffBarLayer {
     }
 
     drawBuffBar(ByRef currentStates, ByRef buffBitmaps) {
-        ; if (!settings["buffBarEnabled"]) {
-        ;     this.hide()
-        ;     return
-        ; }
+        if (!settings["buffBarEnabled"]) {
+            this.hide()
+            return
+        }
         if (readUI(d2rprocess)) {
             this.hide()
             return

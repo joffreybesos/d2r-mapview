@@ -32,11 +32,13 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\memory\patternScan.ahk
 #Include %A_ScriptDir%\memory\IsInGame.ahk
 #Include %A_ScriptDir%\memory\readInvItems.ahk
+#Include %A_ScriptDir%\memory\readStates.ahk
 #Include %A_ScriptDir%\memory\readVendorItems.ahk
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
 #Include %A_ScriptDir%\ui\image\prefetchMaps.ahk
 #Include %A_ScriptDir%\ui\image\loadBitmaps.ahk
+#Include %A_ScriptDir%\ui\image\loadBuffIcons.ahk
 #Include %A_ScriptDir%\ui\showMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
@@ -58,6 +60,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\UIAssistLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\ItemLogLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\ItemCounterLayer.ahk
+#Include %A_ScriptDir%\ui\gdip\BuffBarLayer.ahk
 
 ;Add right click menu in tray
 Menu, Tray, NoStandard ; to remove default menu
@@ -119,6 +122,7 @@ global centerTopOffset := 0
 global redrawMap := 1
 global offsets := []
 global hudBitmaps := loadBitmaps()
+global buffBitmaps := loadBuffIcons()
 
 CreateSettingsGUI(settings, localizedStrings)
 settingupGUI := false
@@ -167,6 +171,7 @@ partyInfoLayer := new PartyInfoLayer(settings)
 itemLogLayer := new ItemLogLayer(settings)
 itemCounterLayer := new ItemCounterLayer(settings)
 uiAssistLayer := new UIAssistLayer(settings)
+buffBarLayer := new BuffBarLayer(settings)
 
 ; main loop
 While 1 {
@@ -211,6 +216,7 @@ While 1 {
             partyInfoLayer.hide()
             itemLogLayer.hide()
             itemCounterLayer.hide()
+            buffBarLayer.hide()
             offsetAttempts := 26
             WriteLogDebug("Offset attempts " offsetAttempts)
         }
@@ -347,9 +353,12 @@ While 1 {
         , fpsTimer := A_TickCount
         if (isInGame) {
             readInvItems(d2rprocess, offsets["unitTable"], HUDItems, gameMemoryData["unitId"])
+            readStates(d2rprocess, gameMemoryData, currentStates)
+            buffBarLayer.drawBuffBar(currentStates, buffBitmaps)
             itemCounterLayer.drawItemCounter(HUDItems)
             gameInfoLayer.drawInfoText(currentFPS)
             partyInfoLayer.drawInfoText(gameMemoryData["partyList"], gameMemoryData["unitId"])
+
             if (settings["includeVendorItems"]) {
                 ReadVendorItems(d2rprocess, unitTableOffset, levelNo, vendorItems)
                 if (vendorItems.length() > 0) {
@@ -380,6 +389,7 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
     } else if gameMemoryData["menuShown"] {
         partyInfoLayer.hide()
         itemCounterLayer.hide()
+        buffBarLayer.hide()
         if (isMapShowing) {
             WriteLogDebug("Hiding since UI menu is shown")
         }
@@ -392,6 +402,7 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
         gameInfoLayer.hide()
         partyInfoLayer.hide()
         itemCounterLayer.hide()
+        buffBarLayer.hide()
     } else if (!isAutomapShown(d2rprocess, uiOffset) and !alwaysShowMap) {
         ; hidemap
         hideMap(alwaysShowMap)
@@ -425,6 +436,7 @@ unHideMap() {
     itemCounterLayer.show()
     itemLogLayer.show()
     partyInfoLayer.show()
+    buffBarLayer.show()
     if (!mapLoading) {
         Gui, Map: Show, NA
         Gui, Units: Show, NA

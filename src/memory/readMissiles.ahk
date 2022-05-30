@@ -11,9 +11,25 @@ readMissiles(ByRef d2rprocess, startingOffset) {
         offset := (8 * (A_Index - 1))
         , arrayUnit := NumGet(&unitTableBuffer , offset, "Int64")
         while (arrayUnit > 0 ) { ; keep following the next pointer
+            ; d2rprocess.readRaw(arrayUnit, arrayUnitBuffer, 144)
+            ; ; SetFormat, Integer, Hex
+            ; Loop, 144
+            ; {
+            ;     OutputDebug, % NumGet(&arrayUnitBuffer, A_Index-1, "UChar") " " 
+            ; }
+            ; OutputDebug, % "`n"
             txtFileNo := d2rprocess.read(arrayUnit + 0x04, "UInt")
-            ;tooltip, % txtFileNo . "", 300, 0, 7
             if (missleCategory := getMissileCategory(txtFileNo)) {
+                pUnitData := d2rprocess.read(arrayUnit + 0x10, "Int64")
+                , dwOwnerId := d2rprocess.read(pUnitData + 0x0C, "UInt")
+                , skillLevel := d2rprocess.read(pUnitData + 0x5E, "UChar")
+                ; d2rprocess.readRaw(pUnitDataPtr, pUnitDataBuf, 144)
+                ; ; ; SetFormat, Integer, Hex
+                ; OutputDebug, % "UD "
+                ; Loop, 144
+                ; {
+                ;     OutputDebug, % NumGet(&pUnitDataBuf, A_Index-1, "UChar") " " 
+                ; }
                 
                 pPath := d2rprocess.read(arrayUnit + 0x38, "Int64")
                 , mode := d2rprocess.read(arrayUnit + 0x0c, "UInt")
@@ -25,7 +41,8 @@ readMissiles(ByRef d2rprocess, startingOffset) {
                 , yPosOffset := yPosOffset / 65536   ; get percentage
                 , unitx := unitx + xPosOffset
                 , unity := unity + yPosOffset
-                , unit := {"txtFileNo": txtFileNo, "x": unitx, "y": unity, "mode": mode, "UnitType": missleCategory}
+                , unit := { "txtFileNo": txtFileNo, "x": unitx, "y": unity, "mode": mode, "UnitType": missleCategory}
+                ; OutputDebug, % txtFileNo " " skillLevel " " dwOwnerId " " unitx " " unity "`n"
                 , array.push(unit)
            }   
            arrayUnit := d2rprocess.read(arrayUnit + 0x150, "Int64")  ; get next unit

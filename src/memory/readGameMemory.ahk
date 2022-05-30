@@ -166,7 +166,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     }
     ; timeStamp("playerposition")
     
-    gameMemoryData := {"pathAddress": pathAddress, "gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "missiles": missiles, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName, "experience": experience, "playerLevel": playerLevel, "menuShown": menuShown, "hoveredMob": hoveredMob, "partyList": partyList, "unitId": unitId}
+    gameMemoryData := {"playerOffset": playerOffset, "pathAddress": pathAddress, "gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "missiles": missiles, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName, "experience": experience, "playerLevel": playerLevel, "menuShown": menuShown, "hoveredMob": hoveredMob, "partyList": partyList, "unitId": unitId}
     ;ElapsedTime := A_TickCount - StartTime
     ;OutputDebug, % ElapsedTime "`n"
     ;ToolTip % "`n`n`n`n" ElapsedTime

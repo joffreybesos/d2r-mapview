@@ -123,6 +123,7 @@ global redrawMap := 1
 global offsets := []
 global hudBitmaps := loadBitmaps()
 global buffBitmaps := loadBuffIcons()
+global newBuffs := []
 
 CreateSettingsGUI(settings, localizedStrings)
 settingupGUI := false

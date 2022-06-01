@@ -1,53 +1,67 @@
 
 
-readMissiles(ByRef d2rprocess, startingOffset) {
+readMissiles(ByRef d2rprocess, startingOffset, ByRef newBuffs, ByRef playerunitx, ByRef playerunity) {
     ;global settings
     array := []
     , tableOffset := startingOffset + (3 * 1024)
     , baseAddress := d2rprocess.BaseAddress + tableOffset
     , d2rprocess.readRaw(baseAddress, unitTableBuffer, 128*8)
+    outputt := ""
     Loop, 128
     {
         offset := (8 * (A_Index - 1))
         , arrayUnit := NumGet(&unitTableBuffer , offset, "Int64")
         while (arrayUnit > 0 ) { ; keep following the next pointer
             ; d2rprocess.readRaw(arrayUnit, arrayUnitBuffer, 144)
-            ; ; SetFormat, Integer, Hex
+            ; SetFormat, Integer, Hex
             ; Loop, 144
             ; {
-            ;     OutputDebug, % NumGet(&arrayUnitBuffer, A_Index-1, "UChar") " " 
+            ;     OutputDebug, % NumGet(&arrayUnitBuffer, A_Index-1, "UChar") "`t" 
             ; }
             ; OutputDebug, % "`n"
             txtFileNo := d2rprocess.read(arrayUnit + 0x04, "UInt")
+            
             if (missleCategory := getMissileCategory(txtFileNo)) {
                 pUnitData := d2rprocess.read(arrayUnit + 0x10, "Int64")
                 , dwOwnerId := d2rprocess.read(pUnitData + 0x0C, "UInt")
                 , skillLevel := d2rprocess.read(pUnitData + 0x5E, "UChar")
-                ; d2rprocess.readRaw(pUnitDataPtr, pUnitDataBuf, 144)
-                ; ; ; SetFormat, Integer, Hex
-                ; OutputDebug, % "UD "
-                ; Loop, 144
-                ; {
-                ;     OutputDebug, % NumGet(&pUnitDataBuf, A_Index-1, "UChar") " " 
+                ; d2rprocess.readRaw(pUnitData, pUnitDataBuf, 200)
+                ; ; SetFormat, Integer, Hex
+                ; if (skillLevel) {
+                ;     outputt .= skillLevel " UD "
+                ;     Loop, 200
+                ;     {
+                ;         outputt .=  NumGet(&pUnitDataBuf, A_Index-1, "UChar") "`t" 
+                ;     }
+                ;     outputt .=  "`n"
                 ; }
                 
                 pPath := d2rprocess.read(arrayUnit + 0x38, "Int64")
                 , mode := d2rprocess.read(arrayUnit + 0x0c, "UInt")
-                , unitx := d2rprocess.read(pPath + 0x02, "UShort")
-                , unity := d2rprocess.read(pPath + 0x06, "UShort")
+                , unitxbase := d2rprocess.read(pPath + 0x02, "UShort")
+                , unitybase := d2rprocess.read(pPath + 0x06, "UShort")
                 , xPosOffset := d2rprocess.read(pPath + 0x00, "UShort") 
                 , yPosOffset := d2rprocess.read(pPath + 0x04, "UShort")
                 , xPosOffset := xPosOffset / 65536   ; get percentage
                 , yPosOffset := yPosOffset / 65536   ; get percentage
-                , unitx := unitx + xPosOffset
-                , unity := unity + yPosOffset
+                , unitx := unitxbase + xPosOffset
+                , unity := unitybase + yPosOffset
                 , unit := { "txtFileNo": txtFileNo, "x": unitx, "y": unity, "mode": mode, "UnitType": missleCategory}
-                ; OutputDebug, % txtFileNo " " skillLevel " " dwOwnerId " " unitx " " unity "`n"
                 , array.push(unit)
+                ;OutputDebug, % txtFileNo " " skillLevel " " dwOwnerId " " unitxbase " " unitybase " " playerunitx " " playerunity "`n"
+                if (skillLevel) {
+                    if (txtFileNo == 236 or txtFileNo == 237 or txtFileNo == 149) {
+                        if (unitxbase == playerunitx and unitybase == playerunity) { ; missile has collided with player
+                            newBuffs[txtFileNo] := { "skillLevel": skillLevel, "timestamp": A_TickCount }
+                            ; OutputDebug, % "Found missile " txtFileNo " " skillLevel "`n"
+                        }
+                    }
+                }
            }   
            arrayUnit := d2rprocess.read(arrayUnit + 0x150, "Int64")  ; get next unit
         }
     } 
+    ; OutputDebug, % outputt 
     return array
 }
 

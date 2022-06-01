@@ -70,6 +70,23 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
         }
     }
 
+    ; player position
+    ; timeStamp("playerposition")
+    pathAddress := d2rprocess.read(playerUnit + 0x38, "Int64")
+    , xPosbase := d2rprocess.read(pathAddress + 0x02, "UShort") 
+    , yPosbase := d2rprocess.read(pathAddress + 0x06, "UShort")
+    , xPosOffset := d2rprocess.read(pathAddress + 0x00, "UShort") 
+    , yPosOffset := d2rprocess.read(pathAddress + 0x04, "UShort")
+    , xPosOffset := xPosOffset / 65536 ; get percentage
+    , yPosOffset := yPosOffset / 65536 ; get percentage
+    , xPos := xPosbase + xPosOffset
+    , yPos := yPosbase + yPosOffset
+
+    if (!xPos) {
+        WriteLog("Did not find player position at player offset " unitTableOffset) 
+    }
+    ; timeStamp("playerposition")
+
 
     hoverAddress := d2rprocess.BaseAddress + offsets["hoverOffset"]
     d2rprocess.readRaw(hoverAddress, hoverBuffer, 12)
@@ -111,14 +128,14 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     ; PlayerMissiles
     if (settings["showPlayerMissiles"]){
         ; timeStamp("readMissiles")
-        playerMissiles := readMissiles(d2rprocess, unitTableOffset + (6 * 1024))
+        playerMissiles := readMissiles(d2rprocess, unitTableOffset + (6 * 1024), newBuffs, xPosbase, yPosBase)
         missiles.push(playerMissiles)
         ; timeStamp("readMissiles")
     }
     ; EnemyMissiles
     if (settings["showEnemyMissiles"]){
         ; timeStamp("readEnemyMissiles")
-        enemyMissiles := readMissiles(d2rprocess, unitTableOffset)
+        enemyMissiles := readMissiles(d2rprocess, unitTableOffset, newBuffs, xPosbase, yPosBase)
         missiles.push(enemyMissiles)
         ; timeStamp("readEnemyMissiles")
     }
@@ -149,23 +166,6 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     menuShown := readUI(d2rprocess)
     ; timeStamp("readUI")
 
-    ; player position
-    ; timeStamp("playerposition")
-    pathAddress := d2rprocess.read(playerUnit + 0x38, "Int64")
-    , xPos := d2rprocess.read(pathAddress + 0x02, "UShort") 
-    , yPos := d2rprocess.read(pathAddress + 0x06, "UShort")
-    , xPosOffset := d2rprocess.read(pathAddress + 0x00, "UShort") 
-    , yPosOffset := d2rprocess.read(pathAddress + 0x04, "UShort")
-    , xPosOffset := xPosOffset / 65536 ; get percentage
-    , yPosOffset := yPosOffset / 65536 ; get percentage
-    , xPos := xPos + xPosOffset
-    , yPos := yPos + yPosOffset
-
-    if (!xPos) {
-        WriteLog("Did not find player position at player offset " unitTableOffset) 
-    }
-    ; timeStamp("playerposition")
-    
     gameMemoryData := {"playerOffset": playerOffset, "pathAddress": pathAddress, "gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "missiles": missiles, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName, "experience": experience, "playerLevel": playerLevel, "menuShown": menuShown, "hoveredMob": hoveredMob, "partyList": partyList, "unitId": unitId}
     ;ElapsedTime := A_TickCount - StartTime
     ;OutputDebug, % ElapsedTime "`n"

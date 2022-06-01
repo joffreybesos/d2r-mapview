@@ -6,6 +6,7 @@ class BuffBarLayer {
     obm :=
     G :=
     buffBarLayerHwnd :=
+    static buffTimers
 
     __new(ByRef settings) {
         SetFormat Integer, D
@@ -26,6 +27,7 @@ class BuffBarLayer {
         this.buffBarFontSize := this.imageSize / 3 ; settings["buffBarFontSize"]
         this.xoffset := 0
         this.yoffset := 0
+        this.buffTimers := []
 
         pToken := Gdip_Startup()
         DetectHiddenWindows, On
@@ -57,19 +59,46 @@ class BuffBarLayer {
         fontSize := this.BuffBarFontSize
         iconsToShow := []
         
+        for k, bufftimer in newBuffs
+        {   
+            ; the missile txtFileNo needs to be mapped to the state enum
+            statNum := missileToState(k)
+            if (statNum) {
+                this.buffTimers[statNum] := { "timestamp": bufftimer.timestamp, "duration": 360 }
+                OutputDebug, % "Reset timer " k " " bufftimer.timestamp " " bufftimer.skillLevel "`n"
+            }
+        }
+        newBuffs := []
+        
+
         for k, state in currentStates
         {
             thisIcon := getStateIcon(state.stateNum)
             if (thisIcon) {
-                iconsToShow.push(thisIcon)
+                iconsToShow.push({ "iconName": thisIcon, "stateNum": state.stateNum })
             }
         }
         xoffset := this.textBoxWidth / 2 - ((iconsToShow.Length() * this.imageSize) / 2)
 
-        for k, iconName in iconsToShow
+        for k, thisIcon in iconsToShow
         {
-            Gdip_DrawImage(this.G, buffBitmaps[iconName], xoffset + (k-1) * this.imageSize, 0,this.imageSize, this.imageSize)
+            Gdip_DrawImage(this.G, buffBitmaps[thisIcon.iconName], xoffset + (k-1) * this.imageSize, 0,this.imageSize, this.imageSize)
+            for j, buffTimer in this.buffTimers
+            {
+                ; OutputDebug, % j " found timer`n"
+                if (thisIcon.stateNum == j) {
+                    now := A_TickCount
+                    timeLeft := Round(buffTimer.duration - ((now - buffTimer.timestamp)/ 1000),0)
+                    if (timeLeft > 0) {
+                        textx := xoffset + (k-1) * this.imageSize + (this.imageSize/2)
+                        this.drawData(textx, 50, 30, "ddFFD700", timeLeft)
+                        OutputDebug, % J " " timeLeft " "  now " " buffTimer.timestamp "`n"
+                    }
+                }
+            }
         }
+
+        
 
         ; pPen := Gdip_CreatePen(0xff00FF00, 2)
         ; Gdip_DrawRectangle(this.G, pPen, 0, 0, this.textBoxWidth, this.textBoxHeight)
@@ -78,10 +107,10 @@ class BuffBarLayer {
     }
 
     drawData(textx, texty, fontSize, alertColor, itemText) {
-        Options = x%textx% y%texty% Left vBottom NoWrap c%alertColor% r4 s%fontSize%
+        Options = x%textx% y%texty% Center vBottom NoWrap c%alertColor% r4 s%fontSize%
         textx := textx + 1
         texty := texty + 1
-        Options2 = x%textx% y%texty% Left vBottom NoWrap cdd000000 r4 s%fontSize%
+        Options2 = x%textx% y%texty% Center vBottom NoWrap cdd000000 r4 s%fontSize%
         Gdip_TextToGraphics(this.G, itemText, Options2, exocetFont)
         Gdip_TextToGraphics(this.G, itemText, Options, exocetFont) 
     }
@@ -104,6 +133,22 @@ class BuffBarLayer {
     }
 }
 
+missileToState(missileNum) {
+    switch (missileNum) {
+        case 183: return 19    ;curseweakenWeaken ;STATE_WEAKEN
+        case 182: return 23    ;cursedimvisionDimVision ;STATE_DIMVISION
+        case 149: return 26    ;shoutShout ;STATE_SHOUT
+        case 237: return 32    ;battleordersBattleOrders ;STATE_BATTLEORDERS
+        case 236: return 51    ;battlecommandBattleCommand ;STATE_BATTLECOMMAND
+        case 184: return 55    ;curseironmaidenIronMaiden ;STATE_IRONMAIDEN
+        case 185: return 56    ;curseterrorTerror ;STATE_TERROR
+        case 186: return 57    ;curseattractAttract ;STATE_ATTRACT
+        case 187: return 58    ;cursereversevampireLifeTap ;STATE_LIFETAP
+        case 188: return 59    ;curseconfuseConfuse ;STATE_CONFUSE
+        case 189: return 60    ;cursedecrepifyDecrepify ;STATE_DECREPIFY
+        case 190: return 61    ;curselowerresistLowerResist ;STATE_LOWERRESIST
+    }
+}
 
 getStateIcon(stateNum) {
     switch (stateNum) {
@@ -125,7 +170,7 @@ getStateIcon(stateNum) {
         case 24: return "Slowed"   ;STATE_SLOWED
         case 26: return "Shout"   ;STATE_SHOUT
         case 28: return "Conviction"   ;STATE_CONVICTION
-        case 28: return "CriticalStrike"   ;STATE_CONVICTION
+        ;case 28: return "CriticalStrike"   ;STATE_CONVICTION
         case 29: return "Convicted"   ;STATE_CONVICTED
         case 30: return "EnergyShield"   ;STATE_ENERGYSHIELD
         case 31: return "VenomClaws"   ;STATE_VENOMCLAWS

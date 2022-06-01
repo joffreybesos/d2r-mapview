@@ -1,35 +1,38 @@
 
 ReadStates(ByRef d2rprocess, gameMemoryData, ByRef currentStates) {
+    currentStates := []
     playerAddress := d2rprocess.BaseAddress + gameMemoryData["playerOffset"]
     playerPtr := d2rprocess.read(playerAddress, "Int64")
-    pStatsListEx := d2rprocess.read(playerPtr + 0x88, "Int64")
-    stateByte1 := d2rprocess.read(pStatsListEx + 0xAC8, "UInt")
-    stateByte2 := d2rprocess.read(pStatsListEx + 0xAC8 + 4, "UInt")
-    stateByte3 := d2rprocess.read(pStatsListEx + 0xAC8 + 8, "UInt")
-    stateByte4 := d2rprocess.read(pStatsListEx + 0xAC8 + 12, "UInt")
-    stateByte5 := d2rprocess.read(pStatsListEx + 0xAC8 + 16, "UInt")
-    stateByte6 := d2rprocess.read(pStatsListEx + 0xAC8 + 20, "UInt")
+    if (playerPtr) {
+        pStatsListEx := d2rprocess.read(playerPtr + 0x88, "Int64")
+        stateByte1 := d2rprocess.read(pStatsListEx + 0xAC8, "UInt")
+        stateByte2 := d2rprocess.read(pStatsListEx + 0xAC8 + 4, "UInt")
+        stateByte3 := d2rprocess.read(pStatsListEx + 0xAC8 + 8, "UInt")
+        stateByte4 := d2rprocess.read(pStatsListEx + 0xAC8 + 12, "UInt")
+        stateByte5 := d2rprocess.read(pStatsListEx + 0xAC8 + 16, "UInt")
+        stateByte6 := d2rprocess.read(pStatsListEx + 0xAC8 + 20, "UInt")
 
-    stats1 := calculateState(stateByte1, -1)
-    stats2 := calculateState(stateByte2, 31)
-    stats3 := calculateState(stateByte3, 63)
-    stats4 := calculateState(stateByte4, 95)
-    stats5 := calculateState(stateByte5, 127)
-    stats6 := calculateState(stateByte6, 159)
-    
-    currentStates := []
-    for k, stat in stats1
-        currentStates.push({ "stateNum": stat, "stateName": getStateName(stat) })
-    for k, stat in stats2
-        currentStates.push({ "stateNum": stat, "stateName": getStateName(stat) })
-    for k, stat in stats3
-        currentStates.push({ "stateNum": stat, "stateName": getStateName(stat) })
-    for k, stat in stats4
-        currentStates.push({ "stateNum": stat, "stateName": getStateName(stat) })
-    for k, stat in stats5
-        currentStates.push({ "stateNum": stat, "stateName": getStateName(stat) })
-    for k, stat in stats6
-        currentStates.push({ "stateNum": stat, "stateName": getStateName(stat) })
+        stats1 := calculateState(stateByte1, -1)
+        stats2 := calculateState(stateByte2, 31)
+        stats3 := calculateState(stateByte3, 63)
+        stats4 := calculateState(stateByte4, 95)
+        stats5 := calculateState(stateByte5, 127)
+        stats6 := calculateState(stateByte6, 159)
+        
+        
+        for k, stat in stats1
+            currentStates.push({ "stateNum": stat, "stateName": getStateName(stat) })
+        for k, stat in stats2
+            currentStates.push({ "stateNum": stat, "stateName": getStateName(stat) })
+        for k, stat in stats3
+            currentStates.push({ "stateNum": stat, "stateName": getStateName(stat) })
+        for k, stat in stats4
+            currentStates.push({ "stateNum": stat, "stateName": getStateName(stat) })
+        for k, stat in stats5
+            currentStates.push({ "stateNum": stat, "stateName": getStateName(stat) })
+        for k, stat in stats6
+            currentStates.push({ "stateNum": stat, "stateName": getStateName(stat) })
+    }
 }
 
 calculateState(stateFlag, offset := 0) {

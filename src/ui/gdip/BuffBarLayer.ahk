@@ -33,6 +33,12 @@ class BuffBarLayer {
         this.hdc := CreateCompatibleDC()
         this.obm := SelectObject(this.hdc, this.hbm)
         this.G := Gdip_GraphicsFromHDC(this.hdc)
+        this.pPenBuff := Gdip_CreatePen(0xff00FF00, 2)
+        this.pPenDebuff := Gdip_CreatePen(0xffff0000, 2)
+        this.pPenPassive := Gdip_CreatePen(0xffdddddd, 2)
+        this.pPenAura := Gdip_CreatePen(0xffffd700, 2)
+        this.pBrushExpiring := Gdip_BrushCreateSolid(0x33ff0000)
+        this.removedIcons := []
         Gdip_SetSmoothingMode(this.G, 4)
         Gdip_SetInterpolationMode(this.G, 7)
         Gui, BuffBar: Show, NA
@@ -56,22 +62,56 @@ class BuffBarLayer {
         
         fontSize := this.BuffBarFontSize
         iconsToShow := []
-        
+        totalicons := 0
         for k, state in currentStates
         {
             thisIcon := getStateIcon(state.stateNum)
             if (thisIcon) {
-                iconsToShow.push(thisIcon)
+                iconsToShow[state.stateNum] := { "fileName": thisIcon, "num": state.stateNum, "active": true, "timestamp": A_TickCount}
+                this.lastIcons[state.stateNum] := 0
+                this.removedIcons[state.stateNum] := 0
+                totalicons++
             }
         }
-        xoffset := this.textBoxWidth / 2 - ((iconsToShow.Length() * this.imageSize) / 2)
+        for k, removedIcon in this.lastIcons {
+            if (removedIcon) {
+                removedIcon.active := false
+                this.removedIcons[removedIcon.num] := removedIcon
+                ;OutputDebug, % "Missing buff icon " removedIcon.fileName "`n"
+            }
+        }
+        for k, expiredIcon in this.removedIcons
+        {
+            if (expiredIcon) {
+                if (A_TickCount - expiredIcon.timeStamp < 5000) {
+                    iconsToShow[expiredIcon.num] := expiredIcon
+                    totalicons++
+                    ; OutputDebug, % "Expiring icon " expiredIcon.num " " expiredIcon.filename "`n"
+                } else {    
+                    this.removedIcons[expiredIcon.stateNum] := 0
+                    ;OutputDebug, % "Expired icon " expiredIcon.num " " expiredIcon.filename "`n"
+                }
+            }
+        }
+        
 
+        xoffset := this.textBoxWidth / 2 - ((totalicons * this.imageSize) / 2)
+        iconi := 0
         for k, iconName in iconsToShow
         {
-            Gdip_DrawImage(this.G, buffBitmaps[iconName], xoffset + (k-1) * this.imageSize, 0,this.imageSize, this.imageSize)
+            iconx := xoffset + (iconi * this.imageSize)
+            Gdip_DrawImage(this.G, buffBitmaps[iconName.fileName], iconx, 0,this.imageSize, this.imageSize)
+            if (iconName.active) {
+                Gdip_DrawRectangle(this.G, this.getBuffColor(iconName.num), iconx, 0, this.imageSize-1, this.imageSize-1)
+            } else {
+                if (Mod(ticktock, 2)) {
+                Gdip_FillRectangle(this.G, this.pBrushExpiring, iconx, 0, this.imageSize, this.imageSize-1)
+                }
+            }
+            iconi++
         }
-
-        ; pPen := Gdip_CreatePen(0xff00FF00, 2)
+        this.lastIcons := iconsToShow.Clone()
+        
         ; Gdip_DrawRectangle(this.G, pPen, 0, 0, this.textBoxWidth, this.textBoxHeight)
         UpdateLayeredWindow(this.buffBarLayerHwnd, this.hdc, this.leftMargin, this.topMargin, this.textBoxWidth, this.textBoxHeight)
         Gdip_GraphicsClear( this.G )
@@ -101,6 +141,113 @@ class BuffBarLayer {
         DeleteObject(this.hbm)
         DeleteDC(this.hdc)
         Gui, BuffBar: Destroy
+    }
+
+    getBuffColor(stateNum) {
+        switch (stateNum) {
+            case 2: return this.pPenDebuff   ;STATE_POISON
+            case 9: return this.pPenDebuff   ;STATE_AMPLIFYDAMAGE
+            case 11: return this.pPenDebuff   ;STATE_COLD
+            case 19: return this.pPenDebuff   ;STATE_WEAKEN
+            case 23: return this.pPenDebuff   ;STATE_DIMVISION
+            case 24: return this.pPenDebuff   ;STATE_SLOWED
+            case 28: return this.pPenDebuff   ;STATE_CONVICTION
+            case 29: return this.pPenDebuff   ;STATE_CONVICTED
+            case 53: return this.pPenDebuff   ;STATE_CONVERSION
+            case 55: return this.pPenDebuff   ;STATE_IRONMAIDEN
+            case 56: return this.pPenDebuff   ;STATE_TERROR
+            case 57: return this.pPenDebuff   ;STATE_ATTRACT
+            case 58: return this.pPenDebuff   ;STATE_LIFETAP
+            case 59: return this.pPenDebuff   ;STATE_CONFUSE
+            case 60: return this.pPenDebuff   ;STATE_DECREPIFY
+            case 61: return this.pPenDebuff   ;STATE_LOWERRESIST
+            case 113: return this.pPenDebuff   ;STATE_DEFENSE_CURSE
+            case 114: return this.pPenDebuff   ;STATE_BLOOD_MANA
+            case 10: return this.pPenBuff   ;STATE_FROZENARMOR
+            case 12: return this.pPenBuff   ;STATE_INFERNO
+            case 13: return this.pPenBuff   ;STATE_BLAZE
+            case 14: return this.pPenBuff   ;STATE_BONEARMOR
+            case 16: return this.pPenBuff   ;STATE_ENCHANT
+            case 17: return this.pPenBuff   ;STATE_INNERSIGHT
+            case 20: return this.pPenBuff   ;STATE_CHILLINGARMOR
+            case 26: return this.pPenBuff   ;STATE_SHOUT
+            case 30: return this.pPenBuff   ;STATE_ENERGYSHIELD
+            case 31: return this.pPenBuff   ;STATE_VENOMCLAWS
+            case 32: return this.pPenBuff   ;STATE_BATTLEORDERS
+            case 38: return this.pPenBuff   ;STATE_THUNDERSTORM
+            case 51: return this.pPenBuff   ;STATE_BATTLECOMMAND
+            case 87: return this.pPenBuff   ;STATE_SLOWMISSILES
+            case 88: return this.pPenBuff   ;STATE_SHIVERARMOR
+            case 93: return this.pPenBuff   ;STATE_VALKYRIE
+            case 94: return this.pPenBuff   ;STATE_FRENZY
+            case 95: return this.pPenBuff   ;STATE_BERSERK
+            case 101: return this.pPenBuff   ;STATE_HOLYSHIELD
+            case 119: return this.pPenBuff   ;STATE_SHADOWWARRIOR
+            case 120: return this.pPenBuff   ;STATE_FERALRAGE
+            case 139: return this.pPenBuff   ;STATE_WOLF
+            case 140: return this.pPenBuff   ;STATE_BEAR
+            case 144: return this.pPenBuff   ;STATE_HURRICANE
+            case 145: return this.pPenBuff   ;STATE_ARMAGEDDON
+            case 151: return this.pPenBuff   ;STATE_CYCLONEARMOR
+            case 153: return this.pPenBuff   ;STATE_CLOAK_OF_SHADOWS
+            case 156: return this.pPenBuff   ;STATE_CLOAKED
+            case 157: return this.pPenBuff   ;STATE_QUICKNESS
+            case 158: return this.pPenBuff   ;STATE_BLADESHIELD
+            case 159: return this.pPenBuff   ;STATE_FADE
+            case 147: return this.pPenAura   ;STATE_BARBS
+            case 40: return this.pPenAura   ;STATE_BLESSEDAIM
+            case 45: return this.pPenAura   ;STATE_CLEANSING
+            case 42: return this.pPenAura   ;STATE_CONCENTRATION
+            case 28: return this.pPenAura   ;STATE_CONVICTION
+            case 37: return this.pPenAura   ;STATE_DEFIANCE
+            case 49: return this.pPenAura   ;STATE_FANATICISM
+            case 35: return this.pPenAura   ;STATE_HOLYFIRE
+            case 46: return this.pPenAura   ;STATE_HOLYSHOCK
+            case 43: return this.pPenAura   ;STATE_HOLYWIND
+            case 48: return this.pPenAura   ;STATE_MEDITATION
+            case 33: return this.pPenAura   ;STATE_MIGHT
+            case 149: return this.pPenAura   ;STATE_OAKSAGE
+            case 34: return this.pPenAura   ;STATE_PRAYER
+            case 50: return this.pPenAura   ;STATE_REDEMPTION
+            case 4: return this.pPenAura   ;STATE_RESISTCOLD
+            case 3: return this.pPenAura   ;STATE_RESISTFIRE
+            case 5: return this.pPenAura   ;STATE_RESISTLIGHTNING
+            case 8: return this.pPenAura   ;STATE_RESISTALL
+            case 47: return this.pPenAura   ;STATE_SANCTUARY
+            case 41: return this.pPenAura   ;STATE_STAMINA
+            case 36: return this.pPenAura   ;STATE_THORNS
+            case 41: return this.pPenAura   ;STATE_STAMINA
+            case 148: return this.pPenAura   ;STATE_WOLVERINE
+            case 64: return this.pPenPassive   ;STATE_CRITICALSTRIKE
+            case 65: return this.pPenPassive   ;STATE_DODGE
+            case 66: return this.pPenPassive   ;STATE_AVOID
+            case 67: return this.pPenPassive   ;STATE_PENETRATE
+            case 68: return this.pPenPassive   ;STATE_EVADE
+            case 69: return this.pPenPassive   ;STATE_PIERCE
+            case 70: return this.pPenPassive   ;STATE_WARMTH
+            case 71: return this.pPenPassive   ;STATE_FIREMASTERY
+            case 72: return this.pPenPassive   ;STATE_LIGHTNINGMASTERY
+            case 73: return this.pPenPassive   ;STATE_COLDMASTERY
+            case 74: return this.pPenPassive   ;STATE_BLADEMASTERY
+            case 75: return this.pPenPassive   ;STATE_AXEMASTERY
+            case 76: return this.pPenPassive   ;STATE_MACEMASTERY
+            case 77: return this.pPenPassive   ;STATE_POLEARMMASTERY
+            case 78: return this.pPenPassive   ;STATE_THROWINGMASTERY
+            case 79: return this.pPenPassive   ;STATE_SPEARMASTERY
+            case 80: return this.pPenPassive   ;STATE_INCREASEDSTAMINA
+            case 81: return this.pPenPassive   ;STATE_IRONSKIN
+            case 82: return this.pPenPassive   ;STATE_INCREASEDSPEED
+            case 83: return this.pPenPassive   ;STATE_NATURALRESISTANCE
+            case 122: return this.pPenPassive   ;STATE_TIGERSTRIKE
+            case 123: return this.pPenPassive   ;STATE_COBRASTRIKE
+            case 124: return this.pPenPassive   ;STATE_PHOENIXSTRIKE
+            case 125: return this.pPenPassive   ;STATE_FISTSOFFIRE
+            case 126: return this.pPenPassive   ;STATE_BLADESOFICE
+            case 127: return this.pPenPassive   ;STATE_CLAWSOFTHUNDER
+            case 138: return this.pPenPassive   ;STATE_FENRIS_RAGE
+            case 152: return this.pPenPassive   ;STATE_CLAWMASTERY
+            case 155: return this.pPenPassive   ;STATE_WEAPONBLOCK
+        }
     }
 }
 
@@ -209,3 +356,5 @@ getStateIcon(stateNum) {
         case 159: return "Fade"   ;STATE_FADE
     }
 }
+
+

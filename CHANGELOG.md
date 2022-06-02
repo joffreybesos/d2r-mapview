@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.8] - 2021-06-02 - Buff expiration alert
+
+- Improved player pointer caching for performance
+- Map is now cropped at the bottom
+
 ## [2.9.7] - 2021-06-02 - Buff expiration alert
 
 - Whenever a buff expires or is removed, it will now flash red for 5 seconds

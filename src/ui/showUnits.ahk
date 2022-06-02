@@ -160,8 +160,10 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
             , regionHeight := gameHeight - topMargin + windowTopMargin
         }
         ;ToolTip % "`n`n`n`n" regionX " " regionY " " regionWidth " " regionHeight
+        regionHeight := regionHeight - (gameHeight / 5)
         WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapHwnd1%
         ;WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %unitHwnd1%
+        gameHeight := gameHeight - (gameHeight / 5)
         UpdateLayeredWindow(unitHwnd1, unitsLayer.hdc, windowLeftMargin, windowTopMargin, gameWidth, gameHeight)
         Gdip_GraphicsClear( unitsLayer.G )
     } else {

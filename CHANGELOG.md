@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.7] - 2021-06-02 - Buff expiration alert
+
+- Whenever a buff expires or is removed, it will now flash red for 5 seconds
+- This will apply to curses, auras, and buffs
+- Each buff will now have a coloured border to say it's a debuff, aura, or buff (red, yellow, green)
+- Buff timers may come in a future release, it's a tricky problem
+
 ## [2.9.6] - 2021-05-28 - Current buffs/auras
 
 - Currently active buffs/auras will now show at the bottom of the screen

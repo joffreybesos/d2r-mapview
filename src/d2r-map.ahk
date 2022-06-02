@@ -71,7 +71,7 @@ Menu, Tray, Add, Reload, Reload
 Menu, Tray, Add
 Menu, Tray, Add, Exit, ExitMH
 
-global version := "2.9.6"
+global version := "2.9.7"
 
 WriteLog("*******************************************************************")
 WriteLog("* Map overlay started https://github.com/joffreybesos/d2r-mapview *")

@@ -323,6 +323,9 @@ While 1 {
             }
             if (Mod(ticktock, 6)) {
                 checkAutomapVisibility(d2rprocess, gameMemoryData)
+                CoordMode, mouse, Client ; Coordinates are relative to the active window's client area
+                MouseGetPos, mouseX, mouseY
+                buffBarLayer.checkHover(mouseX, mouseY)
                 if (buffBarLayer.removedIcons.Length() > 0) {
                     buffBarLayer.drawBuffBar(currentStates, buffBitmaps)
                 }

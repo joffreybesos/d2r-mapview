@@ -18,14 +18,14 @@ class BuffBarLayer {
         Gui, BuffBar: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
         this.buffBarLayerHwnd := WinExist()
         this.imageSize := settings["buffBarIconSize"]
-        this.textBoxWidth := this.imageSize * 15  ; 10 icons wide max
-        this.textBoxHeight := this.imageSize
+        this.buffBarFontSize := this.imageSize / 3 ; settings["buffBarFontSize"]
+        this.xoffset := 0
+        this.yoffset := this.buffBarFontSize * 1.4
+        this.textBoxWidth := this.imageSize * 15  ; 15 icons wide max
+        this.textBoxHeight := this.imageSize + this.yoffset
 
         this.leftMargin := gameWindowX + (gameWindowWidth / 2) - (this.textBoxWidth / 2)
         this.topMargin := gameWindowY + gameWindowHeight - (gameWindowHeight / 4.5)
-        this.buffBarFontSize := this.imageSize / 3 ; settings["buffBarFontSize"]
-        this.xoffset := 0
-        this.yoffset := 0
 
         pToken := Gdip_Startup()
         DetectHiddenWindows, On
@@ -38,10 +38,59 @@ class BuffBarLayer {
         this.pPenPassive := Gdip_CreatePen(0xffdddddd, 2)
         this.pPenAura := Gdip_CreatePen(0xffffd700, 2)
         this.pBrushExpiring := Gdip_BrushCreateSolid(0x33ff0000)
+        this.pBrushBackground := Gdip_BrushCreateSolid(0x55000000)
         this.removedIcons := []
         Gdip_SetSmoothingMode(this.G, 4)
         Gdip_SetInterpolationMode(this.G, 7)
         Gui, BuffBar: Show, NA
+    }
+
+    checkHover(mouseX, mouseY) {
+        if (mouseX > this.leftMargin and mouseX < (this.leftMargin + this.textBoxWidth)) {
+            if (mouseY > this.topMargin and mouseY < (this.topMargin + this.textBoxHeight)) {
+                
+                iconi := 0
+                xoffset := this.textBoxWidth / 2 - ((this.totalicons * this.imageSize) / 2)
+                for k, iconName in this.iconsToShow
+                {
+                    iconx := xoffset + (iconi * this.imageSize)
+                    boxx := this.leftMargin + iconx
+                    boxy := this.topMargin + this.yoffset
+                    if (mouseX > boxx and mouseX < (boxx + this.imageSize)) {
+                        if (mouseY > boxy and mouseY < (boxy + this.imageSize)) {
+                            ;Gdip_DrawImage(this.G, buffBitmaps[iconName.fileName], iconx, this.yoffset,this.imageSize, this.imageSize)
+                            ;Gdip_DrawRectangle(this.G, this.pPenBuff, iconx, this.yoffset, this.imageSize, this.imageSize)
+                            ;OutputDebug, % "Hover " iconName.fileName "`n"
+                            this.drawFloatingText(iconx, 4, iconName.fileName)
+                        }
+                    }
+                    iconi++
+                }
+            }
+        }
+    }
+
+    drawFloatingText(textx, ByRef texty, ByRef text) {
+        fontSize := this.buffBarFontSize
+        textSpaceWidth := StrLen(text) * this.buffBarFontSize
+        , textSpaceHeight := 100
+        textx := textx - textSpaceWidth / 2
+        , texty := texty
+        Options = x%textx% y%texty% Center vTop cffffffff r8 s%fontSize%
+        textx := textx + 1
+        , texty := texty + 1
+        Options2 = x%textx% y%texty% Center vTop cff000000 r8 s%fontSize%
+        
+        ;x|y|width|height|chars|lines
+        measuredString := Gdip_TextToGraphics(this.G, text, Options2, exocetFont, textSpaceWidth, textSpaceHeight)
+        ms := StrSplit(measuredString , "|")
+        , bgx := ms[1] - 6
+        , bgy := ms[2] - 3
+        , bgw := ms[3] + 9
+        , bgh := ms[4] + 0
+        Gdip_FillRectangle(this.G, this.pBrushBackground, bgx, bgy, bgw, bgh)
+        Gdip_TextToGraphics(this.G, text, Options, exocetFont, textSpaceWidth, textSpaceHeight)
+        return measuredString
     }
 
     drawBuffBar(ByRef currentStates, ByRef buffBitmaps) {
@@ -61,16 +110,16 @@ class BuffBarLayer {
         }
         
         fontSize := this.BuffBarFontSize
-        iconsToShow := []
-        totalicons := 0
+        this.iconsToShow := []
+        this.totalicons := 0
         for k, state in currentStates
         {
             thisIcon := getStateIcon(state.stateNum)
             if (thisIcon) {
-                iconsToShow[state.stateNum] := { "fileName": thisIcon, "num": state.stateNum, "active": true, "timestamp": A_TickCount}
+                this.iconsToShow[state.stateNum] := { "fileName": thisIcon, "num": state.stateNum, "active": true, "timestamp": A_TickCount}
                 this.lastIcons[state.stateNum] := 0
                 this.removedIcons[state.stateNum] := 0
-                totalicons++
+                this.totalicons++
             }
         }
         for k, removedIcon in this.lastIcons {
@@ -84,8 +133,8 @@ class BuffBarLayer {
         {
             if (expiredIcon) {
                 if (A_TickCount - expiredIcon.timeStamp < 5000) {
-                    iconsToShow[expiredIcon.num] := expiredIcon
-                    totalicons++
+                    this.iconsToShow[expiredIcon.num] := expiredIcon
+                    this.totalicons++
                     ; OutputDebug, % "Expiring icon " expiredIcon.num " " expiredIcon.filename "`n"
                 } else {    
                     this.removedIcons[expiredIcon.stateNum] := 0
@@ -95,24 +144,24 @@ class BuffBarLayer {
         }
         
 
-        xoffset := this.textBoxWidth / 2 - ((totalicons * this.imageSize) / 2)
+        xoffset := this.textBoxWidth / 2 - ((this.totalicons * this.imageSize) / 2)
         iconi := 0
-        for k, iconName in iconsToShow
+        for k, iconName in this.iconsToShow
         {
             iconx := xoffset + (iconi * this.imageSize)
-            Gdip_DrawImage(this.G, buffBitmaps[iconName.fileName], iconx, 0,this.imageSize, this.imageSize)
+            Gdip_DrawImage(this.G, buffBitmaps[iconName.fileName], iconx, this.yoffset,this.imageSize, this.imageSize)
             if (iconName.active) {
-                Gdip_DrawRectangle(this.G, this.getBuffColor(iconName.num), iconx, 0, this.imageSize-1, this.imageSize-1)
+                Gdip_DrawRectangle(this.G, this.getBuffColor(iconName.num), iconx, this.yoffset, this.imageSize-1, this.imageSize-1)
             } else {
                 if (Mod(ticktock, 2)) {
-                Gdip_FillRectangle(this.G, this.pBrushExpiring, iconx, 0, this.imageSize, this.imageSize-1)
+                    Gdip_FillRectangle(this.G, this.pBrushExpiring, iconx, this.yoffset, this.imageSize, this.imageSize-1)
                 }
             }
             iconi++
         }
-        this.lastIcons := iconsToShow.Clone()
+        this.lastIcons := this.iconsToShow.Clone()
         
-        ; Gdip_DrawRectangle(this.G, pPen, 0, 0, this.textBoxWidth, this.textBoxHeight)
+        ; Gdip_DrawRectangle(this.G, this.pPenBuff, 0, 0, this.textBoxWidth, this.textBoxHeight)
         UpdateLayeredWindow(this.buffBarLayerHwnd, this.hdc, this.leftMargin, this.topMargin, this.textBoxWidth, this.textBoxHeight)
         Gdip_GraphicsClear( this.G )
     }

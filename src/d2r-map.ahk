@@ -24,7 +24,6 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\types\Stats.ahk
 #Include %A_ScriptDir%\types\Skills.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk
-#Include %A_ScriptDir%\memory\scanForPlayer.ahk
 #Include %A_ScriptDir%\memory\readGameMemory.ahk
 #Include %A_ScriptDir%\memory\isAutomapShown.ahk
 #Include %A_ScriptDir%\memory\readLastGameName.ahk
@@ -191,6 +190,7 @@ While 1 {
             seenItems := []
             itemLogItems := []
             vendorItems := []
+            buffBarLayer.removedIcons := []
             newGame := 1
             if (session) {
                 session.setEndTime(gameEndTime)

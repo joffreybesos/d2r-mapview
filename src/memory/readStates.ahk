@@ -1,6 +1,6 @@
 
 ReadStates(ByRef d2rprocess, gameMemoryData, ByRef currentStates) {
-    playerAddress := d2rprocess.BaseAddress + gameMemoryData["playerOffset"]
+    playerAddress := gameMemoryData["playerPointer"]
     playerPtr := d2rprocess.read(playerAddress, "Int64")
     pStatsListEx := d2rprocess.read(playerPtr + 0x88, "Int64")
     stateByte1 := d2rprocess.read(pStatsListEx + 0xAC8, "UInt")

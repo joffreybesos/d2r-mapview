@@ -323,6 +323,9 @@ While 1 {
             }
             if (Mod(ticktock, 6)) {
                 checkAutomapVisibility(d2rprocess, gameMemoryData)
+                if (buffBarLayer.removedIcons.Length() > 0) {
+                    buffBarLayer.drawBuffBar(currentStates, buffBitmaps)
+                }
             }
             
             lastlevel := gameMemoryData["levelNo"]

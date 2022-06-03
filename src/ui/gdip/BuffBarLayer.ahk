@@ -62,6 +62,7 @@ class BuffBarLayer {
                             ;Gdip_DrawImage(this.G, buffBitmaps[iconName.fileName], iconx, this.yoffset,this.imageSize, this.imageSize)
                             ;Gdip_DrawRectangle(this.G, this.pPenBuff, iconx, this.yoffset, this.imageSize, this.imageSize)
                             ; OutputDebug, % "Hover " iconName.num " " iconName.fileName "`n"
+
                             this.showToolTip := iconName.num
                             break
                         }
@@ -72,7 +73,7 @@ class BuffBarLayer {
         }
     }
 
-    drawFloatingText(textx, ByRef texty, ByRef text) {
+    drawFloatingText(textx, texty, text) {
         fontSize := this.buffBarFontSize
         textSpaceWidth := StrLen(text) * this.buffBarFontSize
         , textSpaceHeight := 100
@@ -161,7 +162,8 @@ class BuffBarLayer {
                 }
             }
             if (this.showToolTip == iconName.num) {
-                this.drawFloatingText(iconx + (this.imageSize /2), 4, localizedStrings["buff" . iconName.num])
+                SetFormat Integer, D
+                this.drawFloatingText(iconx + (this.imageSize /2), 0, localizedStrings["buff" . iconName.num])
             }
             iconi++
         }

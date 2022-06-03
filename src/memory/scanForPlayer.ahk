@@ -1,24 +1,46 @@
+global lastPlayerPointer
 
-scanForPlayer(ByRef d2rprocess, lastOffset, startingOffset, settings) {
-    static playerOffset
-    ; check the one that previously worked, it's likely not checkLastOffset()
+scanForPlayer(ByRef d2rprocess, startingOffset, settings) {
     
-    playerOffset := getPlayerOffset(d2rprocess, playerOffset, 1, settings)
-    if (playerOffset) {
-        ;WriteLogDebug("Using last offset " playerOffset " " lastOffset)
-        return playerOffset
+    ; check the one that previously worked, it's likely not checkLastOffset()
+    ;WriteLog("Checking last player pointer " lastPlayerPointer)
+    if (checkPlayerPointer(d2rprocess, lastPlayerPointer)) {
+        return lastPlayerPointer
+    } else {
+        WriteLog("Scanning for new player pointer " lastPlayerPointer ", starting default offset " startingOffset)
+        lastPlayerPointer := getPlayerOffset(d2rprocess, startingOffset, settings)
     }
-    WriteLogDebug("Scanning for new player offset address, starting default offset " startingOffset)
-    playerOffset := getPlayerOffset(d2rprocess, startingOffset, 128, settings)
-    return playerOffset
+    return lastPlayerPointer
 }
 
-getPlayerOffset(ByRef d2r, startingOffset, loops, settings) {
+checkPlayerPointer(ByRef d2r, playerUnit) {
+    if (playerUnit > 0) { ; keep following the next pointer
+        
+        pAct := playerUnit + 0x20
+        actAddress := d2r.read(pAct, "Int64")
+        mapSeedAddress := actAddress + 0x1C
+        mapSeed := d2r.read(mapSeedAddress, "UInt")
+
+        pPath := playerUnit + 0x38
+        pathAddress := d2r.read(pPath, "Int64")
+        xPos := d2r.read(pathAddress + 0x02, "UShort")
+        yPos := d2r.read(pathAddress + 0x06, "UShort")
+
+        ;WriteLog(name " " xPos " " yPos " " mapSeed)
+        if (xPos > 0 and yPos > 0 and StrLen(mapSeed) > 6) {
+            ;WriteLog("SUCCESS: Found current player offset: " newOffset ", " xPos " " yPos " at entry " attempts ", which gives obfuscated map seed: " mapSeed)
+            return true
+        }
+    }
+    return false
+}
+
+getPlayerOffset(ByRef d2r, startingOffset, settings) {
     uiOffset := offsets["uiOffset"]
     expOffset := offsets["expOffset"]
 
     found := false
-    loop, %loops%
+    loop, 128
     {
         SetFormat Integer, D
         attempts := A_Index + 0
@@ -62,21 +84,19 @@ getPlayerOffset(ByRef d2r, startingOffset, loops, settings) {
                     }
                     ;WriteLog(name " " xPos " " yPos " " mapSeed)
                     if (xPos > 0 and yPos > 0 and StrLen(mapSeed) > 6) {
-                        if (loops > 1) {
-                            WriteLog("SUCCESS: Found current player offset: " newOffset ", at entry " attempts ", which gives obfuscated map seed: " mapSeed)
-                        }
+                        WriteLog("SUCCESS: Found current player offset: " newOffset ", " xPos " " yPos " at entry " attempts ", which gives obfuscated map seed: " mapSeed)
+                        
                         SetFormat Integer, D
-                        newOffset := newOffset + 0 ;convert to decimal
                         found := true
-                        return newOffset
+                        return playerUnit
                     }
                 }
             }
-            newOffset := (playerUnit + 0x150) - d2r.BaseAddress
+            ;newOffset := (playerUnit + 0x150) - d2r.BaseAddress
             playerUnit := d2r.read(playerUnit + 0x150, "Int64")  ; get next player
         }
     }
-    if (!found && loops > 1) {
+    if (!found) {
         WriteLogDebug("Did not find a player offset in unit hashtable, likely in game menu.")
     }
     return false

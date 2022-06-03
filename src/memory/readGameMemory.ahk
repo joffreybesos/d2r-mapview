@@ -15,11 +15,10 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     hoveredMob := {}
     ;StartTime := A_TickCount
     unitTableOffset := offsets["unitTable"] ;default offset
-    playerOffset := scanForPlayer(d2rprocess, playerOffset, unitTableOffset, settings)
+    playerPointer := scanForPlayer(d2rprocess, unitTableOffset, settings)
 
     ;WriteLog("Looking for Level No address at player offset " unitTableOffset)
-    , playerAddress := d2rprocess.BaseAddress + playerOffset
-    , playerUnit := d2rprocess.read(playerAddress, "Int64")
+    , playerUnit := playerPointer
     , unitId := d2rprocess.read(playerUnit + 0x08, "UInt")
 
     ; get the level number
@@ -29,7 +28,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     , pLevelAddress := d2rprocess.read(pRoom2Address + 0x90, "Int64")
     , levelNo := d2rprocess.read(pLevelAddress + 0x1F8, "UInt")
     if (!levelNo) {
-        WriteLogDebug("Did not find level num using player offset " playerOffset) 
+        WriteLogDebug("Did not find level num using player offset " playerPointer) 
     }
     ; get the map seed
 
@@ -166,7 +165,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     }
     ; timeStamp("playerposition")
     
-    gameMemoryData := {"pathAddress": pathAddress, "gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "missiles": missiles, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName, "experience": experience, "playerLevel": playerLevel, "menuShown": menuShown, "hoveredMob": hoveredMob, "partyList": partyList, "unitId": unitId}
+    gameMemoryData := {"playerPointer": playerPointer, "pathAddress": pathAddress, "gameName": gameName, "mapSeed": mapSeed, "difficulty": difficulty, "levelNo": levelNo, "xPos": xPos, "yPos": yPos, "mobs": mobs, "missiles": missiles, "otherPlayers": otherPlayerData, "items": items, "objects": objects, "playerName": playerName, "experience": experience, "playerLevel": playerLevel, "menuShown": menuShown, "hoveredMob": hoveredMob, "partyList": partyList, "unitId": unitId}
     ;ElapsedTime := A_TickCount - StartTime
     ;OutputDebug, % ElapsedTime "`n"
     ;ToolTip % "`n`n`n`n" ElapsedTime

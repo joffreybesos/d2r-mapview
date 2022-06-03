@@ -73,7 +73,7 @@ class SessionTableLayer {
             col5 := this.drawData(col4, headery, fontSize, gameNameList, 7 * fontSize)
             col6 := this.drawData(col5, headery, fontSize, gameTimeList, 6 * fontSize)
             col7 := this.drawData(col6, headery, fontSize, xpgainedList, 2 * fontSize)
-            col8 := this.drawData(col7, headery, fontSize, xpperminList, 2 * fontSize)
+            col8 := this.drawData(col7, headery, fontSize, xpperminList, 3 * fontSize)
 
             this.drawHeader(col1, datay, fontSize, "#")
             this.drawHeader(col2, datay, fontSize, "Lvl")

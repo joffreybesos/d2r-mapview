@@ -2,8 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.9.6] - 2021-05-28 - Performance improvements
+## [2.9.8] - 2021-06-03 - Buff tool tips
 
+- Now when you mouse over the buff icon you'll see the name
+- The buff name should appear in your local language
+- You can now vertically adjust the position of the buff icons
+- You can set a positive or negative value to move it up or down the screen
+- Improved player pointer caching for better performance
+- Map is now cropped at the bottom
+
+## [2.9.7] - 2021-06-02 - Buff expiration alert
+
+- Whenever a buff expires or is removed, it will now flash red for 5 seconds
+- This will apply to curses, auras, and buffs
+- Each buff will now have a coloured border to say it's a debuff, aura, or buff (red, yellow, green)
+- Buff timers may come in a future release, it's a tricky problem
+
+## [2.9.6] - 2021-05-28 - Current buffs/auras
+
+- Currently active buffs/auras will now show at the bottom of the screen
+- You can disable this buff bar in settings
+- You can also change the icon size of the buff bar in settings
 - Items such as Runes will no longer say (Identified) in item log
 - Checking vendors for items can be turned off
 - Item filter performance improvements

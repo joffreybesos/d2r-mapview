@@ -12,6 +12,7 @@ class UnitsLayer {
 
         if (settings["centerMode"]) {
             WinGetPos, , , gameWidth, gameHeight, %gameWindowId% 
+            gameHeight := gameHeight - (gameHeight / 5)
             this.hbm := CreateDIBSection(gameWidth, gameHeight)
         } else {
             this.hbm := CreateDIBSection(scaledWidth, scaledHeight)

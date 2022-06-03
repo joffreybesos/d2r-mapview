@@ -46,6 +46,7 @@ class BuffBarLayer {
     }
 
     checkHover(mouseX, mouseY) {
+        this.showToolTip := 0
         if (mouseX > this.leftMargin and mouseX < (this.leftMargin + this.textBoxWidth)) {
             if (mouseY > this.topMargin and mouseY < (this.topMargin + this.textBoxHeight)) {
                 
@@ -60,8 +61,9 @@ class BuffBarLayer {
                         if (mouseY > boxy and mouseY < (boxy + this.imageSize)) {
                             ;Gdip_DrawImage(this.G, buffBitmaps[iconName.fileName], iconx, this.yoffset,this.imageSize, this.imageSize)
                             ;Gdip_DrawRectangle(this.G, this.pPenBuff, iconx, this.yoffset, this.imageSize, this.imageSize)
-                            ;OutputDebug, % "Hover " iconName.fileName "`n"
-                            this.drawFloatingText(iconx, 4, iconName.fileName)
+                            ; OutputDebug, % "Hover " iconName.num " " iconName.fileName "`n"
+                            this.showToolTip := iconName.num
+                            break
                         }
                     }
                     iconi++
@@ -116,7 +118,8 @@ class BuffBarLayer {
         {
             thisIcon := getStateIcon(state.stateNum)
             if (thisIcon) {
-                this.iconsToShow[state.stateNum] := { "fileName": thisIcon, "num": state.stateNum, "active": true, "timestamp": A_TickCount}
+                ;OutputDebug % this.iconsToShow[state.stateNum].showToolTip
+                this.iconsToShow[state.stateNum] := { "fileName": thisIcon, "num": state.stateNum, "active": true, "timestamp": A_TickCount }
                 this.lastIcons[state.stateNum] := 0
                 this.removedIcons[state.stateNum] := 0
                 this.totalicons++
@@ -156,6 +159,9 @@ class BuffBarLayer {
                 if (Mod(ticktock, 2)) {
                     Gdip_FillRectangle(this.G, this.pBrushExpiring, iconx, this.yoffset, this.imageSize, this.imageSize-1)
                 }
+            }
+            if (this.showToolTip == iconName.num) {
+                this.drawFloatingText(iconx + (this.imageSize /2), 4, localizedStrings["buff" . iconName.num])
             }
             iconi++
         }

@@ -33,6 +33,7 @@ LoadLocalization(ByRef settings) {
     localizedStringsItems := ReadSection(locale, "Items")
     localizedStringsMonstes := ReadSection(locale, "Monsters")
     localizedStringsRunes := ReadSection(locale, "Runes")
+    localizedStringsBuffs := ReadSection(locale, "Buffs")
     localizedStringsUI := ReadSection(locale, "UI")
     localizedStringsQuality := ReadSection(locale, "Quality")
     localizedStringsSockets := ReadSection(locale, "Sockets")
@@ -49,6 +50,8 @@ LoadLocalization(ByRef settings) {
     for k, v in localizedStringsMonsters
         localizedStrings[k]:=v
     for k, v in localizedStringsRunes
+        localizedStrings[k]:=v
+    for k, v in localizedStringsBuffs
         localizedStrings[k]:=v
     for k, v in localizedStringsUI
         localizedStrings[k]:=v

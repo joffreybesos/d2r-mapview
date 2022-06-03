@@ -2,9 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.9.8] - 2021-06-02 - Buff expiration alert
+## [2.9.8] - 2021-06-03 - Buff tool tips
 
-- Improved player pointer caching for performance
+- Now when you mouse over the buff icon you'll see the name
+- The buff name should appear in your local language
+- You can now vertically adjust the position of the buff icons
+- You can set a positive or negative value to move it up or down the screen
+- Improved player pointer caching for better performance
 - Map is now cropped at the bottom
 
 ## [2.9.7] - 2021-06-02 - Buff expiration alert

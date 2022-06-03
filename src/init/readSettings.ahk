@@ -80,6 +80,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["includeVendorItems"] := 1
     settings["buffBarEnabled"] := 1
     settings["buffBarIconSize"] := 75
+    settings["buffBarVerticalOffset"] := 0
 
     settings["allowTextToSpeech"] := 1
     settings["textToSpeechVolume"] := 50

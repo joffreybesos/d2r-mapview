@@ -25,7 +25,7 @@ class BuffBarLayer {
         this.textBoxHeight := this.imageSize + this.yoffset
 
         this.leftMargin := gameWindowX + (gameWindowWidth / 2) - (this.textBoxWidth / 2)
-        this.topMargin := gameWindowY + gameWindowHeight - (gameWindowHeight / 4.5)
+        this.topMargin := gameWindowY + gameWindowHeight - (gameWindowHeight / 4.3) + settings["buffBarVerticalOffset"]
 
         pToken := Gdip_Startup()
         DetectHiddenWindows, On

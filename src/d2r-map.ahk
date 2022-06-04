@@ -71,7 +71,7 @@ Menu, Tray, Add, Reload, Reload
 Menu, Tray, Add
 Menu, Tray, Add, Exit, ExitMH
 
-global version := "2.9.8"
+global version := "2.9.9"
 
 WriteLog("*******************************************************************")
 WriteLog("* Map overlay started https://github.com/joffreybesos/d2r-mapview *")
@@ -123,6 +123,7 @@ global redrawMap := 1
 global offsets := []
 global hudBitmaps := loadBitmaps()
 global buffBitmaps := loadBuffIcons()
+global mapList = []
 
 CreateSettingsGUI(settings, localizedStrings)
 settingupGUI := false
@@ -147,36 +148,7 @@ patternScan(d2rprocess, offsets)
 uiOffset := offsets["uiOffset"]
 Gdip_Startup()
 
-; create GUI windows
-Gui, Map1: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-global mapHwnd1 := WinExist()
 
-Gui, Map2: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-global mapHwnd2 := WinExist()
-
-Gui, Map3: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-global mapHwnd3 := WinExist()
-
-Gui, Map4: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-global mapHwnd4 := WinExist()
-
-Gui, Map5: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-global mapHwnd5 := WinExist()
-
-Gui, Map6: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-global mapHwnd6 := WinExist()
-
-Gui, Map7: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-global mapHwnd7 := WinExist()
-
-Gui, Map8: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-global mapHwnd8 := WinExist()
-
-Gui, Map9: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-global mapHwnd9 := WinExist()
-
-Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
-global unitHwnd1 := WinExist()
 
 
 ; performance counters
@@ -262,6 +234,43 @@ While 1 {
 
         if ((gameMemoryData["difficulty"] == "0" or gameMemoryData["difficulty"] == "1" or gameMemoryData["difficulty"] == "2") and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
             if (gameMemoryData["mapSeed"] != lastSeed or newGame) {
+                Loop, 9 {
+                    k := A_Index
+                    Gui, Map%k%: Destroy
+                }
+                
+                ; create GUI windows
+                Gui, Map1: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+                global mapHwnd1 := WinExist()
+
+                Gui, Map2: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+                global mapHwnd2 := WinExist()
+
+                Gui, Map3: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+                global mapHwnd3 := WinExist()
+
+                Gui, Map4: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+                global mapHwnd4 := WinExist()
+
+                Gui, Map5: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+                global mapHwnd5 := WinExist()
+
+                Gui, Map6: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+                global mapHwnd6 := WinExist()
+
+                Gui, Map7: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+                global mapHwnd7 := WinExist()
+
+                Gui, Map8: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+                global mapHwnd8 := WinExist()
+
+                Gui, Map9: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
+                global mapHwnd9 := WinExist()
+
+                Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
+                global unitHwnd1 := WinExist()
+                OutputDebug, % "Recreated GUIs`n"
+
                 gameStartTime := A_TickCount    
                 currentGameName := readLastGameName(d2rprocess, gameWindowId, offsets, session)
 
@@ -300,22 +309,31 @@ While 1 {
             } else {
                 mapList := [gameMemoryData["levelNo"]]
             }
+            ; OutputDebug, % "Loading map list..."
             Loop, % mapList.length()
             {
                 if (mapList[A_Index] != lastLevelList[A_Index]) {
                     listdifferent := true
                     break
                 }
+                ; OutputDebug, % " "mapList[A_Index]
             }
+            ; OutputDebug, % "`n"
             if (listdifferent) { ; only redraw map when it changes
                 ; Show loading text
-                ;Gui, Map: Show, NA
+                
                 mapLoading := 1
+                OutputDebug, % "List different, hiding maps`n"
+
+                ; hide maps
                 Loop, 9 {
                     k := A_Index
                     Gui, Map%k%: Hide ; hide map
                 }
-                Gui, Units: Hide ; hide player dot
+                ; hide units
+                Gui, Units: Hide
+
+                ; strip image data
                 Loop, 9 {
                     k := A_Index
                     imageData%k% := {}
@@ -326,10 +344,12 @@ While 1 {
                 for k, thisLevelNo in mapList
                 {
                     downloadMapImage(settings, gameMemoryData, thisLevelNo, imageData%k%, 0)
+                    OutputDebug, % "Downloading " thisLevelNo "`n"
                 }
                 for k, thisLevelNo in mapList
                 {
-                    Gui, Map%k%: Show, NA
+                    ; Gui, Map%k%: Show, NA
+                    ; OutputDebug, % "Showing GUI " k " " thisLevelNo "`n"
                 }
                 Loop, 8
                 {
@@ -359,6 +379,7 @@ While 1 {
             }
             if (redrawMap) {
                 WriteLogDebug("Redrawing map")
+                OutputDebug, % "Redrawing map`n"
                 for k, thisLevelNo in mapList
                 {
                     IniRead, levelScale, mapconfig.ini, %thisLevelNo%, scale, 1.0
@@ -368,16 +389,24 @@ While 1 {
                     imageData%k%["levelxmargin"] := levelxmargin
                     imageData%k%["levelymargin"] := levelymargin
                 }
+                for k, thisLevelNo in mapList
+                {
+                    Gui, Map%k%: Show, NA
+                    OutputDebug, % "Showing GUI " k " " thisLevelNo "`n"
+                }
                 
                 Loop, 9 {
                     k := A_Index
                     
                     if (imageData%k%.count()) {
+                        OutputDebug, % "ShowMap " k " " thisLevelNo "`n"
                         ShowMap(settings, mapHwnd%k%, imageData%k%, gameMemoryData, uiData%k%)
+                        
                     } else {
                         Gui, Map%k%: Hide
                     }
                 }
+                
 
                 unitsLayer.delete()
                 unitsLayer := new UnitsLayer(uiData1)
@@ -391,7 +420,7 @@ While 1 {
             uiAssistLayer.drawMonsterBar(gameMemoryData["hoveredMob"])
 
             if (settings["centerMode"] and gameMemoryData["pathAddress"]) {
-                MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], imageData1, uiData1)
+                ;MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], imageData1, uiData1)
             }
             if (Mod(ticktock, 6)) {
                 checkAutomapVisibility(d2rprocess, gameMemoryData)
@@ -520,10 +549,15 @@ unHideMap() {
     buffBarLayer.show()
     if (!mapLoading) {
         if (settings["centerMode"]) {
-            Loop, 9 {
-                k := A_Index
+            for k, thisLevelNo in mapList
+            {
                 Gui, Map%k%: Show, NA
+                ; OutputDebug, % "Showing GUI " k " " thisLevelNo "`n"
             }
+            ; Loop, 9 {
+            ;     k := A_Index
+            ;     Gui, Map%k%: Show, NA
+            ; }
         } else {
             Gui, Map1: Show, NA
         }

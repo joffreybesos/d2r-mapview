@@ -2,11 +2,13 @@
 
 
 calculateMapSeed(InitSeedHash1, InitSeedHash2, EndSeedHash1, EndSeedHash2) {
+	WriteLog("Calcualting new map seed from " InitSeedHash1 " " InitSeedHash2 " " EndSeedHash1 " " EndSeedHash2)
     cmd := "SeedReveal.exe " InitSeedHash1 " " InitSeedHash1 " " EndSeedHash1 " " EndSeedHash2
 	mapSeed := StdOutToVar(cmd)
     mapSeed := StrReplace(mapSeed,"`n", "")
 	mapSeed := StrReplace(mapSeed,"`r", "")
 	mapSeed := StrReplace(mapSeed," ", "")
+	WriteLog("Found mapSeed " mapSeed)
 	return mapSeed
 }
 

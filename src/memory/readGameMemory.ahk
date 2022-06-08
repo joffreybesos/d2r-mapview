@@ -43,10 +43,9 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     dwInitSeedHash1 := d2rprocess.read(actMiscAddress + 0x840, "UInt") 
     dwInitSeedHash2 := d2rprocess.read(actMiscAddress + 0x844, "UInt") 
     dwEndSeedHash1 := d2rprocess.read(actMiscAddress + 0x868, "UInt") 
-    dwEndSeedHash2 := d2rprocess.read(actMiscAddress + 0x86C, "UInt") 
 
-    if (dwInitSeedHash1 != lastdwInitSeedHash1 or dwInitSeedHash2 != lastdwInitSeedHash2) {
-        mapSeed := calculateMapSeed(dwInitSeedHash1, dwInitSeedHash2, dwEndSeedHash1, dwEndSeedHash2)
+    if (dwInitSeedHash1 != lastdwInitSeedHash1 or dwInitSeedHash2 != lastdwInitSeedHash2 or mapSeed == 0) {
+        mapSeed := calculateMapSeed(dwInitSeedHash1, dwInitSeedHash2, dwEndSeedHash1, 0)
         lastdwInitSeedHash1 := dwInitSeedHash1
         lastdwInitSeedHash2 := dwInitSeedHash2
     }

@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.0.0] - 2021-06-09 - Bug fix
+## [2.9.11] - 2021-06-09 - Bug fix
+
+- Fixed bug with auto-update where the same version would count as older
+
+## [2.9.10] - 2021-06-09 - Bug fix
 
 - Issue with maps not loading in certain scenarios should be fixed.
 - Issue with voices not loading should error silently

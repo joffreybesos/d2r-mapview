@@ -19,6 +19,15 @@ CheckForUpdates() {
             foundnewer := false
         }
 
+        sameVersion := true
+        Loop, 3
+        {
+            sameVersion := (currenttagarr[A_Index] == latesttagarr[A_Index]) ? sameVersion : false
+        }
+        if (sameVersion) {
+            foundnewer := false
+        }
+
 
         if (foundnewer) {
             WriteLog("Found newer version to download")

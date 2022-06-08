@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.9] - 2021-06-08 - Fix after blizzard patch
+
+- Fix following blizzard patch (finally)
+- Big thanks to @Rabbs and others at MapAssist!
+- I'll probably have a fast follow from this to reduce file size and help performance
+- This hasn't been tested thoroughly but thought I should send it out.
+- Please leave feedback in the discord
+
 ## [2.9.8] - 2021-06-03 - Buff tool tips
 
 - Now when you mouse over the buff icon you'll see the name

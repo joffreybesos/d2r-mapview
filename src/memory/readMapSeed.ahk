@@ -1,24 +1,53 @@
-getMapSeedOffset(ByRef d2r) {
-    ; map seed
-    pattern := d2r.hexStringToPattern("41 8B F9 48 8D 0D ?? ?? ?? ??") 
-    patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)
-    offsetAddress := d2r.read(patternAddress + 6, "UInt")
-    delta := patternAddress - d2r.BaseAddress
-    resultRelativeAddress2 := d2r.BaseAddress + delta + 0xEA + offsetAddress
-    offsetBuffer2 := d2r.read(resultRelativeAddress2, "Int64")
 
-    if (!offsetBuffer2) {
-        WriteLog("Did not find map seed offset!")
-        offsets["mapSeedOffset"] := 0
-    }
-    if (d2r.read(offsetBuffer2 + 0x110, "Int64")) {
-        offsets["mapSeedOffset"] := offsetBuffer2 + 0x840
-        mapSeed := d2rprocess.read(offsets["mapSeedOffset"], "UInt")
-        WriteLog("Found map seed offset " offsets["mapSeedOffset"] " which gives map seed " mapSeed)
-    } else {
-        offsets["mapSeedOffset"] := offsetBuffer2 + 0x10C0
-        mapSeed := d2rprocess.read(offsets["mapSeedOffset"], "UInt")
-        WriteLog("Found map seed offset " offsets["mapSeedOffset"] " which gives map seed " mapSeed)
-    }
-    return offsets["mapSeedOffset"]
+
+
+calculateMapSeed(InitSeedHash1, InitSeedHash2, EndSeedHash1, EndSeedHash2) {
+    cmd := "SeedReveal.exe " InitSeedHash1 " " InitSeedHash1 " " EndSeedHash1 " " EndSeedHash2
+	mapSeed := StdOutToVar(cmd)
+    mapSeed := StrReplace(mapSeed,"`n", "")
+	mapSeed := StrReplace(mapSeed,"`r", "")
+	mapSeed := StrReplace(mapSeed," ", "")
+	return mapSeed
+}
+
+; runs a command and captures stdout without flashing a cmd window
+StdOutToVar(cmd) {
+	DllCall("CreatePipe", "PtrP", hReadPipe, "PtrP", hWritePipe, "Ptr", 0, "UInt", 0)
+	DllCall("SetHandleInformation", "Ptr", hWritePipe, "UInt", 1, "UInt", 1)
+
+	VarSetCapacity(PROCESS_INFORMATION, (A_PtrSize == 4 ? 16 : 24), 0)    ; http://goo.gl/dymEhJ
+	cbSize := VarSetCapacity(STARTUPINFO, (A_PtrSize == 4 ? 68 : 104), 0) ; http://goo.gl/QiHqq9le
+	NumPut(cbSize, STARTUPINFO, 0, "UInt")                                ; cbSize
+	NumPut(0x100, STARTUPINFO, (A_PtrSize == 4 ? 44 : 60), "UInt")        ; dwFlags
+	NumPut(hWritePipe, STARTUPINFO, (A_PtrSize == 4 ? 60 : 88), "Ptr")    ; hStdOutput
+	NumPut(hWritePipe, STARTUPINFO, (A_PtrSize == 4 ? 64 : 96), "Ptr")    ; hStdError
+	
+	if !DllCall(
+	(Join Q C
+		"CreateProcess",             ; http://goo.gl/9y0gw
+		"Ptr",  0,                   ; lpApplicationName
+		"Ptr",  &cmd,                ; lpCommandLine
+		"Ptr",  0,                   ; lpProcessAttributes
+		"Ptr",  0,                   ; lpThreadAttributes
+		"UInt", true,                ; bInheritHandles
+		"UInt", 0x08000000,          ; dwCreationFlags
+		"Ptr",  0,                   ; lpEnvironment
+		"Ptr",  0,                   ; lpCurrentDirectory
+		"Ptr",  &STARTUPINFO,        ; lpStartupInfo
+		"Ptr",  &PROCESS_INFORMATION ; lpProcessInformation
+	)) {
+		DllCall("CloseHandle", "Ptr", hWritePipe)
+		DllCall("CloseHandle", "Ptr", hReadPipe)
+		return ""
+	}
+
+	DllCall("CloseHandle", "Ptr", hWritePipe)
+	VarSetCapacity(buffer, 4096, 0)
+	while DllCall("ReadFile", "Ptr", hReadPipe, "Ptr", &buffer, "UInt", 4096, "UIntP", dwRead, "Ptr", 0)
+		sOutput .= StrGet(&buffer, dwRead, "CP0")
+
+	DllCall("CloseHandle", "Ptr", NumGet(PROCESS_INFORMATION, 0))         ; hProcess
+	DllCall("CloseHandle", "Ptr", NumGet(PROCESS_INFORMATION, A_PtrSize)) ; hThread
+	DllCall("CloseHandle", "Ptr", hReadPipe)
+	return sOutput
 }

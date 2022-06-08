@@ -8,10 +8,16 @@
 #Include %A_ScriptDir%\memory\readMapSeed.ahk
 #Include %A_ScriptDir%\memory\scanForPlayer.ahk
 
+global lastdwInitSeedHash1
+global lastdwInitSeedHash2
+global lastdwEndSeedHash1
+global lastdwEndSeedHash2
+
 readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     static items
     static objects
     static partyList
+    static mapSeed
     hoveredMob := {}
     ;StartTime := A_TickCount
     unitTableOffset := offsets["unitTable"] ;default offset
@@ -30,15 +36,20 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     if (!levelNo) {
         WriteLogDebug("Did not find level num using player offset " playerPointer) 
     }
-    ; get the map seed
+        ; get the map seed
+    actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")  
+    mapSeedOld := d2rprocess.read(actAddress + 0x1C, "UInt")
+    actMiscAddress := d2rprocess.read(actAddress + 0x78, "Int64")   ;0x0000023a64ed4780 ;2449824630656
+    dwInitSeedHash1 := d2rprocess.read(actMiscAddress + 0x840, "UInt") 
+    dwInitSeedHash2 := d2rprocess.read(actMiscAddress + 0x844, "UInt") 
+    dwEndSeedHash1 := d2rprocess.read(actMiscAddress + 0x868, "UInt") 
+    dwEndSeedHash2 := d2rprocess.read(actMiscAddress + 0x86C, "UInt") 
 
-    ;actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")
-    ;mapSeedOld := d2rprocess.read(actAddress + 0x1C, "UInt")
-    if (!offsets["mapSeedOffset"]) {
-        getMapSeedOffset(d2rprocess)
+    if (dwInitSeedHash1 != lastdwInitSeedHash1 or dwInitSeedHash2 != lastdwInitSeedHash2) {
+        mapSeed := calculateMapSeed(dwInitSeedHash1, dwInitSeedHash2, dwEndSeedHash1, dwEndSeedHash2)
+        lastdwInitSeedHash1 := dwInitSeedHash1
+        lastdwInitSeedHash2 := dwInitSeedHash2
     }
-    mapSeedOffset := offsets["mapSeedOffset"]
-    mapSeed := d2rprocess.read(mapSeedOffset, "UInt")
 
     ; get the difficulty
     actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")
@@ -180,5 +191,6 @@ readMapSeed(ByRef d2r) {
     delta := patternAddress - d2r.BaseAddress
     seedAddress := d2r.BaseAddress + delta + 0xEA + offsetAddress
     seed := d2r.read(seedAddress, "Int") ; 0x00007ff6a12172a6
+    seed := 769095319
     return seed
 }

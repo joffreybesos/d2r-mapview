@@ -8,6 +8,7 @@ readSettings(settingsFile, ByRef settings) {
     FileInstall, exocetblizzardot-medium.otf, exocetblizzardot-medium.otf , 1
     FileInstall, formal436bt-regular.otf, formal436bt-regular.otf , 1
     FileInstall, settings.ini, settings.ini, 0
+    FileInstall, SeedReveal.exe, SeedReveal.exe, 1
 
     ; these are the default values
     settings := []

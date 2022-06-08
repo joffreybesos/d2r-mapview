@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.0] - 2021-06-09 - Bug fix
+
+- Issue with maps not loading in certain scenarios should be fixed.
+- Issue with voices not loading should error silently
+- Reverted trimming off the bottom of the map
+
 ## [2.9.9] - 2021-06-08 - Fix after blizzard patch
 
 - Fix following blizzard patch (finally)

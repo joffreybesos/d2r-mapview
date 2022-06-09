@@ -420,7 +420,7 @@ While 1 {
             uiAssistLayer.drawMonsterBar(gameMemoryData["hoveredMob"])
 
             if (settings["centerMode"] and gameMemoryData["pathAddress"]) {
-                ;MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], imageData1, uiData1)
+                MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], imageData1, uiData1)
             }
             if (Mod(ticktock, 6)) {
                 checkAutomapVisibility(d2rprocess, gameMemoryData)

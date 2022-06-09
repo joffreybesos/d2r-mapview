@@ -72,7 +72,7 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
                             fontSize := 11 * scale
                             npcName := mob["isTownNPC"]
                             if (settings["showTownNPCNames"]) {
-                                drawFloatingText(unitsLayer, mobx, moby-(9.2 * scale), fontSize, "ffc6b276", true, formalFont, localizedStrings[npcName])
+                                drawFloatingText(unitsLayer, mobx, moby-(9.2 * scale), fontSize, "ffc6b276", true, true, formalFont, localizedStrings[npcName])
                             }
                             Gdip_DrawPolygon(unitsLayer.G, unitsLayer.pPenTownNPCCross, points)
                         } else if (!mob["isTownNPC"] and !mob["isPlayerMinion"]) {
@@ -86,7 +86,7 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
                             fontSize := 11 * scale
                             npcName := mob["isTownNPC"]
                             if (settings["showTownNPCNames"]) {
-                                drawFloatingText(unitsLayer, mobx, moby-(9.2 * scale), fontSize, "ffc6b276", true, formalFont, localizedStrings[npcName])
+                                drawFloatingText(unitsLayer, mobx, moby-(9.2 * scale), fontSize, "ffc6b276", true, true, formalFont, localizedStrings[npcName])
                             }
                             Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPenTownNPC, mobx-(unitsLayer.normalDotSize/2), moby-(unitsLayer.normalDotSize/1.5), unitsLayer.normalDotSize, unitsLayer.normalDotSize/2)
                         } else if (!mob["isTownNPC"] and !mob["isPlayerMinion"]) {

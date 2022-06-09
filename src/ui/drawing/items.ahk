@@ -49,7 +49,7 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
                 announceItem(settings, item, alert)
             }
             if (itemLoc != 2) { ; if not in store
-                drawFloatingText(unitsLayer, itemx, itemy, fontSize, acolor, true, exocetFont, itemText)
+                drawFloatingText(unitsLayer, itemx, itemy, fontSize, acolor, true, false, exocetFont, itemText)
                 switch (ticktock) {
                     case 1: Gdip_FillEllipse(unitsLayer.G, pBrush1, itemx-5, itemy-5, 10, 10)
                     case 2: Gdip_FillEllipse(unitsLayer.G, pBrush2, itemx-6, itemy-6, 12, 12)

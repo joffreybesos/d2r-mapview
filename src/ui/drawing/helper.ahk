@@ -68,16 +68,21 @@ calcThirdPoint(x1,y1,x2,y2, ByRef angle, ByRef distance) {
 
 
 
-drawFloatingText(ByRef unitsLayer, ByRef unitx, ByRef unity, ByRef fontSize, ByRef fontColor, ByRef background, ByRef font, ByRef text) {
+drawFloatingText(ByRef unitsLayer, ByRef unitx, ByRef unity, ByRef fontSize, ByRef fontColor, ByRef background, ByRef forceNoWrap, ByRef font, ByRef text) {
     
     textSpaceWidth := StrLen(text) * fontSize
     , textSpaceHeight := 100
     , textx := unitx - textSpaceWidth /2
     , texty := unity-(unitsLayer.normalDotSize/2) - textSpaceHeight
-    Options = x%textx% y%texty% Center vBottom c%fontColor% r8 s%fontSize%
+    if (forceNoWrap) {
+        NoWrap := "NoWrap"
+    } else {
+        NoWrap := ""
+    }
+    Options = x%textx% y%texty% Center vBottom %NoWrap% c%fontColor% r8 s%fontSize%
     textx := textx + 1
     , texty := texty + 1
-    Options2 = x%textx% y%texty% Center vBottom cff000000 r8 s%fontSize%
+    Options2 = x%textx% y%texty% Center vBottom %NoWrap% cff000000 r8 s%fontSize%
     
     ;x|y|width|height|chars|lines
     measuredString := Gdip_TextToGraphics(unitsLayer.G, text, Options2, font, textSpaceWidth, textSpaceHeight)

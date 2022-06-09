@@ -11,8 +11,7 @@
 global lastdwInitSeedHash1
 global lastdwInitSeedHash2
 global lastdwEndSeedHash1
-global lastdwEndSeedHash2
-
+ 
 readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     static items
     static objects
@@ -45,7 +44,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     dwEndSeedHash1 := d2rprocess.read(actMiscAddress + 0x868, "UInt") 
 
     if (dwInitSeedHash1 != lastdwInitSeedHash1 or dwInitSeedHash2 != lastdwInitSeedHash2 or mapSeed == 0) {
-        mapSeed := calculateMapSeed(dwInitSeedHash1, dwInitSeedHash2, dwEndSeedHash1, 0)
+        mapSeed := calculateMapSeed(dwInitSeedHash1, dwInitSeedHash2, dwEndSeedHash1)
         lastdwInitSeedHash1 := dwInitSeedHash1
         lastdwInitSeedHash2 := dwInitSeedHash2
     }

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.12] - 2021-06-09 - Improvements to seed generator
+
+- Seed generater has been replaced with a much smaller dll
+- Executable size is now much smaller (69mb down to 7mb)
+- Probably less false flags for Windows smart scanner
+
 ## [2.9.11] - 2021-06-09 - Bug fix
 
 - Fixed bug with auto-update where the same version would count as older

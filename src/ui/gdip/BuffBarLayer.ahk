@@ -79,10 +79,10 @@ class BuffBarLayer {
         , textSpaceHeight := 100
         textx := textx - textSpaceWidth / 2
         , texty := texty
-        Options = x%textx% y%texty% Center vTop cffffffff r8 s%fontSize%
+        Options = x%textx% y%texty% Center vTop NoWrap cffffffff r8 s%fontSize%
         textx := textx + 1
         , texty := texty + 1
-        Options2 = x%textx% y%texty% Center vTop cff000000 r8 s%fontSize%
+        Options2 = x%textx% y%texty% Center vTop NoWrap cff000000 r8 s%fontSize%
         
         ;x|y|width|height|chars|lines
         measuredString := Gdip_TextToGraphics(this.G, text, Options2, exocetFont, textSpaceWidth, textSpaceHeight)
@@ -150,22 +150,29 @@ class BuffBarLayer {
 
         xoffset := this.textBoxWidth / 2 - ((this.totalicons * this.imageSize) / 2)
         iconi := 0
-        for k, iconName in this.iconsToShow
+        Loop, 3
         {
-            iconx := xoffset + (iconi * this.imageSize)
-            Gdip_DrawImage(this.G, buffBitmaps[iconName.fileName], iconx, this.yoffset,this.imageSize, this.imageSize)
-            if (iconName.active) {
-                Gdip_DrawRectangle(this.G, this.getBuffColor(iconName.num), iconx, this.yoffset, this.imageSize-1, this.imageSize-1)
-            } else {
-                if (Mod(ticktock, 2)) {
-                    Gdip_FillRectangle(this.G, this.pBrushExpiring, iconx, this.yoffset, this.imageSize, this.imageSize-1)
+            buffColor := A_Index
+            for k, iconName in this.iconsToShow
+            {
+                thisBuffColor := this.getBuffGroup(iconName.num)
+                if (thisBuffColor == buffColor) {
+                    iconx := xoffset + (iconi * this.imageSize)
+                    Gdip_DrawImage(this.G, buffBitmaps[iconName.fileName], iconx, this.yoffset,this.imageSize, this.imageSize)
+                    if (iconName.active) {
+                        Gdip_DrawRectangle(this.G, this.getBuffColor(thisBuffColor), iconx, this.yoffset, this.imageSize-1, this.imageSize-1)
+                    } else {
+                        if (Mod(ticktock, 2)) {
+                            Gdip_FillRectangle(this.G, this.pBrushExpiring, iconx, this.yoffset, this.imageSize, this.imageSize-1)
+                        }
+                    }
+                    if (this.showToolTip == iconName.num) {
+                        SetFormat Integer, D
+                        this.drawFloatingText(iconx + (this.imageSize /2), 0, localizedStrings["buff" . iconName.num])
+                    }
+                    iconi++
                 }
             }
-            if (this.showToolTip == iconName.num) {
-                SetFormat Integer, D
-                this.drawFloatingText(iconx + (this.imageSize /2), 0, localizedStrings["buff" . iconName.num])
-            }
-            iconi++
         }
         this.lastIcons := this.iconsToShow.Clone()
         
@@ -200,110 +207,119 @@ class BuffBarLayer {
         Gui, BuffBar: Destroy
     }
 
-    getBuffColor(stateNum) {
+    getBuffColor(buffCol) {
+        switch (buffCol) {
+            case 1: return this.pPenBuff
+            case 2: return this.pPenAura
+            case 3: return this.pPenDebuff
+            case 4: return this.pPenPassive
+        }
+    }
+
+    getBuffGroup(stateNum) {
         switch (stateNum) {
-            case 2: return this.pPenDebuff   ;STATE_POISON
-            case 9: return this.pPenDebuff   ;STATE_AMPLIFYDAMAGE
-            case 11: return this.pPenDebuff   ;STATE_COLD
-            case 19: return this.pPenDebuff   ;STATE_WEAKEN
-            case 23: return this.pPenDebuff   ;STATE_DIMVISION
-            case 24: return this.pPenDebuff   ;STATE_SLOWED
-            case 28: return this.pPenDebuff   ;STATE_CONVICTION
-            case 29: return this.pPenDebuff   ;STATE_CONVICTED
-            case 53: return this.pPenDebuff   ;STATE_CONVERSION
-            case 55: return this.pPenDebuff   ;STATE_IRONMAIDEN
-            case 56: return this.pPenDebuff   ;STATE_TERROR
-            case 57: return this.pPenDebuff   ;STATE_ATTRACT
-            case 58: return this.pPenDebuff   ;STATE_LIFETAP
-            case 59: return this.pPenDebuff   ;STATE_CONFUSE
-            case 60: return this.pPenDebuff   ;STATE_DECREPIFY
-            case 61: return this.pPenDebuff   ;STATE_LOWERRESIST
-            case 113: return this.pPenDebuff   ;STATE_DEFENSE_CURSE
-            case 114: return this.pPenDebuff   ;STATE_BLOOD_MANA
-            case 10: return this.pPenBuff   ;STATE_FROZENARMOR
-            case 12: return this.pPenBuff   ;STATE_INFERNO
-            case 13: return this.pPenBuff   ;STATE_BLAZE
-            case 14: return this.pPenBuff   ;STATE_BONEARMOR
-            case 16: return this.pPenBuff   ;STATE_ENCHANT
-            case 17: return this.pPenBuff   ;STATE_INNERSIGHT
-            case 20: return this.pPenBuff   ;STATE_CHILLINGARMOR
-            case 26: return this.pPenBuff   ;STATE_SHOUT
-            case 30: return this.pPenBuff   ;STATE_ENERGYSHIELD
-            case 31: return this.pPenBuff   ;STATE_VENOMCLAWS
-            case 32: return this.pPenBuff   ;STATE_BATTLEORDERS
-            case 38: return this.pPenBuff   ;STATE_THUNDERSTORM
-            case 51: return this.pPenBuff   ;STATE_BATTLECOMMAND
-            case 87: return this.pPenBuff   ;STATE_SLOWMISSILES
-            case 88: return this.pPenBuff   ;STATE_SHIVERARMOR
-            case 93: return this.pPenBuff   ;STATE_VALKYRIE
-            case 94: return this.pPenBuff   ;STATE_FRENZY
-            case 95: return this.pPenBuff   ;STATE_BERSERK
-            case 101: return this.pPenBuff   ;STATE_HOLYSHIELD
-            case 119: return this.pPenBuff   ;STATE_SHADOWWARRIOR
-            case 120: return this.pPenBuff   ;STATE_FERALRAGE
-            case 139: return this.pPenBuff   ;STATE_WOLF
-            case 140: return this.pPenBuff   ;STATE_BEAR
-            case 144: return this.pPenBuff   ;STATE_HURRICANE
-            case 145: return this.pPenBuff   ;STATE_ARMAGEDDON
-            case 151: return this.pPenBuff   ;STATE_CYCLONEARMOR
-            case 153: return this.pPenBuff   ;STATE_CLOAK_OF_SHADOWS
-            case 156: return this.pPenBuff   ;STATE_CLOAKED
-            case 157: return this.pPenBuff   ;STATE_QUICKNESS
-            case 158: return this.pPenBuff   ;STATE_BLADESHIELD
-            case 159: return this.pPenBuff   ;STATE_FADE
-            case 147: return this.pPenAura   ;STATE_BARBS
-            case 40: return this.pPenAura   ;STATE_BLESSEDAIM
-            case 45: return this.pPenAura   ;STATE_CLEANSING
-            case 42: return this.pPenAura   ;STATE_CONCENTRATION
-            case 28: return this.pPenAura   ;STATE_CONVICTION
-            case 37: return this.pPenAura   ;STATE_DEFIANCE
-            case 49: return this.pPenAura   ;STATE_FANATICISM
-            case 35: return this.pPenAura   ;STATE_HOLYFIRE
-            case 46: return this.pPenAura   ;STATE_HOLYSHOCK
-            case 43: return this.pPenAura   ;STATE_HOLYWIND
-            case 48: return this.pPenAura   ;STATE_MEDITATION
-            case 33: return this.pPenAura   ;STATE_MIGHT
-            case 149: return this.pPenAura   ;STATE_OAKSAGE
-            case 34: return this.pPenAura   ;STATE_PRAYER
-            case 50: return this.pPenAura   ;STATE_REDEMPTION
-            case 4: return this.pPenAura   ;STATE_RESISTCOLD
-            case 3: return this.pPenAura   ;STATE_RESISTFIRE
-            case 5: return this.pPenAura   ;STATE_RESISTLIGHTNING
-            case 8: return this.pPenAura   ;STATE_RESISTALL
-            case 47: return this.pPenAura   ;STATE_SANCTUARY
-            case 41: return this.pPenAura   ;STATE_STAMINA
-            case 36: return this.pPenAura   ;STATE_THORNS
-            case 41: return this.pPenAura   ;STATE_STAMINA
-            case 148: return this.pPenAura   ;STATE_WOLVERINE
-            case 64: return this.pPenPassive   ;STATE_CRITICALSTRIKE
-            case 65: return this.pPenPassive   ;STATE_DODGE
-            case 66: return this.pPenPassive   ;STATE_AVOID
-            case 67: return this.pPenPassive   ;STATE_PENETRATE
-            case 68: return this.pPenPassive   ;STATE_EVADE
-            case 69: return this.pPenPassive   ;STATE_PIERCE
-            case 70: return this.pPenPassive   ;STATE_WARMTH
-            case 71: return this.pPenPassive   ;STATE_FIREMASTERY
-            case 72: return this.pPenPassive   ;STATE_LIGHTNINGMASTERY
-            case 73: return this.pPenPassive   ;STATE_COLDMASTERY
-            case 74: return this.pPenPassive   ;STATE_BLADEMASTERY
-            case 75: return this.pPenPassive   ;STATE_AXEMASTERY
-            case 76: return this.pPenPassive   ;STATE_MACEMASTERY
-            case 77: return this.pPenPassive   ;STATE_POLEARMMASTERY
-            case 78: return this.pPenPassive   ;STATE_THROWINGMASTERY
-            case 79: return this.pPenPassive   ;STATE_SPEARMASTERY
-            case 80: return this.pPenPassive   ;STATE_INCREASEDSTAMINA
-            case 81: return this.pPenPassive   ;STATE_IRONSKIN
-            case 82: return this.pPenPassive   ;STATE_INCREASEDSPEED
-            case 83: return this.pPenPassive   ;STATE_NATURALRESISTANCE
-            case 122: return this.pPenPassive   ;STATE_TIGERSTRIKE
-            case 123: return this.pPenPassive   ;STATE_COBRASTRIKE
-            case 124: return this.pPenPassive   ;STATE_PHOENIXSTRIKE
-            case 125: return this.pPenPassive   ;STATE_FISTSOFFIRE
-            case 126: return this.pPenPassive   ;STATE_BLADESOFICE
-            case 127: return this.pPenPassive   ;STATE_CLAWSOFTHUNDER
-            case 138: return this.pPenPassive   ;STATE_FENRIS_RAGE
-            case 152: return this.pPenPassive   ;STATE_CLAWMASTERY
-            case 155: return this.pPenPassive   ;STATE_WEAPONBLOCK
+            case 2: return 3   ;STATE_POISON
+            case 9: return 3   ;STATE_AMPLIFYDAMAGE
+            case 11: return 3   ;STATE_COLD
+            case 19: return 3   ;STATE_WEAKEN
+            case 23: return 3   ;STATE_DIMVISION
+            case 24: return 3   ;STATE_SLOWED
+            case 28: return 3   ;STATE_CONVICTION
+            case 29: return 3   ;STATE_CONVICTED
+            case 53: return 3   ;STATE_CONVERSION
+            case 55: return 3   ;STATE_IRONMAIDEN
+            case 56: return 3   ;STATE_TERROR
+            case 57: return 3   ;STATE_ATTRACT
+            case 58: return 3   ;STATE_LIFETAP
+            case 59: return 3   ;STATE_CONFUSE
+            case 60: return 3   ;STATE_DECREPIFY
+            case 61: return 3   ;STATE_LOWERRESIST
+            case 113: return 3   ;STATE_DEFENSE_CURSE
+            case 114: return 3   ;STATE_BLOOD_MANA
+            case 10: return 1   ;STATE_FROZENARMOR
+            case 12: return 1   ;STATE_INFERNO
+            case 13: return 1   ;STATE_BLAZE
+            case 14: return 1   ;STATE_BONEARMOR
+            case 16: return 1   ;STATE_ENCHANT
+            case 17: return 1   ;STATE_INNERSIGHT
+            case 20: return 1   ;STATE_CHILLINGARMOR
+            case 26: return 1   ;STATE_SHOUT
+            case 30: return 1   ;STATE_ENERGYSHIELD
+            case 31: return 1   ;STATE_VENOMCLAWS
+            case 32: return 1   ;STATE_BATTLEORDERS
+            case 38: return 1   ;STATE_THUNDERSTORM
+            case 51: return 1   ;STATE_BATTLECOMMAND
+            case 87: return 1   ;STATE_SLOWMISSILES
+            case 88: return 1   ;STATE_SHIVERARMOR
+            case 93: return 1   ;STATE_VALKYRIE
+            case 94: return 1   ;STATE_FRENZY
+            case 95: return 1   ;STATE_BERSERK
+            case 101: return 1   ;STATE_HOLYSHIELD
+            case 119: return 1   ;STATE_SHADOWWARRIOR
+            case 120: return 1   ;STATE_FERALRAGE
+            case 139: return 1   ;STATE_WOLF
+            case 140: return 1   ;STATE_BEAR
+            case 144: return 1   ;STATE_HURRICANE
+            case 145: return 1   ;STATE_ARMAGEDDON
+            case 151: return 1   ;STATE_CYCLONEARMOR
+            case 153: return 1   ;STATE_CLOAK_OF_SHADOWS
+            case 156: return 1   ;STATE_CLOAKED
+            case 157: return 1   ;STATE_QUICKNESS
+            case 158: return 1   ;STATE_BLADESHIELD
+            case 159: return 1   ;STATE_FADE
+            case 147: return 2   ;STATE_BARBS
+            case 40: return 2   ;STATE_BLESSEDAIM
+            case 45: return 2   ;STATE_CLEANSING
+            case 42: return 2   ;STATE_CONCENTRATION
+            case 28: return 2   ;STATE_CONVICTION
+            case 37: return 2   ;STATE_DEFIANCE
+            case 49: return 2   ;STATE_FANATICISM
+            case 35: return 2   ;STATE_HOLYFIRE
+            case 46: return 2   ;STATE_HOLYSHOCK
+            case 43: return 2   ;STATE_HOLYWIND
+            case 48: return 2   ;STATE_MEDITATION
+            case 33: return 2   ;STATE_MIGHT
+            case 149: return 2   ;STATE_OAKSAGE
+            case 34: return 2   ;STATE_PRAYER
+            case 50: return 2   ;STATE_REDEMPTION
+            case 4: return 2   ;STATE_RESISTCOLD
+            case 3: return 2   ;STATE_RESISTFIRE
+            case 5: return 2   ;STATE_RESISTLIGHTNING
+            case 8: return 2   ;STATE_RESISTALL
+            case 47: return 2   ;STATE_SANCTUARY
+            case 41: return 2   ;STATE_STAMINA
+            case 36: return 2   ;STATE_THORNS
+            case 41: return 2   ;STATE_STAMINA
+            case 148: return 2   ;STATE_WOLVERINE
+            case 64: return 4   ;STATE_CRITICALSTRIKE
+            case 65: return 4   ;STATE_DODGE
+            case 66: return 4   ;STATE_AVOID
+            case 67: return 4   ;STATE_PENETRATE
+            case 68: return 4   ;STATE_EVADE
+            case 69: return 4   ;STATE_PIERCE
+            case 70: return 4   ;STATE_WARMTH
+            case 71: return 4   ;STATE_FIREMASTERY
+            case 72: return 4   ;STATE_LIGHTNINGMASTERY
+            case 73: return 4   ;STATE_COLDMASTERY
+            case 74: return 4   ;STATE_BLADEMASTERY
+            case 75: return 4   ;STATE_AXEMASTERY
+            case 76: return 4   ;STATE_MACEMASTERY
+            case 77: return 4   ;STATE_POLEARMMASTERY
+            case 78: return 4   ;STATE_THROWINGMASTERY
+            case 79: return 4   ;STATE_SPEARMASTERY
+            case 80: return 4   ;STATE_INCREASEDSTAMINA
+            case 81: return 4   ;STATE_IRONSKIN
+            case 82: return 4   ;STATE_INCREASEDSPEED
+            case 83: return 4   ;STATE_NATURALRESISTANCE
+            case 122: return 4   ;STATE_TIGERSTRIKE
+            case 123: return 4   ;STATE_COBRASTRIKE
+            case 124: return 4   ;STATE_PHOENIXSTRIKE
+            case 125: return 4   ;STATE_FISTSOFFIRE
+            case 126: return 4   ;STATE_BLADESOFICE
+            case 127: return 4   ;STATE_CLAWSOFTHUNDER
+            case 138: return 4   ;STATE_FENRIS_RAGE
+            case 152: return 4   ;STATE_CLAWMASTERY
+            case 155: return 4   ;STATE_WEAPONBLOCK
         }
     }
 }

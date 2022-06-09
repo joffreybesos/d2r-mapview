@@ -160,7 +160,6 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
             , regionHeight := gameHeight - topMargin + windowTopMargin
         }
         ;ToolTip % "`n`n`n`n" regionX " " regionY " " regionWidth " " regionHeight
-        ; WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapHwnd1%
         ;regionHeight := regionHeight - (gameHeight / 5)
         WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapHwnd1%
         gameHeight := gameHeight - (gameHeight / 5)

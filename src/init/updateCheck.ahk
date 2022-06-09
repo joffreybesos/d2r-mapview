@@ -10,14 +10,24 @@ CheckForUpdates() {
         WriteLog("Latest version on Github is " latesttag " this version is " version)
         currenttagarr := StrSplit(version , ".")
         latesttagarr  := StrSplit(latesttag , ".")
-        foundnewer := false
-        if (currenttagarr[1] < latesttagarr[1]) {
-            foundnewer := true
-        } else if (currenttagarr[2] < latesttagarr[2]) {
-            foundnewer := true
-        } else if (currenttagarr[3] < latesttagarr[3]) {
-            foundnewer := true
+        foundnewer := true
+        if (currenttagarr[1] > latesttagarr[1]) {
+            foundnewer := false
+        } else if (currenttagarr[2] > latesttagarr[2]) {
+            foundnewer := false
+        } else if (currenttagarr[3] > latesttagarr[3]) {
+            foundnewer := false
         }
+
+        sameVersion := true
+        Loop, 3
+        {
+            sameVersion := (currenttagarr[A_Index] == latesttagarr[A_Index]) ? sameVersion : false
+        }
+        if (sameVersion) {
+            foundnewer := false
+        }
+
 
         if (foundnewer) {
             WriteLog("Found newer version to download")

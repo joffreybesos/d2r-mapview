@@ -29,7 +29,7 @@ drawExits(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
             , correctedPos := correctPos(settings, exitX, exitY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             , exitX := correctedPos["x"] + centerLeftOffset
             , exitY := correctedPos["y"] + centerTopOffset
-            drawFloatingText(unitsLayer, exitX, exitY-10, exitTextSize, exitTextColor, false, exocetFont, exitLabel.name)
+            drawFloatingText(unitsLayer, exitX, exitY-10, exitTextSize, exitTextColor, false, true, exocetFont, exitName)
         }
     }
 }

@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## [2.9.14] - 2021-06-09 - Minor improvements
+
+- Non-english text won't wrap the last character anymore
+- Buffs will now be grouped by type (buffs, auras, debuffs)
+
+## [2.9.12] - 2021-06-09 - Improvements to seed generator
+
+- Seed generater has been replaced with a much smaller dll
+- Executable size is now much smaller (69mb down to 7mb)
+- Probably less false flags for Windows smart scanner
+
+## [2.9.11] - 2021-06-09 - Bug fix
+
+- Fixed bug with auto-update where the same version would count as older
+
+## [2.9.10] - 2021-06-09 - Bug fix
+
+- Issue with maps not loading in certain scenarios should be fixed.
+- Issue with voices not loading should error silently
+- Reverted trimming off the bottom of the map
+
+## [2.9.9] - 2021-06-08 - Fix after blizzard patch
+
+- Fix following blizzard patch (finally)
+- Big thanks to @Rabbs and others at MapAssist!
+- I'll probably have a fast follow from this to reduce file size and help performance
+- This hasn't been tested thoroughly but thought I should send it out.
+- Please leave feedback in the discord
+
 ## [2.9.8] - 2021-06-03 - Buff tool tips
 
 - Now when you mouse over the buff icon you'll see the name

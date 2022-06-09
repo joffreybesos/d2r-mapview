@@ -13,9 +13,9 @@ drawPlayers(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageD
             playery := correctedPos["y"] + centerTopOffset
             if (settings["showOtherPlayerNames"]) {
                 if (player["isCorpse"]) {
-                    drawFloatingText(unitsLayer, playerx+1, playery-(9.2 * scale), 11 * scale, "ffff00ff", true, formalFont, player["playerName"])
+                    drawFloatingText(unitsLayer, playerx+1, playery-(9.2 * scale), 11 * scale, "ffff00ff", true, true, formalFont, player["playerName"])
                 } else {
-                    drawFloatingText(unitsLayer, playerx+1, playery-(9.2 * scale), 11 * scale, "ff00ff00", true, formalFont, player["playerName"])
+                    drawFloatingText(unitsLayer, playerx+1, playery-(9.2 * scale), 11 * scale, "ff00ff00", true, true,formalFont, player["playerName"])
                 }
             }
             

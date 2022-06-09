@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ## [2.9.14] - 2021-06-09 - Minor improvements
 
-- Non-english player names won't wrap the last character anymore
+- Non-english text won't wrap the last character anymore
 - Buffs will now be grouped by type (buffs, auras, debuffs)
 
 ## [2.9.12] - 2021-06-09 - Improvements to seed generator

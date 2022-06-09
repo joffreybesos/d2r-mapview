@@ -33,6 +33,7 @@ class BuffBarLayer {
         this.hdc := CreateCompatibleDC()
         this.obm := SelectObject(this.hdc, this.hbm)
         this.G := Gdip_GraphicsFromHDC(this.hdc)
+        ; this.pPenDebug := Gdip_CreatePen(0xffFF00FF, 5)
         this.pPenBuff := Gdip_CreatePen(0xff00FF00, 2)
         this.pPenDebuff := Gdip_CreatePen(0xffff0000, 2)
         this.pPenPassive := Gdip_CreatePen(0xffdddddd, 2)
@@ -52,22 +53,34 @@ class BuffBarLayer {
                 
                 iconi := 0
                 xoffset := this.textBoxWidth / 2 - ((this.totalicons * this.imageSize) / 2)
-                for k, iconName in this.iconsToShow
+                foundToolTip := false
+                Loop, 3
                 {
-                    iconx := xoffset + (iconi * this.imageSize)
-                    boxx := this.leftMargin + iconx
-                    boxy := this.topMargin + this.yoffset
-                    if (mouseX > boxx and mouseX < (boxx + this.imageSize)) {
-                        if (mouseY > boxy and mouseY < (boxy + this.imageSize)) {
-                            ;Gdip_DrawImage(this.G, buffBitmaps[iconName.fileName], iconx, this.yoffset,this.imageSize, this.imageSize)
-                            ;Gdip_DrawRectangle(this.G, this.pPenBuff, iconx, this.yoffset, this.imageSize, this.imageSize)
-                            ; OutputDebug, % "Hover " iconName.num " " iconName.fileName "`n"
+                    buffColor := A_Index
+                    for k, iconName in this.iconsToShow
+                    {
+                        thisBuffColor := this.getBuffGroup(iconName.num)
+                        if (thisBuffColor == buffColor) {
+                            iconx := xoffset + (iconi * this.imageSize)
+                            boxx := this.leftMargin + iconx
+                            boxy := this.topMargin + this.yoffset
+                            if (mouseX > boxx and mouseX < (boxx + this.imageSize)) {
+                                if (mouseY > boxy and mouseY < (boxy + this.imageSize)) {
+                                    ;Gdip_DrawImage(this.G, buffBitmaps[iconName.fileName], iconx, this.yoffset,this.imageSize, this.imageSize)
+                                    ;Gdip_DrawRectangle(this.G, this.pPenDebug, iconx, this.yoffset-5, this.imageSize, this.imageSize)
+                                    ;OutputDebug, % "Hover " iconName.num " " iconName.fileName "`n"
 
-                            this.showToolTip := iconName.num
-                            break
+                                    this.showToolTip := iconName.num
+                                    foundToolTip := true
+                                    break
+                                }
+                            }
+                            iconi++
                         }
                     }
-                    iconi++
+                    if (foundToolTip) {
+                        break
+                    }
                 }
             }
         }

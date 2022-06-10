@@ -180,6 +180,11 @@ readSettings(settingsFile, ByRef settings) {
     } else {
         gameWindowId := "ahk_exe D2R.exe"  ;default to normal window id
     }
+    ; id window by PID
+    WinGet, PID, PID, %gameWindowId%
+    if (PID) {
+        gameWindowID := "ahk_pid " . PID
+    }
     settings["gameWindowId"] := gameWindowId
 
     baseUrl := settings["baseUrl"]

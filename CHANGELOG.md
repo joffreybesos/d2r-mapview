@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Non-english text won't wrap the last character anymore
 - Buffs will now be grouped by type (buffs, auras, debuffs)
 - Conviction aura buff icon will no longer say Critical Strike (thanks Timpa)
+- When loading between maps you won't see incorrect lines to exits anymore
 
 ## [2.9.12] - 2021-06-09 - Improvements to seed generator
 

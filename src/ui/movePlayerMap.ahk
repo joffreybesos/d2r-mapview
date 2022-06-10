@@ -80,6 +80,9 @@ MovePlayerMap(ByRef settings, ByRef d2rprocess, ByRef pathAddress, ByRef imageDa
     WinGetPos, X7, Y7, , , ahk_id %mapHwnd7%
     WinGetPos, X8, Y8, , , ahk_id %mapHwnd8%
     WinGetPos, X9, Y9, , , ahk_id %mapHwnd9%
+    if (ticktock == 6) {
+        OutputDebug, % X1 "," Y1 " " X2 "," Y2 " " X3 "," Y3 " " X4 "," Y4 " " X5 "," Y5 " " X6 "," Y6 " " X7 "," Y7 " " X8 "," Y8 " " X9 "," Y9 "`n"
+    }
 
     newX := Round(leftMargin + (leftDiff/2))
     newY := Round(topMargin + (topDiff/2))

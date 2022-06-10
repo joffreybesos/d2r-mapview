@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.9.13] - 2021-06-09 - Minor improvements
+## [2.9.13] - 2021-06-11 - Minor improvements
 
 - Non-english text won't wrap the last character anymore
 - Buffs will now be grouped by type (buffs, auras, debuffs)
@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 - When loading between maps you won't see incorrect lines to exits anymore
 - D2R multi session - MH will 'lock' to most recent active window, to run multiple MHs on multiple sessions, make a separate copy of MV
 - Fixed up some error message localisation (anyone who wants to help localisation let me know)
-- Removed old 'edges' setting
+- Removed 'edges' setting
 
 ## [2.9.12] - 2021-06-09 - Improvements to seed generator
 

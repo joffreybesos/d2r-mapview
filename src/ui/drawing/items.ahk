@@ -72,7 +72,7 @@ announceItem(settings, item, alert) {
     if (!seenItems[item.getHash()]) {
         if (!item.isQuestItem(item.txtFileNo)) {
             ; seen item for the first time
-            WriteLog("ITEMLOG: Found item '" item.getTextToSpeech() "' at '" item.itemx ", " item.itemy "' matched to alert '" alert.name "'")
+            WriteLog("ITEMLOG: Found item '" item.getTextToSpeech() "' at '" item.itemx ", " item.itemy "' matched to alert '" alert.name "' " item.getHash())
             if (settings["allowTextToSpeech"]) {
                 SetFormat Integer, D
                 volume := Round(settings["textToSpeechVolume"] + 0)

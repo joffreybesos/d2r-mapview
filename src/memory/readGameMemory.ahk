@@ -11,7 +11,7 @@
 global lastdwInitSeedHash1
 global lastdwInitSeedHash2
 global lastdwEndSeedHash1
- 
+global playerLevel 
 readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     static items
     static objects

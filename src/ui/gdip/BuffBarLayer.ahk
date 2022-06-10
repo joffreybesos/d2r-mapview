@@ -358,7 +358,6 @@ getStateIcon(stateNum) {
         case 24: return "Slowed"   ;STATE_SLOWED
         case 26: return "Shout"   ;STATE_SHOUT
         case 28: return "Conviction"   ;STATE_CONVICTION
-        case 28: return "CriticalStrike"   ;STATE_CONVICTION
         case 29: return "Convicted"   ;STATE_CONVICTED
         case 30: return "EnergyShield"   ;STATE_ENERGYSHIELD
         case 31: return "VenomClaws"   ;STATE_VENOMCLAWS
@@ -388,7 +387,7 @@ getStateIcon(stateNum) {
         case 59: return "Confuse"   ;STATE_CONFUSE
         case 60: return "Decrepify"   ;STATE_DECREPIFY
         case 61: return "LowerResist"   ;STATE_LOWERRESIST
-        ;case 64: return "CycloneArmor"   ;STATE_CRITICALSTRIKE
+        ;case 64: return "CriticalStrike"   ;STATE_CRITICALSTRIKE
         ;case 65: return "Dodge"   ;STATE_DODGE
         ;case 66: return "Avoid"   ;STATE_AVOID
         ;case 67: return "Penetrate"   ;STATE_PENETRATE

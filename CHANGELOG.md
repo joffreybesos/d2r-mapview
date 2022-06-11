@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - D2R multi session - MH will 'lock' to most recent active window, to run multiple MHs on multiple sessions, make a separate copy of MV
 - Fixed up some error message localisation (anyone who wants to help localisation let me know)
 - Removed 'edges' setting
+- Refactored how map images are handled
 
 ## [2.9.12] - 2021-06-09 - Improvements to seed generator
 

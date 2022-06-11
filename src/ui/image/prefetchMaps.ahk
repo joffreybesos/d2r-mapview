@@ -3,7 +3,7 @@ SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
 
-
+;deprecated
 prefetchMaps(settings, gameMemoryData) {
     
     baseUrl:= settings["baseUrl"]

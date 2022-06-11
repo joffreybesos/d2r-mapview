@@ -1,13 +1,13 @@
 
-drawPlayers(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageData, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset) {
+drawPlayers(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef mapImage, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset) {
     otherPlayers := gameMemoryData["otherPlayers"]
     for index, player in otherPlayers
     {
         
         if (gameMemoryData["playerName"] != player["playerName"] or player["isCorpse"]) {
             ;WriteLog(unitsLayer.GameMemoryData["playerName"] " " player["playerName"])
-            playerx := ((player["x"] - imageData["mapOffsetX"]) * serverScale) + padding
-            playery := ((player["y"] - imageData["mapOffsetY"]) * serverScale) + padding
+            playerx := ((player["x"] - mapImage["mapOffsetX"]) * serverScale) + padding
+            playery := ((player["y"] - mapImage["mapOffsetY"]) * serverScale) + padding
             correctedPos := correctPos(settings, playerx, playery, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             playerx := correctedPos["x"] + centerLeftOffset
             playery := correctedPos["y"] + centerTopOffset

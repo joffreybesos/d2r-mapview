@@ -2,7 +2,7 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageData, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset) {
+drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef mapImage, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset) {
     mobs := gameMemoryData["mobs"]
 
     ; timeStamp("drawMonsters-showDeadMobs")
@@ -10,8 +10,8 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
         for index, mob in mobs
         {
             if (mob["mode"] == 0 or mob["mode"] == 12) { ; dead
-                mobx := ((mob["x"] - imageData["mapOffsetX"]) * serverScale) + padding
-                , moby := ((mob["y"] - imageData["mapOffsetY"]) * serverScale) + padding
+                mobx := ((mob["x"] - mapImage["mapOffsetX"]) * serverScale) + padding
+                , moby := ((mob["y"] - mapImage["mapOffsetY"]) * serverScale) + padding
                 , correctedPos := correctPos(settings, mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 , mobx := correctedPos["x"] + centerLeftOffset
                 , moby := correctedPos["y"] + centerTopOffset
@@ -25,8 +25,8 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
     if (settings["showNormalMobs"]) {
         for index, mob in mobs
         {
-            mobx := ((mob["x"] - imageData["mapOffsetX"]) * serverScale) + padding
-            moby := ((mob["y"] - imageData["mapOffsetY"]) * serverScale) + padding
+            mobx := ((mob["x"] - mapImage["mapOffsetX"]) * serverScale) + padding
+            moby := ((mob["y"] - mapImage["mapOffsetY"]) * serverScale) + padding
             correctedPos := correctPos(settings, mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             mobx := correctedPos["x"] + centerLeftOffset
             moby := correctedPos["y"] + centerTopOffset
@@ -104,8 +104,8 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
     for index, mob in mobs
     {
         
-        mobx := ((mob["x"] - imageData["mapOffsetX"]) * serverScale) + padding
-        moby := ((mob["y"] - imageData["mapOffsetY"]) * serverScale) + padding
+        mobx := ((mob["x"] - mapImage["mapOffsetX"]) * serverScale) + padding
+        moby := ((mob["y"] - mapImage["mapOffsetY"]) * serverScale) + padding
         correctedPos := correctPos(settings, mobx, moby, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
         mobx := correctedPos["x"] + centerLeftOffset
         moby := correctedPos["y"] + centerTopOffset

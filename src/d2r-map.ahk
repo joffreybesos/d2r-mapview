@@ -23,6 +23,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\itemfilter\ItemAlert.ahk
 #Include %A_ScriptDir%\types\Stats.ahk
 #Include %A_ScriptDir%\types\Skills.ahk
+#Include %A_ScriptDir%\types\MapImage.ahk
 #Include %A_ScriptDir%\memory\initMemory.ahk
 #Include %A_ScriptDir%\memory\readGameMemory.ahk
 #Include %A_ScriptDir%\memory\isAutomapShown.ahk
@@ -33,7 +34,6 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\memory\readInvItems.ahk
 #Include %A_ScriptDir%\memory\readStates.ahk
 #Include %A_ScriptDir%\memory\readVendorItems.ahk
-#Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
 #Include %A_ScriptDir%\ui\image\prefetchMaps.ahk
 #Include %A_ScriptDir%\ui\image\loadBitmaps.ahk
@@ -122,6 +122,7 @@ global redrawMap := 1
 global offsets := []
 global hudBitmaps := loadBitmaps()
 global buffBitmaps := loadBuffIcons()
+global mapImageList := []
 
 CreateSettingsGUI(settings, localizedStrings)
 settingupGUI := false
@@ -257,6 +258,7 @@ While 1 {
                 items := []
                 seenItems := []
                 itemLogItems := []
+                mapImageList := []
                 gameInfoLayer.updateSessionStart(session.startTime)
                 ;gameInfoLayer.drawInfoText(currentFPS)
                 newGame := 0
@@ -274,7 +276,14 @@ While 1 {
                 Gui, Units: Hide ; hide player dot
                 ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
                 ; Download map
-                downloadMapImage(settings, gameMemoryData, imageData, 0)
+                levelNo := gameMemoryData["levelNo"]
+                if (mapImageList[levelNo]) {
+                    ; already downloaded
+                } else {
+                    mapImageList[levelNo] := new MapImage(settings, gameMemoryData["mapSeed"], gameMemoryData["difficulty"], levelNo, mapImageList)
+                }
+                ;fetchNewImage(settings, gameMemoryData["mapSeed"], gameMemoryData["difficulty"], gameMemoryData["levelNo"], mapImageList)
+                ;downloadMapImage(settings, gameMemoryData, imageData, 0)
 
                 ; Show Map
                 if (lastlevel == "") {
@@ -282,9 +291,9 @@ While 1 {
                     Gui, Units: Show, NA
                 }
                 
-                if (settings["enablePrefetch"]) {
-                    prefetchMaps(settings, gameMemoryData)
-                }
+                ; if (settings["enablePrefetch"]) {
+                ;     prefetchMaps(settings, gameMemoryData)
+                ; }
                 mapLoading := 0
                 Gui, LoadingText: Destroy ; remove loading text
                 
@@ -293,13 +302,10 @@ While 1 {
             if (redrawMap) {
                 WriteLogDebug("Redrawing map")
                 levelNo := gameMemoryData["levelNo"]
-                IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
-                IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
-                IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0
-                imageData["levelScale"] := levelScale
-                imageData["levelxmargin"] := levelxmargin
-                imageData["levelymargin"] := levelymargin
-                ShowMap(settings, mapHwnd1, imageData, gameMemoryData, uiData)
+                thisMapImage := mapImageList[levelNo]
+                thisMapImage.refreshMapMargins()
+                
+                ShowMap(settings, mapHwnd1, thisMapImage, gameMemoryData, uiData)
 
                 unitsLayer.delete()
                 unitsLayer := new UnitsLayer(uiData)
@@ -311,12 +317,12 @@ While 1 {
                 redrawMap := 0
             }
             ; timeStamp("ShowUnits")
-            ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData, gameMemoryData, shrines, uiData)
+            ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, mapImageList[levelNo], gameMemoryData, shrines, uiData)
             ; timeStamp("ShowUnits")
             uiAssistLayer.drawMonsterBar(gameMemoryData["hoveredMob"])
 
             if (settings["centerMode"] and gameMemoryData["pathAddress"]) {
-                MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], mapHwnd1, unitHwnd1, imageData, uiData)
+                MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], mapHwnd1, unitHwnd1, mapImageList[levelNo], uiData)
             }
             if (Mod(ticktock, 6)) {
                 checkAutomapVisibility(d2rprocess, gameMemoryData)

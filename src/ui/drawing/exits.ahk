@@ -2,10 +2,10 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-drawExits(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageData, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset, xPosDot, yPosDot) {
+drawExits(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef mapImage, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset, xPosDot, yPosDot) {
 
     ; ;draw exit lines
-    exitsHeader := imageData["exits"]
+    exitsHeader := mapImage["exits"]
     if (!settings["centerMode"]) {
         hexOpacity := Round(settings["opacity"] * 255)
         SetFormat, integer, hex

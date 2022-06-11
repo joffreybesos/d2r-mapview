@@ -2,13 +2,13 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-drawLines(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageData, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset, xPosDot, yPosDot) {
+drawLines(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef mapImage, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset, xPosDot, yPosDot) {
     if (xPosDot > 1 and yPosDot > 1) {
         ; draw way point line
         if (settings["showWaypointLine"]) {
             ;WriteLog(settings["showWaypointLine"])
             if (gameMemoryData["levelNo"] != 1 and gameMemoryData["levelNo"] != 40 and gameMemoryData["levelNo"] != 75 and gameMemoryData["levelNo"] != 103 and gameMemoryData["levelNo"] != 109) { ; not in town
-                waypointHeader := imageData["waypoint"]
+                waypointHeader := mapImage["waypoint"]
                 if (waypointHeader) {
                     wparray := StrSplit(waypointHeader, ",")
                     , waypointX := (wparray[1] * serverScale) + padding
@@ -24,7 +24,7 @@ drawLines(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
 
         ; ;draw exit lines
         if (settings["showNextExitLine"]) {
-            exitsHeader := imageData["exits"]
+            exitsHeader := mapImage["exits"]
             if (exitsHeader) {
                 Loop, parse, exitsHeader, `|
                 {
@@ -49,7 +49,7 @@ drawLines(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
 
         ; ;draw boss lines
         if (settings["showBossLine"]) {
-            bossHeader := imageData["bosses"]
+            bossHeader := mapImage["bosses"]
             if (bossHeader) {
                 bossArray := StrSplit(bossHeader, ",")
                 ;bossArray[1] ; name of boss
@@ -66,7 +66,7 @@ drawLines(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageDat
         ; ;draw quest lines
         if (settings["showQuestLine"]) {
             
-            questsHeader := imageData["quests"]
+            questsHeader := mapImage["quests"]
             
             if (questsHeader) {
                 Loop, parse, questsHeader, `|

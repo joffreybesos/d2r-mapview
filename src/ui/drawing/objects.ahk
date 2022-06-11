@@ -1,6 +1,6 @@
 
 
-drawObjects(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageData, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef shrines, ByRef centerLeftOffset, ByRef centerTopOffset) {
+drawObjects(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef mapImage, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef shrines, ByRef centerLeftOffset, ByRef centerTopOffset) {
     if (settings["showPortals"] or settings["showChests"]) {
         gameObjects := gameMemoryData["objects"]
         
@@ -9,8 +9,8 @@ drawObjects(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageD
             if (settings["showPortals"]) {
                 ;WriteLog(object["txtFileNo"] " " object["isRedPortal"])
                 if (object["isPortal"]) {
-                    objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
-                    , objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
+                    objectx := ((object["objectx"] - mapImage["mapOffsetX"]) * serverScale) + padding
+                    , objecty := ((object["objecty"] - mapImage["mapOffsetY"]) * serverScale) + padding
                     , correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                     , objectx := correctedPos["x"] + centerLeftOffset
                     , objecty := correctedPos["y"] + centerTopOffset
@@ -33,8 +33,8 @@ drawObjects(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageD
                     }
                 }
                 if (object["isRedPortal"]) {
-                    objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
-                    , objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
+                    objectx := ((object["objectx"] - mapImage["mapOffsetX"]) * serverScale) + padding
+                    , objecty := ((object["objecty"] - mapImage["mapOffsetY"]) * serverScale) + padding
                     , correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                     , objectx := correctedPos["x"] + centerLeftOffset
                     , objecty := correctedPos["y"] + centerTopOffset
@@ -49,8 +49,8 @@ drawObjects(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageD
             if (settings["showChests"]) {
                 if (object["isChest"]) {
                     if (object["mode"] == 0) {
-                        objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
-                        , objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
+                        objectx := ((object["objectx"] - mapImage["mapOffsetX"]) * serverScale) + padding
+                        , objecty := ((object["objecty"] - mapImage["mapOffsetY"]) * serverScale) + padding
                         , correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                         , objectx := correctedPos["x"] + centerLeftOffset
                         , objecty := correctedPos["y"] + centerTopOffset
@@ -91,8 +91,8 @@ drawObjects(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageD
         {
             if (object["levelNo"] == gameMemoryData["levelNo"]) {
 
-                objectx := ((object["objectx"] - imageData["mapOffsetX"]) * serverScale) + padding
-                , objecty := ((object["objecty"] - imageData["mapOffsetY"]) * serverScale) + padding
+                objectx := ((object["objectx"] - mapImage["mapOffsetX"]) * serverScale) + padding
+                , objecty := ((object["objecty"] - mapImage["mapOffsetY"]) * serverScale) + padding
                 , correctedPos := correctPos(settings, objectx, objecty, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
                 , objectx := correctedPos["x"] + centerLeftOffset
                 , objecty := correctedPos["y"] + centerTopOffset

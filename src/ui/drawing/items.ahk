@@ -1,5 +1,5 @@
 
-drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageData, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset) {
+drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef mapImage, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset) {
     ; draw item alerts
     SetFormat Integer, D
     items := gameMemoryData["items"]
@@ -8,8 +8,8 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef ima
     {
         alert := itemAlertList.findAlert(item)
         if (alert) {
-            itemx := ((item.itemx - imageData["mapOffsetX"]) * serverScale) + padding
-            , itemy := ((item.itemy - imageData["mapOffsetY"]) * serverScale) + padding
+            itemx := ((item.itemx - mapImage["mapOffsetX"]) * serverScale) + padding
+            , itemy := ((item.itemy - mapImage["mapOffsetY"]) * serverScale) + padding
             , correctedPos := correctPos(settings, itemx, itemy, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             , itemx := correctedPos["x"] + centerLeftOffset
             , itemy := correctedPos["y"] + centerTopOffset

@@ -2,7 +2,7 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-drawMissiles(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef imageData, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset) {
+drawMissiles(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef mapImage, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset) {
     static oldMissilex
     static oldMissiley
     
@@ -10,8 +10,8 @@ drawMissiles(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef image
     {   
         for each, missile in missilearray
         {
-            missilex := ((missile["x"] - imageData["mapOffsetX"]) * serverScale) + padding
-            , missiley := ((missile["y"] - imageData["mapOffsetY"]) * serverScale) + padding
+            missilex := ((missile["x"] - mapImage["mapOffsetX"]) * serverScale) + padding
+            , missiley := ((missile["y"] - mapImage["mapOffsetY"]) * serverScale) + padding
             , correctedPos := correctPos(settings, missilex, missiley, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
             , missilex := correctedPos["x"] + centerLeftOffset
             , missiley := correctedPos["y"] + centerTopOffset

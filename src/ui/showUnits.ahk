@@ -10,7 +10,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\drawing\objects.ahk
 #Include %A_ScriptDir%\ui\drawing\otherplayers.ahk
 
-ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByRef imageData, ByRef gameMemoryData, ByRef shrines, ByRef uiData) {
+ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByRef mapImage, ByRef gameMemoryData, ByRef shrines, ByRef uiData) {
     ; timeStamp("unitsStart")
     scale:= settings["scale"]
     , leftMargin:= settings["leftMargin"]
@@ -18,9 +18,9 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
     , Width := uiData["sizeWidth"]
     , Height := uiData["sizeHeight"]
     , levelNo:= gameMemoryData["levelNo"]
-    , levelScale := imageData["levelScale"]
-    , levelxmargin := imageData["levelxmargin"]
-    , levelymargin := imageData["levelymargin"]
+    , levelScale := mapImage["levelScale"]
+    , levelxmargin := mapImage["levelxmargin"]
+    , levelymargin := mapImage["levelymargin"]
     , scale := levelScale * scale
     , leftMargin := leftMargin + levelxmargin
     , topMargin := topMargin + levelymargin
@@ -46,8 +46,8 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
     ; get relative position of player in world
     ; xpos is absolute world pos in game
     ; each map has offset x and y which is absolute world position
-    , xPosDot := ((gameMemoryData["xPos"] - imageData["mapOffsetX"]) * serverScale) + padding
-    , yPosDot := ((gameMemoryData["yPos"] - imageData["mapOffsetY"]) * serverScale) + padding
+    , xPosDot := ((gameMemoryData["xPos"] - mapImage["mapOffsetX"]) * serverScale) + padding
+    , yPosDot := ((gameMemoryData["yPos"] - mapImage["mapOffsetY"]) * serverScale) + padding
     , correctedPos := correctPos(settings, xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
     , xPosDot := correctedPos["x"]
     , yPosDot := correctedPos["y"]
@@ -70,46 +70,46 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
     ;Missiles
     if (settings["showPlayerMissiles"] or settings["showEnemyMissiles"]) {
         ; timeStamp("drawMissiles")
-        drawMissiles(unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
+        drawMissiles(unitsLayer, settings, gameMemoryData, mapImage, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
         ; timeStamp("drawMissiles")
     }
 
     ; draw monsters
     if (settings["showNormalMobs"] or settings["showDeadMobs"] or settings["showUniqueMobs"] or settings["showBosses"]) {
         ; timeStamp("drawMonsters")
-        drawMonsters(unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
+        drawMonsters(unitsLayer, settings, gameMemoryData, mapImage, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
         ; timeStamp("drawMonsters")
     }
 
     ; draw portals
     if (settings["showPortals"] or settings["showChests"] or settings["showShrines"]) {
         ; timeStamp("drawObjects")
-        drawObjects(unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, shrines, centerLeftOffset, centerTopOffset)
+        drawObjects(unitsLayer, settings, gameMemoryData, mapImage, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, shrines, centerLeftOffset, centerTopOffset)
         ; timeStamp("drawObjects")
     }
 
     ; draw lines
     if (settings["showWaypointLine"] or settings["showNextExitLine"] or settings["showBossLine"]) {
         ; timeStamp("drawLines")
-        drawLines(unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset, xPosDot, yPosDot)
+        drawLines(unitsLayer, settings, gameMemoryData, mapImage, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset, xPosDot, yPosDot)
         ; timeStamp("drawLines")
     }
 
     ; timeStamp("drawExits")
-    drawExits(unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset, xPosDot, yPosDot)
+    drawExits(unitsLayer, settings, gameMemoryData, mapImage, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset, xPosDot, yPosDot)
     ; timeStamp("drawExits")
 
     ; draw other players
     if (settings["showOtherPlayers"]) {
         ; timeStamp("drawPlayers")
-        drawPlayers(unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
+        drawPlayers(unitsLayer, settings, gameMemoryData, mapImage, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
         ; timeStamp("drawPlayers")
      }
 
     ; show item alerts
     if (settings["enableItemFilter"]) {
         ; timeStamp("drawItemAlerts")
-        drawItemAlerts(unitsLayer, settings, gameMemoryData, imageData, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
+        drawItemAlerts(unitsLayer, settings, gameMemoryData, mapImage, serverScale, scale, padding, Width, Height, scaledWidth, scaledHeight, centerLeftOffset, centerTopOffset)
         ; timeStamp("drawItemAlerts")
     }
 

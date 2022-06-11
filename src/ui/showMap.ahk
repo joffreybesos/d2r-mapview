@@ -2,17 +2,17 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
+ShowMap(ByRef settings, ByRef mapHwnd1, ByRef mapImage, ByRef gameMemoryData, ByRef uiData) {
     
     scale:= settings["scale"]
     leftMargin:= settings["leftMargin"]
     topMargin:= settings["topMargin"]
     opacity:= settings["opacity"]
-    sFile := imageData["sFile"] ; downloaded map image
     levelNo:= gameMemoryData["levelNo"]
-    levelScale := imageData["levelScale"]
-    levelxmargin := imageData["levelxmargin"]
-    levelymargin := imageData["levelymargin"]
+    
+    levelScale := mapImage["levelScale"]
+    levelxmargin := mapImage["levelxmargin"]
+    levelymargin := mapImage["levelymargin"]
     scale := levelScale * scale
     leftMargin := leftMargin + levelxmargin
     topMargin := topMargin + levelymargin
@@ -33,21 +33,22 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
         MsgBox "Gdiplus failed to start. Please ensure you have gdiplus on your system"
         ExitApp
     }
-
-    pBitmap := Gdip_CreateBitmapFromFile(sFile)
+    
+    pBitmap := Gdip_CreateBitmapFromFile(mapImage.sFile)
     If !pBitmap
     {
-        WriteLog("ERROR: Could not load map image " sFile)
+        WriteLog("ERROR: Could not load map image " mapImage.sFile)
         ExitApp
     }
+    
     Width := Gdip_GetImageWidth(pBitmap)
     Height := Gdip_GetImageHeight(pBitmap)
 
-    if (imageData["prerotated"]) {
+    if (mapImage["prerotated"]) {
         RWidth := Width
         RHeight := Height
-        Width := imageData["originalWidth"]
-        Height := imageData["originalHeight"]
+        Width := mapImage["originalWidth"]
+        Height := mapImage["originalHeight"]
     } else {
         Gdip_GetRotatedDimensions(Width, Height, Angle, RWidth, RHeight)
     }
@@ -63,7 +64,7 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
     Gdip_SetSmoothingMode(G, 4) 
     G := Gdip_GraphicsFromHDC(hdc)
     
-    if (!imageData["prerotated"]) {
+    if (!mapImage["prerotated"]) {
         pBitmap := Gdip_RotateBitmapAtCenter(pBitmap, Angle) ; rotates bitmap for 45 degrees. Disposes of pBitmap.
     }
 
@@ -71,8 +72,8 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
         ; get relative position of player in world
         ; xpos is absolute world pos in game
         ; each map has offset x and y which is absolute world position
-        xPosDot := ((gameMemoryData["xPos"] - imageData["mapOffsetX"]) * serverScale) + padding
-        yPosDot := ((gameMemoryData["yPos"] - imageData["mapOffsetY"]) * serverScale) + padding
+        xPosDot := ((gameMemoryData["xPos"] - mapImage["mapOffsetX"]) * serverScale) + padding
+        yPosDot := ((gameMemoryData["yPos"] - mapImage["mapOffsetY"]) * serverScale) + padding
 
         correctedPos := findNewPos(xPosDot, yPosDot, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
         xPosDot := correctedPos["x"]
@@ -93,12 +94,6 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
         WinMove, ahk_id %mapHwnd1%,, windowLeftMargin+leftMargin, windowTopMargin+topMargin
         WinMove, ahk_id %unitHwnd1%,, windowLeftMargin+leftMargin, windowTopMargin+topMargin
     }
-
-    ; WriteLog(scaledWidth " " scaledHeight " " RWidth " " RHeight " " xPosDot " " yPosDot)
-    ; seed := gameMemoryData["mapSeed"]
-    ; sOutput := A_ScriptDir "\" seed "_" levelNo ".png"
-    ; Gdip_SaveBitmapToFile(pBitmap, sOutput)
-    ; WriteLog(Width " " Height " " RWidth " " RHeight " " scale)
 
     SelectObject(hdc, obm)
     DeleteObject(hbm)

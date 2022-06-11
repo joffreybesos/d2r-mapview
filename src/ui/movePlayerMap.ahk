@@ -5,7 +5,7 @@ SetWorkingDir, %A_ScriptDir%
 global lastLeftMargin := 0
 global lastTopMargin := 0
 
-MovePlayerMap(ByRef settings, ByRef d2rprocess, ByRef pathAddress, ByRef imageData, ByRef uiData) {
+MovePlayerMap(ByRef settings, ByRef d2rprocess, ByRef pathAddress, ByRef imageData, ByRef uiData, ByRef mapList, ByRef levelNo) {
 
     ; player position
     d2rprocess.readRaw(pathAddress, pPathBuffer, 16)
@@ -20,7 +20,7 @@ MovePlayerMap(ByRef settings, ByRef d2rprocess, ByRef pathAddress, ByRef imageDa
     , padding := settings["padding"]
     , serverScale := settings["serverScale"]
     , scale := settings["centerModeScale"]
-    WinGetPos, X, Y, Width, Height, ahk_id %mapHwnd1%
+    
 
     Width := uiData["sizeWidth"]
     , Height := uiData["sizeHeight"]
@@ -67,36 +67,26 @@ MovePlayerMap(ByRef settings, ByRef d2rprocess, ByRef pathAddress, ByRef imageDa
         leftDiff := 0
         topDiff := 0
     }
-    ;ToolTip % "`n`n`n`n`n`n" leftDiff " " topDiff
-    ; leftDiff :=  0
-    ; topDiff :=  0
-
-    WinGetPos, X1, Y1, , , ahk_id %mapHwnd1%
-    WinGetPos, X2, Y2, , , ahk_id %mapHwnd2%
-    WinGetPos, X3, Y3, , , ahk_id %mapHwnd3%
-    WinGetPos, X4, Y4, , , ahk_id %mapHwnd4%
-    WinGetPos, X5, Y5, , , ahk_id %mapHwnd5%
-    WinGetPos, X6, Y6, , , ahk_id %mapHwnd6%
-    WinGetPos, X7, Y7, , , ahk_id %mapHwnd7%
-    WinGetPos, X8, Y8, , , ahk_id %mapHwnd8%
-    WinGetPos, X9, Y9, , , ahk_id %mapHwnd9%
-    if (ticktock == 6) {
-        OutputDebug, % X1 "," Y1 " " X2 "," Y2 " " X3 "," Y3 " " X4 "," Y4 " " X5 "," Y5 " " X6 "," Y6 " " X7 "," Y7 " " X8 "," Y8 " " X9 "," Y9 "`n"
-    }
-
+    
+    mapGuiDimensions1 := getMapClientArea(mapGuis[levelNo])
+    thisLevelX := mapGuiDimensions1.x
+    thisLevelY := mapGuiDimensions1.y
     newX := Round(leftMargin + (leftDiff/2))
     newY := Round(topMargin + (topDiff/2))
-    newXdiff := newX - X1
-    newYdiff := newY - Y1
-    WinMove, ahk_id %mapHwnd1%,, newX, newY
-    WinMove, ahk_id %mapHwnd2%,, X2 + newXdiff, Y2 + newYdiff
-    WinMove, ahk_id %mapHwnd3%,, X3 + newXdiff, Y3 + newYdiff
-    WinMove, ahk_id %mapHwnd4%,, X4 + newXdiff, Y4 + newYdiff
-    WinMove, ahk_id %mapHwnd5%,, X5 + newXdiff, Y5 + newYdiff
-    WinMove, ahk_id %mapHwnd6%,, X6 + newXdiff, Y6 + newYdiff
-    WinMove, ahk_id %mapHwnd7%,, X7 + newXdiff, Y7 + newYdiff
-    WinMove, ahk_id %mapHwnd8%,, X8 + newXdiff, Y8 + newYdiff
-    WinMove, ahk_id %mapHwnd9%,, X9 + newXdiff, Y9 + newYdiff
+    for k, lvl in mapList
+    {
+        if (lvl != levelNo) {
+            mapGuiDimensions := getMapClientArea(mapGuis[lvl])
+            newXdiff := newX - thisLevelX
+            newYdiff := newY - thisLevelY
+            thishwnd := mapGuis[lvl]
+            WinMove, ahk_id %thishwnd%,, mapGuiDimensions.x + newXdiff, mapGuiDimensions.y + newYdiff
+        } else {
+            thishwnd := mapGuis[lvl]
+            WinMove, ahk_id %thishwnd%,, newX, newY
+        }
+    }
+    
 
     
     ;WinMove, ahk_id %unitHwnd1%,, leftMargin + (leftDiff/2), topMargin + (topDiff/2)

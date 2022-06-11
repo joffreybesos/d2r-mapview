@@ -85,6 +85,7 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
 
         UpdateLayeredWindow(mapHwnd1, hdc, 0, 0, scaledWidth, scaledHeight)
         WinMove, ahk_id %mapHwnd1%,, leftMargin, topMargin
+        OutputDebug, % leftMargin " " topMargin "`n"
         ; win move is now handled in movePlayerMap.ahk
     } else {
         Gdip_DrawImage(G, pBitmap, 0, 0, scaledWidth, scaledHeight, 0, 0, RWidth, RHeight, opacity)
@@ -99,7 +100,7 @@ ShowMap(settings, mapHwnd1, imageData, gameMemoryData, ByRef uiData) {
     ; sOutput := A_ScriptDir "\" seed "_" levelNo ".png"
     ; Gdip_SaveBitmapToFile(pBitmap, sOutput)
     ; WriteLog(Width " " Height " " RWidth " " RHeight " " scale)
-
+loggedonce := false
     SelectObject(hdc, obm)
     DeleteObject(hbm)
     DeleteDC(hdc)

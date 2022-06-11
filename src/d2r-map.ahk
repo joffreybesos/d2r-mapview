@@ -34,6 +34,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\memory\readInvItems.ahk
 #Include %A_ScriptDir%\memory\readStates.ahk
 #Include %A_ScriptDir%\memory\readVendorItems.ahk
+#Include %A_ScriptDir%\ui\createMapGUIs.ahk
 #Include %A_ScriptDir%\ui\image\downloadMapImage.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
 #Include %A_ScriptDir%\ui\image\prefetchMaps.ahk
@@ -123,7 +124,8 @@ global redrawMap := 1
 global offsets := []
 global hudBitmaps := loadBitmaps()
 global buffBitmaps := loadBuffIcons()
-global mapList = []
+global mapList := []
+global mapGuis := [] 
 
 CreateSettingsGUI(settings, localizedStrings)
 settingupGUI := false
@@ -145,7 +147,7 @@ patternScan(d2rprocess, offsets)
 uiOffset := offsets["uiOffset"]
 Gdip_Startup()
 
-
+global loggedonce := false
 
 
 ; performance counters
@@ -231,42 +233,14 @@ While 1 {
 
         if ((gameMemoryData["difficulty"] == "0" or gameMemoryData["difficulty"] == "1" or gameMemoryData["difficulty"] == "2") and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
             if (gameMemoryData["mapSeed"] != lastSeed or newGame) {
-                Loop, 9 {
-                    k := A_Index
-                    Gui, Map%k%: Destroy
-                }
                 
-                ; create GUI windows
-                Gui, Map1: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-                global mapHwnd1 := WinExist()
-
-                Gui, Map2: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-                global mapHwnd2 := WinExist()
-
-                Gui, Map3: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-                global mapHwnd3 := WinExist()
-
-                Gui, Map4: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-                global mapHwnd4 := WinExist()
-
-                Gui, Map5: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-                global mapHwnd5 := WinExist()
-
-                Gui, Map6: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-                global mapHwnd6 := WinExist()
-
-                Gui, Map7: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-                global mapHwnd7 := WinExist()
-
-                Gui, Map8: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-                global mapHwnd8 := WinExist()
-
-                Gui, Map9: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-                global mapHwnd9 := WinExist()
+                createMapGUIs(mapGuis)
+                Loop, 136 {
+                    imageData%A_Index% := {}
+                }
 
                 Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
                 global unitHwnd1 := WinExist()
-                OutputDebug, % "Recreated GUIs`n"
 
                 gameStartTime := A_TickCount    
                 currentGameName := readLastGameName(d2rprocess, gameWindowId, offsets, session)
@@ -301,12 +275,12 @@ While 1 {
 
             ; if there's a level num then the player is in a map
             listdifferent := false
+            ; get list of maps to show
             if (settings["centerMode"]) {
                 mapList := getStitchedMaps(gameMemoryData["levelNo"])
             } else {
                 mapList := [gameMemoryData["levelNo"]]
             }
-            ; OutputDebug, % "Loading map list..."
             Loop, % mapList.length()
             {
                 if (mapList[A_Index] != lastLevelList[A_Index]) {
@@ -315,60 +289,47 @@ While 1 {
                 }
                 ; OutputDebug, % " "mapList[A_Index]
             }
-            ; OutputDebug, % "`n"
             if (listdifferent) { ; only redraw map when it changes
                 ; Show loading text
-                
                 mapLoading := 1
                 OutputDebug, % "List different, hiding maps`n"
 
-                ; hide maps
-                Loop, 9 {
-                    k := A_Index
-                    Gui, Map%k%: Hide ; hide map
-                }
-                ; hide units
+                ; hide maps and units
+                hideMapGUIS(mapGuis)
                 Gui, Units: Hide
-
-                ; strip image data
-                Loop, 9 {
-                    k := A_Index
-                    imageData%k% := {}
-                }
-                
                 ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
                 ; Download map
                 for k, thisLevelNo in mapList
                 {
-                    downloadMapImage(settings, gameMemoryData, thisLevelNo, imageData%k%, 0)
+                    downloadMapImage(settings, gameMemoryData, thisLevelNo, imageData%thisLevelNo%, 0)
                     OutputDebug, % "Downloading " thisLevelNo "`n"
                 }
-                for k, thisLevelNo in mapList
-                {
-                    ; Gui, Map%k%: Show, NA
-                    ; OutputDebug, % "Showing GUI " k " " thisLevelNo "`n"
-                }
-                Loop, 8
-                {
-                    k := A_Index + 1
+                ; for k, thisLevelNo in mapList
+                ; {
+                ;     ; Gui, Map%k%: Show, NA
+                ;     ; OutputDebug, % "Showing GUI " k " " thisLevelNo "`n"
+                ; }
+                ; Loop, 8
+                ; {
+                ;     k := A_Index + 1
 
-                    for j, thisExit in imageData%k%["exits"] 
-                    {
-                        imageData1["exits"].push(thisExit)
-                    }
-                    for j, thisQuest in imageData%k%["quests"] 
-                    {
-                        imageData1["quests"].push(thisQuest)
-                    }
-                    for j, thisBoss in imageData%k%["bosses"] 
-                    {
-                        imageData1["bosses"].push(thisBoss)
-                    }
-                    for j, thiswp in imageData%k%["waypoint"] 
-                    {
-                        imageData1["waypoint"].push(thiswp)
-                    }
-                }
+                ;     for j, thisExit in imageData%k%["exits"] 
+                ;     {
+                ;         imageData1["exits"].push(thisExit)
+                ;     }
+                ;     for j, thisQuest in imageData%k%["quests"] 
+                ;     {
+                ;         imageData1["quests"].push(thisQuest)
+                ;     }
+                ;     for j, thisBoss in imageData%k%["bosses"] 
+                ;     {
+                ;         imageData1["bosses"].push(thisBoss)
+                ;     }
+                ;     for j, thiswp in imageData%k%["waypoint"] 
+                ;     {
+                ;         imageData1["waypoint"].push(thiswp)
+                ;     }
+                ; }
                 mapLoading := 0
                 Gui, LoadingText: Destroy ; remove loading text
                 
@@ -382,28 +343,25 @@ While 1 {
                     IniRead, levelScale, mapconfig.ini, %thisLevelNo%, scale, 1.0
                     IniRead, levelxmargin, mapconfig.ini, %thisLevelNo%, x, 0
                     IniRead, levelymargin, mapconfig.ini, %thisLevelNo%, y, 0
-                    imageData%k%["levelScale"] := levelScale
-                    imageData%k%["levelxmargin"] := levelxmargin
-                    imageData%k%["levelymargin"] := levelymargin
+                    imageData%thisLevelNo%["levelScale"] := levelScale
+                    imageData%thisLevelNo%["levelxmargin"] := levelxmargin
+                    imageData%thisLevelNo%["levelymargin"] := levelymargin
                 }
                 for k, thisLevelNo in mapList
                 {
-                    Gui, Map%k%: Show, NA
-                    OutputDebug, % "Showing GUI " k " " thisLevelNo "`n"
+                    Gui, Map%thisLevelNo%: Show, NA
+                    OutputDebug, % "Showing GUI " thisLevelNo "`n"
                 }
-                
-                Loop, 9 {
-                    k := A_Index
-                    
-                    if (imageData%k%.count()) {
-                        OutputDebug, % "ShowMap " k " " thisLevelNo "`n"
-                        ShowMap(settings, mapHwnd%k%, imageData%k%, gameMemoryData, uiData%k%)
+
+                Loop, % mapList.length()
+                {
                         
-                    } else {
-                        Gui, Map%k%: Hide
-                    }
+                    k := mapList[A_Index]
+                    OutputDebug, % "ShowMap " k "`n"
+                    ;thismapHwnd := mapGuis[thisLevelNo]
+                    ShowMap(settings, mapGuis[k], imageData%k%, gameMemoryData, uiData%k%)
+                    ; OutputDebug, % " "mapList[A_Index]
                 }
-                
 
                 unitsLayer.delete()
                 unitsLayer := new UnitsLayer(uiData1)
@@ -412,12 +370,13 @@ While 1 {
                 redrawMap := 0
             }
             ; timeStamp("ShowUnits")
-            ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, imageData1, gameMemoryData, shrines, uiData1)
+            ;ShowUnits(unitsLayer, settings, unitHwnd1, mapGuis[thisLevelNo], imageData%thisLevelNo%, gameMemoryData, shrines, uiData%thisLevelNo%)
             ; timeStamp("ShowUnits")
             uiAssistLayer.drawMonsterBar(gameMemoryData["hoveredMob"])
 
             if (settings["centerMode"] and gameMemoryData["pathAddress"]) {
-                MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], imageData1, uiData1)
+                levelNo := gameMemoryData["levelNo"]
+                MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], imageData%levelNo%, uiData%levelNo%, mapList, levelNo)
             }
             if (Mod(ticktock, 6)) {
                 checkAutomapVisibility(d2rprocess, gameMemoryData)
@@ -521,10 +480,7 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
 
 hideMap(alwaysShowMap, menuShown := 0) {
     if ((alwaysShowMap == false) or menuShown) {
-        Loop, 9 {
-            k := A_Index
-            Gui, Map%k%: Hide ; hide map
-        }
+        hideMapGUIS(mapGuis)
         Gui, Units: Hide
         if (isMapShowing) {
             WriteLogDebug("Map hidden")
@@ -545,19 +501,7 @@ unHideMap() {
     partyInfoLayer.show()
     buffBarLayer.show()
     if (!mapLoading) {
-        if (settings["centerMode"]) {
-            for k, thisLevelNo in mapList
-            {
-                Gui, Map%k%: Show, NA
-                ; OutputDebug, % "Showing GUI " k " " thisLevelNo "`n"
-            }
-            ; Loop, 9 {
-            ;     k := A_Index
-            ;     Gui, Map%k%: Show, NA
-            ; }
-        } else {
-            Gui, Map1: Show, NA
-        }
+        showMapGUIS(mapGuis, mapList)
         Gui, Units: Show, NA
     } else {
         WriteLogDebug("Tried to show map while map loading, ignoring...")

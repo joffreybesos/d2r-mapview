@@ -35,7 +35,7 @@ class PartyInfoLayer {
             this.partyInfoFontSize := this.spacing / 11
         }
         
-        this.textBoxWidth := 200
+        this.textBoxWidth := 250
         this.textBoxHeight := gameWindowHeight
         this.xoffset := 0
         this.yoffset := this.spacing * 0.85 ; + gameWindowY

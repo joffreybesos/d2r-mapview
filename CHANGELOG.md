@@ -2,16 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.9.13] - 2021-06-11 - Minor improvements
+## [2.9.13] - 2021-06-12 - Minor improvements
 
 - Non-english text won't wrap the last character anymore
 - Buffs will now be grouped by type (buffs, auras, debuffs)
 - Conviction aura buff icon will no longer say Critical Strike (thanks Timpa)
-- When loading between maps you won't see incorrect lines to exits anymore
+- When leaving a map you won't see incorrect lines drawn anymore
 - D2R multi session - MH will 'lock' to most recent active window, to run multiple MHs on multiple sessions, make a separate copy of MV
-- Fixed up some error message localisation (anyone who wants to help localisation let me know)
-- Removed 'edges' setting
-- Refactored how map images are handled
+- Fixed up some error message localisation (let me know if you want to help with translation)
+- Removed 'edges' setting as no one uses it anymore
+- Refactored how map images are handled (important for a future change)
 
 ## [2.9.12] - 2021-06-09 - Improvements to seed generator
 

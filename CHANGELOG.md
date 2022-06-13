@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.16] - 2021-06-13 - Minor changes
+
+- Player level of party members has been refined
+
 ## [2.9.15] - 2021-06-13 - Localisation fix
 
 - Fixed localisation bug introduced last release

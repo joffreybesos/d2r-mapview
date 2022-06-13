@@ -146,9 +146,9 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
         if (Mod(ticktock, 6)) {
             ; timeStamp("ReadObjects")
             if (lastHoveredType == 2) {
-                ReadObjects(d2rprocess, unitTableOffset, lastHoveredUnitId, levelNo, objects)
+                ReadObjects(d2rprocess, unitTableOffset, lastHoveredUnitId, levelNo, objects, mapSeed, difficulty)
             } else {
-                ReadObjects(d2rprocess, unitTableOffset, 0, levelNo, objects)
+                ReadObjects(d2rprocess, unitTableOffset, 0, levelNo, objects, mapSeed, difficulty)
             }
             ; timeStamp("ReadObjects")
         }

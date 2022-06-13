@@ -60,6 +60,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\ItemLogLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\ItemCounterLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\BuffBarLayer.ahk
+#Include %A_ScriptDir%\ui\gdip\TPPreviewLayer.ahk
 #Include %A_ScriptDir%\mapFunctions.ahk
 
 ;Add right click menu in tray
@@ -168,6 +169,7 @@ itemLogLayer := new ItemLogLayer(settings)
 itemCounterLayer := new ItemCounterLayer(settings)
 uiAssistLayer := new UIAssistLayer(settings)
 buffBarLayer := new BuffBarLayer(settings)
+tpPreviewLayer := new TPPreviewLayer(settings)
 
 ; main loop
 While 1 {
@@ -279,7 +281,7 @@ While 1 {
                 if (mapImageList[levelNo]) {
                     ; already downloaded
                 } else {
-                    mapImageList[levelNo] := new MapImage(settings, gameMemoryData["mapSeed"], gameMemoryData["difficulty"], levelNo, mapImageList)
+                    mapImageList[levelNo] := new MapImage(settings, gameMemoryData["mapSeed"], gameMemoryData["difficulty"], levelNo)
                 }
                 ;fetchNewImage(settings, gameMemoryData["mapSeed"], gameMemoryData["difficulty"], gameMemoryData["levelNo"], mapImageList)
                 ;downloadMapImage(settings, gameMemoryData, imageData, 0)

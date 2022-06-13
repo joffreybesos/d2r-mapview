@@ -1,5 +1,5 @@
 
-ReadObjects(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef levelNo, ByRef gameObjects) {
+ReadObjects(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef levelNo, ByRef gameObjects, ByRef mapSeed, ByRef difficulty) {
     ; items
     gameObjects := []
     , baseAddress := d2rprocess.BaseAddress + startingOffset + (2 * 1024)
@@ -39,22 +39,27 @@ ReadObjects(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef
                     if (isPortal) {
                         ; if in town
                         ownerName := d2rprocess.readString(pUnitData + 0x34 , 32)
-                        
-                        ; if (currentHoveringUnitId) {
-                        ;     if (currentHoveringUnitId == unitId) { ; portal mouse over
-                        ;         ; partyList := []
-                        ;         ; ReadParty(d2rprocess, partyList)
-                        ;         ; playersOtherside := ""
-                        ;         ; for k,v in partyList
-                        ;         ; {
-                        ;         ;     if (interactType == v.area) {
-                        ;         ;         playersOtherside := playersOtherside . "`n" . v.name
-                        ;         ;     }
-                        ;         ; }
-                        ;         ; OutputDebug, % playersOtherside
-                        ;         isHovered := true
-                        ;     }
-                        ; }
+                        , destX := d2rprocess.read(objectUnit + 0x1AE + 0x0, "UShort")
+                        , destY := d2rprocess.read(objectUnit + 0x1AE + 0x2 , "UShort")
+                        , destMap := d2rprocess.read(objectUnit + 0x1AE + 0x4 , "UChar")
+                         if (currentHoveringUnitId) {
+                            if (currentHoveringUnitId == unitId) { ; portal mouse over
+                                
+                                partyList := []
+                                ReadParty(d2rprocess, partyList, gameMemoryData["unitId"])
+                                ; playersOtherside := ""
+                                ; for k,v in partyList
+                                ; {
+                                ;     if (interactType == v.area) {
+                                ;         playersOtherside := playersOtherside . "`n" . v.name
+                                ;     }
+                                ; }
+                                ; OutputDebug, % playersOtherside
+                                hidePortal := false
+                                tpPreviewLayer.drawMapPreview(partyList, mapSeed, difficulty, destMap, destX, destY)
+                                isHovered := true
+                            }
+                        }
                     }
 
                     gameObject := {"txtFileNo": txtFileNo, "name": name, "mode": mode, "isChest": isChest, "chestState": chestState, "isPortal": isPortal, "isRedPortal": isRedPortal, "ownerName": ownerName, "interactType": interactType, "isShrine": isShrine, "shrineType": shrineType, "objectx": objectx, "objecty": objecty, "levelNo": levelNo }

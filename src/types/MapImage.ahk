@@ -23,7 +23,7 @@ class MapImage {
     originalwidth := ""
     originalheight := ""
 
-    __new(ByRef settings, ByRef mapSeed, ByRef difficulty, ByRef levelNo, ByRef mapImageList) {
+    __new(ByRef settings, ByRef mapSeed, ByRef difficulty, ByRef levelNo) {
         this.mapSeed := mapSeed
         this.difficulty := difficulty
         this.levelNo := levelNo

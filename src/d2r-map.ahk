@@ -345,6 +345,7 @@ While 1 {
         session.saveEntry()
         ExitApp
     }
+
     ticktock := ticktock + 1
     if (ticktock > 6)
         ticktock := 0

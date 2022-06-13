@@ -61,7 +61,7 @@ class PartyInfoLayer {
             Gui, PartyInfo: Hide
 			return
         }
-		if (readUI(d2rprocess)) {
+		if (readUI(d2rprocess) == 1) {
             Gui, PartyInfo: Hide
 			return
         }

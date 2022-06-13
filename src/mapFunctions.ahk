@@ -10,8 +10,15 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
             WriteLogDebug("Hiding town " levelNo " since hideTown is set to true")
         }
         hideMap(false)
-    } else if gameMemoryData["menuShown"] {
+    } else if (gameMemoryData["menuShown"] == 1) {
         partyInfoLayer.hide()
+        itemCounterLayer.hide()
+        buffBarLayer.hide()
+        if (isMapShowing) {
+            WriteLogDebug("Hiding since UI menu is shown")
+        }
+        hideMap(false, 1)
+    } else if (gameMemoryData["menuShown"] == "RIGHT") {
         itemCounterLayer.hide()
         buffBarLayer.hide()
         if (isMapShowing) {
@@ -32,6 +39,9 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
         hideMap(alwaysShowMap)
     } else {
         unHideMap()
+        partyInfoLayer.show()
+        itemCounterLayer.show()
+        buffBarLayer.show()
     }
     if (!levelNo) {
         partyInfoLayer.hide()

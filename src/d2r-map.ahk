@@ -71,7 +71,7 @@ Menu, Tray, Add, Reload, Reload
 Menu, Tray, Add
 Menu, Tray, Add, Exit, ExitMH
 
-global version := "2.9.16"
+global version := "2.9.17"
 
 WriteLog("*******************************************************************")
 WriteLog("* Map overlay started https://github.com/joffreybesos/d2r-mapview *")
@@ -331,6 +331,9 @@ While 1 {
                 if (buffBarLayer.removedIcons.Length() > 0) {
                     buffBarLayer.drawBuffBar(currentStates, buffBitmaps)
                 }
+            }
+            if (HUDItems.tpscrolls < 5) {
+                itemCounterLayer.drawItemCounter(HUDItems)
             }
             
             lastlevel := gameMemoryData["levelNo"]

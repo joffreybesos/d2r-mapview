@@ -58,7 +58,13 @@ class ItemCounterLayer {
 
         ; pPen := Gdip_CreatePen(0xff00FF00, 2)
         ; Gdip_DrawRectangle(this.G, pPen, 0, 0, this.textBoxWidth, this.textBoxHeight)
-        Gdip_DrawImage(this.G, hudBitmaps["pBitmapTP"], this.xoffset + this.textBoxWidth - this.imageSize, 0, this.imageSize, this.imageSize,,,,,0.7)
+        if (HUDItems.tpscrolls < 5) {
+            if (Mod(ticktock, 6)) {
+                Gdip_DrawImage(this.G, hudBitmaps["pBitmapTP"], this.xoffset + this.textBoxWidth - this.imageSize, 0, this.imageSize, this.imageSize,,,,,0.7)
+            }
+        } else {
+            Gdip_DrawImage(this.G, hudBitmaps["pBitmapTP"], this.xoffset + this.textBoxWidth - this.imageSize, 0, this.imageSize, this.imageSize,,,,,0.7)
+        }
         Gdip_DrawImage(this.G, hudBitmaps["pBitmapID"], this.xoffset + this.textBoxWidth - this.imageSize, this.imageSize, this.imageSize, this.imageSize,,,,,0.7)
         Gdip_DrawImage(this.G, hudBitmaps["pBitmapKey"], this.xoffset + this.textBoxWidth - this.imageSize, this.imageSize * 2,this.imageSize, this.imageSize,,,,,0.7)
         tpcolor := this.getColor(HUDItems.tpscrolls)

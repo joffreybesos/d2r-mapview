@@ -115,7 +115,7 @@ class MapImage {
         foundFields := 0
         Loop, Parse, respHeaders, `r`n
         {  
-            WriteLogDebug("Response Header: " A_LoopField)
+            ; WriteLogDebug("Response Header: " A_LoopField)
             
             field := StrSplit(A_LoopField, ":")
             switch (field[1]) {

@@ -90,7 +90,7 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
 
     ; get party
     if (Mod(ticktock, 3)) {
-        ReadParty(d2rprocess, partyList)
+        ReadParty(d2rprocess, partyList, unitId)
     }
 
 

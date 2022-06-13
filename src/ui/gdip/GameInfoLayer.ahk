@@ -159,6 +159,7 @@ class GameInfoLayer {
             }
             this.numplayers := 0
             this.numinparty := 1
+            ; this.hostilePlayers := 0
             
             for k,v in gameMemoryData["partyList"]
             {
@@ -167,11 +168,18 @@ class GameInfoLayer {
                     if (v.partyId == playerPartyId) { ; only if in same party
                         this.numinparty++
                     }
+                    ; if (v.isHostileToPlayer) {
+                    ;     this.hostilePlayers++
+                    ; }
                 }
             }
             if (this.numplayers > 1) {
                 textList := textList "Players: " this.numplayers "`n"
                 textList := textList "In Party: " this.numinparty "`n"
+                ; if (this.hostilePlayers) {
+                ;     textList := textList "Hostile: " this.hostilePlayers "`n"
+                ; }
+
             }
         }
 

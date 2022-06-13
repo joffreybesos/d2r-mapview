@@ -167,7 +167,12 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
         UpdateLayeredWindow(unitHwnd1, unitsLayer.hdc, windowLeftMargin, windowTopMargin, gameWidth, gameHeight)
         Gdip_GraphicsClear( unitsLayer.G )
     } else {
-        WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
+        gameClientArea := getWindowClientArea()
+        , windowLeftMargin := gameClientArea["X"]
+        , windowTopMargin := gameClientArea["Y"]
+        , gameWidth := gameClientArea["W"]
+        , gameHeight := gameClientArea["H"]
+        ;WinGetPos, windowLeftMargin, windowTopMargin , gameWidth, gameHeight, %gameWindowId% 
         WinMove, ahk_id %mapHwnd1%,, windowLeftMargin+leftMargin, windowTopMargin+topMargin
         WinMove, ahk_id %unitHwnd1%,, windowLeftMargin+leftMargin, windowTopMargin+topMargin
         WinSet, Region, , ahk_id %mapHwnd1%

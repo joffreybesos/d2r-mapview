@@ -478,7 +478,7 @@ MapSizeIncrease:
 {
     SetFormat Integer, D
     levelNo := gameMemoryData["levelNo"] + 0
-    levelScale := imageData["levelScale"] + 0
+    levelScale := mapImageList[levelNo]["levelScale"] + 0
     if (levelNo and levelScale and not settings["centerMode"]) {
         levelScale := levelScale + 0.05
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
@@ -500,7 +500,7 @@ MapSizeDecrease:
 {
     SetFormat Integer, D
     levelNo := gameMemoryData["levelNo"] + 0
-    levelScale := imageData["levelScale"] + 0
+    levelScale := mapImageList[levelNo]["levelScale"] + 0
     if (levelNo and levelScale and not settings["centerMode"]) {
         levelScale := levelScale - 0.05
         IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
@@ -528,7 +528,7 @@ SwitchMapMode:
     }
     lastlevel := "INVALIDATED"
 
-    imageData := {}
+    mapImageList[gameMemoryData["levelNo"]] := 0
     gameMemoryData  := {}
     uiData := {}
     WinSet, Region, , ahk_id %mapHwnd1%
@@ -544,8 +544,8 @@ MoveMapLeft:
 {
     SetFormat Integer, D
     levelNo := gameMemoryData["levelNo"] + 0
-    levelxmargin := imageData["levelxmargin"] + 0
-    levelymargin := imageData["levelymargin"] + 0
+    levelxmargin := mapImageList[levelNo]["levelxmargin"] + 0
+    levelymargin := mapImageList[levelNo]["levelymargin"] + 0
     if (levelNo and not settings["centerMode"]) {
         levelxmargin := levelxmargin - 25
         IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
@@ -562,8 +562,8 @@ MoveMapRight:
 {
     SetFormat Integer, D
     levelNo := gameMemoryData["levelNo"] + 0
-    levelxmargin := imageData["levelxmargin"] + 0
-    levelymargin := imageData["levelymargin"] + 0
+    levelxmargin := mapImageList[levelNo]["levelxmargin"] + 0
+    levelymargin := mapImageList[levelNo]["levelymargin"] + 0
     if (levelNo and not settings["centerMode"]) {
         levelxmargin := levelxmargin + 25
         IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
@@ -580,8 +580,8 @@ MoveMapUp:
 {
     SetFormat Integer, D
     levelNo := gameMemoryData["levelNo"] + 0
-    levelxmargin := imageData["levelxmargin"] + 0
-    levelymargin := imageData["levelymargin"] + 0
+    levelxmargin := mapImageList[levelNo]["levelxmargin"] + 0
+    levelymargin := mapImageList[levelNo]["levelymargin"] + 0
     if (levelNo and not settings["centerMode"]) {
         levelymargin := levelymargin - 25
         IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
@@ -598,8 +598,8 @@ MoveMapDown:
 {
     SetFormat Integer, D
     levelNo := gameMemoryData["levelNo"] + 0
-    levelxmargin := imageData["levelxmargin"] + 0
-    levelymargin := imageData["levelymargin"] + 0
+    levelxmargin := mapImageList[levelNo]["levelxmargin"] + 0
+    levelymargin := mapImageList[levelNo]["levelymargin"] + 0
     if (levelNo and not settings["centerMode"]) {
         levelymargin := levelymargin + 25
         IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
@@ -736,7 +736,7 @@ Update:
     SetupHotKeys(gameWindowId, settings)
     if (cmode != settings["centerMode"]) { ; if centermode changed
         lastlevel := "INVALIDATED"
-        imageData := {}
+        ;mapImageList[levelNo] := {}
         gameMemoryData  := {}
         uiData := {}
         WinSet, Region, , ahk_id %mapHwnd1%

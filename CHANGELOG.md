@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Fixed localisation for zhTW (thanks @ckhoho)
 - Fixed bug where map wouldn't move with shortcut keys (thanks @DmAc4LyFe)
 - Fixed bug where 'always show' shortcut not working when set to TAB (thanks @Gapple)
+- Fixed conviction buff name for real this time (thanks @TheKaptainPommes)
 
 ## [2.9.13] - 2021-06-12 - Minor improvements
 

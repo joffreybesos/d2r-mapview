@@ -148,10 +148,6 @@ class GameInfoLayer {
             }
         }
         
-        if (settings["showFPS"]) {
-            textList := textLIst "MH FPS " currentFPS
-        }
-
         if (settings["showNumPlayers"]) {
             ; get the current players part id
             for k,v in gameMemoryData["partyList"]
@@ -162,7 +158,7 @@ class GameInfoLayer {
                 }
             }
             this.numplayers := 0
-            this.numinparty := 0
+            this.numinparty := 1
             
             for k,v in gameMemoryData["partyList"]
             {
@@ -173,8 +169,14 @@ class GameInfoLayer {
                     }
                 }
             }
-            textList := textList "Players: " this.numplayers "`n"
-            textList := textList "In Party: " this.numinparty "`n"
+            if (this.numplayers > 1) {
+                textList := textList "Players: " this.numplayers "`n"
+                textList := textList "In Party: " this.numinparty "`n"
+            }
+        }
+
+        if (settings["showFPS"]) {
+            textList := textLIst "MH FPS " currentFPS "`n"
         }
 
         if (textList) {

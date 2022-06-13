@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Number of players shows in game info text at top left
 - Fixed localisation for zhTW (thanks @ckhoho)
 - Fixed bug where map wouldn't move with shortcut keys (thanks @DmAc4LyFe)
+- Fixed bug where 'always show' shortcut not working when set to TAB (thanks @Gapple)
 
 ## [2.9.13] - 2021-06-12 - Minor improvements
 

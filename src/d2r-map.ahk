@@ -634,13 +634,6 @@ HistoryToggle:
     return
 }
 
-~TAB::
-~Space::
-{
-    WriteLogDebug("TAB or Space pressed, map visibility being checked")
-    checkAutomapVisibility(d2rprocess, gameMemoryData)
-    return
-}
 ~Esc::
 {
     Gui, HelpText: Hide

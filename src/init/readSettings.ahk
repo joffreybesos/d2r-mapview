@@ -41,6 +41,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["gameInfoFontSize"] := "18"
     settings["gameInfoAlignment"] := "LEFT"
     settings["exitTextSize"] := "12"
+    settings["showNumPlayers"] := 1
 
     settings["showPartyLocations"] := 1
     settings["showResists"] := 1

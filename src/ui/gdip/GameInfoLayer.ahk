@@ -121,7 +121,7 @@ class GameInfoLayer {
         }
     }
 
-    drawInfoText(ByRef currentFPS) {
+    drawInfoText(ByRef currentFPS, ByRef gameMemoryData) {
         if (WinActive(gameWindowId)) {
             Gui, GameInfo: Show, NA
         } else {
@@ -147,9 +147,36 @@ class GameInfoLayer {
                 textList := textList "XP penalty: " this.experiencePenalty "% `n"
             }
         }
+        
         if (settings["showFPS"]) {
             textList := textLIst "MH FPS " currentFPS
         }
+
+        if (settings["showNumPlayers"]) {
+            ; get the current players part id
+            for k,v in gameMemoryData["partyList"]
+            {
+                if (gameMemoryData["unitId"] == v.unitId) {
+                    playerPartyId := v.partyId
+                    break
+                }
+            }
+            this.numplayers := 0
+            this.numinparty := 0
+            
+            for k,v in gameMemoryData["partyList"]
+            {
+                this.numplayers++
+                if (k > 1) { ; don't draw your own
+                    if (v.partyId == playerPartyId) { ; only if in same party
+                        this.numinparty++
+                    }
+                }
+            }
+            textList := textList "Players: " this.numplayers "`n"
+            textList := textList "In Party: " this.numinparty "`n"
+        }
+
         if (textList) {
             this.drawData(5, this.topPadding, fontSize, textList)
             

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.14] - 2021-06-13 - Minor improvements
+
+- Number of players shows in game info text at top left
+
+
 ## [2.9.13] - 2021-06-12 - Minor improvements
 
 - Non-english text won't wrap the last character anymore

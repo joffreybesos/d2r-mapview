@@ -70,7 +70,7 @@ Menu, Tray, Add, Reload, Reload
 Menu, Tray, Add
 Menu, Tray, Add, Exit, ExitMH
 
-global version := "2.9.13"
+global version := "2.9.14"
 
 WriteLog("*******************************************************************")
 WriteLog("* Map overlay started https://github.com/joffreybesos/d2r-mapview *")
@@ -365,7 +365,7 @@ While 1 {
             readStates(d2rprocess, gameMemoryData, currentStates)
             buffBarLayer.drawBuffBar(currentStates, buffBitmaps)
             itemCounterLayer.drawItemCounter(HUDItems)
-            gameInfoLayer.drawInfoText(currentFPS)
+            gameInfoLayer.drawInfoText(currentFPS, gameMemoryData)
             partyInfoLayer.drawInfoText(gameMemoryData["partyList"], gameMemoryData["unitId"])
 
             if (settings["includeVendorItems"]) {

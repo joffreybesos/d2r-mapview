@@ -60,6 +60,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\ui\gdip\ItemLogLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\ItemCounterLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\BuffBarLayer.ahk
+#Include %A_ScriptDir%\ui\gdip\PartyEquipmentLayer.ahk
 
 ;Add right click menu in tray
 Menu, Tray, NoStandard ; to remove default menu
@@ -169,6 +170,7 @@ itemLogLayer := new ItemLogLayer(settings)
 itemCounterLayer := new ItemCounterLayer(settings)
 uiAssistLayer := new UIAssistLayer(settings)
 buffBarLayer := new BuffBarLayer(settings)
+partyEquipmentLayer := new PartyEquipmentLayer(settings)
 
 ; main loop
 While 1 {
@@ -332,6 +334,7 @@ While 1 {
                 if (buffBarLayer.removedIcons.Length() > 0) {
                     buffBarLayer.drawBuffBar(currentStates, buffBitmaps)
                 }
+                partyEquipmentLayer.checkHover(mouseX, mouseY)
             }
             
             lastlevel := gameMemoryData["levelNo"]

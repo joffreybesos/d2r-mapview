@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.17] - 2021-06-14 - Minor changes
+
+- Fixed poison damage of item stats with an ugly hack
+- TP scroll counter will flash with only 3 or less scrolls rather than 5
+
+## [2.9.16] - 2021-06-14 - Minor changes
+
+- When you run out of TP scrolls, the counter will now flash when less than 5 scrolls
+- Identify scrolls and keys will not flash at all
+- Player level of party members has been refined
+- Map functions refactor (switching centered mode should be more reliable)
+- Party location info doesn't hide when only a UI menu on the right is shown
+
 ## [2.9.15] - 2021-06-13 - Localisation fix
 
 - Fixed localisation bug introduced last release

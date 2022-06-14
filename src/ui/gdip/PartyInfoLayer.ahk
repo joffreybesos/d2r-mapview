@@ -35,10 +35,13 @@ class PartyInfoLayer {
             this.partyInfoFontSize := this.spacing / 11
         }
         
+		
         this.textBoxWidth := 200
         this.textBoxHeight := gameWindowHeight
         this.xoffset := 0
         this.yoffset := this.spacing * 0.85 ; + gameWindowY
+		this.borderSize := this.spacing * 0.05
+		this.lvlyoffset := this.spacing * 0.37
 
         pToken := Gdip_Startup()
         DetectHiddenWindows, On
@@ -58,7 +61,7 @@ class PartyInfoLayer {
             Gui, PartyInfo: Hide
 			return
         }
-		if (readUI(d2rprocess)) {
+		if (readUI(d2rprocess) == 1) {
             Gui, PartyInfo: Hide
 			return
         }
@@ -85,12 +88,8 @@ class PartyInfoLayer {
             if (k > 1) { ; don't draw your own
                 if (v.partyId == playerPartyId) { ; only if in same party
                     levelName := getAreaName(v.area)
-					if (levelName) {
-						playerText := v.plevel " - " levelName
-					} else {
-						playerText := v.plevel
-					}
-                    this.drawData(this.xoffset, this.yoffset + (this.spacing * (k-1)), fontSize, playerText)
+					this.drawPLevel(this.xoffset + this.borderSize, this.yoffset + (this.spacing * (k-1)) - this.lvlyoffset, fontSize * 1.5, v.plevel)
+                    this.drawAreaName(this.xoffset, this.yoffset + (this.spacing * (k-1)), fontSize, levelName)
                 }
             }
         }
@@ -99,11 +98,20 @@ class PartyInfoLayer {
         Gdip_GraphicsClear( this.G )
     }
 
-    drawData(textx, texty, fontSize, textList) {
-        Options = x%textx% y%texty%  w200 h100 Left vTop cffc6b276 r4 s%fontSize%
+    drawAreaName(textx, texty, fontSize, textList) {
+        Options = x%textx% y%texty%  w200 h100 Left vTop NoWrap cffc6b276 r4 s%fontSize%
         textx := textx + 1
         texty := texty + 1
-        Options2 = x%textx% y%texty% w200 h100 Left vTop cdd000000 r4 s%fontSize%
+        Options2 = x%textx% y%texty% w200 h100 Left vTop NoWrap cdd000000 r4 s%fontSize%
+        Gdip_TextToGraphics(this.G, textList, Options2, formalFont)
+        Gdip_TextToGraphics(this.G, textList, Options, formalFont)
+    }
+
+	drawPLevel(textx, texty, fontSize, textList) {
+        Options = x%textx% y%texty%  w100 h100 Left vTop cdddddddd r4 s%fontSize%
+        textx := textx + 1
+        texty := texty + 1
+        Options2 = x%textx% y%texty% w100 h100 Left vTop cdd000000 r4 s%fontSize%
         Gdip_TextToGraphics(this.G, textList, Options2, formalFont)
         Gdip_TextToGraphics(this.G, textList, Options, formalFont)
     }

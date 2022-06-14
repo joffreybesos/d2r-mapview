@@ -172,10 +172,13 @@ formatStats(statArray) {
                 }
             case "poisonmindam": 
                 if (statArray["poisonmindam"].statValue and statArray["poisonmaxdam"].statValue) {
+                    ; this is an ugly hack which should bring shame to me and my family
+                    mindmg := Floor(statArray["poisonmindam"].statValue / (10.2 /  statArray["poisonlength"].statValue)) 
+                    maxdmg := Floor(statArray["poisonmindam"].statValue / (10.2 /  statArray["poisonlength"].statValue))
                     if (statArray["poisonmindam"].statValue == statArray["poisonmaxdam"].statValue) {
-                        statList[statArray["poisonmindam"].statOrder]:= Format("+{1} Poison Damage Over {2} Seconds", statArray["poisonmindam"].statValue, statArray["poisonlength"].statValue)
+                        statList[statArray["poisonmindam"].statOrder]:= Format("+{1} Poison Damage Over {2} Seconds",mindmg, statArray["poisonlength"].statValue)
                     } else {
-                        statList[statArray["poisonmindam"].statOrder]:= Format("Adds {1}-{2} Poison Damage Over {3} Seconds", statArray["poisonmindam"].statValue, statArray["poisonmaxdam"].statValue, Abs(statArray["poisonlength"].statValue / 3))
+                        statList[statArray["poisonmindam"].statOrder]:= Format("Adds {1}-{2} Poison Damage Over {3} Seconds", mindmg, maxdmg, Abs(statArray["poisonlength"].statValue / 3))
                     }
                 } else {
                     statList[statArray["poisonmindam"].statOrder]:= Format("+{1} to Minimum Poison Damage", statArray["poisonmindam"].statValue)

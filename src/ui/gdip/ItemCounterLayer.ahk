@@ -58,7 +58,7 @@ class ItemCounterLayer {
 
         ; pPen := Gdip_CreatePen(0xff00FF00, 2)
         ; Gdip_DrawRectangle(this.G, pPen, 0, 0, this.textBoxWidth, this.textBoxHeight)
-        if (HUDItems.tpscrolls < 5) {
+        if (HUDItems.tpscrolls < 3) {
             if (Mod(ticktock, 6)) {
                 Gdip_DrawImage(this.G, hudBitmaps["pBitmapTP"], this.xoffset + this.textBoxWidth - this.imageSize, 0, this.imageSize, this.imageSize,,,,,0.7)
             }

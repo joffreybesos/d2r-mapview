@@ -50,16 +50,52 @@ class PartyEquipmentLayer {
         Gdip_SetInterpolationMode(this.G, 7)
         Gui, PlayerEquipment: Show, NA
 
-        this.pPenBuff := Gdip_CreatePen(0xff00FF00, 2)
+        this.pPenBorder := Gdip_CreatePen(0x55ffffff, 3)
     }
 
-    checkHover(mouseX, mouseY) {
+    checkHover(ByRef mouseX, ByRef mouseY, ByRef gameMemoryData) {
         this.showToolTip := 0
-        if (mouseX > this.leftMargin and mouseX < (this.leftMargin + this.textBoxWidth)) {
-            if (mouseY > this.topMargin and mouseY < (this.topMargin + this.textBoxHeight)) {
+        this.partyIcons := []
+        numPartyMembers := 0
+        ; get the current players part id
+        for k,v in gameMemoryData["partyList"]
+        {
+            if (gameMemoryData["unitId"] == v.unitId) {
+                playerPartyId := v.partyId
+                break
             }
         }
-        Gdip_DrawRectangle(this.G, this.pPenBuff, 0, 0, this.spacing * 0.6, this.textBoxHeight)
+        
+        ; draw each party member location
+        for k,v in gameMemoryData["partyList"]
+        {
+            if (k > 1) { ; don't draw your own
+                if (v.partyId == playerPartyId) { ; only if in same party
+                    numPartyMembers++
+                    this.partyIcons[numPartyMembers] := v.unitId
+                }
+            }
+        }
+
+        this.hoveredBox := 0
+        if (mouseX > this.leftMargin and mouseX < (this.leftMargin + this.spacing * 0.6)) {
+            if (mouseY > this.topMargin and mouseY < (this.topMargin + this.textBoxHeight)) {
+                boxHeight := this.spacing * 0.7
+                Loop, 7
+                {
+                    box := A_Index
+                    box2y := this.topMargin + (this.spacing * box)
+                    if (mouseY > box2y and mouseY < box2y + boxHeight) {
+                        this.hoveredBox := box
+                        if (this.partyIcons[box]) {
+                            Gdip_DrawRectangle(this.G, this.pPenBorder, 0, this.spacing * box, this.spacing * 0.6, this.spacing * 0.7)
+                        }
+                    }
+                }
+            }
+        }
+        
+        ;pGdip_DrawRectangle(this.G, this.pPenBuff, 0, this.spacing * 2, this.spacing * 0.6, this.spacing * 0.7)
         UpdateLayeredWindow(this.PartyEquipLayerHwnd, this.hdc, this.leftMargin, this.topMargin, this.textBoxWidth, this.textBoxHeight)
         Gdip_GraphicsClear( this.G )
     }
@@ -84,29 +120,7 @@ class PartyEquipmentLayer {
         
     ;     fontSize := this.PlayerEquipmentFontSize
 
-    ;     ; get the current players part id
-    ;     for k,v in partyList
-    ;     {
-    ;         if (playerUnitId == v.unitId) {
-    ;             playerPartyId := v.partyId
-    ;             break
-    ;         }
-    ;     }
-    ;     ; draw each party member location
-    ;     for k,v in partyList
-    ;     {
-    ;         if (k > 1) { ; don't draw your own
-    ;             if (v.partyId == playerPartyId) { ; only if in same party
-    ;                 levelName := getAreaName(v.area)
-	; 				if (levelName) {
-	; 					playerText := v.plevel " - " levelName
-	; 				} else {
-	; 					playerText := v.plevel
-	; 				}
-    ;                 this.drawData(this.xoffset, this.yoffset + (this.spacing * (k-1)), fontSize, playerText)
-    ;             }
-    ;         }
-    ;     }
+        
         
     ;     UpdateLayeredWindow(this.PartyEquipLayerHwnd, this.hdc, this.leftMargin, this.topMargin, this.textBoxWidth, this.textBoxHeight)
     ;     Gdip_GraphicsClear( this.G )

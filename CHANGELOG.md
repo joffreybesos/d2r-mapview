@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [2.9.16] - 2021-06-14 - Minor changes
 
-- When you run out of TP scrolls, the counter will now flash when less than 5
+- When you run out of TP scrolls, the counter will now flash when less than 5 scrolls
 - Identify scrolls and keys will not flash at all
 - Player level of party members has been refined
 - Map functions refactor (switching centered mode should be more reliable)

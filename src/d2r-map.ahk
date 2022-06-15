@@ -34,6 +34,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include %A_ScriptDir%\memory\readInvItems.ahk
 #Include %A_ScriptDir%\memory\readStates.ahk
 #Include %A_ScriptDir%\memory\readVendorItems.ahk
+#Include %A_ScriptDir%\memory\readOtherPlayerEquip.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
 #Include %A_ScriptDir%\ui\image\prefetchMaps.ahk
 #Include %A_ScriptDir%\ui\image\loadBitmaps.ahk

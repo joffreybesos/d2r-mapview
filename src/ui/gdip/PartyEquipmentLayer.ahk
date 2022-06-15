@@ -88,7 +88,30 @@ class PartyEquipmentLayer {
                     if (mouseY > box2y and mouseY < box2y + boxHeight) {
                         this.hoveredBox := box
                         if (this.partyIcons[box]) {
+                            ReadOtherPlayerEquip(d2rprocess, otherplayeritems, this.partyIcons[box])
+                            OutputDebug, % otherplayeritems.Length() " " v.area "`n"
+                            
                             Gdip_DrawRectangle(this.G, this.pPenBorder, 0, this.spacing * box, this.spacing * 0.6, this.spacing * 0.7)
+
+                            fontSize := 12
+                            rowYoffset := 0
+                            for kk, item in otherplayeritems {
+                                ;OutputDebug, % item.itemLogText " " (A_Now - item.foundTime) "`n"
+                                item.loadStats()
+                                itemLogText := item.localizedName
+                                if (item.prefixName) {
+                                    itemLogText := item.prefixName " " itemLogText
+                                }
+                                this.drawData(this.xoffset, this.yoffset + rowYoffset, fontSize, itemLogText)
+                                if (item.statList) {
+                                    for k, stat in item.statList
+                                    {
+                                        rowYoffset := rowYoffset + fontSize*0.8 + 2
+                                        this.drawData(this.xoffset + 30, this.yoffset + rowYoffset, fontSize*0.8, stat)
+                                    }
+                                }
+                                rowYoffset := rowYoffset + fontSize + 8
+                            }
                         }
                     }
                 }
@@ -126,14 +149,14 @@ class PartyEquipmentLayer {
     ;     Gdip_GraphicsClear( this.G )
     ; }
 
-    ; drawData(textx, texty, fontSize, textList) {
-    ;     Options = x%textx% y%texty%  w200 h100 Left vTop cffc6b276 r4 s%fontSize%
-    ;     textx := textx + 1
-    ;     texty := texty + 1
-    ;     Options2 = x%textx% y%texty% w200 h100 Left vTop cdd000000 r4 s%fontSize%
-    ;     Gdip_TextToGraphics(this.G, textList, Options2, formalFont)
-    ;     Gdip_TextToGraphics(this.G, textList, Options, formalFont)
-    ; }
+    drawData(textx, texty, fontSize, textList) {
+        Options = x%textx% y%texty%  w200 h100 Left vTop cffc6b276 r4 s%fontSize%
+        textx := textx + 1
+        texty := texty + 1
+        Options2 = x%textx% y%texty% w200 h100 Left vTop cdd000000 r4 s%fontSize%
+        Gdip_TextToGraphics(this.G, textList, Options2, formalFont)
+        Gdip_TextToGraphics(this.G, textList, Options, formalFont)
+    }
 
 	show() {
         Gui, PlayerEquipment: Show, NA

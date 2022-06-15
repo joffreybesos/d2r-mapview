@@ -7,6 +7,12 @@ Please follow this guide to setup your own, it's quite easy: https://github.com/
 
 This tool is licenced under GPLv3, reselling this maphack violates the terms of the license.
 
+## Bans
+
+Blizzard did a ban wave on June 14 where it seems they targeted MapAssist (another map hack).  
+This map hack is very similar in how it functions.  
+While most users of this map hack were spared, it is recommended to consider this map hack detectable online.
+
 ## Join the discord server <https://discord.gg/qEgqyVW3uj>
 
 ![Worldstone Keep level 2](https://user-images.githubusercontent.com/93067706/170401221-10e7a71e-7cad-488d-98e0-69f4d3617332.png)

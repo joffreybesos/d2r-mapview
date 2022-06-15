@@ -4,8 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [2.9.17] - 2021-06-14 - Minor changes
 
-- Fixed poison damage of item stats with an ugly hack
 - TP scroll counter will flash with only 3 or less scrolls rather than 5
+- Fixed poison damage of item stats with an ugly hack
+- Fixed issue where map would freeze in certain circumstances
 
 ## [2.9.16] - 2021-06-14 - Minor changes
 

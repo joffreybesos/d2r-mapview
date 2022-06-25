@@ -279,10 +279,10 @@ While 1 {
                 if (mapImageList[levelNo]) {
                     ; already downloaded
                 } else {
-                    mapImageList[levelNo] := new MapImage(settings, gameMemoryData["mapSeed"], gameMemoryData["difficulty"], levelNo, mapImageList)
+                    pathStart := gameMemoryData["xPos"] "," gameMemoryData["yPos"]
+                    pathEnd := GetPathEnd(levelNo)
+                    mapImageList[levelNo] := new MapImage(settings, gameMemoryData["mapSeed"], gameMemoryData["difficulty"], levelNo, mapImageList, pathStart, pathEnd)
                 }
-                ;fetchNewImage(settings, gameMemoryData["mapSeed"], gameMemoryData["difficulty"], gameMemoryData["levelNo"], mapImageList)
-                ;downloadMapImage(settings, gameMemoryData, imageData, 0)
 
                 ; Show Map
                 if (lastlevel == "") {

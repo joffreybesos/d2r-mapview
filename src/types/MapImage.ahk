@@ -23,7 +23,7 @@ class MapImage {
     originalwidth := ""
     originalheight := ""
 
-    __new(ByRef settings, ByRef mapSeed, ByRef difficulty, ByRef levelNo, ByRef mapImageList) {
+    __new(ByRef settings, ByRef mapSeed, ByRef difficulty, ByRef levelNo, ByRef mapImageList, pathStart, pathEnd) {
         this.mapSeed := mapSeed
         this.difficulty := difficulty
         this.levelNo := levelNo
@@ -38,12 +38,18 @@ class MapImage {
         imageUrl := imageUrl . "&rotate=true&showTextLabels=false"
         imageUrl := imageUrl . "&padding=" . settings["padding"]
         imageUrl := imageUrl . "&edge=true"
+        if (pathStart && pathEnd) {
+            imageUrl := imageUrl . "&pathFinding=true"
+            imageUrl := imageUrl . "&pathStart=" . pathStart
+            imageUrl := imageUrl . "&pathEnd=" . pathEnd
+        }
         if (settings["centerMode"]) {
             imageUrl := imageUrl . "&serverScale=" . settings["serverScale"]
         }
 
         this.imageUrl := imageUrl
         this.downloadImage(imageUrl)
+        WriteLog("Downloading image " imageUrl)
         
     }
 
@@ -186,3 +192,65 @@ convertToBool(field) {
     return 0
 }
 
+
+GetPathEnd(levelNo) {
+    switch levelNo
+    {
+        ;case "2": return "8" ; den of evil
+        ;case "4": return "10"
+        ;case "6": return "20"  ; forgotten tower
+        ;case "7": return "12"
+        ;case "8": return "2"
+        ;case "9": return "13"
+        case "10": return "5"
+        case "11": return "15"
+        case "12": return "16"
+        case "21": return "22"
+        case "22": return "23"
+        case "23": return "24"
+        case "24": return "25"
+        case "29": return "30"
+        case "30": return "31"
+        case "31": return "32"
+        ;case "33": return "34"
+        case "34": return "35"
+        case "35": return "36"
+        case "36": return "37"
+        ;case "41": return "55"
+        ;case "42": return "56"
+        ;case "43": return "62"
+        ;case "44": return "65"
+        case "45": return "58"
+        case "47": return "48"
+        case "48": return "49"
+        case "50": return "51"
+        case "51": return "52"
+        case "52": return "53"
+        case "53": return "54"
+        case "56": return "57"
+        case "57": return "60"
+        case "58": return "61"
+        case "62": return "63"
+        case "63": return "64"
+        ;case "76": return "85"
+        ;case "78": return "88"
+        ;case "83": return "100"
+        case "86": return "87"
+        case "87": return "90"
+        case "88": return "89"
+        case "89": return "91"
+        case "92": return "93"
+        case "100": return "101"
+        case "101": return "102"
+        ;case "106": return "107"
+        case "113": return "114"
+        case "115": return "117"
+        case "118": return "120"
+        case "122": return "123"
+        case "123": return "124"
+        case "128": return "129"
+        case "129": return "130"
+        case "130": return "131"
+    }
+    return
+}

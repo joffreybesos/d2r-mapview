@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.18] - 2021-06-26 - Pathfinding
+
+- Pathfinding added which will draw onto the map
+- Will only draw onto the map _once_, it won't update live
+- __REQUIRES__ d2-mapserver v15!
+- If you
+
 ## [2.9.17] - 2021-06-14 - Minor changes
 
 - TP scroll counter will flash with only 3 or less scrolls rather than 5

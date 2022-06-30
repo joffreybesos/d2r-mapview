@@ -15,7 +15,7 @@ class ItemCounterLayer {
         gameWindowWidth := gameClientArea["W"]
         gameWindowHeight := gameClientArea["H"]
 
-        Gui, ItemCounter: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
+        Gui, ItemCounter: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs         
         this.ItemCounterLayerHwnd := WinExist()
         this.imageSize := settings["itemCounterSize"]
         this.textBoxWidth := this.imageSize
@@ -26,6 +26,7 @@ class ItemCounterLayer {
         this.itemCounterFontSize := this.imageSize / 3 ; settings["ItemCounterFontSize"]
         this.xoffset := 0
         this.yoffset := 0
+        this.locked := 1
 
         pToken := Gdip_Startup()
         DetectHiddenWindows, On
@@ -36,6 +37,16 @@ class ItemCounterLayer {
         Gdip_SetSmoothingMode(this.G, 4)
         Gdip_SetInterpolationMode(this.G, 7)
         Gui, ItemCounter: Show, NA
+    }
+    
+    unlock() {
+        Gui, ItemCounter: -E0x20
+        this.locked := 0
+    }
+
+    lock() {
+        Gui, ItemCounter: +E0x20
+        this.locked := 1
     }
 
     drawItemCounter(ByRef HUDItems) {

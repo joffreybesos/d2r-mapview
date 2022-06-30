@@ -33,7 +33,7 @@ class MapImage {
             thickness := 5
         if (thickness < 1)
             thickness := 1
-        
+
         imageUrl := baseUrl . "/v1/map/" . mapSeed . "/" . difficulty . "/" . levelNo . "/image?wallthickness=" . thickness
         imageUrl := imageUrl . "&rotate=true&showTextLabels=false"
         imageUrl := imageUrl . "&padding=" . settings["padding"]
@@ -50,8 +50,8 @@ class MapImage {
         this.imageUrl := imageUrl
         this.downloadImage(imageUrl)
         WriteLog("Downloading image " imageUrl)
-        
-    }
+
+    } 
 
     getFileName() {
         return A_Temp "/" this.mapSeed "_" this.difficulty "_" this.levelNo ".png"
@@ -70,8 +70,8 @@ class MapImage {
                 whr.WaitForResponse()
                 vStream := whr.ResponseStream
                 sFile := this.getFileName()
-                if (ComObjType(vStream) = 0xD) {      ;VT_UNKNOWN = 0xD
-                    
+                if (ComObjType(vStream) = 0xD) { ;VT_UNKNOWN = 0xD
+
                     pIStream := ComObjQuery(vStream, "{0000000c-0000-0000-C000-000000000046}")	;defined in ObjIdl.h
 
                     oFile := FileOpen( sFile, "w")
@@ -81,7 +81,7 @@ class MapImage {
                             , "ptr", pIStream	
                             , "ptr", &Buffer			;pv [out] A pointer to the buffer which the stream data is read into.
                             , "uint", 8192			;cb [in] The number of bytes of data to read from the stream object.
-                            , "ptr*", cbRead)		;pcbRead [out] A pointer to a ULONG variable that receives the actual number of bytes read from the stream object. 
+                        , "ptr*", cbRead)		;pcbRead [out] A pointer to a ULONG variable that receives the actual number of bytes read from the stream object. 
                         oFile.RawWrite(&Buffer, cbRead)
                     } Until (cbRead = 0)
                     ObjRelease(pIStream)
@@ -89,9 +89,9 @@ class MapImage {
                 }
                 this.sFile := sFile
                 this.parseHeaders(whr.GetAllResponseHeaders)
-                
+
                 if (whr.GetAllResponseHeaders)
-                    break   ; don't retry if headers found
+                    break ; don't retry if headers found
             } catch e {
                 errMsg := e.message
                 errMsg := StrReplace(errMsg, "`nSource:`t`tWinHttp.WinHttpRequest`nDescription:`t", "")
@@ -115,14 +115,13 @@ class MapImage {
             }
         }
     }
-    
 
     parseHeaders(ByRef respHeaders) {
         foundFields := 0
         Loop, Parse, respHeaders, `r`n
-        {  
+        { 
             ; WriteLogDebug("Response Header: " A_LoopField)
-            
+
             field := StrSplit(A_LoopField, ":")
             switch (field[1]) {
                 case "lefttrimmed": leftTrimmed := Trim(field[2]), foundFields++
@@ -182,7 +181,7 @@ class MapImage {
         this.levelxmargin := levelxmargin
         this.levelymargin := levelymargin
     }
-    
+
 }
 
 ; yes AHK really needs this
@@ -191,7 +190,6 @@ convertToBool(field) {
         return 1
     return 0
 }
-
 
 GetPathEnd(levelNo) {
     switch levelNo
@@ -209,6 +207,7 @@ GetPathEnd(levelNo) {
         case "22": return "23"
         case "23": return "24"
         case "24": return "25"
+        case "28": return "29" ;barracs to jail lvl 1
         case "29": return "30"
         case "30": return "31"
         case "31": return "32"

@@ -5,12 +5,13 @@
 #Include %A_ScriptDir%\memory\readMissiles.ahk
 #Include %A_ScriptDir%\memory\readUI.ahk
 #Include %A_ScriptDir%\memory\readParty.ahk
-#Include %A_ScriptDir%\memory\readMapSeed.ahk
 #Include %A_ScriptDir%\memory\scanForPlayer.ahk
 
-global lastdwInitSeedHash1
-global lastdwInitSeedHash2
-global lastdwEndSeedHash1
+
+; global lastdwInitSeedHash1
+; global lastdwInitSeedHash2
+; global lastdwEndSeedHash1
+global xorkey
 global playerLevel 
 readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     static items
@@ -35,19 +36,17 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     if (!levelNo) {
         WriteLogDebug("Did not find level num using player offset " playerPointer) 
     }
-        ; get the map seed
-    actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")  
-    mapSeedOld := d2rprocess.read(actAddress + 0x1C, "UInt")
-    actMiscAddress := d2rprocess.read(actAddress + 0x78, "Int64")   ;0x0000023a64ed4780 ;2449824630656
-    dwInitSeedHash1 := d2rprocess.read(actMiscAddress + 0x840, "UInt") 
-    dwInitSeedHash2 := d2rprocess.read(actMiscAddress + 0x844, "UInt") 
-    dwEndSeedHash1 := d2rprocess.read(actMiscAddress + 0x868, "UInt") 
 
-    if (dwInitSeedHash1 != lastdwInitSeedHash1 or dwInitSeedHash2 != lastdwInitSeedHash2 or mapSeed == 0) {
-        mapSeed := calculateMapSeed(dwInitSeedHash1, dwInitSeedHash2, dwEndSeedHash1)
-        lastdwInitSeedHash1 := dwInitSeedHash1
-        lastdwInitSeedHash2 := dwInitSeedHash2
-    }
+    ; get playername
+    playerNameAddress := d2rprocess.read(playerUnit + 0x10, "Int64")
+    , playerName := d2rprocess.readString(playerNameAddress, length := 0)
+    
+
+    ; get the map seed
+    actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")  
+    actMiscAddress := d2rprocess.read(actAddress + 0x78, "Int64")   ;0x0000023a64ed4780 ;2449824630656
+    mapSeed := d2rprocess.read(actMiscAddress + 0x840, "UInt") 
+
 
     ; get the difficulty
     actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")
@@ -57,10 +56,8 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
         WriteLogDebug("Did not find difficulty using player offset " unitTableOffset) 
     }
 
-    ; get playername
-    playerNameAddress := d2rprocess.read(playerUnit + 0x10, "Int64")
-    , playerName := d2rprocess.readString(playerNameAddress, length := 0)
-    , pStatsListEx := d2rprocess.read(playerUnit + 0x88, "Int64")
+    
+    pStatsListEx := d2rprocess.read(playerUnit + 0x88, "Int64")
     , statPtr := d2rprocess.read(pStatsListEx + 0x30, "Int64")
     , statCount := d2rprocess.read(pStatsListEx + 0x38, "Int64")
     , d2rprocess.readRaw(statPtr + 0x2, buffer, statCount*8)
@@ -178,17 +175,4 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     ;ElapsedTime := A_TickCount - StartTime
     ;OutputDebug, % ElapsedTime "`n"
     ;ToolTip % "`n`n`n`n" ElapsedTime
-}
-
-
-readMapSeed(ByRef d2r) {
-    ; map seed
-    pattern := d2r.hexStringToPattern("41 8B F9 48 8D 0D ?? ?? ?? ??") 
-    patternAddress := d2r.modulePatternScan("D2R.exe", , pattern*)  
-    offsetAddress := d2r.read(patternAddress + 6, "Int") ; 0x00007ff6a12172a6
-    delta := patternAddress - d2r.BaseAddress
-    seedAddress := d2r.BaseAddress + delta + 0xEA + offsetAddress
-    seed := d2r.read(seedAddress, "Int") ; 0x00007ff6a12172a6
-    seed := 769095319
-    return seed
 }

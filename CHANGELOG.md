@@ -2,12 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.9.18] - 2021-06-26 - Pathfinding
+## [2.9.18] - 2021-06-30 - Fix after latest patch
 
-- Pathfinding added which will draw onto the map
-- Will only draw onto the map _once_, it won't update live
-- __REQUIRES__ d2-mapserver v15!
-- If you
+- Can correctly get map seed after latest patch
 
 ## [2.9.17] - 2021-06-14 - Minor changes
 

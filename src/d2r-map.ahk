@@ -4,6 +4,8 @@
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #KeyHistory 0
+; if not A_IsAdmin
+; 	Run *RunAs "%A_ScriptFullPath%" 
 ListLines Off
 Process, Priority, , A
 SetBatchLines, -1
@@ -14,6 +16,7 @@ SetWinDelay, -1
 SetControlDelay, -1
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
+SetTitleMatchMode, 2
 #Include %A_ScriptDir%\include\classMemory.ahk
 #Include %A_ScriptDir%\include\logging.ahk
 #Include %A_ScriptDir%\include\Yaml.ahk
@@ -71,7 +74,7 @@ Menu, Tray, Add, Reload, Reload
 Menu, Tray, Add
 Menu, Tray, Add, Exit, ExitMH
 
-global version := "2.9.18"
+global version := "2.9.19"
 
 WriteLog("*******************************************************************")
 WriteLog("* Map overlay started https://github.com/joffreybesos/d2r-mapview *")

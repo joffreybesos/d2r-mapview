@@ -68,6 +68,13 @@ loadStats(ByRef statCount, ByRef statPtr, ByRef statExCount, ByRef statExPtr) {
     return statList
 }
 
+loadFormattedStats(ByRef statCount, ByRef statPtr, ByRef statExCount, ByRef statExPtr) {
+
+; turn list of stats into readable format
+    statList := formatStats(statArray)
+    return statList
+}
+
 
 formatStats(statArray) {
     statList := []

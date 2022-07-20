@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.19] - 2021-07-13 - Pathfinding
+
+- Pathfinding is now added for certain areas
+- Can be disabled in Ctrl+O settings
+- Pathfinding _REQUIRES_ d2-mapserver version 16 or higher
+- Some bug fixes
+
 ## [2.9.18] - 2021-06-30 - Fix after latest patch
 
 - Can correctly get map seed after latest patch

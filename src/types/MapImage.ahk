@@ -38,10 +38,13 @@ class MapImage {
         imageUrl := imageUrl . "&rotate=true&showTextLabels=false"
         imageUrl := imageUrl . "&padding=" . settings["padding"]
         imageUrl := imageUrl . "&edge=true"
-        if (pathStart && pathEnd) {
-            imageUrl := imageUrl . "&pathFinding=true"
-            imageUrl := imageUrl . "&pathStart=" . pathStart
-            imageUrl := imageUrl . "&pathEnd=" . pathEnd
+        if (settings["showPathFinding"]) {
+            if (pathStart && pathEnd) {
+                imageUrl := imageUrl . "&pathFinding=true"
+                imageUrl := imageUrl . "&pathStart=" . pathStart
+                imageUrl := imageUrl . "&pathEnd=" . pathEnd
+                imageUrl := imageUrl . "&pathColour=" . settings["pathFindingColour"]
+            }
         }
         if (settings["centerMode"]) {
             imageUrl := imageUrl . "&serverScale=" . settings["serverScale"]

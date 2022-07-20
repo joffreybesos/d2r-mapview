@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 - Pathfinding is now added for certain areas
 - Can be disabled in Ctrl+O settings
-- Pathfinding _REQUIRES_ d2-mapserver version 16 or higher
+- Pathfinding _REQUIRES_ d2-mapserver version 18 or higher
 - Some bug fixes
 
 ## [2.9.18] - 2021-06-30 - Fix after latest patch

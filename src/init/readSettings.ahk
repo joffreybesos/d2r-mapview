@@ -66,6 +66,8 @@ readSettings(settingsFile, ByRef settings) {
     settings["showShrines"] := 1
     settings["showPortals"] := 1
     settings["showChests"] := 1
+    settings["showPathFinding"] := 0
+    settings["pathFindingColour"] := "FF0000"
     settings["lastActiveGUITab"] := "Info"
     settings["settingsUIX"] := 100
     settings["settingsUIY"] := 100

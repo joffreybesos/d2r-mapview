@@ -27,9 +27,9 @@ drawObjects(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef mapIma
 
                     ;Gdip_DrawString(unitsLayer.G, text, hFont, hFormat, pBrush2, RectF)
                     if (settings["centerMode"]) {
-                        Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPortal, objectx-8, objecty-25, 16, 32)
+                        Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPortal, objectx-8, objecty-(10 * scale), 8 * scale, 16 * scale)
                     } else {
-                        Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPortal, objectx-8, objecty-14, 9, 16)
+                        Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pPortal, objectx-8, objecty-(9 * scale), 8 * scale, 16 * scale)
                     }
                 }
                 if (object["isRedPortal"]) {
@@ -40,9 +40,9 @@ drawObjects(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef mapIma
                     , objecty := correctedPos["y"] + centerTopOffset
                     if (settings["centerMode"]) {
                         ;Gdip_DrawString(unitsLayer.G, text, hFont, hFormat, pBrush2, RectF)
-                        Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pRedPortal, objectx-8, objecty-25, 16, 32)
+                        Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pRedPortal, objectx-8, objecty-(10 * scale), 8 * scale, 16 * scale)
                     } else {
-                        Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pRedPortal, objectx-8, objecty-14, 9, 16)
+                        Gdip_DrawEllipse(unitsLayer.G, unitsLayer.pRedPortal, objectx-8, objecty-(9 * scale), 8 * scale, 16 * scale)
                     }
                 }
             }
@@ -55,9 +55,10 @@ drawObjects(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef mapIma
                         , objectx := correctedPos["x"] + centerLeftOffset
                         , objecty := correctedPos["y"] + centerTopOffset
                         if (settings["centerMode"]) {
-                            drawChest(unitsLayer, objectx, objecty, 0.5, object["chestState"])
+                            
+                            drawChest(unitsLayer, objectx, objecty, (1 / 4) * scale, object["chestState"])
                         } else {
-                            drawChest(unitsLayer, objectx, objecty, 0.3, object["chestState"])
+                            drawChest(unitsLayer, objectx, objecty, (1 / 5) * scale, object["chestState"])
                         }
                     }
                 }
@@ -69,7 +70,7 @@ drawObjects(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef mapIma
     if (settings["showShrines"]) {
         gameObjects := gameMemoryData["objects"]
         , shrineColor := "ff" . settings["shrineColor"]
-        , shrineTextSize := settings["shrineTextSize"]
+        , shrineTextSize := (settings["shrineTextSize"] /2) * scale
         , pBrush := Gdip_BrushCreateSolid("0xff" . settings["shrineColor"])
         for index, object in gameObjects
         {

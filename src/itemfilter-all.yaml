@@ -1,0 +1,669 @@
+# this file is for testing purposes
+
+
+enabledAlerts:
+  - All
+
+Alerts:
+  All:
+    items:
+      - Hand Axe
+      - Axe
+      - Double Axe
+      - Military Pick
+      - War Axe
+      - Large Axe
+      - Broad Axe
+      - Battle Axe
+      - Great Axe
+      - Giant Axe
+      - Wand
+      - Yew Wand
+      - Bone Wand
+      - Grim Wand
+      - Club
+      - Scepter
+      - Grand Scepter
+      - War Scepter
+      - Spiked Club
+      - Mace
+      - Morning Star
+      - Flail
+      - War Hammer
+      - Maul
+      - Great Maul
+      - Short Sword
+      - Scimitar
+      - Saber
+      - Falchion
+      - Crystal Sword
+      - Broad Sword
+      - Long Sword
+      - War Sword
+      - Two-Handed Sword
+      - Claymore
+      - Giant Sword
+      - Bastard Sword
+      - Flamberge
+      - Great Sword
+      - Dagger
+      - Dirk
+      - Kriss
+      - Blade
+      - Throwing Knife
+      - Throwing Axe
+      - Balanced Knife
+      - Balanced Axe
+      - Javelin
+      - Pilum
+      - Short Spear
+      - Glaive
+      - Throwing Spear
+      - Spear
+      - Trident
+      - Brandistock
+      - Spetum
+      - Pike
+      - Bardiche
+      - Voulge
+      - Scythe
+      - Poleaxe
+      - Halberd
+      - War Scythe
+      - Short Staff
+      - Long Staff
+      - Gnarled Staff
+      - Battle Staff
+      - War Staff
+      - Short Bow
+      - Hunter's Bow
+      - Long Bow
+      - Composite Bow
+      - Short Battle Bow
+      - Long Battle Bow
+      - Short War Bow
+      - Long War Bow
+      - Light Crossbow
+      - Crossbow
+      - Heavy Crossbow
+      - Repeating Crossbow
+      - Rancid Gas Potion
+      - Oil Potion
+      - Choking Gas Potion
+      - Exploding Potion
+      - Strangling Gas Potion
+      - Fulminating Potion
+      - Decoy Gidbinn
+      - The Gidbinn
+      - Wirt's Leg
+      - Horadric Malus
+      - Hellforge Hammer
+      - Horadric Staff
+      - Staff of Kings
+      - Hatchet
+      - Cleaver
+      - Twin Axe
+      - Crowbill
+      - Naga
+      - Military Axe
+      - Bearded Axe
+      - Tabar
+      - Gothic Axe
+      - Ancient Axe
+      - Burnt Wand
+      - Petrified Wand
+      - Tomb Wand
+      - Grave Wand
+      - Cudgel
+      - Rune Scepter
+      - Holy Water Sprinkler
+      - Divine Scepter
+      - Barbed Club
+      - Flanged Mace
+      - Jagged Star
+      - Knout
+      - Battle Hammer
+      - War Club
+      - Martel de Fer
+      - Gladius
+      - Cutlass
+      - Shamshir
+      - Tulwar
+      - Dimensional Blade
+      - Battle Sword
+      - Rune Sword
+      - Ancient Sword
+      - Espandon
+      - Dacian Falx
+      - Tusk Sword
+      - Gothic Sword
+      - Zweihander
+      - Executioner Sword
+      - Poignard
+      - Rondel
+      - Cinquedeas
+      - Stilleto
+      - Battle Dart
+      - Francisca
+      - War Dart
+      - Hurlbat
+      - War Javelin
+      - Great Pilum
+      - Simbilan
+      - Spiculum
+      - Harpoon
+      - War Spear
+      - Fuscina
+      - War Fork
+      - Yari
+      - Lance
+      - Lochaber Axe
+      - Bill
+      - Battle Scythe
+      - Partizan
+      - Bec-de-Corbin
+      - Grim Scythe
+      - Jo Staff
+      - Quarterstaff
+      - Cedar Staff
+      - Gothic Staff
+      - Rune Staff
+      - Edge Bow
+      - Razor Bow
+      - Cedar Bow
+      - Double Bow
+      - Short Siege Bow
+      - Long Siege Bow
+      - Rune Bow
+      - Gothic Bow
+      - Arbalest
+      - Siege Crossbow
+      - Ballista
+      - Chu-Ko-Nu
+      - Khalim's Flail
+      - Khalim's Will
+      - Katar
+      - Wrist Blade
+      - Hatchet Hands
+      - Cestus
+      - Claws
+      - Blade Talons
+      - Scissors Katar
+      - Quhab
+      - Wrist Spike
+      - Fascia
+      - Hand Scythe
+      - Greater Claws
+      - Greater Talons
+      - Scissors Quhab
+      - Suwayyah
+      - Wrist Sword
+      - War Fist
+      - Battle Cestus
+      - Feral Claws
+      - Runic Talons
+      - Scissors Suwayyah
+      - Tomahawk
+      - Small Crescent
+      - Ettin Axe
+      - War Spike
+      - Berserker Axe
+      - Feral Axe
+      - Silver-edged Axe
+      - Decapitator
+      - Champion Axe
+      - Glorious Axe
+      - Polished Wand
+      - Ghost Wand
+      - Lich Wand
+      - Unearthed Wand
+      - Truncheon
+      - Mighty Scepter
+      - Seraph Rod
+      - Caduceus
+      - Tyrant Club
+      - Reinforced Mace
+      - Devil Star
+      - Scourge
+      - Legendary Mallet
+      - Ogre Maul
+      - Thunder Maul
+      - Falcata
+      - Ataghan
+      - Elegant Blade
+      - Hydra Edge
+      - Phase Blade
+      - Conquest Sword
+      - Cryptic Sword
+      - Mythical Sword
+      - Legend Sword
+      - Highland Blade
+      - Balrog Blade
+      - Champion Sword
+      - Colossal Sword
+      - Colossus Blade
+      - Bone Knife
+      - Mithral Point
+      - Fanged Knife
+      - Legend Spike
+      - Flying Knife
+      - Flying Axe
+      - Winged Knife
+      - Winged Axe
+      - Hyperion Javelin
+      - Stygian Pilum
+      - Balrog Spear
+      - Ghost Glaive
+      - Winged Harpoon
+      - Hyperion Spear
+      - Stygian Pike
+      - Mancatcher
+      - Ghost Spear
+      - War Pike
+      - Ogre Axe
+      - Colossus Voulge
+      - Thresher
+      - Cryptic Axe
+      - Great Poleaxe
+      - Giant Thresher
+      - Walking Stick
+      - Stalagmite
+      - Elder Staff
+      - Shillelagh
+      - Archon Staff
+      - Spider Bow
+      - Blade Bow
+      - Shadow Bow
+      - Great Bow
+      - Diamond Bow
+      - Crusader Bow
+      - Ward Bow
+      - Hydra Bow
+      - Pellet Bow
+      - Gorgon Crossbow
+      - Colossus Crossbow
+      - Demon Crossbow
+      - Eagle Orb
+      - Sacred Globe
+      - Smoked Sphere
+      - Clasped Orb
+      - Jared's Stone
+      - Stag Bow
+      - Reflex Bow
+      - Maiden Spear
+      - Maiden Pike
+      - Maiden Javelin
+      - Glowing Orb
+      - Crystalline Globe
+      - Cloudy Sphere
+      - Sparkling Ball
+      - Swirling Crystal
+      - Ashwood Bow
+      - Ceremonial Bow
+      - Ceremonial Spear
+      - Ceremonial Pike
+      - Ceremonial Javelin
+      - Heavenly Stone
+      - Eldritch Orb
+      - Demon Heart
+      - Vortex Orb
+      - Dimensional Shard
+      - Matriarchal Bow
+      - Grand Matron Bow
+      - Matriarchal Spear
+      - Matriarchal Pike
+      - Matriarchal Javelin
+      - Cap
+      - Skull Cap
+      - Helm
+      - Full Helm
+      - Great Helm
+      - Crown
+      - Mask
+      - Quilted Armor
+      - Leather Armor
+      - Hard Leather Armor
+      - Studded Leather
+      - Ring Mail
+      - Scale Mail
+      - Chain Mail
+      - Breast Plate
+      - Splint Mail
+      - Plate Mail
+      - Field Plate
+      - Gothic Plate
+      - Full Plate Mail
+      - Ancient Armor
+      - Light Plate
+      - Buckler
+      - Small Shield
+      - Large Shield
+      - Kite Shield
+      - Tower Shield
+      - Gothic Shield
+      - Leather Gloves
+      - Heavy Gloves
+      - Chain Gloves
+      - Light Gauntlets
+      - Gauntlets
+      - Boots
+      - Heavy Boots
+      - Chain Boots
+      - Light Plated Boots
+      - Greaves
+      - Sash
+      - Light Belt
+      - Belt
+      - Heavy Belt
+      - Plated Belt
+      - Bone Helm
+      - Bone Shield
+      - Spiked Shield
+      - War Hat
+      - Sallet
+      - Casque
+      - Basinet
+      - Winged Helm
+      - Grand Crown
+      - Death Mask
+      - Ghost Armor
+      - Serpentskin Armor
+      - Demonhide Armor
+      - Trellised Armor
+      - Linked Mail
+      - Tigulated Mail
+      - Mesh Armor
+      - Cuirass
+      - Russet Armor
+      - Templar Coat
+      - Sharktooth Armor
+      - Embossed Plate
+      - Chaos Armor
+      - Ornate Armor
+      - Mage Plate
+      - Defender
+      - Round Shield
+      - Scutum
+      - Dragon Shield
+      - Pavise
+      - Ancient Shield
+      - Demonhide Gloves
+      - Sharkskin Gloves
+      - Heavy Bracers
+      - Battle Gauntlets
+      - War Gauntlets
+      - Demonhide Boots
+      - Sharkskin Boots
+      - Mesh Boots
+      - Battle Boots
+      - War Boots
+      - Demonhide Sash
+      - Sharkskin Belt
+      - Mesh Belt
+      - Battle Belt
+      - War Belt
+      - Grim Helm
+      - Grim Shield
+      - Barbed Shield
+      - Wolf Head
+      - Hawk Helm
+      - Antlers
+      - Falcon Mask
+      - Spirit Mask
+      - Jawbone Cap
+      - Fanged Helm
+      - Horned Helm
+      - Assault Helmet
+      - Avenger Guard
+      - Targe
+      - Rondache
+      - Heraldic Shield
+      - Aerin Shield
+      - Crown Shield
+      - Preserved Head
+      - Zombie Head
+      - Unraveller Head
+      - Gargoyle Head
+      - Demon Head
+      - Circlet
+      - Coronet
+      - Tiara
+      - Diadem
+      - Shako
+      - Hydraskull
+      - Armet
+      - Giant Conch
+      - Spired Helm
+      - Corona
+      - Demonhead
+      - Dusk Shroud
+      - Wyrmhide
+      - Scarab Husk
+      - Wire Fleece
+      - Diamond Mail
+      - Loricated Mail
+      - Boneweave
+      - Great Hauberk
+      - Balrog Skin
+      - Hellforge Plate
+      - Kraken Shell
+      - Lacquered Plate
+      - Shadow Plate
+      - Sacred Armor
+      - Archon Plate
+      - Heater
+      - Luna
+      - Hyperion
+      - Monarch
+      - Aegis
+      - Ward
+      - Bramble Mitts
+      - Vampirebone Gloves
+      - Vambraces
+      - Crusader Gauntlets
+      - Ogre Gauntlets
+      - Wyrmhide Boots
+      - Scarabshell Boots
+      - Boneweave Boots
+      - Mirrored Boots
+      - Myrmidon Greaves
+      - Spiderweb Sash
+      - Vampirefang Belt
+      - Mithril Coil
+      - Troll Belt
+      - Colossus Girdle
+      - Bone Visage
+      - Troll Nest
+      - Blade Barrier
+      - Alpha Helm
+      - Griffon Headress
+      - Hunter's Guise
+      - Sacred Feathers
+      - Totemic Mask
+      - Jawbone Visor
+      - Lion Helm
+      - Rage Mask
+      - Savage Helmet
+      - Slayer Guard
+      - Akaran Targe
+      - Akaran Rondache
+      - Protector Shield
+      - Gilded Shield
+      - Royal Shield
+      - Mummified Trophy
+      - Fetish Trophy
+      - Sexton Trophy
+      - Cantor Trophy
+      - Heirophant Trophy
+      - Blood Spirit
+      - Sun Spirit
+      - Earth Spirit
+      - Sky Spirit
+      - Dream Spirit
+      - Carnage Helm
+      - Fury Visor
+      - Destroyer Helm
+      - Conqueror Crown
+      - Guardian Crown
+      - Sacred Targe
+      - Sacred Rondache
+      - Ancient Shield
+      - Zakarum Shield
+      - Vortex Shield
+      - Minion Skull
+      - Hellspawn Skull
+      - Overseer Skull
+      - Succubus Skull
+      - Bloodlord Skull
+      - Elixir
+      - Healing Potion
+      - Mana Potion
+      - Full Healing Potion
+      - Full Mana Potion
+      - Stamina Potion
+      - Antidote Potion
+      - Rejuvenation Potion
+      - Full Rejuvenation Potion
+      - Thawing Potion
+      - Tome of Town Portal
+      - Tome of Identify
+      - Amulet
+      - Amulet of the Viper
+      - Ring
+      - Gold
+      - Scroll of Inifuss
+      - Key to the Cairn Stones
+      - Arrows
+      - Torch
+      - Bolts
+      - Scroll of Town Portal
+      - Scroll of Identify
+      - Heart
+      - Brain
+      - Jawbone
+      - Eye
+      - Horn
+      - Tail
+      - Flag
+      - Fang
+      - Quill
+      - Soul
+      - Scalp
+      - Spleen
+      - Key
+      - The Black Tower Key
+      - Potion of Life
+      - A Jade Figurine
+      - The Golden Bird
+      - Lam Esen's Tome
+      - Horadric Cube
+      - Horadric Scroll
+      - Mephisto's Soulstone
+      - Book of Skill
+      - Khalim's Eye
+      - Khalim's Heart
+      - Khalim's Brain
+      - Ear
+      - Chipped Amethyst
+      - Flawed Amethyst
+      - Amethyst
+      - Flawless Amethyst
+      - Perfect Amethyst
+      - Chipped Topaz
+      - Flawed Topaz
+      - Topaz
+      - Flawless Topaz
+      - Perfect Topaz
+      - Chipped Sapphire
+      - Flawed Sapphire
+      - Sapphire
+      - Flawless Sapphire
+      - Perfect Sapphire
+      - Chipped Emerald
+      - Flawed Emerald
+      - Emerald
+      - Flawless Emerald
+      - Perfect Emerald
+      - Chipped Ruby
+      - Flawed Ruby
+      - Ruby
+      - Flawless Ruby
+      - Perfect Ruby
+      - Chipped Diamond
+      - Flawed Diamond
+      - Diamond
+      - Flawless Diamond
+      - Perfect Diamond
+      - Minor Healing Potion
+      - Light Healing Potion
+      - Healing Potion
+      - Greater Healing Potion
+      - Super Healing Potion
+      - Minor Mana Potion
+      - Light Mana Potion
+      - Mana Potion
+      - Greater Mana Potion
+      - Super Mana Potion
+      - Chipped Skull
+      - Flawed Skull
+      - Skull
+      - Flawless Skull
+      - Perfect Skull
+      - Herb
+      - Small Charm
+      - Large Charm
+      - Grand Charm
+      - Small Red Potion
+      - Large Red Potion
+      - Small Blue Potion
+      - Large Blue Potion
+      - El Rune
+      - Eld Rune
+      - Tir Rune
+      - Nef Rune
+      - Eth Rune
+      - Ith Rune
+      - Tal Rune
+      - Ral Rune
+      - Ort Rune
+      - Thul Rune
+      - Amn Rune
+      - Sol Rune
+      - Shael Rune
+      - Dol Rune
+      - Hel Rune
+      - Io Rune
+      - Lum Rune
+      - Ko Rune
+      - Fal Rune
+      - Lem Rune
+      - Pul Rune
+      - Um Rune
+      - Mal Rune
+      - Ist Rune
+      - Gul Rune
+      - Vex Rune
+      - Ohm Rune
+      - Lo Rune
+      - Sur Rune
+      - Ber Rune
+      - Jah Rune
+      - Cham Rune
+      - Zod Rune
+      - Jewel
+      - Malah's Potion
+      - Scroll of Knowledge
+      - Scroll of Resistance
+      - Key of Terror
+      - Key of Hate
+      - Key of Destruction
+      - Diablo's Horn
+      - Baal's Eye
+      - Mephisto's Brain
+      - Token of Absolution
+      - Twisted Essence of Suffering
+      - Charged Essense of Hatred
+      - Burning Essence of Terror
+      - Festering Essence of Destruction
+      - Standard of Heroes
+    color: AAAAAA

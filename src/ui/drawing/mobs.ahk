@@ -116,10 +116,11 @@ drawMonsters(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef mapIm
                     textx := mobx-(unitsLayer.bossDotSize/2) - 100
                     , texty := moby-(unitsLayer.bossDotSize/2) - 105
                     , bossTextColor := "ff" . settings["bossColor"] 
-                    Options = x%textx% y%texty% Center vBottom cffff0000 r8 s24
+                    , bossFontSize := 16 * scale
+                    Options = x%textx% y%texty% Center vBottom cffff0000 r8 s%bossFontSize%
                     textx := textx + 2
                     , texty := texty + 2
-                    Options2 = x%textx% y%texty% Center vBottom cff000000 r8 s24
+                    Options2 = x%textx% y%texty% Center vBottom cff000000 r8 s%bossFontSize%
                     
                     ;x|y|width|height|chars|lines
                     measuredString := Gdip_TextToGraphics(unitsLayer.G, mob["textTitle"], Options2, exocetFont, 200, 100)

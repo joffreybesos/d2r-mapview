@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.20] - 2021-07-25 - Bug fixes
+
+- Many bug fixes for windowed mode
+- Fixed bug where map sometimes wouldn't appear in windowed mode
+- Fixed bug where half of map would be hidden in windowed mode
+- Fixed scaling of chests, boss health bars, portals, and exit lines in windowed mode
+
 ## [2.9.19] - 2021-07-13 - Pathfinding
 
 - Pathfinding is now added for certain areas

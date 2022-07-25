@@ -152,18 +152,22 @@ ShowUnits(ByRef unitsLayer, ByRef settings, ByRef unitHwnd1, ByRef mapHwnd1, ByR
         , regionX := 0 - leftMargin
         , regionY := 0 - topMargin
         if (leftMargin > 0) {
-            regionX := windowLeftMargin
-            , regionWidth := gameWidth - leftMargin + windowLeftMargin
+            regionWidth := gameWidth ;- leftMargin + windowLeftMargin
         }
         if (topMargin > 0) {
-            regionY := windowTopMargin
-            , regionHeight := gameHeight - topMargin + windowTopMargin
+            regionHeight := gameHeight ;- topMargin + windowTopMargin
         }
+
         ;ToolTip % "`n`n`n`n" regionX " " regionY " " regionWidth " " regionHeight
         ;regionHeight := regionHeight - (gameHeight / 5)
         WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapHwnd1%
+        ; if (ticktock == 6) {
+        ;     OutputDebug, % "WinSet, Region, %" regionX "%-%" regionY "% W%" regionWidth "% H%" regionHeight "%, ahk_id %mapHwnd1%`n"
+        ; }
         ;WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %unitHwnd1%
         gameHeight := gameHeight - (gameHeight / 5)
+        ; Gdip_DrawRectangle(unitsLayer.G, unitsLayer.pPenHealth, 0, 0, gameWidth-1, gameHeight-1)
+        
         UpdateLayeredWindow(unitHwnd1, unitsLayer.hdc, windowLeftMargin, windowTopMargin, gameWidth, gameHeight)
         Gdip_GraphicsClear( unitsLayer.G )
     } else {

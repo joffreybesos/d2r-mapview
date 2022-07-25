@@ -27,7 +27,11 @@ class UnitsLayer {
     }
 
     createPens(ByRef settings) {
-        scale := 2 ; TOFIX: Need to include this variable in construtor
+        ;scale := 2 ; TOFIX: Need to include this variable in construtor
+        scale := settings["scale"]
+        if (settings["centerMode"]) {
+            scale:= settings["centerModeScale"]
+        }
         this.pPenGreen := Gdip_CreatePen(0xff00FF00, 0.8 * scale)
         this.pPenPlayer := Gdip_CreatePen(0xff2087fd, 1 * scale)
         this.pPenOtherPlayer := Gdip_CreatePen(0xff00ff00, 0.8 * scale)
@@ -43,10 +47,10 @@ class UnitsLayer {
         this.pBrushNonHealth := Gdip_BrushCreateSolid(0x44000000)
 
         ; lines
-        this.pLineWP := Gdip_CreatePen(0x55ffFF00, 3)
-        this.pLineExit := Gdip_CreatePen(0x55FF00FF, 3)
-        this.pLineBoss := Gdip_CreatePen(0x55FF0000, 3)
-        this.pLineQuest := Gdip_CreatePen(0x5500FF00, 3)
+        this.pLineWP := Gdip_CreatePen(0x55ffFF00, 1.5 * scale)
+        this.pLineExit := Gdip_CreatePen(0x55FF00FF, 1.5 * scale)
+        this.pLineBoss := Gdip_CreatePen(0x55FF0000, 1.5 * scale)
+        this.pLineQuest := Gdip_CreatePen(0x5500FF00, 1.5 * scale)
         this.pBrushLineWP := Gdip_BrushCreateSolid(0x55ffFF00)
         this.pBrushLineExit := Gdip_BrushCreateSolid(0x55FF00FF)
         this.pBrushLineBoss := Gdip_BrushCreateSolid(0x55FF0000)
@@ -141,8 +145,8 @@ class UnitsLayer {
             this.pPortal := Gdip_CreatePen("0xff" . settings["portalColor"], 2.5 * scale)
             this.pRedPortal := Gdip_CreatePen("0xff" . settings["redPortalColor"], 2.5 * scale)
         } else {
-            this.pPortal := Gdip_CreatePen("0xff" . settings["portalColor"], 1.3 * scale)
-            this.pRedPortal := Gdip_CreatePen("0xff" . settings["redPortalColor"], 1.3 * scale)
+            this.pPortal := Gdip_CreatePen("0xff" . settings["portalColor"], 1.8 * scale)
+            this.pRedPortal := Gdip_CreatePen("0xff" . settings["redPortalColor"], 1.8 * scale)
         }
 
         ; chests

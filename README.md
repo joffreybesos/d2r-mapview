@@ -15,6 +15,8 @@ While most users of this map hack were spared, it is recommended to consider thi
 
 ## Join the discord server <https://discord.gg/qEgqyVW3uj>
 
+
+
 ![Worldstone Keep level 2](https://user-images.githubusercontent.com/93067706/170401221-10e7a71e-7cad-488d-98e0-69f4d3617332.png)
 
 ## Demonstration
@@ -300,3 +302,5 @@ Violations of the licence may make you liable for DMCA takedowns.
 - @blacha and his [Diablo 2 map package](https://github.com/blacha/diablo2/tree/master/packages/map)
 - @OneXDeveloper @ItzRabbs and others at [MapAssist](https://github.com/OneXDeveloper/MapAssist)
 - @noah- and [d2bs project](https://github.com/noah-/d2bs/blob/master/D2Structs.h)
+
+![mapviewimage](https://user-images.githubusercontent.com/93067706/183021907-89636339-92d7-4022-b784-b82efb9cfb18.png)

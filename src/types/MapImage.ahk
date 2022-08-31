@@ -23,7 +23,7 @@ class MapImage {
     originalwidth := ""
     originalheight := ""
 
-    __new(ByRef settings, ByRef mapSeed, ByRef difficulty, ByRef levelNo, ByRef mapImageList, pathStart, pathEnd) {
+    __new(ByRef settings, ByRef mapSeed, ByRef difficulty, ByRef levelNo) {
         this.mapSeed := mapSeed
         this.difficulty := difficulty
         this.levelNo := levelNo
@@ -173,16 +173,6 @@ class MapImage {
         this.prerotated := prerotated
         this.originalwidth := originalwidth
         this.originalheight := originalheight
-    }
-
-    refreshMapMargins() {
-        levelNo := this.levelNo
-        IniRead, levelScale, mapconfig.ini, %levelNo%, scale, 1.0
-        IniRead, levelxmargin, mapconfig.ini, %levelNo%, x, 0
-        IniRead, levelymargin, mapconfig.ini, %levelNo%, y, 0
-        this.levelScale := levelScale
-        this.levelxmargin := levelxmargin
-        this.levelymargin := levelymargin
     }
 
 }

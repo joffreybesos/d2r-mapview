@@ -24,6 +24,7 @@ SetTitleMatchMode, 2
 #Include %A_ScriptDir%\include\Gdip_All.ahk
 #Include %A_ScriptDir%\itemfilter\AlertList.ahk
 #Include %A_ScriptDir%\itemfilter\ItemAlert.ahk
+#Include %A_ScriptDir%\types\Areas.ahk
 #Include %A_ScriptDir%\types\Stats.ahk
 #Include %A_ScriptDir%\types\Skills.ahk
 #Include %A_ScriptDir%\types\MapImage.ahk
@@ -41,6 +42,7 @@ SetTitleMatchMode, 2
 #Include %A_ScriptDir%\ui\image\prefetchMaps.ahk
 #Include %A_ScriptDir%\ui\image\loadBitmaps.ahk
 #Include %A_ScriptDir%\ui\image\loadBuffIcons.ahk
+#Include %A_ScriptDir%\ui\createMapGuis.ahk
 #Include %A_ScriptDir%\ui\showMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
@@ -146,12 +148,6 @@ global d2rprocess := initMemory(gameWindowId)
 patternScan(d2rprocess, offsets)
 Gdip_Startup()
 
-; create GUI windows
-Gui, Map: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-global mapHwnd1 := WinExist()
-
-Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
-global unitHwnd1 := WinExist()
 
 
 ; performance counters
@@ -171,6 +167,7 @@ itemLogLayer := new ItemLogLayer(settings)
 itemCounterLayer := new ItemCounterLayer(settings)
 uiAssistLayer := new UIAssistLayer(settings)
 buffBarLayer := new BuffBarLayer(settings)
+mapGuis := new MapGuis(settings)
 
 ; main loop
 While 1 {
@@ -236,7 +233,12 @@ While 1 {
         }
 
         if ((gameMemoryData["difficulty"] == "0" or gameMemoryData["difficulty"] == "1" or gameMemoryData["difficulty"] == "2") and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
+            mapList := getStitchedMaps(gameMemoryData["levelNo"])
             if (gameMemoryData["mapSeed"] != lastSeed or newGame) {
+
+                ; new game so reset all the map guis
+                mapGuis := new MapGuis(settings)
+
                 gameStartTime := A_TickCount    
                 currentGameName := readLastGameName(d2rprocess, gameWindowId, offsets, session)
 
@@ -274,28 +276,12 @@ While 1 {
                 ; Show loading text
                 ;Gui, Map: Show, NA
                 mapLoading := 1
-                Gui, Map: Hide ; hide map
-                Gui, Units: Hide ; hide player dot
-                ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
-                ; Download map
-                levelNo := gameMemoryData["levelNo"]
-                if (mapImageList[levelNo]) {
-                    ; already downloaded
-                } else {
-                    pathStart := gameMemoryData["xPos"] "," gameMemoryData["yPos"]
-                    pathEnd := GetPathEnd(levelNo)
-                    mapImageList[levelNo] := new MapImage(settings, gameMemoryData["mapSeed"], gameMemoryData["difficulty"], levelNo, mapImageList, pathStart, pathEnd)
-                }
-
-                ; Show Map
-                if (lastlevel == "") {
-                    Gui, Map: Show, NA
-                    Gui, Units: Show, NA
-                }
+                mapGuis.hide()
                 
-                ; if (settings["enablePrefetch"]) {
-                ;     prefetchMaps(settings, gameMemoryData)
-                ; }
+                ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
+                ; Show Map
+                mapGuis.downloadMapImages(mapList, gameMemoryData)
+                
                 mapLoading := 0
                 Gui, LoadingText: Destroy ; remove loading text
                 
@@ -303,14 +289,11 @@ While 1 {
             }
             if (redrawMap) {
                 WriteLogDebug("Redrawing map")
-                levelNo := gameMemoryData["levelNo"]
-                thisMapImage := mapImageList[levelNo]
-                thisMapImage.refreshMapMargins()
-                
-                ShowMap(settings, mapHwnd1, thisMapImage, gameMemoryData, uiData)
+                mapGuis.drawMaps(mapList, gameMemoryData)
+                ;ShowMap(settings, mapHwnd1, thisMapImage, gameMemoryData, uiData)
 
-                unitsLayer.delete()
-                unitsLayer := new UnitsLayer(uiData)
+                ; unitsLayer.delete()
+                ; unitsLayer := new UnitsLayer(uiData)
                 
                 gameInfoLayer.updateAreaLevel(levelNo, gameMemoryData["difficulty"])
                 gameInfoLayer.updateExpLevel(levelNo, gameMemoryData["difficulty"], gameMemoryData["playerLevel"])
@@ -319,15 +302,16 @@ While 1 {
                 redrawMap := 0
             }
             ; timeStamp("ShowUnits")
-            ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, mapImageList[levelNo], gameMemoryData, shrines, uiData)
+            ; ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, mapImageList[levelNo], gameMemoryData, shrines, uiData)
             ; timeStamp("ShowUnits")
             uiAssistLayer.drawMonsterBar(gameMemoryData["hoveredMob"])
 
             if (settings["centerMode"] and gameMemoryData["pathAddress"]) {
-                MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], mapHwnd1, unitHwnd1, mapImageList[levelNo], uiData)
+                mapGuis.updateMapPositions(mapList, settings, d2rprocess, gameMemoryData)
+                ; MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], mapHwnd1, unitHwnd1, mapImageList[levelNo], uiData)
             }
             if (Mod(ticktock, 6)) {
-                checkAutomapVisibility(d2rprocess, gameMemoryData)
+                ; checkAutomapVisibility(d2rprocess, gameMemoryData)
                 CoordMode,Mouse,Screen
                 MouseGetPos, mouseX, mouseY
                 buffBarLayer.checkHover(mouseX, mouseY)
@@ -342,7 +326,7 @@ While 1 {
             lastlevel := gameMemoryData["levelNo"]
         } else {
             WriteLog("In Menu - no valid difficulty, levelno, or mapseed found '" gameMemoryData["difficulty"] "' '" gameMemoryData["levelNo"] "' '" gameMemoryData["mapSeed"] "'")
-            hideMap(false)
+            ; hideMap(false)
             lastlevel:=
         }
     }
@@ -552,17 +536,17 @@ Update:
     buffBarLayer.delete()
     buffBarLayer := new BuffBarLayer(settings)
     SetupHotKeys(gameWindowId, settings)
-    if (cmode != settings["centerMode"]) { ; if centermode changed
-        lastlevel := "INVALIDATED"
-        mapImageList[levelNo] := 0
-        gameMemoryData := {}
-        uiData := {}
-        WinSet, Region, , ahk_id %mapHwnd1%
-        WinSet, Region, , ahk_id %unitHwnd1%
-        Gui, Map: Hide
-        Gui, Units: Hide
-        mapShowing := 0
-    }
+    ; if (cmode != settings["centerMode"]) { ; if centermode changed
+    ;     lastlevel := "INVALIDATED"
+    ;     ; mapImageList[levelNo] := 0
+    ;     gameMemoryData := {}
+    ;     ; uiData := {}
+    ;     ; WinSet, Region, , ahk_id %mapHwnd1%
+    ;     ; WinSet, Region, , ahk_id %unitHwnd1%
+    ;     ; Gui, Map: Hide
+    ;     ; Gui, Units: Hide
+    ;     mapShowing := 0
+    ; }
     GuiControl, Hide, Unsaved
     GuiControl, Disable, UpdateBtn
     redrawMap := 1

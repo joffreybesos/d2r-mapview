@@ -1,12 +1,3 @@
-; #Include %A_ScriptDir%\ui\drawing\helper.ahk
-; #Include %A_ScriptDir%\ui\drawing\exits.ahk
-; #Include %A_ScriptDir%\ui\drawing\items.ahk
-; #Include %A_ScriptDir%\ui\drawing\lines.ahk
-; #Include %A_ScriptDir%\ui\drawing\missiles.ahk
-; #Include %A_ScriptDir%\ui\drawing\mobs.ahk
-; #Include %A_ScriptDir%\ui\drawing\objects.ahk
-; #Include %A_ScriptDir%\ui\drawing\otherplayers.ahk
-
 #Include %A_ScriptDir%\ui\map\Drawing.ahk
 #Include %A_ScriptDir%\ui\map\units\npcs.ahk
 #Include %A_ScriptDir%\ui\map\units\objects.ahk
@@ -15,6 +6,7 @@
 #Include %A_ScriptDir%\ui\map\units\items.ahk
 #Include %A_ScriptDir%\ui\map\units\missiles.ahk
 #Include %A_ScriptDir%\ui\map\units\players.ahk
+#Include %A_ScriptDir%\ui\helper.ahk
 
 class UnitsGUI {
     unitHwnd :=

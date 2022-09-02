@@ -1,7 +1,4 @@
 
-
-
-
 correctPos(settings, xPosDot, yPosDot, centerX, centerY, RWidth, RHeight, scale) {
     correctedPos := findNewPos(xPosDot, yPosDot, centerX, centerY, RWidth, RHeight, scale)
     if (settings["centerMode"]) {
@@ -48,23 +45,6 @@ hasVal(haystack, needle) {
 	return 0
 }
 
-
-createCross(ByRef playerCrossXoffset, ByRef playerCrossYoffset, ByRef scale) {
-    xscale := scale
-    , yscale := scale / 2
-    , x1 := playerCrossXoffset - xscale - xscale
-    , x2 := playerCrossXoffset - xscale
-    , x3 := playerCrossXoffset
-    , x4 := playerCrossXoffset + xscale
-    , x5 := playerCrossXoffset + xscale + xscale
-    , y1 := playerCrossYoffset - yscale - yscale
-    , y2 := playerCrossYoffset - yscale
-    , y3 := playerCrossYoffset
-    , y4 := playerCrossYoffset + yscale
-    , y5 := playerCrossYoffset + yscale + yscale
-    points = %x1%,%y2%|%x2%,%y3%|%x1%,%y4%|%x2%,%y5%|%x3%,%y4%|%x4%,%y5%|%x5%,%y4%|%x4%,%y3%|%x5%,%y2%|%x4%,%y1%|%x3%,%y2%|%x2%,%y1%
-    return points
-}
 
 isWindowFullScreen(WinID)
 {

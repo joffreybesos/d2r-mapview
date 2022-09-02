@@ -44,11 +44,8 @@ SetTitleMatchMode, 2
 #Include %A_ScriptDir%\ui\image\loadBuffIcons.ahk
 #Include %A_ScriptDir%\ui\map\MapGUIs.ahk
 #Include %A_ScriptDir%\ui\map\UnitsGUI.ahk
-#Include %A_ScriptDir%\ui\showMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
-#Include %A_ScriptDir%\ui\showUnits.ahk
-#Include %A_ScriptDir%\ui\movePlayerMap.ahk
 #Include %A_ScriptDir%\stats\GameSession.ahk
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\localization.ahk

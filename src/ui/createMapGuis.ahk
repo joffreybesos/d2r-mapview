@@ -34,10 +34,12 @@ class MapGuis {
 
     drawMaps(ByRef mapList, ByRef gameMemoryData) {
         this.show(mapList)
+        this.hide(mapList)
         for k, thisLevelNo in mapList {
             ; OutputDebug, % "Drawing map " thisLevelNo "`n"
             this.drawMap(thisLevelNo, gameMemoryData)
         }
+        this.show(mapList)
     }
 
     show(ByRef mapList) {

@@ -105,9 +105,10 @@ class MapGUIs {
         gameWindow := getWindowClientArea()
         mapPosX := ((gameWindow.W / 2) - correctedPos.x + gameWindow.X)
         mapPosY := ((gameWindow.H / 2) - correctedPos.y + gameWindow.Y) + (mapScaledHeight / 4) - (5 * scale)
-        WinMove, ahk_id %mapGuiHwnd%,,mapPosX, mapPosY
         this.mapImageList[levelNo].mapPosX := mapPosX
         this.mapImageList[levelNo].mapPosY := mapPosY
+        this.updateVisibleRegion(thisLevelNo, gameWindow)
+        WinMove, ahk_id %mapGuiHwnd%,,mapPosX, mapPosY
         SelectObject(hdc, obm)
         DeleteObject(hbm)
         DeleteDC(hdc)
@@ -121,41 +122,41 @@ class MapGUIs {
         for k, thisLevelNo in mapList {
             gameWindow := getWindowClientArea()
             this.updateMapPosition(settings, d2rprocess, gameMemoryData, thisLevelNo, gameWindow)
-            
-            mapGuiHwnd := this.mapGuis[thisLevelNo]
-            if (this.mapImageList[thisLevelNo].mapPosX < gameWindow.X) {
-                regionX := gameWindow.X - this.mapImageList[thisLevelNo].mapPosX
-                regionWidth := gameWindow.W
-            } else if (this.mapImageList[thisLevelNo].mapPosX > (gameWindow.W + gameWindow.X)) {
-                ; regionX := (gameWindow.W + gameWindow.X) - this.mapImageList[thisLevelNo].mapPosX
-                regionX := 0
-                regionY := 0
-                regionWidth := 0
-                regionHeight := 0
-            } else {
-                regionX := 0
-                regionWidth := gameWindow.W - (this.mapImageList[thisLevelNo].mapPosX - gameWindow.X)
-            }
-
-            if (this.mapImageList[thisLevelNo].mapPosY < gameWindow.Y) {
-                regionY := gameWindow.Y - this.mapImageList[thisLevelNo].mapPosY
-                regionHeight := gameWindow.H
-            } else if (this.mapImageList[thisLevelNo].mapPosY > (gameWindow.H + gameWindow.Y)) {
-                ; regionY := (gameWindow.H + gameWindow.Y) - this.mapImageList[thisLevelNo].mapPosY
-                regionX := 0
-                regionY := 0
-                regionWidth := 0
-                regionHeight := 0
-                
-            } else {
-                regionY := 0
-                regionHeight := gameWindow.H - (this.mapImageList[thisLevelNo].mapPosY - gameWindow.Y)
-            }
-            
-            
-
-            WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapGuiHwnd%
+            this.updateVisibleRegion(thisLevelNo, gameWindow)
         }
+    }
+
+    updateVisibleRegion(ByRef levelNo, ByRef gameWindow) {
+        mapGuiHwnd := this.mapGuis[levelNo]
+        if (this.mapImageList[levelNo].mapPosX < gameWindow.X) {
+            regionX := gameWindow.X - this.mapImageList[levelNo].mapPosX
+            regionWidth := gameWindow.W
+        } else if (this.mapImageList[levelNo].mapPosX > (gameWindow.W + gameWindow.X)) {
+            ; regionX := (gameWindow.W + gameWindow.X) - this.mapImageList[levelNo].mapPosX
+            regionX := 0
+            regionY := 0
+            regionWidth := 0
+            regionHeight := 0
+        } else {
+            regionX := 0
+            regionWidth := gameWindow.W - (this.mapImageList[levelNo].mapPosX - gameWindow.X)
+        }
+
+        if (this.mapImageList[levelNo].mapPosY < gameWindow.Y) {
+            regionY := gameWindow.Y - this.mapImageList[levelNo].mapPosY
+            regionHeight := gameWindow.H
+        } else if (this.mapImageList[levelNo].mapPosY > (gameWindow.H + gameWindow.Y)) {
+            ; regionY := (gameWindow.H + gameWindow.Y) - this.mapImageList[levelNo].mapPosY
+            regionX := 0
+            regionY := 0
+            regionWidth := 0
+            regionHeight := 0
+            
+        } else {
+            regionY := 0
+            regionHeight := gameWindow.H - (this.mapImageList[levelNo].mapPosY - gameWindow.Y)
+        }
+        WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapGuiHwnd%
     }
 
     updateMapPosition(ByRef settings, ByRef d2rprocess, ByRef gameMemoryData, ByRef levelNo, ByRef gameWindow) {

@@ -52,11 +52,9 @@ class UnitsGUI {
         drawMissiles(this.G, this.brushes, settings, gameMemoryData)
         drawPlayers(this.G, this.brushes, settings, gameMemoryData)
         
-        Gdip_DrawRectangle(this.G, this.brushes.pPenHealth, 0, 0, gameWindow.W-1, gameWindow.H-1)
+        ; Gdip_DrawRectangle(this.G, this.brushes.pPenHealth, 0, 0, gameWindow.W-1, gameWindow.H-1)
         UpdateLayeredWindow(this.unitHwnd, this.hdc, gameWindow.X, gameWindow.Y, gameWindow.W, gameWindow.H)
         Gdip_GraphicsClear( this.G )
-
-
         ; timeStamp("unitsEnd")
     }
 

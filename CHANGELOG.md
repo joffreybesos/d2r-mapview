@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.0] - 2022-09-02 - Huge rework
+
+- Maps no longer load when going from one walkable area to another
+- All connected walkable maps now render at once
+- Walkable exits are now marked e.g. entrance to Cold Plains
+- Complete rewrite of how maps and units are drawn
+
 ## [2.9.20] - 2021-07-25 - Bug fixes
 
 - Many bug fixes for windowed mode

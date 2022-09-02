@@ -100,7 +100,7 @@ class MapGUIs {
         correctedPos := findNewPos(playerX, playerY, (originalWidth/2), (originalHeight/2), mapScaledWidth, mapScaledHeight, scale)
         gameWindow := getWindowClientArea()
         mapPosX := ((gameWindow.W / 2) - correctedPos.x + gameWindow.X)
-        mapPosY := ((gameWindow.H / 2) - correctedPos.y + gameWindow.Y) + (mapScaledHeight / 4)
+        mapPosY := ((gameWindow.H / 2) - correctedPos.y + gameWindow.Y) + (mapScaledHeight / 4) - (5 * scale)
         WinMove, ahk_id %mapGuiHwnd%,,mapPosX, mapPosY
         this.mapImageList[levelNo].mapPosX := mapPosX
         this.mapImageList[levelNo].mapPosY := mapPosY
@@ -145,7 +145,7 @@ class MapGUIs {
         ; correctedPos := transformPosition(playerX, playerY, originalWidth / 2, originalHeight / 2, mapScaledWidth, mapScaledHeight, scale)
         gameWindow := getWindowClientArea()
         mapPosX := ((gameWindow.W / 2) - correctedPos.x + gameWindow.X)
-        mapPosY := ((gameWindow.H / 2) - correctedPos.y + gameWindow.Y) + (mapScaledHeight / 4)
+        mapPosY := ((gameWindow.H / 2) - correctedPos.y + gameWindow.Y) + (mapScaledHeight / 4) - (5 * scale)
         mapGuiHwnd := this.mapGuis[levelNo]
         WinMove, ahk_id %mapGuiHwnd%,,mapPosX, mapPosY
     }

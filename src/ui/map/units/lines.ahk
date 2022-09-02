@@ -150,6 +150,7 @@ getExitsOfInterest(currentLvl) {
         case "104": return "105"
         case "105": return "106"
         case "106": return "107"
+        case "107": return "108"
         case "113": return "114"
         case "115": return "117"
         case "118": return "120"

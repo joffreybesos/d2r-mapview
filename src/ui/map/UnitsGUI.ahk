@@ -10,6 +10,7 @@
 #Include %A_ScriptDir%\ui\map\Drawing.ahk
 #Include %A_ScriptDir%\ui\map\units\npcs.ahk
 #Include %A_ScriptDir%\ui\map\units\objects.ahk
+#Include %A_ScriptDir%\ui\map\units\exits.ahk
 
 class UnitsGUI {
     unitHwnd :=
@@ -31,7 +32,7 @@ class UnitsGUI {
         this.brushes := new Brushes(settings)
     }
 
-    drawUnitLayer(ByRef settings, ByRef gameMemoryData) {
+    drawUnitLayer(ByRef settings, ByRef gameMemoryData, ByRef mapImage) {
         ; timeStamp("unitsStart")
         StartTime := A_TickCount
         , Angle := 45
@@ -53,8 +54,9 @@ class UnitsGUI {
             Gdip_DrawEllipse(this.G, this.pPenTownNPCCross, mobScreenPos.x, mobScreenPos.y, 15, 15)
         }
 
-        drawNPCs(this.G, this.brushes, settings, gameMemoryData, renderScale, scale)
-        drawObjects(this.G, this.brushes, settings, gameMemoryData, renderScale, scale)
+        drawNPCs(this.G, this.brushes, settings, gameMemoryData)
+        drawObjects(this.G, this.brushes, settings, gameMemoryData)
+        drawExits(this.G, this.brushes, settings, gameMemoryData, mapImage)
 
         playerScreenPos := World2Screen(playerX, playerY, playerX, playerY, scale)
         

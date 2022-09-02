@@ -300,7 +300,7 @@ While 1 {
                 redrawMap := 0
             }
             ; ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, mapImageList[levelNo], gameMemoryData, shrines, uiData)
-            unitsGui.drawUnitLayer(settings, gameMemoryData)
+            unitsGui.drawUnitLayer(settings, gameMemoryData, mapGuis.mapImageList[levelNo])
             ; timeStamp("ShowUnits")
             uiAssistLayer.drawMonsterBar(gameMemoryData["hoveredMob"])
 

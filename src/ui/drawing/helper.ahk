@@ -241,7 +241,7 @@ getWindowClientArea() {
     Win_Client_Y := NumGet(&RECT, 4, "Int")
     Win_Client_W := NumGet(&RECT, 8, "Int")
     Win_Client_H := NumGet(&RECT, 12, "Int")
-    return { "x": Win_Client_X, "Y": Win_Client_Y, "W": Win_Client_W, "H": Win_Client_H }
+    return { "X": Win_Client_X, "Y": Win_Client_Y, "W": Win_Client_W, "H": Win_Client_H }
 }
 
 

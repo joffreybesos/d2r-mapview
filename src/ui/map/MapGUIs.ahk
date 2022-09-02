@@ -119,11 +119,46 @@ class MapGUIs {
 
     updateMapPositions(ByRef mapList, ByRef settings, ByRef d2rprocess, ByRef gameMemoryData) {
         for k, thisLevelNo in mapList {
-            this.updateMapPosition(settings, d2rprocess, gameMemoryData, thisLevelNo)
+            gameWindow := getWindowClientArea()
+            this.updateMapPosition(settings, d2rprocess, gameMemoryData, thisLevelNo, gameWindow)
+            
+            mapGuiHwnd := this.mapGuis[thisLevelNo]
+            if (this.mapImageList[thisLevelNo].mapPosX < gameWindow.X) {
+                regionX := gameWindow.X - this.mapImageList[thisLevelNo].mapPosX
+                regionWidth := gameWindow.W
+            } else if (this.mapImageList[thisLevelNo].mapPosX > (gameWindow.W + gameWindow.X)) {
+                ; regionX := (gameWindow.W + gameWindow.X) - this.mapImageList[thisLevelNo].mapPosX
+                regionX := 0
+                regionY := 0
+                regionWidth := 0
+                regionHeight := 0
+            } else {
+                regionX := 0
+                regionWidth := gameWindow.W - (this.mapImageList[thisLevelNo].mapPosX - gameWindow.X)
+            }
+
+            if (this.mapImageList[thisLevelNo].mapPosY < gameWindow.Y) {
+                regionY := gameWindow.Y - this.mapImageList[thisLevelNo].mapPosY
+                regionHeight := gameWindow.H
+            } else if (this.mapImageList[thisLevelNo].mapPosY > (gameWindow.H + gameWindow.Y)) {
+                ; regionY := (gameWindow.H + gameWindow.Y) - this.mapImageList[thisLevelNo].mapPosY
+                regionX := 0
+                regionY := 0
+                regionWidth := 0
+                regionHeight := 0
+                
+            } else {
+                regionY := 0
+                regionHeight := gameWindow.H - (this.mapImageList[thisLevelNo].mapPosY - gameWindow.Y)
+            }
+            
+            
+
+            WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapGuiHwnd%
         }
     }
 
-    updateMapPosition(ByRef settings, ByRef d2rprocess, ByRef gameMemoryData, ByRef levelNo) {
+    updateMapPosition(ByRef settings, ByRef d2rprocess, ByRef gameMemoryData, ByRef levelNo, ByRef gameWindow) {
         scale := settings["centerModeScale"]
         renderScale := settings["serverScale"] 
         ; player position
@@ -147,11 +182,13 @@ class MapGUIs {
         playerY := (gameMemoryData["yPos"] - this.mapImageList[levelNo].mapOffsetY) * renderScale
         correctedPos := findNewPos(playerX, playerY, (originalWidth/2), (originalHeight/2), mapScaledWidth, mapScaledHeight, scale)
         ; correctedPos := transformPosition(playerX, playerY, originalWidth / 2, originalHeight / 2, mapScaledWidth, mapScaledHeight, scale)
-        gameWindow := getWindowClientArea()
+        
         mapPosX := ((gameWindow.W / 2) - correctedPos.x + gameWindow.X)
         mapPosY := ((gameWindow.H / 2) - correctedPos.y + gameWindow.Y) + (mapScaledHeight / 4) - (5 * scale)
         mapGuiHwnd := this.mapGuis[levelNo]
         WinMove, ahk_id %mapGuiHwnd%,,mapPosX, mapPosY
+        this.mapImageList[levelNo].mapPosX := mapPosX
+        this.mapImageList[levelNo].mapPosY := mapPosY
     }
 }
 

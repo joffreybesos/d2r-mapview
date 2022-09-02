@@ -56,6 +56,7 @@ class UnitsGUI {
         UpdateLayeredWindow(this.unitHwnd, this.hdc, gameWindow.X, gameWindow.Y, gameWindow.W, gameWindow.H)
         Gdip_GraphicsClear( this.G )
 
+
         ; timeStamp("unitsEnd")
     }
 

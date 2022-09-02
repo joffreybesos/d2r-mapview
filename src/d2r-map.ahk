@@ -54,11 +54,9 @@ SetTitleMatchMode, 2
 #Include %A_ScriptDir%\init\serverHealthCheck.ahk
 #Include %A_ScriptDir%\init\updateCheck.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
-#Include %A_ScriptDir%\ui\gdip\unitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\SessionTableLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\GameInfoLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\PartyInfoLayer.ahk
-#Include %A_ScriptDir%\ui\gdip\UnitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UIAssistLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\ItemLogLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\ItemCounterLayer.ahk

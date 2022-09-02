@@ -27,8 +27,8 @@ ReadObjects(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef
                     , shrineFlag := d2rprocess.read(pUnitData + 0x09, "UShort")
                     , name := getObjectName(txtFileNo)
                     , pPath := d2rprocess.read(objectUnit + 0x38, "Int64")  
-                    , objectx := d2rprocess.read(pPath + 0x10, "UShort")
-                    , objecty := d2rprocess.read(pPath + 0x14, "UShort")
+                    , x := d2rprocess.read(pPath + 0x10, "UShort")
+                    , y := d2rprocess.read(pPath + 0x14, "UShort")
 
                     if (isShrine) {
                         shrineType := shrineType(interactType)
@@ -57,7 +57,7 @@ ReadObjects(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef
                         ; }
                     }
 
-                    gameObject := {"txtFileNo": txtFileNo, "name": name, "mode": mode, "isChest": isChest, "chestState": chestState, "isPortal": isPortal, "isRedPortal": isRedPortal, "ownerName": ownerName, "interactType": interactType, "isShrine": isShrine, "shrineType": shrineType, "objectx": objectx, "objecty": objecty, "levelNo": levelNo }
+                    gameObject := {"txtFileNo": txtFileNo, "name": name, "mode": mode, "isChest": isChest, "chestState": chestState, "isPortal": isPortal, "isRedPortal": isRedPortal, "ownerName": ownerName, "interactType": interactType, "isShrine": isShrine, "shrineType": shrineType, "x": x, "y": y, "levelNo": levelNo }
                     ;WriteLog("txtFileNo: " txtFileNo ", name: " name ", isPortal: " isPortal ", isShrine: " isShrine ", objectx: " objectx ", objecty: " objecty)
                     , gameObjects.push(gameObject)
                 }

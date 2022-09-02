@@ -1,5 +1,5 @@
 
-class MapGuis {
+class MapGUIs {
     mapGuis := []
     mapImageList := []
     __new(ByRef settings) {

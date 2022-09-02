@@ -1,0 +1,100 @@
+; #Include %A_ScriptDir%\ui\drawing\helper.ahk
+; #Include %A_ScriptDir%\ui\drawing\exits.ahk
+; #Include %A_ScriptDir%\ui\drawing\items.ahk
+; #Include %A_ScriptDir%\ui\drawing\lines.ahk
+; #Include %A_ScriptDir%\ui\drawing\missiles.ahk
+; #Include %A_ScriptDir%\ui\drawing\mobs.ahk
+; #Include %A_ScriptDir%\ui\drawing\objects.ahk
+; #Include %A_ScriptDir%\ui\drawing\otherplayers.ahk
+
+#Include %A_ScriptDir%\ui\map\Drawing.ahk
+#Include %A_ScriptDir%\ui\map\units\npcs.ahk
+#Include %A_ScriptDir%\ui\map\units\objects.ahk
+
+class UnitsGUI {
+    unitHwnd :=
+    brushes :=
+
+    __new(ByRef settings) {
+        Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
+        this.unitHwnd := WinExist()
+        
+        gameWindow := getWindowClientArea()
+        this.hbm := CreateDIBSection(gameWindow.W, gameWindow.H)
+
+        this.hdc := CreateCompatibleDC()
+        this.obm := SelectObject(this.hdc, this.hbm)
+
+        this.G := Gdip_GraphicsFromHDC(this.hdc)
+        Gdip_SetSmoothingMode(this.G, 4)
+        Gdip_SetInterpolationMode(this.G, 7)
+        this.brushes := new Brushes(settings)
+    }
+
+    drawUnitLayer(ByRef settings, ByRef gameMemoryData) {
+        ; timeStamp("unitsStart")
+        StartTime := A_TickCount
+        , Angle := 45
+        , opacity := 1.0
+        , scale:= settings["centerModeScale"]
+        , renderScale := settings["serverScale"]
+        , opacity:= settings["centerModeOpacity"]
+        
+        ; get relative position of player in world
+        ; xpos is absolute world pos in game
+        ; each map has offset x and y which is absolute world position
+        gameWindow := getWindowClientArea()
+        playerX := gameMemoryData.xPos
+        playerY := gameMemoryData.yPos
+
+        for index, mob in gameMemoryData.mobs
+        {
+            mobScreenPos := World2Screen(playerX, playerY, mob.x, mob.y, scale)
+            Gdip_DrawEllipse(this.G, this.pPenTownNPCCross, mobScreenPos.x, mobScreenPos.y, 15, 15)
+        }
+
+        drawNPCs(this.G, this.brushes, settings, gameMemoryData, renderScale, scale)
+        drawObjects(this.G, this.brushes, settings, gameMemoryData, renderScale, scale)
+
+        playerScreenPos := World2Screen(playerX, playerY, playerX, playerY, scale)
+        
+        points := createCross(playerScreenPos.x, playerScreenPos.y, 4.9 * scale)
+        Gdip_DrawPolygon(this.G, this.brushes.pPenPlayer, points)
+
+        
+        Gdip_DrawRectangle(this.G, this.brushes.pPenHealth, 0, 0, gameWindow.W, gameWindow.H)
+        UpdateLayeredWindow(this.unitHwnd, this.hdc, 0, 0, gameWindow.W, gameWindow.H)
+        Gdip_GraphicsClear( this.G )
+
+        ; timeStamp("unitsEnd")
+    }
+
+    show() {
+        Gui, Units: Show, NA
+    }
+
+    hide() {
+        Gui, Units: Hide ; hide units
+    }
+
+}
+
+
+
+; player is always middle of screen, calculate relative to that
+World2Screen(ByRef playerX, ByRef playerY, ByRef targetx, ByRef targety, scale) {
+    ; scale := 27
+    scale := scale * 3
+    xdiff := targetx - playerX
+    ydiff := targety - playerY
+    
+    gameWindow := getWindowClientArea()
+    centerX := (gameWindow.W/2)
+    centerY := (gameWindow.H/2)
+    angle := 0.785398    ;45 deg
+    x := xdiff * cos(angle) - ydiff * sin(angle)
+    y := xdiff * sin(angle) + ydiff * cos(angle)
+    x := centerX + (x * scale)
+    y := centerY + (y * scale * 0.5) - 10
+    return { "x": x, "y": y }
+}

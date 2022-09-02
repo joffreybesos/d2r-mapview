@@ -1,77 +1,6 @@
-#SingleInstance, Force
-SendMode Input
-SetWorkingDir, %A_ScriptDir%
-#Include %A_ScriptDir%\ui\drawing\helper.ahk
-#Include %A_ScriptDir%\ui\drawing\exits.ahk
-#Include %A_ScriptDir%\ui\drawing\items.ahk
-#Include %A_ScriptDir%\ui\drawing\lines.ahk
-#Include %A_ScriptDir%\ui\drawing\missiles.ahk
-#Include %A_ScriptDir%\ui\drawing\mobs.ahk
-#Include %A_ScriptDir%\ui\drawing\objects.ahk
-#Include %A_ScriptDir%\ui\drawing\otherplayers.ahk
 
-class UnitsGUI {
-    unitHwnd :=
+class Brushes {
     __new(ByRef settings) {
-        Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
-        this.unitHwnd := WinExist()
-        
-        gameWindow := getWindowClientArea()
-        this.hbm := CreateDIBSection(gameWindow.W, gameWindow.H)
-
-        this.hdc := CreateCompatibleDC()
-        this.obm := SelectObject(this.hdc, this.hbm)
-
-        this.G := Gdip_GraphicsFromHDC(this.hdc)
-        Gdip_SetSmoothingMode(this.G, 4)
-        Gdip_SetInterpolationMode(this.G, 7)
-        this.createPens(settings)
-    }
-
-    drawUnitLayer(ByRef settings, ByRef gameMemoryData) {
-        ; timeStamp("unitsStart")
-        StartTime := A_TickCount
-        , Angle := 45
-        , opacity := 1.0
-        , scale:= settings["centerModeScale"]
-        , renderScale := settings["serverScale"]
-        , opacity:= settings["centerModeOpacity"]
-        
-        ; get relative position of player in world
-        ; xpos is absolute world pos in game
-        ; each map has offset x and y which is absolute world position
-        gameWindow := getWindowClientArea()
-        playerX := gameMemoryData.xPos
-        playerY := gameMemoryData.yPos
-
-        for index, mob in gameMemoryData.mobs
-        {
-            mobScreenPos := World2Screen(playerX, playerY, mob.x, mob.y, scale)
-            Gdip_DrawEllipse(this.G, this.pPenTownNPCCross, mobScreenPos.x, mobScreenPos.y, 15, 15)
-        }
-
-        playerScreenPos := World2Screen(playerX, playerY, playerX, playerY, scale)
-        
-        points := createCross(playerScreenPos.x, playerScreenPos.y, 4.9 * scale)
-        Gdip_DrawPolygon(this.G, this.pPenPlayer, points)
-
-        
-        Gdip_DrawRectangle(this.G, this.pPenHealth, 0, 0, gameWindow.W, gameWindow.H)
-        UpdateLayeredWindow(this.unitHwnd, this.hdc, 0, 0, gameWindow.W, gameWindow.H)
-        Gdip_GraphicsClear( this.G )
-
-        ; timeStamp("unitsEnd")
-    }
-
-    show() {
-        Gui, Units: Show, NA
-    }
-
-    hide() {
-        Gui, Units: Hide ; hide units
-    }
-
-    createPens(ByRef settings) {
         scale := settings["centerModeScale"]
         this.pPenGreen := Gdip_CreatePen(0xff00FF00, 0.8 * scale)
         this.pPenPlayer := Gdip_CreatePen(0xff2087fd, 1 * scale)
@@ -255,20 +184,86 @@ class UnitsGUI {
 
 
 
-; player is always middle of screen, calculate relative to that
-World2Screen(ByRef playerX, ByRef playerY, ByRef targetx, ByRef targety, scale) {
-    ; scale := 27
-    scale := scale * 3
-    xdiff := targetx - playerX
-    ydiff := targety - playerY
+
+drawFloatingText(ByRef G, ByRef brushes, ByRef unitx, ByRef unity, ByRef fontSize, ByRef fontColor, ByRef background, ByRef forceNoWrap, ByRef font, ByRef text) {
     
-    gameWindow := getWindowClientArea()
-    centerX := (gameWindow.W/2)
-    centerY := (gameWindow.H/2)
-    angle := 0.785398    ;45 deg
-    x := xdiff * cos(angle) - ydiff * sin(angle)
-    y := xdiff * sin(angle) + ydiff * cos(angle)
-    x := centerX + (x * scale)
-    y := centerY + (y * scale * 0.5) - 10
-    return { "x": x, "y": y }
+    textSpaceWidth := StrLen(text) * fontSize
+    , textSpaceHeight := 100
+    , textx := unitx - textSpaceWidth /2
+    , texty := unity-(brushes.normalDotSize/2) - textSpaceHeight
+    if (forceNoWrap) {
+        NoWrap := "NoWrap"
+    } else {
+        NoWrap := ""
+    }
+    Options = x%textx% y%texty% Center vBottom %NoWrap% c%fontColor% r8 s%fontSize%
+    textx := textx + 1
+    , texty := texty + 1
+    Options2 = x%textx% y%texty% Center vBottom %NoWrap% cff000000 r8 s%fontSize%
+    
+    ;x|y|width|height|chars|lines
+    measuredString := Gdip_TextToGraphics(G, text, Options2, font, textSpaceWidth, textSpaceHeight)
+    if (background) {        
+        ms := StrSplit(measuredString , "|")
+        , bgx := ms[1] - 5
+        , bgy := ms[2] - 2
+        , bgw := ms[3] + 8
+        , bgh := ms[4] + 0
+        Gdip_FillRectangle(G, brushes.pBrushNonHealth, bgx, bgy, bgw, bgh)
+    }
+    Gdip_TextToGraphics(G, text, Options,  font, textSpaceWidth, textSpaceHeight)
+    return measuredString
+}
+
+
+drawChest(ByRef G, ByRef brushes, ByRef objectx, ByRef objecty, ByRef chestscale, ByRef state) {
+    if (state == "trap") {
+        pBrush := Gdip_BrushCreateSolid(0xccff0000)
+    } else if (state == "locked") {
+        pBrush := Gdip_BrushCreateSolid(0xccffff00)
+    } else {
+        pBrush := Gdip_BrushCreateSolid(0xcc542a00)
+    }
+    chestxoffset := objectx - 10
+    , chestyoffset := objecty - 10
+    , x1 := 10 * chestscale + chestxoffset
+    , y1 := 19 * chestscale + chestyoffset
+    , x2 := 40 * chestscale + chestxoffset
+    , y2 := 12 * chestscale + chestyoffset
+    , x3 := 50 * chestscale + chestxoffset
+    , y3 := 28 * chestscale + chestyoffset
+    , x4 := 19 * chestscale + chestxoffset
+    , y4 := 34 * chestscale + chestyoffset
+    , x5 := 4 * chestscale + chestxoffset
+    , y5 := 25 * chestscale + chestyoffset
+    , x6 := 35 * chestscale + chestxoffset
+    , x7 := 17 * chestscale + chestxoffset
+    , y7 := 32 * chestscale + chestyoffset
+    , x8 := 4 * chestscale + chestxoffset
+    , y8 := 18 * chestscale + chestyoffset
+    , x9 := 16 * chestscale + chestxoffset
+    , y9 := 35 * chestscale + chestyoffset
+    , x10:= 15 * chestscale + chestxoffset
+    , y11:= 13 * chestscale + chestyoffset
+    , y12:= 30 * chestscale + chestyoffset
+    , y13:= 31 * chestscale + chestyoffset
+    , y15:= 24 * chestscale + chestyoffset
+    , y16:= 40 * chestscale + chestyoffset
+    , y17:= 49 * chestscale + chestyoffset
+    , y18:= 38 * chestscale + chestyoffset
+    , y19:= 21 * chestscale + chestyoffset
+    , piewidth := 15 * chestscale
+    , pieheight := 30 * chestscale
+    backpoints = %x1%,%y1%|%x2%,%y2%|%x3%,%y3%|%x4%,%y4%|%x5%,%y5%|%x1%,%y19%
+
+    Gdip_DrawPie(G, brushes.pChest, x6, y2, piewidth, pieheight, 180, 180)
+    Gdip_FillPolygon(G, pBrush, backpoints)
+    Gdip_FillPie(G, pBrush, x8, y8, piewidth, pieheight, 180, 180) ;15,30
+    Gdip_FillPie(G, pBrush, x6, y11, piewidth, pieheight, 180, 180) ;17,31
+    points = %x5%,%y15%|%x5%,%y16%|%x4%,%y17%|%x4%,%y4%|%x4%,%y17%|%x3%,%y18%|%x3%,%y15%|%x4%,%y4%|%x5%,%y5%
+    Gdip_DrawPie(G, brushes.pChest, x8, y8, piewidth, pieheight, 180, 180)
+    Gdip_FillPolygon(G, pBrush, points)
+    Gdip_DrawPolygon(G, brushes.pChest, Points)
+    Gdip_DrawLine(G, brushes.pChest, x1, y1, x2, y2)
+    Gdip_DeleteBrush(pBrush)
 }

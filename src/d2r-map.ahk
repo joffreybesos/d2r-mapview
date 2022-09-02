@@ -42,8 +42,8 @@ SetTitleMatchMode, 2
 #Include %A_ScriptDir%\ui\image\prefetchMaps.ahk
 #Include %A_ScriptDir%\ui\image\loadBitmaps.ahk
 #Include %A_ScriptDir%\ui\image\loadBuffIcons.ahk
-#Include %A_ScriptDir%\ui\createMapGuis.ahk
-#Include %A_ScriptDir%\ui\unitsGUI.ahk
+#Include %A_ScriptDir%\ui\map\MapGUIs.ahk
+#Include %A_ScriptDir%\ui\map\UnitsGUI.ahk
 #Include %A_ScriptDir%\ui\showMap.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
@@ -168,7 +168,7 @@ itemLogLayer := new ItemLogLayer(settings)
 itemCounterLayer := new ItemCounterLayer(settings)
 uiAssistLayer := new UIAssistLayer(settings)
 buffBarLayer := new BuffBarLayer(settings)
-mapGuis := new MapGuis(settings)
+mapGuis := new MapGUIs(settings)
 unitsGui := new UnitsGUI(settings)
                 
 ; main loop
@@ -260,7 +260,7 @@ While 1 {
                 session.startingExperience := gameMemoryData["experience"]
                 lastSeed := gameMemoryData["mapSeed"]
                 ;ipAddress := readIPAddress(d2rprocess, gameWindowId, offsets, session)
-                shrines := []
+                global shrines := []
                 items := []
                 seenItems := []
                 itemLogItems := []
@@ -280,6 +280,7 @@ While 1 {
                 ;Gui, Map: Show, NA
                 mapLoading := 1
                 mapGuis.hide()
+                unitsGui.hide()
                 
                 ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
                 ; Show Map
@@ -293,18 +294,11 @@ While 1 {
             if (redrawMap) {
                 WriteLogDebug("Redrawing map")
                 mapGuis.drawMaps(mapList, gameMemoryData)
-                ;ShowMap(settings, mapHwnd1, thisMapImage, gameMemoryData, uiData)
-
-                ; unitsLayer.delete()
-                ; unitsLayer := new UnitsLayer(uiData)
                 unitsGui.show()
-                
                 gameInfoLayer.updateAreaLevel(levelNo, gameMemoryData["difficulty"])
                 gameInfoLayer.updateExpLevel(levelNo, gameMemoryData["difficulty"], gameMemoryData["playerLevel"])
-                
                 redrawMap := 0
             }
-            ; timeStamp("ShowUnits")
             ; ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, mapImageList[levelNo], gameMemoryData, shrines, uiData)
             unitsGui.drawUnitLayer(settings, gameMemoryData)
             ; timeStamp("ShowUnits")
@@ -312,7 +306,6 @@ While 1 {
 
             if (settings["centerMode"] and gameMemoryData["pathAddress"]) {
                 mapGuis.updateMapPositions(mapList, settings, d2rprocess, gameMemoryData)
-                ; MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], mapHwnd1, unitHwnd1, mapImageList[levelNo], uiData)
             }
             if (Mod(ticktock, 6)) {
                 ; checkAutomapVisibility(d2rprocess, gameMemoryData)

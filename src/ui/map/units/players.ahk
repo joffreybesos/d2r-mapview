@@ -7,8 +7,8 @@ drawPlayers(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData) {
 
     ; draw yourself
     gameWindow := getWindowClientArea()
-    centerX := (gameWindow.W/2)
-    centerY := (gameWindow.H/2) - (5 * scale)
+    centerX := (gameWindow.W/2) + gameWindow.X
+    centerY := (gameWindow.H/2) + gameWindow.Y - (5 * scale)
     points := createCross(centerX, centerY, 4.9 * scale)
     Gdip_DrawPolygon(G, brushes.pPenPlayer, points)
 

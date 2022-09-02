@@ -86,5 +86,7 @@ World2Screen(ByRef playerX, ByRef playerY, ByRef targetx, ByRef targety, scale) 
     y := xdiff * sin(angle) + ydiff * cos(angle)
     x := centerX + (x * scale)
     y := centerY + (y * scale * 0.5) - 10
+    x := x + gameWindow.X
+    y := y + gameWindow.Y
     return { "x": x, "y": y }
 }

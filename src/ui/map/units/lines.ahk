@@ -8,8 +8,8 @@ drawLines(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef ma
         scale := settings["centerModeScale"]
 
         gameWindow := getWindowClientArea()
-        centerX := (gameWindow.W/2)
-        centerY := (gameWindow.H/2)
+        centerX := (gameWindow.W/2) + gameWindow.X
+        centerY := (gameWindow.H/2) + gameWindow.Y
         ; draw way point line
         if (settings["showWaypointLine"]) {
             ;WriteLog(settings["showWaypointLine"])

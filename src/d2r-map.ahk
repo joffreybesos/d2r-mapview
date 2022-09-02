@@ -126,7 +126,7 @@ global redrawMap := 1
 global offsets := []
 global hudBitmaps := loadBitmaps()
 global buffBitmaps := loadBuffIcons()
-global mapImageList := []
+
 
 CreateSettingsGUI(settings, localizedStrings)
 settingupGUI := false
@@ -261,7 +261,7 @@ While 1 {
                 items := []
                 seenItems := []
                 itemLogItems := []
-                mapImageList := []
+                
                 gameInfoLayer.updateSessionStart(session.startTime)
                 ;gameInfoLayer.drawInfoText(currentFPS)
                 newGame := 0
@@ -296,7 +296,6 @@ While 1 {
                 gameInfoLayer.updateExpLevel(levelNo, gameMemoryData["difficulty"], gameMemoryData["playerLevel"])
                 redrawMap := 0
             }
-            ; ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, mapImageList[levelNo], gameMemoryData, shrines, uiData)
             unitsGui.drawUnitLayer(settings, gameMemoryData, mapGuis.mapImageList[levelNo])
             ; timeStamp("ShowUnits")
             uiAssistLayer.drawMonsterBar(gameMemoryData["hoveredMob"])

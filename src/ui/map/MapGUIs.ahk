@@ -43,10 +43,14 @@ class MapGUIs {
     }
 
     show(ByRef mapList) {
+        this.mapList := mapList
         for k, thisLevelNo in mapList
         {
             Gui, Map%thisLevelNo%: Show, NA
         }
+    }
+    showLast() {
+        this.show(this.mapList)
     }
 
 

@@ -1,5 +1,5 @@
 
-checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
+checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData, ByRef settings, ByRef mapGuis, ByRef unitsGui) {
     uiOffset:= offsets["uiOffset"]
     , alwaysShowMap:= settings["alwaysShowMap"]
     , hideTown:= settings["hideTown"] 
@@ -9,36 +9,36 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
         if (isMapShowing) {
             WriteLogDebug("Hiding town " levelNo " since hideTown is set to true")
         }
-        hideMap(false)
-    } else if (gameMemoryData["menuShown"] == 1) {
+        hideMap(false, mapGuis, unitsGui)
+    } else if (gameMemoryData["menuShown"] == 1) { ; hide when menu shown
         partyInfoLayer.hide()
         itemCounterLayer.hide()
         buffBarLayer.hide()
         if (isMapShowing) {
             WriteLogDebug("Hiding since UI menu is shown")
         }
-        hideMap(false, 1)
+        hideMap(false, mapGuis, unitsGui, 1)
     } else if (gameMemoryData["menuShown"] == "RIGHT") {
         itemCounterLayer.hide()
         buffBarLayer.hide()
         if (isMapShowing) {
             WriteLogDebug("Hiding since UI menu is shown")
         }
-        hideMap(false, 1)
-    } else if not WinActive(gameWindowId) {
+        hideMap(false, mapGuis, unitsGui, 1)
+    } else if not WinActive(gameWindowId) { ; hide when game window not active window
         if (isMapShowing) {
             WriteLogDebug("D2R is not active window, hiding map")
         }
-        hideMap(false)
+        hideMap(false, mapGuis, unitsGui)
         gameInfoLayer.hide()
         partyInfoLayer.hide()
         itemCounterLayer.hide()
         buffBarLayer.hide()
     } else if (!isAutomapShown(d2rprocess, uiOffset) and !alwaysShowMap) {
         ; hidemap
-        hideMap(alwaysShowMap)
+        hideMap(alwaysShowMap, mapGuis, unitsGui)
     } else {
-        unHideMap()
+        unHideMap(mapGuis, unitsGui)
         partyInfoLayer.show()
         itemCounterLayer.show()
         buffBarLayer.show()
@@ -49,10 +49,10 @@ checkAutomapVisibility(ByRef d2rprocess, ByRef gameMemoryData) {
     return
 }
 
-hideMap(alwaysShowMap, menuShown := 0) {
+hideMap(alwaysShowMap, ByRef mapGuis, ByRef unitsGui, menuShown := 0) {
     if ((alwaysShowMap == false) or menuShown) {
-        Gui, Map: Hide
-        Gui, Units: Hide
+        mapGuis.hide()
+        unitsGui.hide()
         if (isMapShowing) {
             WriteLogDebug("Map hidden")
         }
@@ -61,7 +61,7 @@ hideMap(alwaysShowMap, menuShown := 0) {
     return
 }
 
-unHideMap() {
+unHideMap(ByRef mapGuis, ByRef unitsGui) {
     ;showmap
     if (!isMapShowing) {
         WriteLogDebug("Map shown")
@@ -72,8 +72,8 @@ unHideMap() {
     partyInfoLayer.show()
     buffBarLayer.show()
     if (!mapLoading) {
-        Gui, Map: Show, NA
-        Gui, Units: Show, NA
+        mapGuis.showLast()
+        unitsGui.show()
     } else {
         WriteLogDebug("Tried to show map while map loading, ignoring...")
     }
@@ -215,12 +215,11 @@ MapSizeDecrease(ByRef settings, ByRef gameMemoryData, byRef mapImageList) {
     }
 }
 
-MapAlwaysShow(ByRef settings, ByRef gameMemoryData, byRef mapImageList) {
+MapAlwaysShow(ByRef settings, ByRef gameMemoryData, ByRef mapGuis, ByRef unitsGui) {
     SetFormat Integer, D
     settings["alwaysShowMap"] := !settings["alwaysShowMap"]
-    checkAutomapVisibility(d2rprocess, gameMemoryData)
     if (settings["alwaysShowMap"]) {
-        unHideMap()
+        unHideMap(mapGuis, unitsGui)
         IniWrite, true, settings.ini, Settings, alwaysShowMap
     } else {
         IniWrite, false, settings.ini, Settings, alwaysShowMap

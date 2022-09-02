@@ -179,7 +179,7 @@ While 1 {
         }
         offsetAttempts += 1
         if (offsetAttempts > 25) {
-            hideMap(false)
+            hideMap(false, mapGuis, unitsGui)
             lastlevel:=
             items := []
             shrines := []
@@ -304,7 +304,7 @@ While 1 {
                 mapGuis.updateMapPositions(mapList, settings, d2rprocess, gameMemoryData)
             }
             if (Mod(ticktock, 6)) {
-                ; checkAutomapVisibility(d2rprocess, gameMemoryData)
+                checkAutomapVisibility(d2rprocess, gameMemoryData, settings, mapGuis, unitsGui)
                 CoordMode,Mouse,Screen
                 MouseGetPos, mouseX, mouseY
                 buffBarLayer.checkHover(mouseX, mouseY)
@@ -371,7 +371,7 @@ While 1 {
 
 MapAlwaysShow:
 {
-    MapAlwaysShow(settings, gameMemoryData, mapImageList)
+    MapAlwaysShow(settings, gameMemoryData, mapGuis, unitsGui)
     return
 }
 

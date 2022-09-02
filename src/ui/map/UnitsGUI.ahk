@@ -14,6 +14,7 @@
 #Include %A_ScriptDir%\ui\map\units\lines.ahk
 #Include %A_ScriptDir%\ui\map\units\items.ahk
 #Include %A_ScriptDir%\ui\map\units\missiles.ahk
+#Include %A_ScriptDir%\ui\map\units\players.ahk
 
 class UnitsGUI {
     unitHwnd :=
@@ -57,12 +58,7 @@ class UnitsGUI {
         drawLines(this.G, this.brushes, settings, gameMemoryData, mapImage)
         drawItemAlerts(this.G, this.brushes, settings, gameMemoryData)
         drawMissiles(this.G, this.brushes, settings, gameMemoryData)
-
-        playerScreenPos := World2Screen(playerX, playerY, playerX, playerY, scale)
-        
-        points := createCross(playerScreenPos.x, playerScreenPos.y, 4.9 * scale)
-        Gdip_DrawPolygon(this.G, this.brushes.pPenPlayer, points)
-
+        drawPlayers(this.G, this.brushes, settings, gameMemoryData)
         
         Gdip_DrawRectangle(this.G, this.brushes.pPenHealth, 0, 0, gameWindow.W, gameWindow.H)
         UpdateLayeredWindow(this.unitHwnd, this.hdc, 0, 0, gameWindow.W, gameWindow.H)

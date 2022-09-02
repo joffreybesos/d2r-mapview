@@ -36,7 +36,8 @@ class MapImage {
 
         imageUrl := baseUrl . "/v1/map/" . mapSeed . "/" . difficulty . "/" . levelNo . "/image?wallthickness=" . thickness
         imageUrl := imageUrl . "&rotate=true&showTextLabels=false"
-        imageUrl := imageUrl . "&padding=" . settings["padding"]
+        imageUrl := imageUrl . "&padding=0"  ; . settings["padding"]
+        imageUrl := imageUrl . "&noStitch=true"  ; . settings["padding"]
         imageUrl := imageUrl . "&edge=true"
         if (settings["showPathFinding"]) {
             if (pathStart && pathEnd) {

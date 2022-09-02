@@ -272,7 +272,7 @@ While 1 {
             historyToggle := true
 
             ; if there's a level num then the player is in a map
-            if (gameMemoryData["levelNo"] != lastlevel) { ; only redraw map when it changes
+            if (mapList[1] != lastlevel) { ; only redraw map when it changes
                 ; Show loading text
                 ;Gui, Map: Show, NA
                 mapLoading := 1
@@ -322,8 +322,7 @@ While 1 {
             if (HUDItems.tpscrolls < 5) {
                 itemCounterLayer.drawItemCounter(HUDItems)
             }
-            
-            lastlevel := gameMemoryData["levelNo"]
+            lastlevel := mapList[1]
         } else {
             WriteLog("In Menu - no valid difficulty, levelno, or mapseed found '" gameMemoryData["difficulty"] "' '" gameMemoryData["levelNo"] "' '" gameMemoryData["mapSeed"] "'")
             ; hideMap(false)

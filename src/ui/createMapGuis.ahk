@@ -43,7 +43,7 @@ class MapGuis {
     drawMaps(ByRef mapList, ByRef gameMemoryData) {
         this.show(mapList)
         for k, thisLevelNo in mapList {
-            OutputDebug, % "Drawing map " thisLevelNo "`n"
+            ; OutputDebug, % "Drawing map " thisLevelNo "`n"
             this.drawMap(thisLevelNo, gameMemoryData)
         }
         
@@ -74,7 +74,7 @@ class MapGuis {
         renderScale := settings["serverScale"] 
         thisMap := this.mapImageList[levelNo]
         Gdip_Startup()
-        OutputDebug, % thisMap.sFile "`n"
+        ; OutputDebug, % thisMap.sFile "`n"
         pBitmap := Gdip_CreateBitmapFromFile(this.mapImageList[levelNo].sFile)
 
         rotatedWidth := Gdip_GetImageWidth(pBitmap)
@@ -95,20 +95,20 @@ class MapGuis {
         obm := SelectObject(hdc, hbm)
         Gdip_SetSmoothingMode(G, 4) 
         G := Gdip_GraphicsFromHDC(hdc)
-
-        ; relativePlayerX := gameMemoryData["xPos"] - thisMap.mapOffsetX
-        ; relativePlayerY := gameMemoryData["yPos"] - thisMap.mapOffsetY
-        
-        Gdip_DrawImage(G, pBitmap, 0, 0, mapScaledWidth, mapScaledHeight / 2, 0, 0, rotatedWidth, rotatedHeight, 0.1)
+        ; pPen := Gdip_CreatePen(0x44ff0000, 5)
+        Gdip_DrawImage(G, pBitmap, 0, 0, mapScaledWidth, mapScaledHeight / 2, 0, 0, rotatedWidth, rotatedHeight, 0.7)
+        ; Gdip_DrawRectangle(G, pPen, 0, 0, mapScaledWidth, mapScaledHeight/2)
+        ; Gdip_DeletePen(pPen)
         mapGuiHwnd := this.mapGuis[levelNo]
         UpdateLayeredWindow(mapGuiHwnd, hdc, 0, 0, mapScaledWidth, mapScaledHeight)
         playerX := (gameMemoryData["xPos"] - this.mapImageList[levelNo].mapOffsetX) * renderScale
         playerY := (gameMemoryData["yPos"] - this.mapImageList[levelNo].mapOffsetY) * renderScale
         
-        correctedPos := transformPosition(playerX, playerY, originalWidth / 2, originalHeight / 2, mapScaledWidth, mapScaledHeight, 2)
+        ; correctedPos := transformPosition(playerX, playerY, originalWidth / 2, originalHeight / 2, mapScaledWidth, mapScaledHeight, 2)
+        correctedPos := findNewPos(playerX, playerY, (originalWidth/2), (originalHeight/2), mapScaledWidth, mapScaledHeight, scale)
         gameWindow := getWindowClientArea()
-        mapPosX := gameWindow.X + (gameWindow.W / 2) - correctedPos.x
-        mapPosY := gameWindow.Y + (gameWindow.H / 2) - correctedPos.y
+        mapPosX := ((gameWindow.W / 2) - correctedPos.x + gameWindow.X)
+        mapPosY := ((gameWindow.H / 2) - correctedPos.y + gameWindow.Y) + (mapScaledHeight / 4)
         WinMove, ahk_id %mapGuiHwnd%,,mapPosX, mapPosY
         SelectObject(hdc, obm)
         DeleteObject(hbm)
@@ -147,24 +147,24 @@ class MapGuis {
         ; calculate new position
         playerX := (gameMemoryData["xPos"] - this.mapImageList[levelNo].mapOffsetX) * renderScale
         playerY := (gameMemoryData["yPos"] - this.mapImageList[levelNo].mapOffsetY) * renderScale
-        ; correctedPos := findNewPos(playerX, playerY, (originalWidth/2), (originalHeight/2), mapScaledWidth, mapScaledHeight, scale)
-        correctedPos := transformPosition(playerX, playerY, originalWidth / 2, originalHeight / 2, mapScaledWidth, mapScaledHeight, scale)
+        correctedPos := findNewPos(playerX, playerY, (originalWidth/2), (originalHeight/2), mapScaledWidth, mapScaledHeight, scale)
+        ; correctedPos := transformPosition(playerX, playerY, originalWidth / 2, originalHeight / 2, mapScaledWidth, mapScaledHeight, scale)
         gameWindow := getWindowClientArea()
-        mapPosX := gameWindow.X + (gameWindow.W / 2) - correctedPos.x
-        mapPosY := gameWindow.Y + (gameWindow.H / 1.22) - correctedPos.y
+        mapPosX := ((gameWindow.W / 2) - correctedPos.x + gameWindow.X)
+        mapPosY := ((gameWindow.H / 2) - correctedPos.y + gameWindow.Y) + (mapScaledHeight / 4)
         mapGuiHwnd := this.mapGuis[levelNo]
         WinMove, ahk_id %mapGuiHwnd%,,mapPosX, mapPosY
     }
 }
 
-transformPosition(ByRef playerx, ByRef playery, ByRef centrex, ByRef centrey, ByRef mapScaledWidth, ByRef mapScaledHeight, ByRef scale) {
-    xdiff := playerx - centrex
-    , ydiff := playery - centrey
-    , angle := 0.785398    ;45 deg
-    , x := xdiff * cos(angle) - ydiff * sin(angle)
-    , y := xdiff * sin(angle) + ydiff * cos(angle)
-    , newx := mapScaledWidth / 2 + (x * scale)
-    , newy := ((mapScaledHeight) + (y * scale)) / 2
-    return { x: newx, y: newy }
-}
+; transformPosition(ByRef playerx, ByRef playery, ByRef centrex, ByRef centrey, ByRef mapScaledWidth, ByRef mapScaledHeight, ByRef scale) {
+;     xdiff := playerx - centrex
+;     , ydiff := playery - centrey
+;     , angle := 0.785398    ;45 deg
+;     , x := xdiff * cos(angle) - ydiff * sin(angle)
+;     , y := xdiff * sin(angle) + ydiff * cos(angle)
+;     , newx := mapScaledWidth / 2 + (x * scale)
+;     , newy := ((mapScaledHeight / 2) + (y * scale))
+;     return { x: newx, y: newy }
+; }
 

@@ -1,7 +1,7 @@
 getStitchedMaps(ByRef mapId) {
     switch (mapId) {
         ;// act 1
-        case 1: return [1] ;,2,3,4,17]
+        case 1: return [1,2,3,4,17]
         case 2: return [1,2,3,4,17]
         case 3: return [1,2,3,4,17]
         case 4: return [1,2,3,4,17]

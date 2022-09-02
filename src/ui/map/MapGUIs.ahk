@@ -14,6 +14,8 @@ class MapGUIs {
             Gui, Map%A_Index%: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
             thisMapGui := WinExist()
             this.mapGuis[A_Index] := thisMapGui
+            Gui, Map%A_Index%: Show, NA
+            Gui, Map%A_Index%: Hide, NA
         }
     }
 
@@ -33,8 +35,8 @@ class MapGUIs {
     }
 
     drawMaps(ByRef mapList, ByRef gameMemoryData) {
-        this.show(mapList)
-        this.hide(mapList)
+        ; this.show(mapList)
+        ; this.hide(mapList)
         for k, thisLevelNo in mapList {
             ; OutputDebug, % "Drawing map " thisLevelNo "`n"
             this.drawMap(thisLevelNo, gameMemoryData)
@@ -68,6 +70,7 @@ class MapGUIs {
     drawMap(ByRef levelNo, ByRef gameMemoryData) {
         scale := settings["centerModeScale"]
         renderScale := settings["serverScale"] 
+        opacity := settings["centerModeOpacity"]
         thisMap := this.mapImageList[levelNo]
         Gdip_Startup()
         ; OutputDebug, % thisMap.sFile "`n"
@@ -107,8 +110,9 @@ class MapGUIs {
         mapPosY := ((gameWindow.H / 2) - correctedPos.y + gameWindow.Y) + (mapScaledHeight / 4) - (5 * scale)
         this.mapImageList[levelNo].mapPosX := mapPosX
         this.mapImageList[levelNo].mapPosY := mapPosY
-        this.updateVisibleRegion(thisLevelNo, gameWindow)
+        
         WinMove, ahk_id %mapGuiHwnd%,,mapPosX, mapPosY
+        this.updateVisibleRegion(thisLevelNo, gameWindow)
         SelectObject(hdc, obm)
         DeleteObject(hbm)
         DeleteDC(hdc)

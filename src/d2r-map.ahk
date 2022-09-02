@@ -375,13 +375,13 @@ MapAlwaysShow:
 
 MapSizeIncrease:
 {
-    MapSizeIncrease(settings, gameMemoryData, mapImageList)
+    MapSizeIncrease(settings, gameMemoryData)
     return
 }
 
 MapSizeDecrease:
 {
-    MapSizeDecrease(settings, gameMemoryData, mapImageList)
+    MapSizeDecrease(settings, gameMemoryData)
     return
 }
 

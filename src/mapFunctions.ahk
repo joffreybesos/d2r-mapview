@@ -175,43 +175,29 @@ SwitchMapMode(ByRef settings, ByRef mapImageList, ByRef gameMemoryData, ByRef ui
     WriteLog("switched map mode")
 }
 
-MapSizeIncrease(ByRef settings, ByRef gameMemoryData, byRef mapImageList) {
+MapSizeIncrease(ByRef settings, ByRef gameMemoryData) {
     SetFormat Integer, D
     levelNo := gameMemoryData["levelNo"] + 0
-    levelScale := mapImageList[levelNo]["levelScale"] + 0
-    if (levelNo and levelScale and not settings["centerMode"]) {
-        levelScale := levelScale + 0.05
-        IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
-        redrawMap := 1
-        WriteLog("Increased level " levelNo " scale by 0.05 to " levelScale)
-    }
     if (levelNo and settings["centerMode"]) {
         centerModeScale := settings["centerModeScale"]
         centerModeScale := centerModeScale + 0.05
         IniWrite, %centerModeScale%, settings.ini, Settings, centerModeScale
         settings["centerModeScale"] := centerModeScale
         redrawMap := 1
-        WriteLog("Increased centerModeScale global setting by 0.05 to " levelScale)
+        WriteLog("Increased centerModeScale global setting by 0.05 to " centerModeScale)
     }
 }
 
-MapSizeDecrease(ByRef settings, ByRef gameMemoryData, byRef mapImageList) {
+MapSizeDecrease(ByRef settings, ByRef gameMemoryData) {
     SetFormat Integer, D
     levelNo := gameMemoryData["levelNo"] + 0
-    levelScale := mapImageList[levelNo]["levelScale"] + 0
-    if (levelNo and levelScale and not settings["centerMode"]) {
-        levelScale := levelScale - 0.05
-        IniWrite, %levelScale%, mapconfig.ini, %levelNo%, scale
-        redrawMap := 1
-        WriteLog("Decreased level " levelNo " scale by 0.05 to " levelScale)
-    }
     if (levelNo and settings["centerMode"]) {
         centerModeScale := settings["centerModeScale"]
         centerModeScale := centerModeScale - 0.05
         IniWrite, %centerModeScale%, settings.ini, Settings, centerModeScale
         settings["centerModeScale"] := centerModeScale
         redrawMap := 1
-        WriteLog("Decreased centerModeScale global setting by 0.05 to " levelScale)
+        WriteLog("Decreased centerModeScale global setting by 0.05 to " centerModeScale)
     }
 }
 

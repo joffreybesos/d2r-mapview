@@ -11,6 +11,7 @@
 #Include %A_ScriptDir%\ui\map\units\npcs.ahk
 #Include %A_ScriptDir%\ui\map\units\objects.ahk
 #Include %A_ScriptDir%\ui\map\units\exits.ahk
+#Include %A_ScriptDir%\ui\map\units\lines.ahk
 
 class UnitsGUI {
     unitHwnd :=
@@ -48,15 +49,10 @@ class UnitsGUI {
         playerX := gameMemoryData.xPos
         playerY := gameMemoryData.yPos
 
-        for index, mob in gameMemoryData.mobs
-        {
-            mobScreenPos := World2Screen(playerX, playerY, mob.x, mob.y, scale)
-            Gdip_DrawEllipse(this.G, this.pPenTownNPCCross, mobScreenPos.x, mobScreenPos.y, 15, 15)
-        }
-
         drawNPCs(this.G, this.brushes, settings, gameMemoryData)
         drawObjects(this.G, this.brushes, settings, gameMemoryData)
         drawExits(this.G, this.brushes, settings, gameMemoryData, mapImage)
+        drawLines(this.G, this.brushes, settings, gameMemoryData, mapImage)
 
         playerScreenPos := World2Screen(playerX, playerY, playerX, playerY, scale)
         

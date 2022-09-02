@@ -1,7 +1,6 @@
 
 class MapGuis {
     mapGuis := []
-    unitGuis := []
     mapImageList := []
     __new(ByRef settings) {
         Loop, 136 {
@@ -9,18 +8,12 @@ class MapGuis {
         }
         
         this.mapGuis := []
-        this.unitGuis := []
         ; create GUI windows
-        
         Loop, 136
         {
             Gui, Map%A_Index%: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
             thisMapGui := WinExist()
             this.mapGuis[A_Index] := thisMapGui
-
-            Gui, Units%A_Index%: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
-            thisUnitGui := WinExist()
-            this.unitsGuis[A_Index] := thisUnitGui
         }
     }
 
@@ -29,7 +22,6 @@ class MapGuis {
         ; hide maps
         Loop, 136 {
             Gui, Map%A_Index%: Hide ; hide map
-            Gui, Units%A_Index%: Hide ; hide units
         }
     }
 
@@ -46,14 +38,12 @@ class MapGuis {
             ; OutputDebug, % "Drawing map " thisLevelNo "`n"
             this.drawMap(thisLevelNo, gameMemoryData)
         }
-        
     }
 
     show(ByRef mapList) {
         for k, thisLevelNo in mapList
         {
             Gui, Map%thisLevelNo%: Show, NA
-            Gui, Units%thisLevelNo%: Show, NA
         }
     }
 
@@ -110,6 +100,8 @@ class MapGuis {
         mapPosX := ((gameWindow.W / 2) - correctedPos.x + gameWindow.X)
         mapPosY := ((gameWindow.H / 2) - correctedPos.y + gameWindow.Y) + (mapScaledHeight / 4)
         WinMove, ahk_id %mapGuiHwnd%,,mapPosX, mapPosY
+        this.mapImageList[levelNo].mapPosX := mapPosX
+        this.mapImageList[levelNo].mapPosY := mapPosY
         SelectObject(hdc, obm)
         DeleteObject(hbm)
         DeleteDC(hdc)

@@ -24,7 +24,7 @@ getStitchedMaps(ByRef mapId) {
         case 45: return [40,41,42,43,44,45]
 
         ;// act 3
-        case 75: return [75,76,77,78,79,80,81,82,83]
+        case 75: return [75] ;,76,77,78,79,80,81,82,83]
         case 76: return [75,76,77,78,79,80,81,82,83]
         case 77: return [75,76,77,78,79,80,81,82,83]
         case 78: return [75,76,77,78,79,80,81,82,83]

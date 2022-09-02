@@ -8,8 +8,8 @@ drawLines(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef ma
         scale := settings["centerModeScale"]
 
         gameWindow := getWindowClientArea()
-        centerX := (gameWindow.W/2) + gameWindow.X
-        centerY := (gameWindow.H/2) + gameWindow.Y
+        centerX := (gameWindow.W/2) ;+ gameWindow.X
+        centerY := (gameWindow.H/2) ;+ gameWindow.Y
         ; draw way point line
         if (settings["showWaypointLine"]) {
             ;WriteLog(settings["showWaypointLine"])
@@ -37,13 +37,18 @@ drawLines(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef ma
                     ;exitArray[2] ; name of exit
 
                     ; only draw the line if it's a 'next' exit
-                    if (isNextExit(gameMemoryData["levelNo"]) == exitArray[1]) {
-                        exitX := exitArray[3] + mapImage.mapOffsetX
-                        , exitY := exitArray[4] + mapImage.mapOffsetY
-                        exitScreenPos := World2Screen(playerX, playerY, exitX, exitY, scale)
+                    otherExits := getExitsOfInterest(gameMemoryData["levelNo"])
+                    
+                    Loop, parse, otherExits, `,
+                    {
+                        if (A_LoopField == exitArray[1]) {
+                            exitX := exitArray[3] + mapImage.mapOffsetX
+                            , exitY := exitArray[4] + mapImage.mapOffsetY
+                            exitScreenPos := World2Screen(playerX, playerY, exitX, exitY, scale)
 
-                        drawLineWithArrow(G, brushes, centerX, centerY, exitScreenPos.x, exitScreenPos.y, scale, brushes.pLineExit, brushes.pBrushLineExit)
-                        ;Gdip_DrawLine(G, brushes.pLineExit, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, exitX, exitY)
+                            drawLineWithArrow(G, brushes, centerX, centerY, exitScreenPos.x, exitScreenPos.y, scale, brushes.pLineExit, brushes.pBrushLineExit)
+                            ;Gdip_DrawLine(G, brushes.pLineExit, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, exitX, exitY)
+                        }
                     }
                 }
             }
@@ -86,13 +91,14 @@ drawLines(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef ma
 
 
 
-isNextExit(currentLvl) {
+getExitsOfInterest(currentLvl) {
     switch currentLvl
     {
-        case "2": return "8"
-        case "3": return "9"
+        case "2": return "8,3"
+        case "3": return "4,17"
         case "4": return "10"
-        case "6": return "20"
+        case "5": return "6"
+        case "6": return "7,20"
         case "7": return "12"
         case "8": return "2"
         case "9": return "13"
@@ -103,6 +109,7 @@ isNextExit(currentLvl) {
         case "22": return "23"
         case "23": return "24"
         case "24": return "25"
+        case "27": return "28"
         case "29": return "30"
         case "30": return "31"
         case "31": return "32"
@@ -110,10 +117,10 @@ isNextExit(currentLvl) {
         case "34": return "35"
         case "35": return "36"
         case "36": return "37"
-        case "41": return "55"
-        case "42": return "56"
-        case "43": return "62"
-        case "44": return "65"
+        case "41": return "42,55"
+        case "42": return "43,56"
+        case "43": return "44,62"
+        case "44": return "45,65"
         case "45": return "58"
         case "47": return "48"
         case "48": return "49"
@@ -128,6 +135,10 @@ isNextExit(currentLvl) {
         case "63": return "64"
         case "76": return "85"
         case "78": return "88"
+        case "79": return "80"
+        case "80": return "81"
+        case "81": return "82"
+        case "82": return "83"
         case "83": return "100"
         case "86": return "87"
         case "87": return "90"
@@ -136,6 +147,8 @@ isNextExit(currentLvl) {
         case "92": return "93"
         case "100": return "101"
         case "101": return "102"
+        case "104": return "105"
+        case "105": return "106"
         case "106": return "107"
         case "113": return "114"
         case "115": return "117"

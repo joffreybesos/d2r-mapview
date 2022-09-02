@@ -52,8 +52,8 @@ class UnitsGUI {
         drawMissiles(this.G, this.brushes, settings, gameMemoryData)
         drawPlayers(this.G, this.brushes, settings, gameMemoryData)
         
-        Gdip_DrawRectangle(this.G, this.brushes.pPenHealth, 0, 0, gameWindow.W, gameWindow.H)
-        UpdateLayeredWindow(this.unitHwnd, this.hdc, 0, 0, gameWindow.W, gameWindow.H)
+        Gdip_DrawRectangle(this.G, this.brushes.pPenHealth, 0, 0, gameWindow.W-1, gameWindow.H-1)
+        UpdateLayeredWindow(this.unitHwnd, this.hdc, gameWindow.X, gameWindow.Y, gameWindow.W, gameWindow.H)
         Gdip_GraphicsClear( this.G )
 
         ; timeStamp("unitsEnd")
@@ -86,7 +86,5 @@ World2Screen(ByRef playerX, ByRef playerY, ByRef targetx, ByRef targety, scale) 
     y := xdiff * sin(angle) + ydiff * cos(angle)
     x := centerX + (x * scale)
     y := centerY + (y * scale * 0.5) - 10
-    x := x + gameWindow.X
-    y := y + gameWindow.Y
     return { "x": x, "y": y }
 }

@@ -70,7 +70,8 @@ class MapGuis {
     }
 
     drawMap(ByRef levelNo, ByRef gameMemoryData) {
-        scale := 2
+        scale := settings["centerModeScale"]
+        renderScale := settings["serverScale"] 
         thisMap := this.mapImageList[levelNo]
         Gdip_Startup()
         OutputDebug, % thisMap.sFile "`n"
@@ -101,10 +102,10 @@ class MapGuis {
         Gdip_DrawImage(G, pBitmap, 0, 0, mapScaledWidth, mapScaledHeight / 2, 0, 0, rotatedWidth, rotatedHeight, 0.1)
         mapGuiHwnd := this.mapGuis[levelNo]
         UpdateLayeredWindow(mapGuiHwnd, hdc, 0, 0, mapScaledWidth, mapScaledHeight)
-        playerX := gameMemoryData["xPos"] - this.mapImageList[levelNo].mapOffsetX
-        playerY := gameMemoryData["yPos"] - this.mapImageList[levelNo].mapOffsetY
+        playerX := (gameMemoryData["xPos"] - this.mapImageList[levelNo].mapOffsetX) * renderScale
+        playerY := (gameMemoryData["yPos"] - this.mapImageList[levelNo].mapOffsetY) * renderScale
         
-        correctedPos := transformPosition(playerX, playerY, originalWidth / 2, originalHeight / 2, mapScaledWidth, mapScaledHeight, scale)
+        correctedPos := transformPosition(playerX, playerY, originalWidth / 2, originalHeight / 2, mapScaledWidth, mapScaledHeight, 2)
         gameWindow := getWindowClientArea()
         mapPosX := gameWindow.X + (gameWindow.W / 2) - correctedPos.x
         mapPosY := gameWindow.Y + (gameWindow.H / 2) - correctedPos.y
@@ -126,6 +127,7 @@ class MapGuis {
 
     updateMapPosition(ByRef settings, ByRef d2rprocess, ByRef gameMemoryData, ByRef levelNo) {
         scale := settings["centerModeScale"]
+        renderScale := settings["serverScale"] 
         ; player position
         pathAddress = gameMemoryData["pathAddress"]
         d2rprocess.readRaw(pathAddress, pPathBuffer, 16)
@@ -143,12 +145,13 @@ class MapGuis {
         mapScaledHeight := this.mapImageList[levelNo].mapScaledHeight
 
         ; calculate new position
-        playerX := gameMemoryData["xPos"] - this.mapImageList[levelNo].mapOffsetX
-        playerY := gameMemoryData["yPos"] - this.mapImageList[levelNo].mapOffsetY
+        playerX := (gameMemoryData["xPos"] - this.mapImageList[levelNo].mapOffsetX) * renderScale
+        playerY := (gameMemoryData["yPos"] - this.mapImageList[levelNo].mapOffsetY) * renderScale
+        ; correctedPos := findNewPos(playerX, playerY, (originalWidth/2), (originalHeight/2), mapScaledWidth, mapScaledHeight, scale)
         correctedPos := transformPosition(playerX, playerY, originalWidth / 2, originalHeight / 2, mapScaledWidth, mapScaledHeight, scale)
         gameWindow := getWindowClientArea()
         mapPosX := gameWindow.X + (gameWindow.W / 2) - correctedPos.x
-        mapPosY := gameWindow.Y + (gameWindow.H / 2) - correctedPos.y
+        mapPosY := gameWindow.Y + (gameWindow.H / 1.22) - correctedPos.y
         mapGuiHwnd := this.mapGuis[levelNo]
         WinMove, ahk_id %mapGuiHwnd%,,mapPosX, mapPosY
     }

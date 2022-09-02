@@ -52,7 +52,8 @@ drawExits(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef ma
             , exitX := exitArray[3] + mapImage.mapOffsetX
             , exitY := exitArray[4] + mapImage.mapOffsetY
             exitScreenPos := World2Screen(playerX, playerY, exitX, exitY, scale)
-            drawFloatingText(G, brushes, exitScreenPos.x, exitScreenPos.y-10, exitTextSize, exitTextColor, false, true, exocetFont, exitName)
+            
+            drawFloatingText(G, brushes, exitScreenPos.x, exitScreenPos.y-10, exitTextSize, exitTextColor, false, true, exocetFont, exitName, true)
         }
     }
 }

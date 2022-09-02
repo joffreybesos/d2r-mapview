@@ -185,12 +185,35 @@ class Brushes {
 
 
 
-drawFloatingText(ByRef G, ByRef brushes, ByRef unitx, ByRef unity, ByRef fontSize, ByRef fontColor, ByRef background, ByRef forceNoWrap, ByRef font, ByRef text) {
-    
+drawFloatingText(ByRef G, ByRef brushes, ByRef unitx, ByRef unity, ByRef fontSize, ByRef fontColor, ByRef background, ByRef forceNoWrap, ByRef font, ByRef text, noOverflow := false) {
+
     textSpaceWidth := StrLen(text) * fontSize
     , textSpaceHeight := 100
     , textx := unitx - textSpaceWidth /2
     , texty := unity-(brushes.normalDotSize/2) - textSpaceHeight
+
+    if (noOverflow) { ; this wil stop text from overflowing over the edges
+        gameWindow := getWindowClientArea()
+        hStringFormat := Gdip_StringFormatGetGeneric(1)
+        CreateRectF(RC, textx, texty, textSpaceWidth, textSpaceHeight)
+        measuredString := Gdip_MeasureString(G, text, font, hStringFormat, RC)
+        ms2 := StrSplit(measuredString , "|")
+        , bgw := ms2[3] + 8
+        , bgh := ms2[4] + 0 
+        if ((textx + (bgw/2) + (textSpaceWidth/2) ) > gameWindow.W) {
+            textx := gameWindow.W - (bgw/2) - (textSpaceWidth/2)
+        }
+        if (textx < (bgw/2 - textSpaceWidth/2)) {
+            textx := (bgw/2 - textSpaceWidth/2)
+        }
+        if ((texty + textSpaceHeight) > gameWindow.H) {
+            texty := gameWindow.H - textSpaceHeight
+        }
+        if (texty < -(textSpaceHeight - bgh)) {
+            texty := bgh - textSpaceHeight
+        }
+    }
+
     if (forceNoWrap) {
         NoWrap := "NoWrap"
     } else {

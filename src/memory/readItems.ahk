@@ -42,8 +42,8 @@ ReadItems(ByRef d2rprocess, startingOffset, ByRef items) {
                         , item := new GameItem(txtFileNo, itemQuality, uniqueOrSetId)
                         , item.name := name
                         , item.itemLoc := itemLoc
-                        , item.itemx := itemx
-                        , item.itemy := itemy
+                        , item.x := itemx
+                        , item.y := itemy
                         , item.statPtr := statPtr
                         , item.statCount := statCount
                         , item.statExPtr := statExPtr

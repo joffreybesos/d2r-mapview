@@ -12,6 +12,7 @@
 #Include %A_ScriptDir%\ui\map\units\objects.ahk
 #Include %A_ScriptDir%\ui\map\units\exits.ahk
 #Include %A_ScriptDir%\ui\map\units\lines.ahk
+#Include %A_ScriptDir%\ui\map\units\items.ahk
 
 class UnitsGUI {
     unitHwnd :=
@@ -53,6 +54,7 @@ class UnitsGUI {
         drawObjects(this.G, this.brushes, settings, gameMemoryData)
         drawExits(this.G, this.brushes, settings, gameMemoryData, mapImage)
         drawLines(this.G, this.brushes, settings, gameMemoryData, mapImage)
+        drawItemAlerts(this.G, this.brushes, settings, gameMemoryData)
 
         playerScreenPos := World2Screen(playerX, playerY, playerX, playerY, scale)
         

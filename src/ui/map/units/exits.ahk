@@ -2,11 +2,10 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-drawExits(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef mapImage) {
+drawExits(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale, ByRef mapImage) {
     playerX := gameMemoryData.xPos
     playerY := gameMemoryData.yPos
     renderScale := settings["serverScale"]
-    scale := settings["centerModeScale"]
 
     ; ;draw exit lines
     exitsHeader := mapImage["exits"]

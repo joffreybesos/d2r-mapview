@@ -47,9 +47,7 @@ class MapImage {
                 imageUrl := imageUrl . "&pathColour=" . settings["pathFindingColour"]
             }
         }
-        if (settings["centerMode"]) {
-            imageUrl := imageUrl . "&serverScale=" . settings["serverScale"]
-        }
+        imageUrl := imageUrl . "&serverScale=" . settings["serverScale"]
 
         this.imageUrl := imageUrl
         this.downloadImage(imageUrl)

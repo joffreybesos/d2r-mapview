@@ -1,12 +1,11 @@
 
 
-drawMissiles(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData) {
+drawMissiles(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale) {
     static oldmobScreenPosx
     static oldmobScreenPosy
     playerX := gameMemoryData.xPos
     playerY := gameMemoryData.yPos
     renderScale := settings["serverScale"]
-    scale := settings["centerModeScale"]
     
     for index,  missilearray in gameMemoryData["missiles"]
     {   

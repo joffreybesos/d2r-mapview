@@ -1,7 +1,16 @@
 
 class Brushes {
     __new(ByRef settings) {
-        scale := settings["centerModeScale"]
+        if (settings["mapPosition"] == "TOP_LEFT") {
+            scale := settings["cornerModeScale"]
+            dotScale := 1.2
+        } else if (settings["mapPosition"] == "TOP_RIGHT") {
+            scale := settings["cornerModeScale"]
+            dotScale := 1.2
+        } else {
+            scale := settings["centerModeScale"]
+            dotScale := 1.2
+        }
         this.pPenGreen := Gdip_CreatePen(0xff00FF00, 0.8 * scale)
         this.pPenPlayer := Gdip_CreatePen(0xff2087fd, 1 * scale)
         this.pPenOtherPlayer := Gdip_CreatePen(0xff00ff00, 0.8 * scale)
@@ -44,11 +53,10 @@ class Brushes {
         , this.majorDotSize := settings["missileMajorDotSize"]
         , this.minorDotSize := settings["missileMinorDotSize"]
         
-        if (settings["centerMode"]) {
-            penSize := penSize * (scale / 1.2)
-            , this.majorDotSize := this.majorDotSize * (scale / 1.1)
-            , this.minorDotSize := this.minorDotSize * (scale / 1.1)
-        }
+        penSize := penSize * (scale / dotScale)
+        , this.majorDotSize := this.majorDotSize * (scale / dotScale)
+        , this.minorDotSize := this.minorDotSize * (scale / dotScale)
+        
 
         this.pPenPhysicalMajor := Gdip_CreatePen(physicalMajorColor, penSize)
         , this.pPenPhysicalMinor := Gdip_CreatePen(physicalMinorColor, penSize)
@@ -77,14 +85,12 @@ class Brushes {
         , this.uniqueImmunitySize := settings["uniqueImmunitySize"] ; 14
         , this.bossDotSize := settings["bossDotSize"] ; 5
 
-        if (settings["centerMode"]) {
-            this.deadDotSize := this.deadDotSize * (scale / 1.2)
-            , this.normalDotSize := this.normalDotSize * (scale / 1.2)
-            , this.normalImmunitySize := this.normalImmunitySize * (scale / 1.2)
-            , this.uniqueDotSize := this.uniqueDotSize * (scale / 1.2)
-            , this.uniqueImmunitySize := this.uniqueImmunitySize * (scale / 1.2)
-            , this.bossDotSize := this.bossDotSize * (scale / 1.2)
-        }
+        this.deadDotSize := this.deadDotSize * (scale / dotScale)
+        , this.normalDotSize := this.normalDotSize * (scale / dotScale)
+        , this.normalImmunitySize := this.normalImmunitySize * (scale / dotScale)
+        , this.uniqueDotSize := this.uniqueDotSize * (scale / dotScale)
+        , this.uniqueImmunitySize := this.uniqueImmunitySize * (scale / dotScale)
+        , this.bossDotSize := this.bossDotSize * (scale / dotScale)
 
         this.pPenNormal := Gdip_CreatePen(normalMobColor, this.normalDotSize * 0.7)
         , this.pPenUnique := Gdip_CreatePen(uniqueMobColor, this.uniqueDotSize * 0.7)

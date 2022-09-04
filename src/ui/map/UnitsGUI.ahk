@@ -26,6 +26,14 @@ class UnitsGUI {
         Gdip_SetSmoothingMode(this.G, 4)
         Gdip_SetInterpolationMode(this.G, 7)
         this.brushes := new Brushes(settings)
+
+        if (settings["mapPosition"] == "TOP_LEFT") {
+            this.scale := settings["cornerModeScale"]
+        } else if (settings["mapPosition"] == "TOP_RIGHT") {
+            this.scale := settings["cornerModeScale"]
+        } else {
+            this.scale := settings["centerModeScale"]
+        }
     }
 
     drawUnitLayer(ByRef settings, ByRef gameMemoryData, ByRef mapImage) {
@@ -33,22 +41,20 @@ class UnitsGUI {
         StartTime := A_TickCount
         , Angle := 45
         , opacity := 1.0
-        , scale:= settings["centerModeScale"]
         , renderScale := settings["serverScale"]
-        , opacity:= settings["centerModeOpacity"]
         
         ; get relative position of player in world
         ; xpos is absolute world pos in game
         ; each map has offset x and y which is absolute world position
         gameWindow := getMapDrawingArea()
         
-        drawNPCs(this.G, this.brushes, settings, gameMemoryData)
-        drawObjects(this.G, this.brushes, settings, gameMemoryData)
-        drawExits(this.G, this.brushes, settings, gameMemoryData, mapImage)
-        drawLines(this.G, this.brushes, settings, gameMemoryData, mapImage)
-        drawItemAlerts(this.G, this.brushes, settings, gameMemoryData)
-        drawMissiles(this.G, this.brushes, settings, gameMemoryData)
-        drawPlayers(this.G, this.brushes, settings, gameMemoryData)
+        drawNPCs(this.G, this.brushes, settings, gameMemoryData, this.scale)
+        drawObjects(this.G, this.brushes, settings, gameMemoryData, this.scale)
+        drawExits(this.G, this.brushes, settings, gameMemoryData, this.scale, mapImage)
+        drawLines(this.G, this.brushes, settings, gameMemoryData, this.scale, mapImage)
+        drawItemAlerts(this.G, this.brushes, settings, gameMemoryData, this.scale)
+        drawMissiles(this.G, this.brushes, settings, gameMemoryData, this.scale)
+        drawPlayers(this.G, this.brushes, settings, gameMemoryData, this.scale)
         
         ; Gdip_DrawRectangle(this.G, this.brushes.pPenHealth, 0, 0, gameWindow.W-1, gameWindow.H-1)
         UpdateLayeredWindow(this.unitHwnd, this.hdc, gameWindow.X, gameWindow.Y, gameWindow.W, gameWindow.H)

@@ -1,9 +1,8 @@
 
-drawPlayers(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData) {
+drawPlayers(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale) {
     playerX := gameMemoryData.xPos
     playerY := gameMemoryData.yPos
     renderScale := settings["serverScale"]
-    scale := settings["centerModeScale"]
 
     ; draw yourself
     gameWindow := getMapDrawingArea()

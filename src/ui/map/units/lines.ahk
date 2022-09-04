@@ -1,11 +1,10 @@
 
 
-drawLines(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef mapImage) {
+drawLines(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale, ByRef mapImage) {
     if (gameMemoryData.xPos > 1 and gameMemoryData.yPos > 1) { ; stops invalid lines
         playerX := gameMemoryData.xPos
         playerY := gameMemoryData.yPos
         renderScale := settings["serverScale"]
-        scale := settings["centerModeScale"]
 
         gameWindow := getMapDrawingArea()
         centerX := (gameWindow.W/2) ;+ gameWindow.X

@@ -1,11 +1,10 @@
 
-drawItemAlerts(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData) {
+drawItemAlerts(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale) {
     ; draw item alerts
     SetFormat Integer, D
     playerX := gameMemoryData.xPos
     playerY := gameMemoryData.yPos
     renderScale := settings["serverScale"]
-    scale := settings["centerModeScale"]
     
     items := gameMemoryData["items"]
     for index, item in items

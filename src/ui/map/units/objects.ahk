@@ -1,10 +1,9 @@
 
 
-drawObjects(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData) {
+drawObjects(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale) {
     playerX := gameMemoryData.xPos
     playerY := gameMemoryData.yPos
     renderScale := settings["serverScale"]
-    scale := settings["centerModeScale"]
 
     if (settings["showPortals"] or settings["showChests"]) {
         gameObjects := gameMemoryData["objects"]

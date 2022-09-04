@@ -1,11 +1,10 @@
 
 
-drawNPCs(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData) {
+drawNPCs(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale) {
     mobs := gameMemoryData.mobs
     playerX := gameMemoryData.xPos
     playerY := gameMemoryData.yPos
     renderScale := settings["serverScale"]
-    scale := settings["centerModeScale"]
 
     ; timeStamp("drawMonsters-showDeadMobs")
     if (settings["showDeadMobs"]) {

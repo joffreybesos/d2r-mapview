@@ -16,15 +16,15 @@ readSettings(settingsFile, ByRef settings) {
     settings["baseUrl"] := "http://localhost:3002"
     settings["alwaysShowMap"] := 0
     settings["hideTown"] := 0
-    settings["serverScale"] := "2"
+    settings["serverScale"] := 3
 
     settings["mapPosition"] := "CENTER"   ; can be "TOP_LEFT" or "TOP_RIGHT"
-    settings["centerModeScale"] := "2.262"
-    settings["centerModeOpacity"] := "0.7"
+    settings["centerModeScale"] := 2.262
+    settings["centerModeOpacity"] := 0.6
     settings["centerModeOffsetX"] := 0
     settings["centerModeOffsetY"] := 0
-    settings["cornerModeScale"] := "1.130"
-    settings["cornerModeOpacity"] := "0.7"
+    settings["cornerModeScale"] := 1.130
+    settings["cornerModeOpacity"] := 0.6
     settings["cornerModeOffsetX"] := 0
     settings["cornerModeOffsetY"] := 0
 
@@ -54,6 +54,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["showMerc"] := 1
     settings["showTownNPCs"] := 1
     settings["showTownNPCNames"] := 1
+    settings["NPCsAsCross"] := 1
     
     settings["showImmunities"] := 1
     settings["showOtherPlayers"] := 1
@@ -66,7 +67,6 @@ readSettings(settingsFile, ByRef settings) {
     settings["lastActiveGUITab"] := "Info"
     settings["settingsUIX"] := 100
     settings["settingsUIY"] := 100
-    settings["enablePrefetch"] := 0
 
     settings["enableItemFilter"] := 1
     settings["itemFontSize"] := 12

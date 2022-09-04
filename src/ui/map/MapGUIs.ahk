@@ -17,6 +17,16 @@ class MapGUIs {
             Gui, Map%A_Index%: Show, NA
             Gui, Map%A_Index%: Hide, NA
         }
+        if (settings["mapPosition"] == "TOP_LEFT") {
+            this.scale := settings["cornerModeScale"]
+            this.opacity := settings["cornerModeOpacity"]
+        } else if (settings["mapPosition"] == "TOP_RIGHT") {
+            this.scale := settings["cornerModeScale"]
+            this.opacity := settings["cornerModeOpacity"]
+        } else {
+            this.scale := settings["centerModeScale"]
+            this.opacity := settings["centerModeOpacity"]
+        }
     }
 
 
@@ -56,9 +66,9 @@ class MapGUIs {
     }
 
     drawMap(ByRef levelNo, ByRef gameMemoryData) {
-        scale := settings["centerModeScale"]
+        
         renderScale := settings["serverScale"] 
-        opacity := settings["centerModeOpacity"]
+        
         thisMap := this.mapImageList[levelNo]
         Gdip_Startup()
         ; OutputDebug, % thisMap.sFile "`n"
@@ -72,8 +82,8 @@ class MapGUIs {
         originalWidth := this.mapImageList[levelNo].originalWidth
         originalHeight := this.mapImageList[levelNo].originalHeight
 
-        mapScaledWidth := rotatedWidth * scale
-        mapScaledHeight := rotatedHeight * scale
+        mapScaledWidth := rotatedWidth * this.scale
+        mapScaledHeight := rotatedHeight * this.scale
         this.mapImageList[levelNo].mapScaledWidth := mapScaledWidth
         this.mapImageList[levelNo].mapScaledHeight := mapScaledHeight
 
@@ -83,7 +93,7 @@ class MapGUIs {
         Gdip_SetSmoothingMode(G, 4) 
         G := Gdip_GraphicsFromHDC(hdc)
         ; pPen := Gdip_CreatePen(0x44ff0000, 5)
-        Gdip_DrawImage(G, pBitmap, 0, 0, mapScaledWidth, mapScaledHeight / 2, 0, 0, rotatedWidth, rotatedHeight, 0.7)
+        Gdip_DrawImage(G, pBitmap, 0, 0, mapScaledWidth, mapScaledHeight / 2, 0, 0, rotatedWidth, rotatedHeight, this.opacity)
         ; Gdip_DrawRectangle(G, pPen, 0, 0, mapScaledWidth, mapScaledHeight/2)
         ; Gdip_DeletePen(pPen)
         mapGuiHwnd := this.mapGuis[levelNo]
@@ -92,10 +102,10 @@ class MapGUIs {
         playerY := (gameMemoryData["yPos"] - this.mapImageList[levelNo].mapOffsetY) * renderScale
         
         ; correctedPos := transformPosition(playerX, playerY, originalWidth / 2, originalHeight / 2, mapScaledWidth, mapScaledHeight, 2)
-        correctedPos := findNewPos(playerX, playerY, (originalWidth/2), (originalHeight/2), mapScaledWidth, mapScaledHeight, scale)
+        correctedPos := findNewPos(playerX, playerY, (originalWidth/2), (originalHeight/2), mapScaledWidth, mapScaledHeight, this.scale)
         gameWindow := getMapDrawingArea()
         mapPosX := ((gameWindow.W / 2) - correctedPos.x + gameWindow.X)
-        mapPosY := ((gameWindow.H / 2) - correctedPos.y + gameWindow.Y) + (mapScaledHeight / 4) - (5 * scale)
+        mapPosY := ((gameWindow.H / 2) - correctedPos.y + gameWindow.Y) + (mapScaledHeight / 4) - (5 * this.scale)
         this.mapImageList[levelNo].mapPosX := mapPosX
         this.mapImageList[levelNo].mapPosY := mapPosY
         
@@ -152,7 +162,6 @@ class MapGUIs {
     }
 
     updateMapPosition(ByRef settings, ByRef d2rprocess, ByRef gameMemoryData, ByRef levelNo, ByRef gameWindow) {
-        scale := settings["centerModeScale"]
         renderScale := settings["serverScale"] 
         ; player position
         pathAddress = gameMemoryData["pathAddress"]
@@ -173,11 +182,11 @@ class MapGUIs {
         ; calculate new position
         playerX := (gameMemoryData["xPos"] - this.mapImageList[levelNo].mapOffsetX) * renderScale
         playerY := (gameMemoryData["yPos"] - this.mapImageList[levelNo].mapOffsetY) * renderScale
-        correctedPos := findNewPos(playerX, playerY, (originalWidth/2), (originalHeight/2), mapScaledWidth, mapScaledHeight, scale)
-        ; correctedPos := transformPosition(playerX, playerY, originalWidth / 2, originalHeight / 2, mapScaledWidth, mapScaledHeight, scale)
+        correctedPos := findNewPos(playerX, playerY, (originalWidth/2), (originalHeight/2), mapScaledWidth, mapScaledHeight, this.scale)
+        ; correctedPos := transformPosition(playerX, playerY, originalWidth / 2, originalHeight / 2, mapScaledWidth, mapScaledHeight, this.scale)
         
         mapPosX := ((gameWindow.W / 2) - correctedPos.x + gameWindow.X)
-        mapPosY := ((gameWindow.H / 2) - correctedPos.y + gameWindow.Y) + (mapScaledHeight / 4) - (5 * scale)
+        mapPosY := ((gameWindow.H / 2) - correctedPos.y + gameWindow.Y) + (mapScaledHeight / 4) - (5 * this.scale)
         mapGuiHwnd := this.mapGuis[levelNo]
         WinMove, ahk_id %mapGuiHwnd%,,mapPosX, mapPosY
         this.mapImageList[levelNo].mapPosX := mapPosX

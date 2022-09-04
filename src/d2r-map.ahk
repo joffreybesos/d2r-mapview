@@ -39,7 +39,6 @@ SetTitleMatchMode, 2
 #Include %A_ScriptDir%\memory\readStates.ahk
 #Include %A_ScriptDir%\memory\readVendorItems.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
-#Include %A_ScriptDir%\ui\image\prefetchMaps.ahk
 #Include %A_ScriptDir%\ui\image\loadBitmaps.ahk
 #Include %A_ScriptDir%\ui\image\loadBuffIcons.ahk
 #Include %A_ScriptDir%\ui\map\MapGUIs.ahk
@@ -298,9 +297,7 @@ While 1 {
             ; timeStamp("ShowUnits")
             uiAssistLayer.drawMonsterBar(gameMemoryData["hoveredMob"])
 
-            if (settings["centerMode"] and gameMemoryData["pathAddress"]) {
-                mapGuis.updateMapPositions(mapList, settings, d2rprocess, gameMemoryData)
-            }
+            mapGuis.updateMapPositions(mapList, settings, d2rprocess, gameMemoryData)
             if (Mod(ticktock, 6)) {
                 checkAutomapVisibility(d2rprocess, gameMemoryData, settings, mapGuis, unitsGui)
                 CoordMode,Mouse,Screen
@@ -509,7 +506,6 @@ ShowSettings:
 Update:
 {
     WriteLog("Applying new settings...")
-    cmode := settings["centerMode"]
     UpdateSettings(settings, defaultSettings)
     historyText.delete()
     historyText := new SessionTableLayer(settings)
@@ -526,17 +522,10 @@ Update:
     buffBarLayer.delete()
     buffBarLayer := new BuffBarLayer(settings)
     SetupHotKeys(gameWindowId, settings)
-    ; if (cmode != settings["centerMode"]) { ; if centermode changed
-    ;     lastlevel := "INVALIDATED"
-    ;     ; mapImageList[levelNo] := 0
-    ;     gameMemoryData := {}
-    ;     ; uiData := {}
-    ;     ; WinSet, Region, , ahk_id %mapHwnd1%
-    ;     ; WinSet, Region, , ahk_id %unitHwnd1%
-    ;     ; Gui, Map: Hide
-    ;     ; Gui, Units: Hide
-    ;     mapShowing := 0
-    ; }
+    lastlevel := "INVALIDATED"
+    gameMemoryData := {}
+    mapList.hide()
+    mapShowing := 0
     GuiControl, Hide, Unsaved
     GuiControl, Disable, UpdateBtn
     redrawMap := 1

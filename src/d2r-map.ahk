@@ -95,7 +95,6 @@ lastSeed:=""
 session :=
 lastPlayerLevel:=
 lastPlayerExperience:=
-uidata:={}
 sessionList := []
 offsetAttempts := 2
 
@@ -117,8 +116,6 @@ global itemLogItems := []
 global vendorItems := []
 global oSpVoice := ComObjCreate("SAPI.SpVoice")
 global itemAlertList := new AlertList("itemfilter.yaml")
-global centerLeftOffset := 0
-global centerTopOffset := 0
 global redrawMap := 1
 global offsets := []
 global hudBitmaps := loadBitmaps()
@@ -237,7 +234,6 @@ While 1 {
 
                 gameStartTime := A_TickCount    
                 currentGameName := readLastGameName(d2rprocess, gameWindowId, offsets, session)
-
                 if (session) {
                     session.setEndTime(gameEndTime)
                     session.endingPlayerLevel := lastPlayerLevel
@@ -248,12 +244,11 @@ While 1 {
                         sessionList.push(session)
                     }
                 }
-                
                 session := new GameSession(currentGameName, A_TickCount, gameMemoryData["playerName"])
                 session.startingPlayerLevel := gameMemoryData["playerLevel"]
                 session.startingExperience := gameMemoryData["experience"]
                 lastSeed := gameMemoryData["mapSeed"]
-                ;ipAddress := readIPAddress(d2rprocess, gameWindowId, offsets, session)
+
                 global shrines := []
                 items := []
                 seenItems := []
@@ -293,11 +288,14 @@ While 1 {
                 gameInfoLayer.updateExpLevel(levelNo, gameMemoryData["difficulty"], gameMemoryData["playerLevel"])
                 redrawMap := 0
             }
-            unitsGui.drawUnitLayer(settings, gameMemoryData, mapGuis.mapImageList[levelNo])
+            ; timeStamp("ShowUnits")
+            ; unitsGui.drawUnitLayer(settings, gameMemoryData, mapGuis.mapImageList[levelNo])
             ; timeStamp("ShowUnits")
             uiAssistLayer.drawMonsterBar(gameMemoryData["hoveredMob"])
-
+            timeStamp("updateMapPositions")
             mapGuis.updateMapPositions(mapList, settings, d2rprocess, gameMemoryData)
+            timeStamp("updateMapPositions")
+
             if (Mod(ticktock, 6)) {
                 checkAutomapVisibility(d2rprocess, gameMemoryData, settings, mapGuis, unitsGui)
                 CoordMode,Mouse,Screen
@@ -481,7 +479,7 @@ ExitMH:
                     ++count
                 }
             }
-            OutputDebug, % thisName " " Round(averageVal / count / 1000.0, 2) "ms `n"
+            OutputDebug, % thisName " " Round(averageVal / count / 1000.0, 2) "ms, last measurement " Round(perf2["duration"] / 1000.0, 2) "ms `n"
             alreadyseenperf.Push(thisName)
         }
     }

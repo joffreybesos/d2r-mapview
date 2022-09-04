@@ -37,6 +37,10 @@ class MapGUIs {
         }
     }
 
+    hideSingle(levelNo) {
+        Gui, Map%levelNo%: Hide ; hide map
+    }
+
     downloadMapImages(ByRef mapList, ByRef gameMemoryData) {
         for k, thisLevelNo in mapList
         {
@@ -110,7 +114,7 @@ class MapGUIs {
         this.mapImageList[levelNo].mapPosY := mapPosY
         
         WinMove, ahk_id %mapGuiHwnd%,,mapPosX, mapPosY
-        this.updateVisibleRegion(thisLevelNo, gameWindow)
+        this.updateVisibleRegion(levelNo, gameWindow)
         SelectObject(hdc, obm)
         DeleteObject(hbm)
         DeleteDC(hdc)
@@ -122,9 +126,14 @@ class MapGUIs {
 
     updateMapPositions(ByRef mapList, ByRef settings, ByRef d2rprocess, ByRef gameMemoryData) {
         gameWindow := getMapDrawingArea()
+        newPos := this.calculateMapPosition(settings, d2rprocess, gameMemoryData, mapList[1], gameWindow)
         for k, thisLevelNo in mapList {
-            this.updateMapPosition(settings, d2rprocess, gameMemoryData, thisLevelNo, gameWindow)
-            this.updateVisibleRegion(thisLevelNo, gameWindow)
+            if (k != 1) {
+                this.moveMap(newPos.x, newPos.y, thisLevelNo)
+            }
+            if (Mod(thisLevelNo, ticktock) == 0) {
+                this.updateVisibleRegion(thisLevelNo, gameWindow)
+            }
         }
     }
 
@@ -153,7 +162,6 @@ class MapGUIs {
             regionY := 0
             regionWidth := 0
             regionHeight := 0
-            
         } else {
             regionY := 0
             regionHeight := gameWindow.H - (this.mapImageList[levelNo].mapPosY - gameWindow.Y)
@@ -161,7 +169,16 @@ class MapGUIs {
         WinSet, Region, %regionX%-%regionY% W%regionWidth% H%regionHeight%, ahk_id %mapGuiHwnd%
     }
 
-    updateMapPosition(ByRef settings, ByRef d2rprocess, ByRef gameMemoryData, ByRef levelNo, ByRef gameWindow) {
+    moveMap(ByRef relativeOffsetX, ByRef relativeOffsetY, ByRef levelNo) {
+        mapGuiHwnd := this.mapGuis[levelNo]
+        newmapPosX := this.mapImageList[levelNo].mapPosX - relativeOffsetX
+        newmapPosY := this.mapImageList[levelNo].mapPosY - relativeOffsetY
+        WinMove, ahk_id %mapGuiHwnd%,,newmapPosX, newmapPosY
+        this.mapImageList[levelNo].mapPosX := newmapPosX
+        this.mapImageList[levelNo].mapPosY := newmapPosY
+    }
+
+    calculateMapPosition(ByRef settings, ByRef d2rprocess, ByRef gameMemoryData, ByRef levelNo, ByRef gameWindow) {
         renderScale := settings["serverScale"] 
         ; player position
         pathAddress = gameMemoryData["pathAddress"]
@@ -187,10 +204,14 @@ class MapGUIs {
         
         mapPosX := ((gameWindow.W / 2) - correctedPos.x + gameWindow.X)
         mapPosY := ((gameWindow.H / 2) - correctedPos.y + gameWindow.Y) + (mapScaledHeight / 4) - (5 * this.scale)
-        mapGuiHwnd := this.mapGuis[levelNo]
-        WinMove, ahk_id %mapGuiHwnd%,,mapPosX, mapPosY
+        newMapPosX := this.mapImageList[levelNo].mapPosX - mapPosX
+        newMapPosY := this.mapImageList[levelNo].mapPosY - mapPosY
         this.mapImageList[levelNo].mapPosX := mapPosX
         this.mapImageList[levelNo].mapPosY := mapPosY
+        mapGuiHwnd := this.mapGuis[levelNo]
+        WinMove, ahk_id %mapGuiHwnd%,,mapPosX, mapPosY
+        
+        return { x: newMapPosX, y: newMapPosY }
     }
 }
 

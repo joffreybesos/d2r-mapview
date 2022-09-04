@@ -74,6 +74,24 @@ getWindowClientArea() {
     return { "X": Win_Client_X, "Y": Win_Client_Y, "W": Win_Client_W, "H": Win_Client_H }
 }
 
+getMapDrawingArea() {
+    WinGet, windowId, ID , %gameWindowId%
+    VarSetCapacity(RECT, 16, 0)
+    DllCall("user32\GetClientRect", Ptr,windowId, Ptr,&RECT)
+    DllCall("user32\ClientToScreen", Ptr,windowId, Ptr,&RECT)
+    Win_Client_X := NumGet(&RECT, 0, "Int")
+    Win_Client_Y := NumGet(&RECT, 4, "Int")
+    Win_Client_W := NumGet(&RECT, 8, "Int")
+    Win_Client_H := NumGet(&RECT, 12, "Int")
+    if (settings["mapPosition"] == "TOP_RIGHT") {
+        return { "X": 228, "Y": 69, "W": 1280, "H": 540 }
+    } else if (settings["mapPosition"] == "TOP_LEFT") {
+        return { "X": 228, "Y": 69, "W": 1280, "H": 540 }
+    } else {
+        return { "X": Win_Client_X, "Y": Win_Client_Y, "W": Win_Client_W, "H": Win_Client_H }
+    }
+    
+}
 
 b64Encode(string)
 {

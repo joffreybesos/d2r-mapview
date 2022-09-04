@@ -16,7 +16,7 @@ class UnitsGUI {
         Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
         this.unitHwnd := WinExist()
         
-        gameWindow := getWindowClientArea()
+        gameWindow := getMapDrawingArea()
         this.hbm := CreateDIBSection(gameWindow.W, gameWindow.H)
 
         this.hdc := CreateCompatibleDC()
@@ -40,10 +40,8 @@ class UnitsGUI {
         ; get relative position of player in world
         ; xpos is absolute world pos in game
         ; each map has offset x and y which is absolute world position
-        gameWindow := getWindowClientArea()
-        playerX := gameMemoryData.xPos
-        playerY := gameMemoryData.yPos
-
+        gameWindow := getMapDrawingArea()
+        
         drawNPCs(this.G, this.brushes, settings, gameMemoryData)
         drawObjects(this.G, this.brushes, settings, gameMemoryData)
         drawExits(this.G, this.brushes, settings, gameMemoryData, mapImage)
@@ -77,7 +75,7 @@ World2Screen(ByRef playerX, ByRef playerY, ByRef targetx, ByRef targety, scale) 
     xdiff := targetx - playerX
     ydiff := targety - playerY
     
-    gameWindow := getWindowClientArea()
+    gameWindow := getMapDrawingArea()
     centerX := (gameWindow.W/2)
     centerY := (gameWindow.H/2)
     angle := 0.785398    ;45 deg

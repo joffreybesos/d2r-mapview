@@ -193,7 +193,7 @@ drawFloatingText(ByRef G, ByRef brushes, ByRef unitx, ByRef unity, ByRef fontSiz
     , texty := unity-(brushes.normalDotSize/2) - textSpaceHeight
 
     if (noOverflow) { ; this wil stop text from overflowing over the edges
-        gameWindow := getWindowClientArea()
+        gameWindow := getMapDrawingArea()
         hStringFormat := Gdip_StringFormatGetGeneric(1)
         CreateRectF(RC, textx, texty, textSpaceWidth, textSpaceHeight)
         measuredString := Gdip_MeasureString(G, text, font, hStringFormat, RC)

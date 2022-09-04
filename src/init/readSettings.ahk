@@ -14,23 +14,21 @@ readSettings(settingsFile, ByRef settings) {
     settings["locale"] := ""
     settings["chosenVoice"] := 1
     settings["baseUrl"] := "http://localhost:3002"
-    settings["scale"] := "1.000000"
-    settings["leftMargin"] := "20"
-    settings["topMargin"] := "20"
-    settings["opacity"] := "0.6"
     settings["alwaysShowMap"] := 0
     settings["hideTown"] := 0
-    settings["edges"] := 1
-    settings["padding"] := 150
-    settings["wallThickness"] := "0.5"
-    settings["centerMode"] := 1
+    settings["serverScale"] := "2"
+
+    settings["mapPosition"] := "CENTER"   ; can be "TOP_LEFT" or "TOP_RIGHT"
     settings["centerModeScale"] := "2.262"
-    settings["serverScale"] := "3"
     settings["centerModeOpacity"] := "0.7"
-    settings["centerModeXoffset"] := "-1"
-    settings["centerModeYoffset"] := "-25"
-    settings["centerModeXUnitoffset"] := "4"
-    settings["centerModeYUnitoffset"] := "0"
+    settings["centerModeOffsetX"] := 0
+    settings["centerModeOffsetY"] := 0
+    settings["cornerModeScale"] := "1.130"
+    settings["cornerModeOpacity"] := "0.7"
+    settings["cornerModeOffsetX"] := 0
+    settings["cornerModeOffsetY"] := 0
+
+
     settings["showGameHistory"] := 1
     settings["historyTextAlignment"] := "LEFT"
     settings["historyTextSize"] := "18"
@@ -55,12 +53,9 @@ readSettings(settingsFile, ByRef settings) {
     settings["showDeadMobs"] := 1
     settings["showMerc"] := 1
     settings["showTownNPCs"] := 1
-    settings["NPCsAsCross"] := 1
     settings["showTownNPCNames"] := 1
     
     settings["showImmunities"] := 1
-    settings["showPlayerDotCenter"] := 1
-    settings["playerAsCross"] := 1
     settings["showOtherPlayers"] := 1
     settings["showOtherPlayerNames"] := 0
     settings["showShrines"] := 1

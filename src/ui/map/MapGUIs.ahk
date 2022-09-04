@@ -35,8 +35,8 @@ class MapGUIs {
     }
 
     drawMaps(ByRef mapList, ByRef gameMemoryData) {
-        ; this.show(mapList)
-        ; this.hide(mapList)
+        this.show(mapList)
+        this.hide(mapList)
         for k, thisLevelNo in mapList {
             ; OutputDebug, % "Drawing map " thisLevelNo "`n"
             this.drawMap(thisLevelNo, gameMemoryData)
@@ -53,18 +53,6 @@ class MapGUIs {
     }
     showLast() {
         this.show(this.mapList)
-    }
-
-
-    getMapClientArea(windowId) {
-        VarSetCapacity(RECT, 16, 0)
-        DllCall("user32\GetClientRect", Ptr,windowId, Ptr,&RECT)
-        DllCall("user32\ClientToScreen", Ptr,windowId, Ptr,&RECT)
-        Win_Client_X := NumGet(&RECT, 0, "Int")
-        Win_Client_Y := NumGet(&RECT, 4, "Int")
-        Win_Client_W := NumGet(&RECT, 8, "Int")
-        Win_Client_H := NumGet(&RECT, 12, "Int")
-        return { "x": Win_Client_X, "y": Win_Client_Y, "width": Win_Client_W, "height": Win_Client_H }
     }
 
     drawMap(ByRef levelNo, ByRef gameMemoryData) {
@@ -105,7 +93,7 @@ class MapGUIs {
         
         ; correctedPos := transformPosition(playerX, playerY, originalWidth / 2, originalHeight / 2, mapScaledWidth, mapScaledHeight, 2)
         correctedPos := findNewPos(playerX, playerY, (originalWidth/2), (originalHeight/2), mapScaledWidth, mapScaledHeight, scale)
-        gameWindow := getWindowClientArea()
+        gameWindow := getMapDrawingArea()
         mapPosX := ((gameWindow.W / 2) - correctedPos.x + gameWindow.X)
         mapPosY := ((gameWindow.H / 2) - correctedPos.y + gameWindow.Y) + (mapScaledHeight / 4) - (5 * scale)
         this.mapImageList[levelNo].mapPosX := mapPosX
@@ -123,8 +111,8 @@ class MapGUIs {
     }
 
     updateMapPositions(ByRef mapList, ByRef settings, ByRef d2rprocess, ByRef gameMemoryData) {
+        gameWindow := getMapDrawingArea()
         for k, thisLevelNo in mapList {
-            gameWindow := getWindowClientArea()
             this.updateMapPosition(settings, d2rprocess, gameMemoryData, thisLevelNo, gameWindow)
             this.updateVisibleRegion(thisLevelNo, gameWindow)
         }

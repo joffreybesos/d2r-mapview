@@ -6,7 +6,7 @@ drawPlayers(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData) {
     scale := settings["centerModeScale"]
 
     ; draw yourself
-    gameWindow := getWindowClientArea()
+    gameWindow := getMapDrawingArea()
     centerX := (gameWindow.W/2) ;+ gameWindow.X
     centerY := (gameWindow.H/2) - (5 * scale) ;+ gameWindow.Y
     points := createCross(centerX, centerY, 4.9 * scale)

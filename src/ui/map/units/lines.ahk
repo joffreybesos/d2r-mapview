@@ -1,6 +1,6 @@
 
 
-drawLines(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale, ByRef mapImage) {
+drawLines(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale, ByRef gameWindow, ByRef mapImage) {
     if (gameMemoryData.xPos > 1 and gameMemoryData.yPos > 1) { ; stops invalid lines
         playerX := gameMemoryData.xPos
         playerY := gameMemoryData.yPos
@@ -18,7 +18,7 @@ drawLines(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef sc
                     wparray := StrSplit(waypointHeader, ",")
                     , waypointX := wparray[1] + mapImage.mapOffsetX
                     , wayPointY := wparray[2] + mapImage.mapOffsetY
-                    wpScreenPos := World2Screen(playerX, playerY, waypointX, wayPointY, scale)
+                    wpScreenPos := World2Screen(playerX, playerY, waypointX, wayPointY, scale, gameWindow)
                     drawLineWithArrow(G, brushes, centerX, centerY, wpScreenPos.x, wpScreenPos.y, scale, brushes.pLineWP, brushes.pBrushLineWP)
                     ;Gdip_DrawLine(G, brushes.pLineWP, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, waypointX, wayPointY)
                 }
@@ -43,7 +43,7 @@ drawLines(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef sc
                         if (A_LoopField == exitArray[1]) {
                             exitX := exitArray[3] + mapImage.mapOffsetX
                             , exitY := exitArray[4] + mapImage.mapOffsetY
-                            exitScreenPos := World2Screen(playerX, playerY, exitX, exitY, scale)
+                            exitScreenPos := World2Screen(playerX, playerY, exitX, exitY, scale, gameWindow)
 
                             drawLineWithArrow(G, brushes, centerX, centerY, exitScreenPos.x, exitScreenPos.y, scale, brushes.pLineExit, brushes.pBrushLineExit)
                             ;Gdip_DrawLine(G, brushes.pLineExit, xPosDot+centerLeftOffset, yPosDot+centerTopOffset, exitX, exitY)
@@ -61,7 +61,7 @@ drawLines(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef sc
                 ;bossArray[1] ; name of boss
                 , bossX := bossArray[2] + mapImage.mapOffsetX
                 , bossY := bossArray[3] + mapImage.mapOffsetY
-                bossScreenPos := World2Screen(playerX, playerY, bossX, bossY, scale)
+                bossScreenPos := World2Screen(playerX, playerY, bossX, bossY, scale, gameWindow)
                 drawLineWithArrow(G, brushes, centerX, centerY, bossScreenPos.x, bossScreenPos.y, scale, brushes.pLineBoss, brushes.pBrushLineBoss)
                 ;Gdip_DrawLine(G, brushes.pLineBoss, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, bossX, bossY)
             }
@@ -79,7 +79,7 @@ drawLines(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef sc
                     ;questsArray[1] ; name of quest
                     , questX := questsArray[2] + mapImage.mapOffsetX
                     , questY := questsArray[3] + mapImage.mapOffsetY
-                    questScreenPos := World2Screen(playerX, playerY, questX, questY, scale)
+                    questScreenPos := World2Screen(playerX, playerY, questX, questY, scale, gameWindow)
                     drawLineWithArrow(G, brushes, centerX, centerY, questScreenPos.x, questScreenPos.y, scale, brushes.pLineQuest, brushes.pBrushLineQuest)
                     ; Gdip_DrawLine(G, brushes.pLineQuest, xPosDot + centerLeftOffset, yPosDot + centerTopOffset, questX, questY)
                 }

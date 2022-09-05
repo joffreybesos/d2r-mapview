@@ -13,6 +13,7 @@
 ; global lastdwEndSeedHash1
 global xorkey
 global playerLevel 
+global experience
 readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     static items
     static objects
@@ -21,10 +22,10 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     hoveredMob := {}
     ;StartTime := A_TickCount
     unitTableOffset := offsets["unitTable"] ;default offset
-    playerPointer := scanForPlayer(d2rprocess, unitTableOffset, settings)
+    playerPointer := scanForPlayer(d2rprocess, unitTableOffset)
 
     ;WriteLog("Looking for Level No address at player offset " unitTableOffset)
-    , playerUnit := playerPointer
+    playerUnit := playerPointer
     , unitId := d2rprocess.read(playerUnit + 0x08, "UInt")
 
     ; get the level number
@@ -33,45 +34,39 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     , pRoom2Address := d2rprocess.read(pRoom1Address + 0x18, "Int64")
     , pLevelAddress := d2rprocess.read(pRoom2Address + 0x90, "Int64")
     , levelNo := d2rprocess.read(pLevelAddress + 0x1F8, "UInt")
-    if (!levelNo) {
-        WriteLogDebug("Did not find level num using player offset " playerPointer) 
-    }
 
     ; get playername
-    playerNameAddress := d2rprocess.read(playerUnit + 0x10, "Int64")
+    , playerNameAddress := d2rprocess.read(playerUnit + 0x10, "Int64")
     , playerName := d2rprocess.readString(playerNameAddress, length := 0)
     
 
     ; get the map seed
-    actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")  
-    actMiscAddress := d2rprocess.read(actAddress + 0x78, "Int64")   ;0x0000023a64ed4780 ;2449824630656
-    mapSeed := d2rprocess.read(actMiscAddress + 0x840, "UInt") 
+    , actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")  
+    , actMiscAddress := d2rprocess.read(actAddress + 0x78, "Int64")   ;0x0000023a64ed4780 ;2449824630656
+    , mapSeed := d2rprocess.read(actMiscAddress + 0x840, "UInt") 
 
 
     ; get the difficulty
-    actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")
     , aActUnk2 := d2rprocess.read(actAddress + 0x78, "Int64")
     , difficulty := d2rprocess.read(aActUnk2 + 0x830, "UShort")
-    if ((difficulty != 0) & (difficulty != 1) & (difficulty != 2)) {
-        WriteLogDebug("Did not find difficulty using player offset " unitTableOffset) 
-    }
-
     
-    pStatsListEx := d2rprocess.read(playerUnit + 0x88, "Int64")
-    , statPtr := d2rprocess.read(pStatsListEx + 0x30, "Int64")
-    , statCount := d2rprocess.read(pStatsListEx + 0x38, "Int64")
-    , d2rprocess.readRaw(statPtr + 0x2, buffer, statCount*8)
-    ; get level and experience
-    Loop, %statCount%
-    {
-        offset := (A_Index -1) * 8
-        , statEnum := NumGet(&buffer , offset, Type := "UShort")
-        , statValue := NumGet(&buffer , offset + 0x2, Type := "UInt")
-        if (statEnum == 12) {
-            playerLevel := statValue
-        }
-        if (statEnum == 13) {
-            experience := statValue
+    if (Mod(ticktock, 6)) {
+        pStatsListEx := d2rprocess.read(playerUnit + 0x88, "Int64")
+        , statPtr := d2rprocess.read(pStatsListEx + 0x30, "Int64")
+        , statCount := d2rprocess.read(pStatsListEx + 0x38, "Int64")
+        , d2rprocess.readRaw(statPtr + 0x2, buffer, statCount*8)
+        ; get level and experience
+        Loop, %statCount%
+        {
+            offset := (A_Index -1) * 8
+            , statEnum := NumGet(&buffer , offset, Type := "UShort")
+            , statValue := NumGet(&buffer , offset + 0x2, Type := "UInt")
+            if (statEnum == 12) {
+                playerLevel := statValue
+            }
+            if (statEnum == 13) {
+                experience := statValue
+            }
         }
     }
 

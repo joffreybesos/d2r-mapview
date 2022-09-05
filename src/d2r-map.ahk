@@ -213,9 +213,9 @@ While 1 {
         Sleep, 80 ; sleep when no offset found, you're likely in menu
     } else {
         offsetAttempts := 0
-        ; timeStamp("readGameMemory")
+        timeStamp("readGameMemory")
         readGameMemory(d2rprocess, settings, gameMemoryData)
-        ; timeStamp("readGameMemory")
+        timeStamp("readGameMemory")
 
         if (gameMemoryData["experience"]) {
             lastPlayerLevel:= gameMemoryData["playerLevel"]
@@ -292,7 +292,9 @@ While 1 {
             unitsGui.drawUnitLayer(settings, gameMemoryData, mapGuis.mapImageList[levelNo])
             ; timeStamp("ShowUnits")
             uiAssistLayer.drawMonsterBar(gameMemoryData["hoveredMob"])
+            ; timeStamp("updateMapPositions")
             mapGuis.updateMapPositions(mapList, settings, d2rprocess, gameMemoryData)
+            ; timeStamp("updateMapPositions")
 
             if (Mod(ticktock, 6)) {
                 checkAutomapVisibility(d2rprocess, gameMemoryData, settings, mapGuis, unitsGui)

@@ -1,5 +1,5 @@
 
-drawPlayers(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale) {
+drawPlayers(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale, ByRef gameWindow) {
     playerX := gameMemoryData.xPos
     playerY := gameMemoryData.yPos
     renderScale := settings["serverScale"]
@@ -18,7 +18,7 @@ drawPlayers(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef 
         
         if (gameMemoryData["playerName"] != player["playerName"] or player["isCorpse"]) {
             ;WriteLog(GameMemoryData["playerName"] " " player["playerName"])
-            playerScreenPos := World2Screen(playerX, playerY, player.x, player.y, scale)
+            playerScreenPos := World2Screen(playerX, playerY, player.x, player.y, scale, gameWindow)
             
             if (settings["showOtherPlayerNames"]) {
                 if (player["isCorpse"]) {

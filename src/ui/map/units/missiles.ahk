@@ -1,6 +1,6 @@
 
 
-drawMissiles(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale) {
+drawMissiles(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale, ByRef gameWindow) {
     static oldmobScreenPosx
     static oldmobScreenPosy
     playerX := gameMemoryData.xPos
@@ -11,7 +11,7 @@ drawMissiles(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef
     {   
         for each, missile in missilearray
         {
-            mobScreenPos := World2Screen(playerX, playerY, missile.x, missile.y, scale)
+            mobScreenPos := World2Screen(playerX, playerY, missile.x, missile.y, scale, gameWindow)
             if (oldmobScreenPosx == mobScreenPos.x && oldmobScreenPosy == mobScreenPos.y){
             } else {
                 switch (missile["UnitType"]) {

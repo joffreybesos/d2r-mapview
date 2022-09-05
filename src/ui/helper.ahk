@@ -93,7 +93,7 @@ getMapDrawingArea() {
             Y := Win_Client_Y + (Win_Client_H / 26)
             X := Win_Client_X
         }
-        return { "X": X + (Win_Client_W * 0.6666), "Y": Y, "W": Win_Client_W / 3, "H": Win_Client_H / 3 }
+        return { "X": X + (Win_Client_W * 0.6666), "Y": Y, "W": Win_Client_W / 3, "H": Win_Client_H / 3, "CenterX": Win_Client_W / 3 / 2, "CenterY": Win_Client_H / 3 / 2 }
     } else if (settings["mapPosition"] == "TOP_LEFT") {
         if ((Win_Client_W / Win_Client_H) > 2) {  ; ultra wide
             Y := Win_Client_Y + (Win_Client_H / 28)
@@ -102,9 +102,9 @@ getMapDrawingArea() {
             Y := Win_Client_Y + (Win_Client_H / 22)
             X := Win_Client_X
         }
-        return { "X": X, "Y": Y, "W": Win_Client_W / 3, "H": Win_Client_H / 3 }
+        return { "X": X, "Y": Y, "W": Win_Client_W / 3, "H": Win_Client_H / 3, "CenterX": Win_Client_W / 3 / 2, "CenterY": Win_Client_H / 3 / 2 }
     } else {
-        return { "X": Win_Client_X, "Y": Win_Client_Y, "W": Win_Client_W, "H": Win_Client_H }
+        return { "X": Win_Client_X, "Y": Win_Client_Y, "W": Win_Client_W, "H": Win_Client_H, "CenterX": Win_Client_W / 2, "CenterY": Win_Client_H / 2 }
     }
     
 }

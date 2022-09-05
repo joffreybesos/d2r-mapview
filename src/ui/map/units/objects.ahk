@@ -1,6 +1,6 @@
 
 
-drawObjects(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale) {
+drawObjects(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale, ByRef gameWindow) {
     playerX := gameMemoryData.xPos
     playerY := gameMemoryData.yPos
     renderScale := settings["serverScale"]
@@ -13,7 +13,7 @@ drawObjects(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef 
             if (settings["showPortals"]) {
                 ;WriteLog(object["txtFileNo"] " " object["isRedPortal"])
                 if (object["isPortal"]) {
-                    objectScreenPos := World2Screen(playerX, playerY, object.x, object.y, scale)
+                    objectScreenPos := World2Screen(playerX, playerY, object.x, object.y, scale, gameWindow)
                     
                     portalColor := "ff" . settings["portalColor"]
                     if (object["interactType"] == 1 or object["interactType"] == 40 or object["interactType"] == 75 or object["interactType"] == 103 or object["interactType"] == 109) {
@@ -27,32 +27,33 @@ drawObjects(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef 
                     }
 
                     ;Gdip_DrawString(G, text, hFont, hFormat, pBrush2, RectF)
-                    if (settings["centerMode"]) {
-                        Gdip_DrawEllipse(G, brushes.pPortal, objectScreenPos.x-8, objectScreenPos.y-(10 * scale), 8 * scale, 16 * scale)
-                    } else {
-                        Gdip_DrawEllipse(G, brushes.pPortal, objectScreenPos.x-8, objectScreenPos.y-(9 * scale), 8 * scale, 16 * scale)
-                    }
+                    Gdip_DrawEllipse(G, brushes.pPortal, objectScreenPos.x-8, objectScreenPos.y-(9 * scale), 8 * scale, 16 * scale)
                 }
                 if (object["isRedPortal"]) {
-                    objectScreenPos := World2Screen(playerX, playerY, object.x, object.y, scale)
-                    if (settings["centerMode"]) {
-                        ;Gdip_DrawString(G, text, hFont, hFormat, pBrush2, RectF)
-                        Gdip_DrawEllipse(G, brushes.pRedPortal, objectScreenPos.x-8, objectScreenPos.y-(10 * scale), 8 * scale, 16 * scale)
-                    } else {
-                        Gdip_DrawEllipse(G, brushes.pRedPortal, objectScreenPos.x-8, objectScreenPos.y-(9 * scale), 8 * scale, 16 * scale)
-                    }
+                    objectScreenPos := World2Screen(playerX, playerY, object.x, object.y, scale, gameWindow)
+                    Gdip_DrawEllipse(G, brushes.pRedPortal, objectScreenPos.x-8, objectScreenPos.y-(10 * scale), 8 * scale, 16 * scale)
                 }
             }
             if (settings["showChests"]) {
                 if (object["isChest"]) {
                     if (object["mode"] == 0) {
-                        objectScreenPos := World2Screen(playerX, playerY, object.x, object.y, scale)
-                        if (settings["centerMode"]) {
-                            
-                            drawChest(G, brushes, objectScreenPos.x, objectScreenPos.y, (1 / 4) * scale, object["chestState"])
-                        } else {
-                            drawChest(G, brushes, objectScreenPos.x, objectScreenPos.y, (1 / 5) * scale, object["chestState"])
+                        objectScreenPos := World2Screen(playerX, playerY, object.x, object.y, scale, gameWindow)
+                        drawChest(G, brushes, objectScreenPos.x, objectScreenPos.y, (1 / 4) * scale, object["chestState"])
+                    }
+                }
+            }
+            if (settings["showShrines"]) {
+                if (object["isShrine"]) {
+                    isShrineAlreadySeen := 0
+                    for index, oldShrine in shrines
+                    {
+                        if (oldShrine["x"] == object["x"] and oldShrine["y"] == object["y"] and oldShrine["levelNo"] == object["levelNo"]) {
+                            ; already seen
+                            isShrineAlreadySeen := 1
                         }
+                    }
+                    if (!isShrineAlreadySeen) {
+                        shrines.push(object)
                     }
                 }
             }
@@ -65,27 +66,11 @@ drawObjects(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef 
         , shrineColor := "ff" . settings["shrineColor"]
         , shrineTextSize := (settings["shrineTextSize"] /2) * scale
         , pBrush := Gdip_BrushCreateSolid("0xff" . settings["shrineColor"])
-        for index, object in gameObjects
-        {
-            if (object["isShrine"]) {
-                isShrineAlreadySeen := 0
-                for index, oldShrine in shrines
-                {
-                    if (oldShrine["x"] == object["x"] and oldShrine["y"] == object["y"] and oldShrine["levelNo"] == object["levelNo"]) {
-                        ; already seen
-                        isShrineAlreadySeen := 1
-                    }
-                }
-                if (!isShrineAlreadySeen) {
-                    shrines.push(object)
-                }
-            }
-        }
         for index, object in shrines
         {
             if (object["levelNo"] == gameMemoryData["levelNo"]) {
 
-                objectScreenPos := World2Screen(playerX, playerY, object.x, object.y, scale)
+                objectScreenPos := World2Screen(playerX, playerY, object.x, object.y, scale, gameWindow)
                 , shrineType := object["shrineType"]
                 , textx := objectScreenPos.x - 150
                 , texty := objectScreenPos.y - 110

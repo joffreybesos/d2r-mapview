@@ -1,6 +1,6 @@
 global lastPlayerPointer
 
-scanForPlayer(ByRef d2rprocess, startingOffset, settings) {
+scanForPlayer(ByRef d2rprocess, startingOffset) {
     
     ; check the one that previously worked, it's likely not checkLastOffset()
     ;WriteLog("Checking last player pointer " lastPlayerPointer)
@@ -8,7 +8,7 @@ scanForPlayer(ByRef d2rprocess, startingOffset, settings) {
         return lastPlayerPointer
     } else {
         WriteLog("Scanning for new player pointer " lastPlayerPointer ", starting default offset " startingOffset)
-        lastPlayerPointer := getPlayerOffset(d2rprocess, startingOffset, settings)
+        lastPlayerPointer := getPlayerOffset(d2rprocess, startingOffset)
     }
     return lastPlayerPointer
 }
@@ -27,7 +27,7 @@ checkPlayerPointer(ByRef d2r, playerUnit) {
         yPos := d2r.read(pathAddress + 0x06, "UShort")
 
         ;WriteLog(name " " xPos " " yPos " " mapSeed)
-        if (xPos > 0 and yPos > 0 and StrLen(mapSeed) > 6) {
+        if (xPos > 0 and yPos > 0 and mapSeed) {
             ;WriteLog("SUCCESS: Found current player offset: " newOffset ", " xPos " " yPos " at entry " attempts ", which gives obfuscated map seed: " mapSeed)
             return true
         }
@@ -35,7 +35,7 @@ checkPlayerPointer(ByRef d2r, playerUnit) {
     return false
 }
 
-getPlayerOffset(ByRef d2r, startingOffset, settings) {
+getPlayerOffset(ByRef d2r, startingOffset) {
     uiOffset := offsets["uiOffset"]
     expOffset := offsets["expOffset"]
 

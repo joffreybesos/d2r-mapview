@@ -48,15 +48,15 @@ class UnitsGUI {
         ; each map has offset x and y which is absolute world position
         gameWindow := getMapDrawingArea()
         
-        drawNPCs(this.G, this.brushes, settings, gameMemoryData, this.scale)
-        drawObjects(this.G, this.brushes, settings, gameMemoryData, this.scale)
-        drawExits(this.G, this.brushes, settings, gameMemoryData, this.scale, mapImage)
-        drawLines(this.G, this.brushes, settings, gameMemoryData, this.scale, mapImage)
-        drawItemAlerts(this.G, this.brushes, settings, gameMemoryData, this.scale)
-        drawMissiles(this.G, this.brushes, settings, gameMemoryData, this.scale)
-        drawPlayers(this.G, this.brushes, settings, gameMemoryData, this.scale)
+        drawNPCs(this.G, this.brushes, settings, gameMemoryData, this.scale, gameWindow)
+        drawObjects(this.G, this.brushes, settings, gameMemoryData, this.scale, gameWindow)
+        drawExits(this.G, this.brushes, settings, gameMemoryData, this.scale, gameWindow, mapImage)
+        drawLines(this.G, this.brushes, settings, gameMemoryData, this.scale, gameWindow, mapImage)
+        drawItemAlerts(this.G, this.brushes, settings, gameMemoryData, this.scale, gameWindow)
+        ; drawMissiles(this.G, this.brushes, settings, gameMemoryData, this.scale, gameWindow)
+        drawPlayers(this.G, this.brushes, settings, gameMemoryData, this.scale, gameWindow)
         
-        ; Gdip_DrawRectangle(this.G, this.brushes.pPenHealth, 0, 0, gameWindow.W-1, gameWindow.H-1)
+        Gdip_DrawRectangle(this.G, this.brushes.pPenHealth, 0, 0, gameWindow.W-1, gameWindow.H-1)
         UpdateLayeredWindow(this.unitHwnd, this.hdc, gameWindow.X, gameWindow.Y, gameWindow.W, gameWindow.H)
         Gdip_GraphicsClear( this.G )
         ; timeStamp("unitsEnd")
@@ -75,19 +75,17 @@ class UnitsGUI {
 
 
 ; player is always middle of screen, calculate relative to that
-World2Screen(ByRef playerX, ByRef playerY, ByRef targetx, ByRef targety, scale) {
+World2Screen(ByRef playerX, ByRef playerY, ByRef targetx, ByRef targety, scale, ByRef gameWindow) {
     ; scale := 27
-    scale := scale * 3
+    renderScale := 3
+    scale := scale * renderScale
     xdiff := targetx - playerX
     ydiff := targety - playerY
     
-    gameWindow := getMapDrawingArea()
-    centerX := (gameWindow.W/2)
-    centerY := (gameWindow.H/2)
     angle := 0.785398    ;45 deg
     x := xdiff * cos(angle) - ydiff * sin(angle)
     y := xdiff * sin(angle) + ydiff * cos(angle)
-    x := centerX + (x * scale)
-    y := centerY + (y * scale * 0.5) - 10
+    x := gameWindow.CenterX + (x * scale)
+    y := gameWindow.CenterY + (y * scale * 0.5) - 10
     return { "x": x, "y": y }
 }

@@ -1,6 +1,6 @@
 
 
-drawNPCs(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale) {
+drawNPCs(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale, ByRef gameWindow) {
     mobs := gameMemoryData.mobs
     playerX := gameMemoryData.xPos
     playerY := gameMemoryData.yPos
@@ -11,7 +11,7 @@ drawNPCs(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef sca
         for index, mob in mobs
         {
             if (mob["mode"] == 0 or mob["mode"] == 12) { ; dead
-                mobScreenPos := World2Screen(playerX, playerY, mob.x, mob.y, scale)
+                mobScreenPos := World2Screen(playerX, playerY, mob.x, mob.y, scale, gameWindow)
                 Gdip_DrawEllipse(G, brushes.pPenDead, mobScreenPos.x, mobScreenPos.y, brushes.deadDotSize, brushes.deadDotSize/2)
             }
         }
@@ -22,7 +22,7 @@ drawNPCs(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef sca
     if (settings["showNormalMobs"]) {
         for index, mob in mobs
         {
-            mobScreenPos := World2Screen(playerX, playerY, mob.x, mob.y, scale)
+            mobScreenPos := World2Screen(playerX, playerY, mob.x, mob.y, scale, gameWindow)
 
             if (mob["isUnique"] == 0) {
                 if (mob["mode"] != 0 and mob["mode"] != 12) { ; not dead
@@ -96,7 +96,7 @@ drawNPCs(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef sca
     ; having this in a separate loop forces it to be drawn on top
     for index, mob in mobs
     {
-        mobScreenPos := World2Screen(playerX, playerY, mob.x, mob.y, scale)
+        mobScreenPos := World2Screen(playerX, playerY, mob.x, mob.y, scale, gameWindow)
         if (mob["isBoss"]) {
             if (settings["showBosses"]) {
                 if (mob["mode"] != 0 and mob["mode"] != 12) {

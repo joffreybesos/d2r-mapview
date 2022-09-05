@@ -1,5 +1,5 @@
 
-drawItemAlerts(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale) {
+drawItemAlerts(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale, ByRef gameWindow) {
     ; draw item alerts
     SetFormat Integer, D
     playerX := gameMemoryData.xPos
@@ -11,7 +11,7 @@ drawItemAlerts(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByR
     {
         alert := itemAlertList.findAlert(item)
         if (alert) {
-            itemScreenPos := World2Screen(playerX, playerY, item.x, item.y, scale)
+            itemScreenPos := World2Screen(playerX, playerY, item.x, item.y, scale, gameWindow)
             
             pBrush1 := Gdip_BrushCreateSolid("0xffffffff")
             , pBrush2 := Gdip_BrushCreateSolid("0xee" . alert.color)

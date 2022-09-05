@@ -155,49 +155,60 @@ MoveMapDown(ByRef gameMemoryData, ByRef settings, ByRef mapImageList) {
 }
 
 SwitchMapMode(ByRef settings, ByRef mapImageList, ByRef gameMemoryData, ByRef uiData) {
-    settings["centerMode"] := !settings["centerMode"]
-    if (settings["centerMode"]) {
-        WriteLog("Switched to centered mode")
+    if (settings["mapPosition"] == "CENTER") {
+        settings["mapPosition"] := "TOP_LEFT"
+        WriteLog("Switched to top left map mode")
+        GuiControl, Settings:, mapPosition, |CENTER|TOP_LEFT||TOP_RIGHT
+    } else if (settings["mapPosition"] == "TOP_LEFT") {
+        settings["mapPosition"] := "TOP_RIGHT"
+        WriteLog("Switched to top right map mode")
+        GuiControl, Settings:, mapPosition, |CENTER|TOP_LEFT|TOP_RIGHT||
     } else {
-        WriteLog("Turn off centered mode")
+        settings["mapPosition"] := "CENTER"
+        WriteLog("Switched to centered map mode")
+        GuiControl, Settings:, mapPosition, |CENTER||TOP_LEFT|TOP_RIGHT
     }
     lastlevel := "INVALIDATED"
-
-    mapImageList[gameMemoryData["levelNo"]] := 0
-    gameMemoryData  := {}
-    uiData := {}
-    WinSet, Region, , ahk_id %mapHwnd1%
-    WinSet, Region, , ahk_id %unitHwnd1%
-    ; Gui, Map: Hide
-    ; Gui, Units: Hide
     mapShowing := 0
-    GuiControl, Settings:, centerMode, % settings["centerMode"]
-    WriteLog("switched map mode")
 }
 
 MapSizeIncrease(ByRef settings, ByRef gameMemoryData) {
     SetFormat Integer, D
     levelNo := gameMemoryData["levelNo"] + 0
-    if (levelNo and settings["centerMode"]) {
+    if (levelNo and settings["mapPosition"] == "CENTER") {
         centerModeScale := settings["centerModeScale"]
         centerModeScale := centerModeScale + 0.05
         IniWrite, %centerModeScale%, settings.ini, Settings, centerModeScale
         settings["centerModeScale"] := centerModeScale
         redrawMap := 1
         WriteLog("Increased centerModeScale global setting by 0.05 to " centerModeScale)
+    } else {
+        cornerModeScale := settings["cornerModeScale"]
+        cornerModeScale := cornerModeScale + 0.05
+        IniWrite, %cornerModeScale%, settings.ini, Settings, cornerModeScale
+        settings["cornerModeScale"] := cornerModeScale
+        redrawMap := 1
+        WriteLog("Increased cornerModeScale global setting by 0.05 to " cornerModeScale)
     }
 }
 
 MapSizeDecrease(ByRef settings, ByRef gameMemoryData) {
     SetFormat Integer, D
     levelNo := gameMemoryData["levelNo"] + 0
-    if (levelNo and settings["centerMode"]) {
+    if (levelNo and settings["mapPosition"] == "CENTER") {
         centerModeScale := settings["centerModeScale"]
         centerModeScale := centerModeScale - 0.05
         IniWrite, %centerModeScale%, settings.ini, Settings, centerModeScale
         settings["centerModeScale"] := centerModeScale
         redrawMap := 1
         WriteLog("Decreased centerModeScale global setting by 0.05 to " centerModeScale)
+    } else {
+        cornerModeScale := settings["cornerModeScale"]
+        cornerModeScale := cornerModeScale - 0.05
+        IniWrite, %cornerModeScale%, settings.ini, Settings, cornerModeScale
+        settings["cornerModeScale"] := cornerModeScale
+        redrawMap := 1
+        WriteLog("Decreased cornerModeScale global setting by 0.05 to " cornerModeScale)
     }
 }
 

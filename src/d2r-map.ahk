@@ -398,24 +398,28 @@ MoveMapLeft:
 {
     MoveMapLeft(settings)
     mapGuis.setOffsetPosition(settings)
+    unitsGui.setOffsetPosition(settings)
     return
 }
 MoveMapRight:
 {
     MoveMapRight(settings)
     mapGuis.setOffsetPosition(settings)
+    unitsGui.setOffsetPosition(settings)
     return
 }
 MoveMapUp:
 {
     MoveMapUp(settings)
     mapGuis.setOffsetPosition(settings)
+    unitsGui.setOffsetPosition(settings)
     return
 }
 MoveMapDown:
 {
     MoveMapDown(settings)
     mapGuis.setOffsetPosition(settings)
+    unitsGui.setOffsetPosition(settings)
     return
 }
 HistoryToggle:

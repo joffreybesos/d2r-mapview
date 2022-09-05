@@ -15,7 +15,11 @@ class UnitsGUI {
     __new(ByRef settings) {
         Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
         this.unitHwnd := WinExist()
-        
+        this.createDrawingSection(settings)
+        this.brushes := new Brushes(settings)
+    }
+
+    createDrawingSection(ByRef settings) {
         gameWindow := getMapDrawingArea()
         this.hbm := CreateDIBSection(gameWindow.W, gameWindow.H)
 
@@ -25,7 +29,6 @@ class UnitsGUI {
         this.G := Gdip_GraphicsFromHDC(this.hdc)
         Gdip_SetSmoothingMode(this.G, 4)
         Gdip_SetInterpolationMode(this.G, 7)
-        this.brushes := new Brushes(settings)
 
         this.setScale(settings)
         this.setOffsetPosition(settings)
@@ -55,12 +58,6 @@ class UnitsGUI {
     }
 
     drawUnitLayer(ByRef settings, ByRef gameMemoryData, ByRef mapImage) {
-        ; timeStamp("unitsStart")
-        StartTime := A_TickCount
-        , Angle := 45
-        , opacity := 1.0
-        , renderScale := settings["serverScale"]
-        
         ; get relative position of player in world
         ; xpos is absolute world pos in game
         ; each map has offset x and y which is absolute world position
@@ -71,13 +68,12 @@ class UnitsGUI {
         drawExits(this.G, this.brushes, settings, gameMemoryData, this.scale, gameWindow, mapImage)
         drawLines(this.G, this.brushes, settings, gameMemoryData, this.scale, gameWindow, mapImage)
         drawItemAlerts(this.G, this.brushes, settings, gameMemoryData, this.scale, gameWindow)
-        ; drawMissiles(this.G, this.brushes, settings, gameMemoryData, this.scale, gameWindow)
+        drawMissiles(this.G, this.brushes, settings, gameMemoryData, this.scale, gameWindow)
         drawPlayers(this.G, this.brushes, settings, gameMemoryData, this.scale, gameWindow)
         
-        Gdip_DrawRectangle(this.G, this.brushes.pPenHealth, 0, 0, gameWindow.W-1, gameWindow.H-1)
-        UpdateLayeredWindow(this.unitHwnd, this.hdc, gameWindow.X, gameWindow.Y, gameWindow.W, gameWindow.H)
+        ; Gdip_DrawRectangle(this.G, this.brushes.pPenHealth, this.offsetX, this.offsetY, gameWindow.W-1, gameWindow.H-1)
+        UpdateLayeredWindow(this.unitHwnd, this.hdc, gameWindow.X + this.offsetX, gameWindow.Y + this.offsetY, gameWindow.W - this.offsetX, gameWindow.H - this.offsetY)
         Gdip_GraphicsClear( this.G )
-        ; timeStamp("unitsEnd")
     }
 
     show() {
@@ -87,7 +83,6 @@ class UnitsGUI {
     hide() {
         Gui, Units: Hide ; hide units
     }
-
 }
 
 

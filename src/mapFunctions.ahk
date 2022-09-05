@@ -81,77 +81,53 @@ unHideMap(ByRef mapGuis, ByRef unitsGui) {
 }
 
 
-MoveMapLeft(ByRef gameMemoryData, ByRef settings, ByRef mapImageList) {
+MoveHorizontal(ByRef settings, amount) {
     SetFormat Integer, D
-    levelNo := gameMemoryData["levelNo"] + 0
-    levelxmargin := mapImageList[levelNo]["levelxmargin"] + 0
-    levelymargin := mapImageList[levelNo]["levelymargin"] + 0
-    if (levelNo and not settings["centerMode"]) {
-        levelxmargin := levelxmargin - 25
-        IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
-        redrawMap := 1
-    } else if (levelNo and settings["centerMode"]) {
-        centerModeXoffset := settings["centerModeXoffset"] - 3
-        IniWrite, %centerModeXoffset%, settings.ini, Settings, centerModeXoffset
-        settings["centerModeXoffset"] := centerModeXoffset
-        redrawMap := 1
+    if (settings["mapPosition"] == "CENTER") {
+        centerModeOffsetX := settings["centerModeOffsetX"]
+        centerModeOffsetX := centerModeOffsetX + amount
+        IniWrite, %centerModeOffsetX%, settings.ini, Settings, centerModeOffsetX
+        settings["centerModeOffsetX"] := centerModeOffsetX
+    } else {
+        cornerModeOffsetX := settings["cornerModeOffsetX"]
+        cornerModeOffsetX := cornerModeOffsetX + amount
+        IniWrite, %cornerModeOffsetX%, settings.ini, Settings, cornerModeOffsetX
+        settings["cornerModeOffsetX"] := cornerModeOffsetX
     }
-    return
+    ; redrawMap := 1
 }
 
 
-MoveMapRight(ByRef gameMemoryData, ByRef settings, ByRef mapImageList) {
-    SetFormat Integer, D
-    levelNo := gameMemoryData["levelNo"] + 0
-    levelxmargin := mapImageList[levelNo]["levelxmargin"] + 0
-    levelymargin := mapImageList[levelNo]["levelymargin"] + 0
-    if (levelNo and not settings["centerMode"]) {
-        levelxmargin := levelxmargin + 25
-        IniWrite, %levelxmargin%, mapconfig.ini, %levelNo%, x
-        redrawMap := 1
-    } else if (levelNo and settings["centerMode"]) {
-        centerModeXoffset := settings["centerModeXoffset"] + 3
-        IniWrite, %centerModeXoffset%, settings.ini, Settings, centerModeXoffset
-        settings["centerModeXoffset"] := centerModeXoffset
-        redrawMap := 1
-    }
+MoveMapLeft(ByRef settings) {
+    MoveHorizontal(settings, -5)
 }
 
-
-
-MoveMapUp(ByRef gameMemoryData, ByRef settings, ByRef mapImageList) {
-    SetFormat Integer, D
-    levelNo := gameMemoryData["levelNo"] + 0
-    levelxmargin := mapImageList[levelNo]["levelxmargin"] + 0
-    levelymargin := mapImageList[levelNo]["levelymargin"] + 0
-    if (levelNo and not settings["centerMode"]) {
-        levelymargin := levelymargin - 25
-        IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
-        redrawMap := 1
-    } else if (levelNo and settings["centerMode"]) {
-        centerModeYoffset := settings["centerModeYoffset"] - 3
-        IniWrite, %centerModeYoffset%, settings.ini, Settings, centerModeYoffset
-        settings["centerModeYoffset"] := centerModeYoffset
-        redrawMap := 1
-    }
+MoveMapRight(ByRef settings) {
+    MoveHorizontal(settings, 5)
 }
 
-
-MoveMapDown(ByRef gameMemoryData, ByRef settings, ByRef mapImageList) {
+MoveVertical(ByRef settings, amount) {
     SetFormat Integer, D
-    levelNo := gameMemoryData["levelNo"] + 0
-    levelxmargin := mapImageList[levelNo]["levelxmargin"] + 0
-    levelymargin := mapImageList[levelNo]["levelymargin"] + 0
-    if (levelNo and not settings["centerMode"]) {
-        levelymargin := levelymargin + 25
-        IniWrite, %levelymargin%, mapconfig.ini, %levelNo%, y
-        redrawMap := 1
-    } else if (levelNo and settings["centerMode"]) {
-        centerModeYoffset := settings["centerModeYoffset"] + 3
-        IniWrite, %centerModeYoffset%, settings.ini, Settings, centerModeYoffset
-        settings["centerModeYoffset"] := centerModeYoffset
-        redrawMap := 1
+    if (settings["mapPosition"] == "CENTER") {
+        centerModeOffsetY := settings["centerModeOffsetY"]
+        centerModeOffsetY := centerModeOffsetY + amount
+        IniWrite, %centerModeOffsetY%, settings.ini, Settings, centerModeOffsetY
+        settings["centerModeOffsetY"] := centerModeOffsetY
+    } else {
+        cornerModeOffsetY := settings["cornerModeOffsetY"]
+        cornerModeOffsetY := cornerModeOffsetY + amount
+        IniWrite, %cornerModeOffsetY%, settings.ini, Settings, cornerModeOffsetY
+        settings["cornerModeOffsetY"] := cornerModeOffsetY
     }
+    ; redrawMap := 1
+}
+
+MoveMapUp(ByRef settings) {
+    MoveVertical(settings, -5)
+}
+
+MoveMapDown(ByRef settings) {
+    MoveVertical(settings, 5)
 }
 
 SwitchMapMode(ByRef settings, ByRef mapImageList, ByRef gameMemoryData, ByRef uiData) {

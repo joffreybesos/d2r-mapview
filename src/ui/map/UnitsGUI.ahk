@@ -28,6 +28,7 @@ class UnitsGUI {
         this.brushes := new Brushes(settings)
 
         this.setScale(settings)
+        this.setOffsetPosition(settings)
     }
 
     setScale(ByRef settings) {
@@ -37,6 +38,19 @@ class UnitsGUI {
             this.scale := settings["cornerModeScale"]
         } else {
             this.scale := settings["centerModeScale"]
+        }
+    }
+
+    setOffsetPosition(ByRef settings) {
+        if (settings["mapPosition"] == "TOP_LEFT") {
+            this.offsetX := settings["cornerModeOffsetX"]
+            this.offsetY := settings["cornerModeOffsetY"]
+        } else if (settings["mapPosition"] == "TOP_RIGHT") {
+            this.offsetX := settings["cornerModeOffsetX"]
+            this.offsetY := settings["cornerModeOffsetY"]
+        } else {
+            this.offsetX := settings["centerModeOffsetX"]
+            this.offsetY := settings["centerModeOffsetY"]
         }
     }
 

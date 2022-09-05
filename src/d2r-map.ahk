@@ -371,6 +371,7 @@ MapSizeIncrease:
 {
     MapSizeIncrease(settings, gameMemoryData)
     mapGuis.setScale(settings)
+    mapGuis.setOffsetPosition(settings)
     unitsGui.setScale(settings)
     return
 }
@@ -379,6 +380,7 @@ MapSizeDecrease:
 {
     MapSizeDecrease(settings, gameMemoryData)
     mapGuis.setScale(settings)
+    mapGuis.setOffsetPosition(settings)
     unitsGui.setScale(settings)
     return
 }
@@ -387,29 +389,33 @@ SwitchMapMode:
 {
     SwitchMapMode(settings, mapImageList, gameMemoryData, uiData)
     mapGuis.setScale(settings)
+    mapGuis.setOffsetPosition(settings)
     unitsGui.setScale(settings)
     return
 }
 
 MoveMapLeft:
 {
-    MoveMapLeft(gameMemoryData, settings, mapImageList)
-    
+    MoveMapLeft(settings)
+    mapGuis.setOffsetPosition(settings)
     return
 }
 MoveMapRight:
 {
-    MoveMapRight(gameMemoryData, settings, mapImageList)
+    MoveMapRight(settings)
+    mapGuis.setOffsetPosition(settings)
     return
 }
 MoveMapUp:
 {
-    MoveMapUp(gameMemoryData, settings, mapImageList)
+    MoveMapUp(settings)
+    mapGuis.setOffsetPosition(settings)
     return
 }
 MoveMapDown:
 {
-    MoveMapDown(gameMemoryData, settings, mapImageList)
+    MoveMapDown(settings)
+    mapGuis.setOffsetPosition(settings)
     return
 }
 HistoryToggle:

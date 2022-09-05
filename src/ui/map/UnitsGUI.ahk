@@ -72,7 +72,7 @@ class UnitsGUI {
         drawPlayers(this.G, this.brushes, settings, gameMemoryData, this.scale, gameWindow)
         
         ; Gdip_DrawRectangle(this.G, this.brushes.pPenHealth, this.offsetX, this.offsetY, gameWindow.W-1, gameWindow.H-1)
-        UpdateLayeredWindow(this.unitHwnd, this.hdc, gameWindow.X + this.offsetX, gameWindow.Y + this.offsetY, gameWindow.W - this.offsetX, gameWindow.H - this.offsetY)
+        UpdateLayeredWindow(this.unitHwnd, this.hdc, gameWindow.X + this.offsetX, gameWindow.Y + this.offsetY, gameWindow.W, gameWindow.H)
         Gdip_GraphicsClear( this.G )
     }
 

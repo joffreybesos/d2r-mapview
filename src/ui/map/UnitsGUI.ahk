@@ -77,7 +77,7 @@ class UnitsGUI {
 ; player is always middle of screen, calculate relative to that
 World2Screen(ByRef playerX, ByRef playerY, ByRef targetx, ByRef targety, scale, ByRef gameWindow) {
     ; scale := 27
-    renderScale := 3
+    renderScale := settings["serverScale"]
     scale := scale * renderScale
     xdiff := targetx - playerX
     ydiff := targety - playerY

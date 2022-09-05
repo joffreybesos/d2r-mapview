@@ -17,6 +17,10 @@ class MapGUIs {
             Gui, Map%A_Index%: Show, NA
             Gui, Map%A_Index%: Hide, NA
         }
+        this.setScale(settings)
+    }
+
+    setScale(ByRef settings) {
         if (settings["mapPosition"] == "TOP_LEFT") {
             this.scale := settings["cornerModeScale"]
             this.opacity := settings["cornerModeOpacity"]
@@ -28,7 +32,6 @@ class MapGUIs {
             this.opacity := settings["centerModeOpacity"]
         }
     }
-
 
     hide() {
         ; hide maps

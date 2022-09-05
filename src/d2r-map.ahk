@@ -266,7 +266,6 @@ While 1 {
             levelNo := gameMemoryData["levelNo"]
             if (mapList[1] != lastlevel) { ; only redraw map when it changes
                 ; Show loading text
-                ;Gui, Map: Show, NA
                 mapLoading := 1
                 mapGuis.hide()
                 unitsGui.hide()
@@ -371,24 +370,31 @@ MapAlwaysShow:
 MapSizeIncrease:
 {
     MapSizeIncrease(settings, gameMemoryData)
+    mapGuis.setScale(settings)
+    unitsGui.setScale(settings)
     return
 }
 
 MapSizeDecrease:
 {
     MapSizeDecrease(settings, gameMemoryData)
+    mapGuis.setScale(settings)
+    unitsGui.setScale(settings)
     return
 }
 
 SwitchMapMode:
 {
     SwitchMapMode(settings, mapImageList, gameMemoryData, uiData)
+    mapGuis.setScale(settings)
+    unitsGui.setScale(settings)
     return
 }
 
 MoveMapLeft:
 {
     MoveMapLeft(gameMemoryData, settings, mapImageList)
+    
     return
 }
 MoveMapRight:

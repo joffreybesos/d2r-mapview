@@ -27,6 +27,10 @@ class UnitsGUI {
         Gdip_SetInterpolationMode(this.G, 7)
         this.brushes := new Brushes(settings)
 
+        this.setScale(settings)
+    }
+
+    setScale(ByRef settings) {
         if (settings["mapPosition"] == "TOP_LEFT") {
             this.scale := settings["cornerModeScale"]
         } else if (settings["mapPosition"] == "TOP_RIGHT") {

@@ -170,6 +170,7 @@ SwitchMapMode(ByRef settings, ByRef mapImageList, ByRef gameMemoryData, ByRef ui
     }
     lastlevel := "INVALIDATED"
     mapShowing := 0
+    redrawMap := 1
 }
 
 MapSizeIncrease(ByRef settings, ByRef gameMemoryData) {

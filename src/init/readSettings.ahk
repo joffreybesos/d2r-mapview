@@ -3,7 +3,6 @@ SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
 readSettings(settingsFile, ByRef settings) {
-    FileInstall, mapconfig-default.ini, mapconfig.ini , 0
     FileInstall, itemfilter.yaml, itemfilter.yaml , 0
     FileInstall, exocetblizzardot-medium.otf, exocetblizzardot-medium.otf , 1
     FileInstall, formal436bt-regular.otf, formal436bt-regular.otf , 1

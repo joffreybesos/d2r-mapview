@@ -71,7 +71,7 @@ Menu, Tray, Add, Reload, Reload
 Menu, Tray, Add
 Menu, Tray, Add, Exit, ExitMH
 
-global version := "2.9.20"
+global version := "3.0.0"
 
 WriteLog("*******************************************************************")
 WriteLog("* Map overlay started https://github.com/joffreybesos/d2r-mapview *")
@@ -289,12 +289,10 @@ While 1 {
                 redrawMap := 0
             }
             ; timeStamp("ShowUnits")
-            ; unitsGui.drawUnitLayer(settings, gameMemoryData, mapGuis.mapImageList[levelNo])
+            unitsGui.drawUnitLayer(settings, gameMemoryData, mapGuis.mapImageList[levelNo])
             ; timeStamp("ShowUnits")
             uiAssistLayer.drawMonsterBar(gameMemoryData["hoveredMob"])
-            timeStamp("updateMapPositions")
             mapGuis.updateMapPositions(mapList, settings, d2rprocess, gameMemoryData)
-            timeStamp("updateMapPositions")
 
             if (Mod(ticktock, 6)) {
                 checkAutomapVisibility(d2rprocess, gameMemoryData, settings, mapGuis, unitsGui)

@@ -104,7 +104,7 @@ drawNPCs(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef sca
                     textx := mobScreenPos.x-(brushes.bossDotSize/2) - 100
                     , texty := mobScreenPos.y-(brushes.bossDotSize/2) - 105
                     , bossTextColor := "ff" . settings["bossColor"] 
-                    , bossFontSize := 16 * scale
+                    , bossFontSize := 12 * scale
                     Options = x%textx% y%texty% Center vBottom cffff0000 r8 s%bossFontSize%
                     textx := textx + 2
                     , texty := texty + 2

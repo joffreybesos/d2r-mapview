@@ -42,6 +42,8 @@ class UnitsGUI {
         } else {
             this.scale := settings["centerModeScale"]
         }
+        
+        this.brushes := new Brushes(settings)
     }
 
     setOffsetPosition(ByRef settings) {

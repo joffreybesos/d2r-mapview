@@ -88,11 +88,13 @@ MoveHorizontal(ByRef settings, amount) {
         centerModeOffsetX := centerModeOffsetX + amount
         IniWrite, %centerModeOffsetX%, settings.ini, Settings, centerModeOffsetX
         settings["centerModeOffsetX"] := centerModeOffsetX
+        GuiControl, Settings:, centerModeOffsetX, % settings["centerModeOffsetX"]
     } else {
         cornerModeOffsetX := settings["cornerModeOffsetX"]
         cornerModeOffsetX := cornerModeOffsetX + amount
         IniWrite, %cornerModeOffsetX%, settings.ini, Settings, cornerModeOffsetX
         settings["cornerModeOffsetX"] := cornerModeOffsetX
+        GuiControl, Settings:, cornerModeOffsetX, % settings["cornerModeOffsetX"]
     }
     ; redrawMap := 1
 }
@@ -113,11 +115,13 @@ MoveVertical(ByRef settings, amount) {
         centerModeOffsetY := centerModeOffsetY + amount
         IniWrite, %centerModeOffsetY%, settings.ini, Settings, centerModeOffsetY
         settings["centerModeOffsetY"] := centerModeOffsetY
+        GuiControl, Settings:, centerModeOffsetY, % settings["centerModeOffsetY"]
     } else {
         cornerModeOffsetY := settings["cornerModeOffsetY"]
         cornerModeOffsetY := cornerModeOffsetY + amount
         IniWrite, %cornerModeOffsetY%, settings.ini, Settings, cornerModeOffsetY
         settings["cornerModeOffsetY"] := cornerModeOffsetY
+        GuiControl, Settings:, cornerModeOffsetY, % settings["cornerModeOffsetY"]
     }
     ; redrawMap := 1
 }
@@ -159,6 +163,7 @@ MapSizeIncrease(ByRef settings, ByRef gameMemoryData) {
         settings["centerModeScale"] := centerModeScale
         redrawMap := 1
         WriteLog("Increased centerModeScale global setting by 0.05 to " centerModeScale)
+        GuiControl, Settings:, centerModeScale, % settings["centerModeScale"]
     } else {
         cornerModeScale := settings["cornerModeScale"]
         cornerModeScale := cornerModeScale + 0.05
@@ -166,6 +171,7 @@ MapSizeIncrease(ByRef settings, ByRef gameMemoryData) {
         settings["cornerModeScale"] := cornerModeScale
         redrawMap := 1
         WriteLog("Increased cornerModeScale global setting by 0.05 to " cornerModeScale)
+        GuiControl, Settings:, cornerModeScale, % settings["cornerModeScale"]
     }
 }
 

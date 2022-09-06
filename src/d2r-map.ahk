@@ -371,8 +371,9 @@ MapSizeIncrease:
 {
     MapSizeIncrease(settings, gameMemoryData)
     mapGuis.setScale(settings)
-    mapGuis.setOffsetPosition(settings)
     unitsGui.setScale(settings)
+    mapGuis.setOffsetPosition(settings)
+    unitsGui.setOffsetPosition(settings)
     return
 }
 
@@ -380,8 +381,9 @@ MapSizeDecrease:
 {
     MapSizeDecrease(settings, gameMemoryData)
     mapGuis.setScale(settings)
-    mapGuis.setOffsetPosition(settings)
     unitsGui.setScale(settings)
+    mapGuis.setOffsetPosition(settings)
+    unitsGui.setOffsetPosition(settings)
     return
 }
 
@@ -389,14 +391,17 @@ SwitchMapMode:
 {
     SwitchMapMode(settings, mapImageList, gameMemoryData, uiData)
     mapGuis.setScale(settings)
-    mapGuis.setOffsetPosition(settings)
     unitsGui.setScale(settings)
+    mapGuis.setOffsetPosition(settings)
+    unitsGui.setOffsetPosition(settings)
     return
 }
 
 MoveMapLeft:
 {
     MoveMapLeft(settings)
+    mapGuis.setScale(settings)
+    unitsGui.setScale(settings)
     mapGuis.setOffsetPosition(settings)
     unitsGui.setOffsetPosition(settings)
     return
@@ -404,6 +409,8 @@ MoveMapLeft:
 MoveMapRight:
 {
     MoveMapRight(settings)
+    mapGuis.setScale(settings)
+    unitsGui.setScale(settings)
     mapGuis.setOffsetPosition(settings)
     unitsGui.setOffsetPosition(settings)
     return
@@ -411,6 +418,8 @@ MoveMapRight:
 MoveMapUp:
 {
     MoveMapUp(settings)
+    mapGuis.setScale(settings)
+    unitsGui.setScale(settings)
     mapGuis.setOffsetPosition(settings)
     unitsGui.setOffsetPosition(settings)
     return
@@ -418,6 +427,8 @@ MoveMapUp:
 MoveMapDown:
 {
     MoveMapDown(settings)
+    mapGuis.setScale(settings)
+    unitsGui.setScale(settings)
     mapGuis.setOffsetPosition(settings)
     unitsGui.setOffsetPosition(settings)
     return
@@ -537,8 +548,10 @@ Update:
     buffBarLayer := new BuffBarLayer(settings)
     SetupHotKeys(gameWindowId, settings)
     lastlevel := "INVALIDATED"
-    gameMemoryData := {}
-    mapList.hide()
+    mapGuis.setScale(settings)
+    unitsGui.setScale(settings)
+    mapGuis.setOffsetPosition(settings)
+    unitsGui.setOffsetPosition(settings)
     mapShowing := 0
     GuiControl, Hide, Unsaved
     GuiControl, Disable, UpdateBtn

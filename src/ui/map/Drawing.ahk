@@ -9,7 +9,7 @@ class Brushes {
             dotScale := 1.2
         } else {
             scale := settings["centerModeScale"]
-            dotScale := 1.2
+            dotScale := 1.1
         }
         this.pPenGreen := Gdip_CreatePen(0xff00FF00, 0.8 * scale)
         this.pPenPlayer := Gdip_CreatePen(0xff2087fd, 1 * scale)
@@ -26,10 +26,10 @@ class Brushes {
         this.pBrushNonHealth := Gdip_BrushCreateSolid(0x44000000)
 
         ; lines
-        this.pLineWP := Gdip_CreatePen(0x55ffFF00, 2 * scale)
-        this.pLineExit := Gdip_CreatePen(0x55FF00FF, 2 * scale)
-        this.pLineBoss := Gdip_CreatePen(0x55FF0000, 2 * scale)
-        this.pLineQuest := Gdip_CreatePen(0x5500FF00, 2 * scale)
+        this.pLineWP := Gdip_CreatePen(0x55ffFF00, 1.5 * scale)
+        this.pLineExit := Gdip_CreatePen(0x55FF00FF, 1.5 * scale)
+        this.pLineBoss := Gdip_CreatePen(0x55FF0000, 1.5 * scale)
+        this.pLineQuest := Gdip_CreatePen(0x5500FF00, 1.5 * scale)
         this.pBrushLineWP := Gdip_BrushCreateSolid(0x55ffFF00)
         this.pBrushLineExit := Gdip_BrushCreateSolid(0x55FF00FF)
         this.pBrushLineBoss := Gdip_BrushCreateSolid(0x55FF0000)

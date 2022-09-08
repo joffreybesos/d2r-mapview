@@ -1,9 +1,7 @@
 # Diablo 2: Resurrected map viewer
 
-Noob friendly FREE map reveal tool for Diablo 2 Resurrected.  
+Noob friendly FREE map overlay tool for Diablo 2 Resurrected.  
 Use at your own risk, there is no warranty or responsibility taken for being penalised for using this.
-
-Please follow this guide to setup your own, it's quite easy: https://github.com/joffreybesos/d2r-mapview/wiki/Setup-guide
 
 This tool is licenced under GPLv3, reselling this maphack violates the terms of the license.
 
@@ -11,24 +9,21 @@ This tool is licenced under GPLv3, reselling this maphack violates the terms of 
 
 Blizzard did a ban wave on June 14 where it seems they targeted MapAssist (another map hack).  
 This map hack is very similar in how it functions.  
-While most users of this map hack were spared, it is recommended to consider this map hack detectable online.
+While most users of this map hack were spared, **it is recommended to consider this map hack detectable online**.
 
 ## Join the discord server <https://discord.gg/qEgqyVW3uj>
-
-
 
 ![Worldstone Keep level 2](https://user-images.githubusercontent.com/93067706/170401221-10e7a71e-7cad-488d-98e0-69f4d3617332.png)
 
 ## Demonstration
 
-<https://youtu.be/tSDmgh0ceXk>
+<https://youtu.be/tSDmgh0ceXk> (needs an update)
 
 ## Map examples
 
 |    Stony Field     |   Lower Kurast     |        Travincal         | Harrogath    |
 | :---------------: | :------------------: | :----------------------: | :-----------------: |
-| ![image](https://user-images.githubusercontent.com/93067706/170401476-5f13bdf9-57eb-40a4-a736-a508c21d854a.png)| ![image](https://user-images.githubusercontent.com/93067706/170401546-4bb935f1-722f-429b-bf1a-07701db672c3.png) |![image](https://user-images.githubusercontent.com/93067706/170401603-170e38f0-864d-4375-8db8-1a3ed1fbcc75.png) | ![image](https://user-images.githubusercontent.com/93067706/170441186-e7bd7813-48ae-4355-8491-30f0a19c0222.png)
-|
+| ![image](https://user-images.githubusercontent.com/93067706/170401476-5f13bdf9-57eb-40a4-a736-a508c21d854a.png)| ![image](https://user-images.githubusercontent.com/93067706/170401546-4bb935f1-722f-429b-bf1a-07701db672c3.png) |![image](https://user-images.githubusercontent.com/93067706/170401603-170e38f0-864d-4375-8db8-1a3ed1fbcc75.png) | ![image](https://user-images.githubusercontent.com/93067706/170441186-e7bd7813-48ae-4355-8491-30f0a19c0222.png) |
 
 ## Setup
 
@@ -46,14 +41,26 @@ Sometimes windows defender can intercept the download, try a different browser i
 The compiled executable will get false positives in virus scans. This is because the tool is written in Autohotkey.
 Autohotkey, while a powerful tool, has been used for all sorts of nefarious applications in the past.  
 If you look on the Autohotkey forums, you'll see this is a widely reported problem.
-On top of that it reads from memory and hooks into hotkeys which flags in virus scanners.
+This tool reads from memory and hooks into global hotkeys which as a general throws up flags in certain virus scanners.
 
-If you still don't trust it, you can run directly from source.
+If you still don't trust it, you can run directly from source which is very easy.
 To do so download and install <https://www.autohotkey.com/>  
-Then you can simply double click `src/d2r-map.ahk` to run from source code.
+Then you can simply double click the file `src/d2r-map.ahk` to run from source code.
 This way you can be fully aware of what code you're executing and you don't have to trust an opaque executable.
 
 Do not accept executables for this from any other source!
+
+### Usage
+
+Start D2R, then start the MH, you should see text in the top left corner.
+
+- Press `Ctrl+H` to see help in game, including a map legend
+- Press `Ctrl+O` for in game options
+- Press `\` to switch map to the left corner.
+- You can exit the maphack with `Shift+F10`
+- You can reload the maphack with `Shift+F11`
+- You can also right click the icon in the system tray.
+- This MH will automatically exit when you exit D2R.
 
 ## Features
 
@@ -85,15 +92,7 @@ Do not accept executables for this from any other source!
 - Highly configurable, size, color, position, opacity etc  
 - Can change map size and position with key shortcuts while in game  
 
-**Other notes**
 
-- Press `Ctrl+H` to see help in game, including a map legend
-- Press `Ctrl+O` for in game options
-- Press `\` to switch map to the left corner.
-- You can exit the maphack with `Shift+F10`
-- You can reload the maphack with `Shift+F11`
-- You can also right click the icon in the system tray.
-- This MH will automatically exit when you exit D2R.
 
 ## Discord
 

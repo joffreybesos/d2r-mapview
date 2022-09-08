@@ -61,7 +61,12 @@ class MapGUIs {
     downloadMapImages(ByRef mapList, ByRef gameMemoryData) {
         for k, thisLevelNo in mapList
         {
-            this.mapImageList[thisLevelNo] := new MapImage(settings, gameMemoryData["mapSeed"], gameMemoryData["difficulty"], thisLevelNo)
+            if (gameMemoryData["levelNo"] == thisLevelNo) {
+                GetPathEnd(thisLevelNo, pathStart, pathEnd)
+                this.mapImageList[thisLevelNo] := new MapImage(settings, gameMemoryData["mapSeed"], gameMemoryData["difficulty"], thisLevelNo, pathStart, pathEnd)
+            } else {
+                this.mapImageList[thisLevelNo] := new MapImage(settings, gameMemoryData["mapSeed"], gameMemoryData["difficulty"], thisLevelNo)
+            }
         }
     }
 

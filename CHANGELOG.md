@@ -14,8 +14,9 @@ All notable changes to this project will be documented in this file.
 - Removed `mapconfig.ini` since that's not used anymore
 
 - **NOTE**: Expect some minor bugs with this release
-  - Performance will overall be slower
+  - Performance may overall be slower (looking for feedback)
   - Some minor visual bugs may pop up
+  - Pathfinding may have some bugs
   - You may need to reset your settings to defaults by deleting or renaming your `settings.ini` file
   - You can still use v2.9.20 if you are experiencing problems
 

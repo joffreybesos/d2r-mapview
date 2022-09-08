@@ -2,22 +2,19 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-drawExits(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef mapImage, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset, xPosDot, yPosDot) {
+drawExits(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale, ByRef gameWindow, ByRef mapImage) {
+    playerX := gameMemoryData.xPos
+    playerY := gameMemoryData.yPos
+    renderScale := settings["serverScale"]
 
     ; ;draw exit lines
     exitsHeader := mapImage["exits"]
-    if (!settings["centerMode"]) {
-        hexOpacity := Round(settings["opacity"] * 255)
-        SetFormat, integer, hex
-        hexOpacity += 0
-        StringTrimLeft, hexOpacity, hexOpacity, 2
 
-    } else {
-        hexOpacity := Round(settings["centerModeOpacity"] * 255)
-        SetFormat, integer, hex
-        hexOpacity += 0
-        StringTrimLeft, hexOpacity, hexOpacity, 2
-    }
+    hexOpacity := Round(settings["centerModeOpacity"] * 255)
+    SetFormat, integer, hex
+    hexOpacity += 0
+    StringTrimLeft, hexOpacity, hexOpacity, 2
+    
     exitTextColor := "ffffffff"
     exitTextColorShadow := hexOpacity . "000000"
     exitTextSize := settings["exitTextSize"] * scale
@@ -51,12 +48,11 @@ drawExits(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef mapImage
                 areaLvl := " (" areaLvl ")"
             }
             exitName := localizedStrings[exitArray[2]] . areaLvl
-            , exitX := (exitArray[3] * serverScale) + padding
-            , exitY := (exitArray[4] * serverScale) + padding
-            , correctedPos := correctPos(settings, exitX, exitY, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-            , exitX := correctedPos["x"] + centerLeftOffset
-            , exitY := correctedPos["y"] + centerTopOffset
-            drawFloatingText(unitsLayer, exitX, exitY-10, exitTextSize, exitTextColor, false, true, exocetFont, exitName)
+            , exitX := exitArray[3] + mapImage.mapOffsetX
+            , exitY := exitArray[4] + mapImage.mapOffsetY
+            exitScreenPos := World2Screen(playerX, playerY, exitX, exitY, scale, gameWindow)
+            
+            drawFloatingText(G, brushes, exitScreenPos.x, exitScreenPos.y-10, exitTextSize, exitTextColor, false, true, exocetFont, exitName, true)
         }
     }
 }

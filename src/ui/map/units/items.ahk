@@ -1,18 +1,17 @@
 
-drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef mapImage, ByRef serverScale, ByRef scale, ByRef padding, ByRef Width, ByRef Height, ByRef scaledWidth, ByRef scaledHeight, ByRef centerLeftOffset, ByRef centerTopOffset) {
+drawItemAlerts(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef scale, ByRef gameWindow) {
     ; draw item alerts
     SetFormat Integer, D
-    items := gameMemoryData["items"]
+    playerX := gameMemoryData.xPos
+    playerY := gameMemoryData.yPos
+    renderScale := settings["serverScale"]
     
+    items := gameMemoryData["items"]
     for index, item in items
     {
         alert := itemAlertList.findAlert(item)
         if (alert) {
-            itemx := ((item.itemx - mapImage["mapOffsetX"]) * serverScale) + padding
-            , itemy := ((item.itemy - mapImage["mapOffsetY"]) * serverScale) + padding
-            , correctedPos := correctPos(settings, itemx, itemy, (Width/2), (Height/2), scaledWidth, scaledHeight, scale)
-            , itemx := correctedPos["x"] + centerLeftOffset
-            , itemy := correctedPos["y"] + centerTopOffset
+            itemScreenPos := World2Screen(playerX, playerY, item.x, item.y, scale, gameWindow)
             
             pBrush1 := Gdip_BrushCreateSolid("0xffffffff")
             , pBrush2 := Gdip_BrushCreateSolid("0xee" . alert.color)
@@ -49,16 +48,16 @@ drawItemAlerts(ByRef unitsLayer, ByRef settings, ByRef gameMemoryData, ByRef map
                 announceItem(settings, item, alert)
             }
             if (itemLoc != 2) { ; if not in store
-                drawFloatingText(unitsLayer, itemx, itemy, fontSize, acolor, true, false, exocetFont, itemText)
+                drawFloatingText(G, brushes, itemScreenPos.x, itemScreenPos.y, fontSize, acolor, true, false, exocetFont, itemText)
                 switch (ticktock) {
-                    case 1: Gdip_FillEllipse(unitsLayer.G, pBrush1, itemx-5, itemy-5, 10, 10)
-                    case 2: Gdip_FillEllipse(unitsLayer.G, pBrush2, itemx-6, itemy-6, 12, 12)
-                    case 3: Gdip_FillEllipse(unitsLayer.G, pBrush3, itemx-8, itemy-8, 16, 16)
-                    case 4: Gdip_FillEllipse(unitsLayer.G, pBrush4, itemx-10, itemy-10, 20, 20)
-                    case 5: Gdip_FillEllipse(unitsLayer.G, pBrush5, itemx-14, itemy-14, 28, 28)
-                    case 6: Gdip_FillEllipse(unitsLayer.G, pBrush6, itemx-16, itemy-16, 32, 32)
+                    case 1: Gdip_FillEllipse(G, pBrush1, itemScreenPos.x-5, itemScreenPos.y-5, 10, 10)
+                    case 2: Gdip_FillEllipse(G, pBrush2, itemScreenPos.x-6, itemScreenPos.y-6, 12, 12)
+                    case 3: Gdip_FillEllipse(G, pBrush3, itemScreenPos.x-8, itemScreenPos.y-8, 16, 16)
+                    case 4: Gdip_FillEllipse(G, pBrush4, itemScreenPos.x-10, itemScreenPos.y-10, 20, 20)
+                    case 5: Gdip_FillEllipse(G, pBrush5, itemScreenPos.x-14, itemScreenPos.y-14, 28, 28)
+                    case 6: Gdip_FillEllipse(G, pBrush6, itemScreenPos.x-16, itemScreenPos.y-16, 32, 32)
                 }
-                Gdip_FillEllipse(unitsLayer.G, pBrush2, itemx-2.5, itemy-2.5, 5, 5)
+                Gdip_FillEllipse(G, pBrush2, itemScreenPos.x-2.5, itemScreenPos.y-2.5, 5, 5)
                 Gdip_DeletePen(pItemPen)
             }
         }
@@ -72,7 +71,7 @@ announceItem(settings, item, alert) {
     if (!seenItems[item.getHash()]) {
         if (!item.isQuestItem(item.txtFileNo)) {
             ; seen item for the first time
-            WriteLog("ITEMLOG: Found item '" item.getTextToSpeech() "' at '" item.itemx ", " item.itemy "' matched to alert '" alert.name "' " item.getHash())
+            WriteLog("ITEMLOG: Found item '" item.getTextToSpeech() "' at '" item.x ", " item.y "' matched to alert '" alert.name "' " item.getHash())
             if (settings["allowTextToSpeech"]) {
                 SetFormat Integer, D
                 volume := Round(settings["textToSpeechVolume"] + 0)

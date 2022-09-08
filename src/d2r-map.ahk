@@ -24,6 +24,7 @@ SetTitleMatchMode, 2
 #Include %A_ScriptDir%\include\Gdip_All.ahk
 #Include %A_ScriptDir%\itemfilter\AlertList.ahk
 #Include %A_ScriptDir%\itemfilter\ItemAlert.ahk
+#Include %A_ScriptDir%\types\Areas.ahk
 #Include %A_ScriptDir%\types\Stats.ahk
 #Include %A_ScriptDir%\types\Skills.ahk
 #Include %A_ScriptDir%\types\MapImage.ahk
@@ -38,14 +39,12 @@ SetTitleMatchMode, 2
 #Include %A_ScriptDir%\memory\readStates.ahk
 #Include %A_ScriptDir%\memory\readVendorItems.ahk
 #Include %A_ScriptDir%\ui\image\clearCache.ahk
-#Include %A_ScriptDir%\ui\image\prefetchMaps.ahk
 #Include %A_ScriptDir%\ui\image\loadBitmaps.ahk
 #Include %A_ScriptDir%\ui\image\loadBuffIcons.ahk
-#Include %A_ScriptDir%\ui\showMap.ahk
+#Include %A_ScriptDir%\ui\map\MapGUIs.ahk
+#Include %A_ScriptDir%\ui\map\UnitsGUI.ahk
 #Include %A_ScriptDir%\ui\showText.ahk
 #Include %A_ScriptDir%\ui\showHelp.ahk
-#Include %A_ScriptDir%\ui\showUnits.ahk
-#Include %A_ScriptDir%\ui\movePlayerMap.ahk
 #Include %A_ScriptDir%\stats\GameSession.ahk
 #Include %A_ScriptDir%\stats\readSessionFile.ahk
 #Include %A_ScriptDir%\localization.ahk
@@ -54,11 +53,9 @@ SetTitleMatchMode, 2
 #Include %A_ScriptDir%\init\serverHealthCheck.ahk
 #Include %A_ScriptDir%\init\updateCheck.ahk
 #Include %A_ScriptDir%\ui\settingsPanel.ahk
-#Include %A_ScriptDir%\ui\gdip\unitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\SessionTableLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\GameInfoLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\PartyInfoLayer.ahk
-#Include %A_ScriptDir%\ui\gdip\UnitsLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\UIAssistLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\ItemLogLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\ItemCounterLayer.ahk
@@ -74,7 +71,7 @@ Menu, Tray, Add, Reload, Reload
 Menu, Tray, Add
 Menu, Tray, Add, Exit, ExitMH
 
-global version := "2.9.20"
+global version := "3.0.0"
 
 WriteLog("*******************************************************************")
 WriteLog("* Map overlay started https://github.com/joffreybesos/d2r-mapview *")
@@ -98,7 +95,6 @@ lastSeed:=""
 session :=
 lastPlayerLevel:=
 lastPlayerExperience:=
-uidata:={}
 sessionList := []
 offsetAttempts := 2
 
@@ -120,13 +116,11 @@ global itemLogItems := []
 global vendorItems := []
 global oSpVoice := ComObjCreate("SAPI.SpVoice")
 global itemAlertList := new AlertList("itemfilter.yaml")
-global centerLeftOffset := 0
-global centerTopOffset := 0
 global redrawMap := 1
 global offsets := []
 global hudBitmaps := loadBitmaps()
 global buffBitmaps := loadBuffIcons()
-global mapImageList := []
+
 
 CreateSettingsGUI(settings, localizedStrings)
 settingupGUI := false
@@ -146,12 +140,6 @@ global d2rprocess := initMemory(gameWindowId)
 patternScan(d2rprocess, offsets)
 Gdip_Startup()
 
-; create GUI windows
-Gui, Map: -Caption +E0x20 +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
-global mapHwnd1 := WinExist()
-
-Gui, Units: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
-global unitHwnd1 := WinExist()
 
 
 ; performance counters
@@ -171,7 +159,9 @@ itemLogLayer := new ItemLogLayer(settings)
 itemCounterLayer := new ItemCounterLayer(settings)
 uiAssistLayer := new UIAssistLayer(settings)
 buffBarLayer := new BuffBarLayer(settings)
-
+mapGuis := new MapGUIs(settings)
+unitsGui := new UnitsGUI(settings)
+                
 ; main loop
 While 1 {
     frameStart:=A_TickCount
@@ -183,7 +173,7 @@ While 1 {
         }
         offsetAttempts += 1
         if (offsetAttempts > 25) {
-            hideMap(false)
+            hideMap(false, mapGuis, unitsGui)
             lastlevel:=
             items := []
             shrines := []
@@ -223,9 +213,9 @@ While 1 {
         Sleep, 80 ; sleep when no offset found, you're likely in menu
     } else {
         offsetAttempts := 0
-        ; timeStamp("readGameMemory")
+        timeStamp("readGameMemory")
         readGameMemory(d2rprocess, settings, gameMemoryData)
-        ; timeStamp("readGameMemory")
+        timeStamp("readGameMemory")
 
         if (gameMemoryData["experience"]) {
             lastPlayerLevel:= gameMemoryData["playerLevel"]
@@ -236,10 +226,14 @@ While 1 {
         }
 
         if ((gameMemoryData["difficulty"] == "0" or gameMemoryData["difficulty"] == "1" or gameMemoryData["difficulty"] == "2") and (gameMemoryData["levelNo"] > 0 and gameMemoryData["levelNo"] < 137) and gameMemoryData["mapSeed"]) {
+            mapList := getStitchedMaps(gameMemoryData["levelNo"])
             if (gameMemoryData["mapSeed"] != lastSeed or newGame) {
+
+                ; new game so reset all the map guis
+                mapGuis := new MapGuis(settings)
+
                 gameStartTime := A_TickCount    
                 currentGameName := readLastGameName(d2rprocess, gameWindowId, offsets, session)
-
                 if (session) {
                     session.setEndTime(gameEndTime)
                     session.endingPlayerLevel := lastPlayerLevel
@@ -250,17 +244,16 @@ While 1 {
                         sessionList.push(session)
                     }
                 }
-                
                 session := new GameSession(currentGameName, A_TickCount, gameMemoryData["playerName"])
                 session.startingPlayerLevel := gameMemoryData["playerLevel"]
                 session.startingExperience := gameMemoryData["experience"]
                 lastSeed := gameMemoryData["mapSeed"]
-                ;ipAddress := readIPAddress(d2rprocess, gameWindowId, offsets, session)
-                shrines := []
+
+                global shrines := []
                 items := []
                 seenItems := []
                 itemLogItems := []
-                mapImageList := []
+                
                 gameInfoLayer.updateSessionStart(session.startTime)
                 ;gameInfoLayer.drawInfoText(currentFPS)
                 newGame := 0
@@ -270,32 +263,17 @@ While 1 {
             historyToggle := true
 
             ; if there's a level num then the player is in a map
-            if (gameMemoryData["levelNo"] != lastlevel) { ; only redraw map when it changes
+            levelNo := gameMemoryData["levelNo"]
+            if (mapList[1] != lastlevel) { ; only redraw map when it changes
                 ; Show loading text
-                ;Gui, Map: Show, NA
                 mapLoading := 1
-                Gui, Map: Hide ; hide map
-                Gui, Units: Hide ; hide player dot
-                ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
-                ; Download map
-                levelNo := gameMemoryData["levelNo"]
-                if (mapImageList[levelNo]) {
-                    ; already downloaded
-                } else {
-                    pathStart := gameMemoryData["xPos"] "," gameMemoryData["yPos"]
-                    pathEnd := GetPathEnd(levelNo)
-                    mapImageList[levelNo] := new MapImage(settings, gameMemoryData["mapSeed"], gameMemoryData["difficulty"], levelNo, mapImageList, pathStart, pathEnd)
-                }
-
-                ; Show Map
-                if (lastlevel == "") {
-                    Gui, Map: Show, NA
-                    Gui, Units: Show, NA
-                }
+                mapGuis.hide()
+                unitsGui.hide()
                 
-                ; if (settings["enablePrefetch"]) {
-                ;     prefetchMaps(settings, gameMemoryData)
-                ; }
+                ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
+                ; Show Map
+                mapGuis.downloadMapImages(mapList, gameMemoryData)
+                
                 mapLoading := 0
                 Gui, LoadingText: Destroy ; remove loading text
                 
@@ -303,31 +281,22 @@ While 1 {
             }
             if (redrawMap) {
                 WriteLogDebug("Redrawing map")
-                levelNo := gameMemoryData["levelNo"]
-                thisMapImage := mapImageList[levelNo]
-                thisMapImage.refreshMapMargins()
-                
-                ShowMap(settings, mapHwnd1, thisMapImage, gameMemoryData, uiData)
-
-                unitsLayer.delete()
-                unitsLayer := new UnitsLayer(uiData)
-                
+                mapGuis.drawMaps(mapList, gameMemoryData)
+                unitsGui.show()
                 gameInfoLayer.updateAreaLevel(levelNo, gameMemoryData["difficulty"])
                 gameInfoLayer.updateExpLevel(levelNo, gameMemoryData["difficulty"], gameMemoryData["playerLevel"])
-                
-                
                 redrawMap := 0
             }
             ; timeStamp("ShowUnits")
-            ShowUnits(unitsLayer, settings, unitHwnd1, mapHwnd1, mapImageList[levelNo], gameMemoryData, shrines, uiData)
+            unitsGui.drawUnitLayer(settings, gameMemoryData, mapGuis.mapImageList[levelNo])
             ; timeStamp("ShowUnits")
             uiAssistLayer.drawMonsterBar(gameMemoryData["hoveredMob"])
+            ; timeStamp("updateMapPositions")
+            mapGuis.updateMapPositions(mapList, settings, d2rprocess, gameMemoryData)
+            ; timeStamp("updateMapPositions")
 
-            if (settings["centerMode"] and gameMemoryData["pathAddress"]) {
-                MovePlayerMap(settings, d2rprocess, gameMemoryData["pathAddress"], mapHwnd1, unitHwnd1, mapImageList[levelNo], uiData)
-            }
             if (Mod(ticktock, 6)) {
-                checkAutomapVisibility(d2rprocess, gameMemoryData)
+                checkAutomapVisibility(d2rprocess, gameMemoryData, settings, mapGuis, unitsGui)
                 CoordMode,Mouse,Screen
                 MouseGetPos, mouseX, mouseY
                 buffBarLayer.checkHover(mouseX, mouseY)
@@ -338,11 +307,10 @@ While 1 {
             if (HUDItems.tpscrolls < 5) {
                 itemCounterLayer.drawItemCounter(HUDItems)
             }
-            
-            lastlevel := gameMemoryData["levelNo"]
+            lastlevel := mapList[1]
         } else {
             WriteLog("In Menu - no valid difficulty, levelno, or mapseed found '" gameMemoryData["difficulty"] "' '" gameMemoryData["levelNo"] "' '" gameMemoryData["mapSeed"] "'")
-            hideMap(false)
+            ; hideMap(false)
             lastlevel:=
         }
     }
@@ -395,46 +363,74 @@ While 1 {
 
 MapAlwaysShow:
 {
-    MapAlwaysShow(settings, gameMemoryData, mapImageList)
+    MapAlwaysShow(settings, gameMemoryData, mapGuis, unitsGui)
     return
 }
 
 MapSizeIncrease:
 {
-    MapSizeIncrease(settings, gameMemoryData, mapImageList)
+    MapSizeIncrease(settings, gameMemoryData)
+    mapGuis.setScale(settings)
+    unitsGui.setScale(settings)
+    mapGuis.setOffsetPosition(settings)
+    unitsGui.setOffsetPosition(settings)
     return
 }
 
 MapSizeDecrease:
 {
-    MapSizeDecrease(settings, gameMemoryData, mapImageList)
+    MapSizeDecrease(settings, gameMemoryData)
+    mapGuis.setScale(settings)
+    unitsGui.setScale(settings)
+    mapGuis.setOffsetPosition(settings)
+    unitsGui.setOffsetPosition(settings)
     return
 }
 
 SwitchMapMode:
 {
     SwitchMapMode(settings, mapImageList, gameMemoryData, uiData)
+    mapGuis.setScale(settings)
+    unitsGui.setScale(settings)
+    mapGuis.setOffsetPosition(settings)
+    unitsGui.setOffsetPosition(settings)
     return
 }
 
 MoveMapLeft:
 {
-    MoveMapLeft(gameMemoryData, settings, mapImageList)
+    MoveMapLeft(settings)
+    mapGuis.setScale(settings)
+    unitsGui.setScale(settings)
+    mapGuis.setOffsetPosition(settings)
+    unitsGui.setOffsetPosition(settings)
     return
 }
 MoveMapRight:
 {
-    MoveMapRight(gameMemoryData, settings, mapImageList)
+    MoveMapRight(settings)
+    mapGuis.setScale(settings)
+    unitsGui.setScale(settings)
+    mapGuis.setOffsetPosition(settings)
+    unitsGui.setOffsetPosition(settings)
     return
 }
 MoveMapUp:
 {
-    MoveMapUp(gameMemoryData, settings, mapImageList)
+    MoveMapUp(settings)
+    mapGuis.setScale(settings)
+    unitsGui.setScale(settings)
+    mapGuis.setOffsetPosition(settings)
+    unitsGui.setOffsetPosition(settings)
     return
 }
 MoveMapDown:
 {
-    MoveMapDown(gameMemoryData, settings, mapImageList)
+    MoveMapDown(settings)
+    mapGuis.setScale(settings)
+    unitsGui.setScale(settings)
+    mapGuis.setOffsetPosition(settings)
+    unitsGui.setOffsetPosition(settings)
     return
 }
 HistoryToggle:
@@ -510,7 +506,7 @@ ExitMH:
                     ++count
                 }
             }
-            OutputDebug, % thisName " " Round(averageVal / count / 1000.0, 2) "ms `n"
+            OutputDebug, % thisName " " Round(averageVal / count / 1000.0, 2) "ms, last measurement " Round(perf2["duration"] / 1000.0, 2) "ms `n"
             alreadyseenperf.Push(thisName)
         }
     }
@@ -535,7 +531,6 @@ ShowSettings:
 Update:
 {
     WriteLog("Applying new settings...")
-    cmode := settings["centerMode"]
     UpdateSettings(settings, defaultSettings)
     historyText.delete()
     historyText := new SessionTableLayer(settings)
@@ -552,17 +547,12 @@ Update:
     buffBarLayer.delete()
     buffBarLayer := new BuffBarLayer(settings)
     SetupHotKeys(gameWindowId, settings)
-    if (cmode != settings["centerMode"]) { ; if centermode changed
-        lastlevel := "INVALIDATED"
-        mapImageList[levelNo] := 0
-        gameMemoryData := {}
-        uiData := {}
-        WinSet, Region, , ahk_id %mapHwnd1%
-        WinSet, Region, , ahk_id %unitHwnd1%
-        Gui, Map: Hide
-        Gui, Units: Hide
-        mapShowing := 0
-    }
+    lastlevel := "INVALIDATED"
+    mapGuis.setScale(settings)
+    unitsGui.setScale(settings)
+    mapGuis.setOffsetPosition(settings)
+    unitsGui.setOffsetPosition(settings)
+    mapShowing := 0
     GuiControl, Hide, Unsaved
     GuiControl, Disable, UpdateBtn
     redrawMap := 1

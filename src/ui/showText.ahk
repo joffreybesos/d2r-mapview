@@ -1,14 +1,13 @@
 
 ShowText(settings, Text, opacity) {
     
-    leftMargin:=settings["leftMargin"]
-    topMargin:= settings["topMargin"]
+    fontSize := settings["centerModeScale"] * 10
 
     pToken := Gdip_Startup()
 
     Width:= 1000
     Height = 500
-    Options = x0 y0 Center vCenter c%opacity%ffffff r4 s20
+    Options = x0 y0 Center vCenter c%opacity%ffffff r4 s%fontSize%
     Font = Arial
 
     DetectHiddenWindows, On
@@ -24,7 +23,7 @@ ShowText(settings, Text, opacity) {
     pBrush := Gdip_BrushCreateSolid(0xAA000000)
     Gdip_DeleteBrush(pBrush)
     Gdip_TextToGraphics(G, Text, Options, Font, Width, Height)
-    UpdateLayeredWindow(hwnd1, hdc, leftMargin, topMargin, Width, Height)
+    UpdateLayeredWindow(hwnd1, hdc, 20, 20, Width, Height)
     SelectObject(hdc, obm)
     DeleteObject(hbm)
     DeleteDC(hdc)

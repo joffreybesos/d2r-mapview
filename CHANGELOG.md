@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.0.0] - 2022-09-02 - Major rework
+## [3.0.0] - 2022-09-08 - Major rework
 
-- Maps no longer have to load when going from one walkable area to another
+- Maps no longer have to load when going from one walkable area to another!
 - All connected walkable maps now render at once
 - Walkable exits are now marked e.g. entrance to Cold Plains from Blood Moor
-- Complete rewrite of how maps and units are drawn
-- Settings UI General tab has been updated
+- Major rewrite of how maps and units are drawn
+- `Ctrl+O` Settings UI General tab has been updated
 - Map position can now be CENTER, TOP_LEFT or TOP_RIGHT
+- You can cycle these 3 positions with the `\` key
 - Removed left margin, top margin and other redundant settings
 - Removed `mapconfig.ini` since that's not used anymore
 
@@ -20,6 +21,7 @@ All notable changes to this project will be documented in this file.
   - Pathfinding may have some bugs
   - You may need to reset your settings to defaults by deleting/renaming your `settings.ini` file
   - You can still use v2.9.20 if you are experiencing problems
+  - Change map scale with numpad +/- keys is a bit slow
 
 ## [2.9.20] - 2021-07-25 - Bug fixes
 

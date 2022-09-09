@@ -13,9 +13,10 @@ readSettings(settingsFile, ByRef settings) {
     settings["locale"] := ""
     settings["chosenVoice"] := 1
     settings["baseUrl"] := "http://localhost:3002"
+    settings["rustGenerator"] := 1
     settings["alwaysShowMap"] := 0
     settings["hideTown"] := 0
-    settings["serverScale"] := 3
+    settings["serverScale"] := 2
 
     settings["mapPosition"] := "CENTER"   ; can be "TOP_LEFT" or "TOP_RIGHT"
     settings["centerModeScale"] := 2.262

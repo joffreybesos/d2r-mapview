@@ -9,8 +9,6 @@ class MapImage {
 
     leftTrimmed := ""
     topTrimmed := ""
-    levelxmargin := ""
-    levelymargin := ""
     mapOffsetX := ""
     mapOffsety := ""
     mapwidth := ""
@@ -27,36 +25,51 @@ class MapImage {
         this.mapSeed := mapSeed
         this.difficulty := difficulty
         this.levelNo := levelNo
-        baseUrl:= settings["baseUrl"]
-        thickness := settings["wallThickness"] + 0.0
-        if (thickness > 5)
-            thickness := 5
-        if (thickness < 1)
-            thickness := 1
+        if (settings["rustGenerator"]) {
+            sFile := this.getRustFileName()
+            sFileHeader := this.getRustHeaderFileName()
+            this.sFile := sFile
+            FileRead, headers, %sFileHeader%
+            this.parseHeaders(headers)
+            WriteLog("Opened rust image " sFile)
+        } else {
+            baseUrl:= settings["baseUrl"]
+            thickness := settings["wallThickness"] + 0.0
+            if (thickness > 5)
+                thickness := 5
+            if (thickness < 1)
+                thickness := 1
 
-        imageUrl := baseUrl . "/v1/map/" . mapSeed . "/" . difficulty . "/" . levelNo . "/image?wallthickness=" . thickness
-        imageUrl := imageUrl . "&rotate=true&showTextLabels=false"
-        imageUrl := imageUrl . "&padding=0"  ; . settings["padding"]
-        imageUrl := imageUrl . "&noStitch=true"  ; . settings["padding"]
-        imageUrl := imageUrl . "&edge=true"
-        if (settings["showPathFinding"]) {
-            if (pathStart && pathEnd) {
-                imageUrl := imageUrl . "&pathFinding=true"
-                imageUrl := imageUrl . "&pathStart=" . pathStart
-                imageUrl := imageUrl . "&pathEnd=" . pathEnd
-                imageUrl := imageUrl . "&pathColour=" . settings["pathFindingColour"]
+            imageUrl := baseUrl . "/v1/map/" . mapSeed . "/" . difficulty . "/" . levelNo . "/image?wallthickness=" . thickness
+            imageUrl := imageUrl . "&rotate=true&showTextLabels=false"
+            imageUrl := imageUrl . "&padding=0"  ; . settings["padding"]
+            imageUrl := imageUrl . "&noStitch=true"  ; . settings["padding"]
+            imageUrl := imageUrl . "&edge=true"
+            if (settings["showPathFinding"]) {
+                if (pathStart && pathEnd) {
+                    imageUrl := imageUrl . "&pathFinding=true"
+                    imageUrl := imageUrl . "&pathStart=" . pathStart
+                    imageUrl := imageUrl . "&pathEnd=" . pathEnd
+                    imageUrl := imageUrl . "&pathColour=" . settings["pathFindingColour"]
+                }
             }
+            imageUrl := imageUrl . "&serverScale=" . settings["serverScale"]
+
+            this.imageUrl := imageUrl
+            this.downloadImage(imageUrl)
+            WriteLog("Downloading image " imageUrl)
         }
-        imageUrl := imageUrl . "&serverScale=" . settings["serverScale"]
-
-        this.imageUrl := imageUrl
-        this.downloadImage(imageUrl)
-        WriteLog("Downloading image " imageUrl)
-
     } 
 
     getFileName() {
         return A_Temp "/" this.mapSeed "_" this.difficulty "_" this.levelNo ".png"
+    }
+
+    getRustFileName() {
+        return A_Temp "/map_" this.mapSeed "_" this.difficulty "_" this.levelNo ".png"
+    }
+    getRustHeaderFileName() {
+        return A_Temp "/map_" this.mapSeed "_" this.difficulty "_" this.levelNo ".txt"
     }
 
     downloadImage(Byref imageUrl) {
@@ -126,8 +139,6 @@ class MapImage {
 
             field := StrSplit(A_LoopField, ":")
             switch (field[1]) {
-                case "lefttrimmed": leftTrimmed := Trim(field[2]), foundFields++
-                case "toptrimmed": topTrimmed := Trim(field[2]), foundFields++
                 case "offsetx": mapOffsetX := Trim(field[2]), foundFields++
                 case "offsety": mapOffsety := Trim(field[2]), foundFields++
                 case "mapwidth": mapwidth := Trim(field[2]), foundFields++
@@ -141,7 +152,7 @@ class MapImage {
                 case "originalheight": originalheight := Trim(field[2]), foundFields++
             }
         }
-        if (foundFields < 9) {
+        if (foundFields < 5) {
             WriteLog("ERROR: Did not find all expected response headers, turn on debug mode to view. Unexpected behaviour may occur")
             Loop, Parse, respHeaders, `n
             {
@@ -156,11 +167,6 @@ class MapImage {
         if (serverisv10) {
             prerotated := true
         }
-        this.leftTrimmed := leftTrimmed
-        this.topTrimmed := topTrimmed
-        this.topTrimmed := topTrimmed
-        this.levelxmargin := levelxmargin
-        this.levelymargin := levelymargin
         this.mapOffsetX := mapOffsetX
         this.mapOffsety := mapOffsety
         this.mapwidth := mapwidth

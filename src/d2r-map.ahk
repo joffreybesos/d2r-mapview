@@ -85,7 +85,9 @@ global defaultSettings
 readSettings("settings.ini", settings)
 global localizedStrings := LoadLocalization(settings)
 CheckForUpdates()
-checkServer(settings)
+if (!settings["rustGenerator"]) {
+    checkServer(settings)
+}
 lastMap := ""
 exitArray := []
 helpToggle:= true
@@ -213,9 +215,9 @@ While 1 {
         Sleep, 80 ; sleep when no offset found, you're likely in menu
     } else {
         offsetAttempts := 0
-        timeStamp("readGameMemory")
+        ; timeStamp("readGameMemory")
         readGameMemory(d2rprocess, settings, gameMemoryData)
-        timeStamp("readGameMemory")
+        ; timeStamp("readGameMemory")
 
         if (gameMemoryData["experience"]) {
             lastPlayerLevel:= gameMemoryData["playerLevel"]
@@ -272,7 +274,11 @@ While 1 {
                 
                 ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
                 ; Show Map
-                mapGuis.downloadMapImages(mapList, gameMemoryData)
+                if (settings["rustGenerator"]) {
+                    mapGuis.generateImages(mapList, gameMemoryData)
+                } else {
+                    mapGuis.downloadMapImages(mapList, gameMemoryData)
+                }
                 
                 mapLoading := 0
                 Gui, LoadingText: Destroy ; remove loading text

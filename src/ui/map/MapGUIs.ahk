@@ -2,6 +2,7 @@
 class MapGUIs {
     mapGuis := []
     mapImageList := []
+    bitmapList := []
     __new(ByRef settings) {
         Loop, 136 {
             Gui, Map%A_Index%: Destroy
@@ -69,6 +70,18 @@ class MapGUIs {
             }
         }
     }
+    generateImages(ByRef mapList, ByRef gameMemoryData) {
+        exePath := "d2-mapgenerator.exe"
+        d2path := "./game"
+        for k, thisLevelNo in mapList
+        {
+            if (!this.mapImageList[thisLevelNo]) {
+                cmd := exePath " generate --d2lod " d2path " --seed " gameMemoryData["mapSeed"] " --difficulty " gameMemoryData["difficulty"] " --rotate --scale " settings["serverScale"] " --map " thislevelNo
+                RunWait, %comspec% /c %cmd%,,hide
+                this.mapImageList[thisLevelNo] := new MapImage(settings, gameMemoryData["mapSeed"], gameMemoryData["difficulty"], thisLevelNo)
+            }
+        }
+    }
 
     drawMaps(ByRef mapList, ByRef gameMemoryData) {
         this.show(mapList)
@@ -98,10 +111,12 @@ class MapGUIs {
         thisMap := this.mapImageList[levelNo]
         Gdip_Startup()
         ; OutputDebug, % thisMap.sFile "`n"
-        pBitmap := Gdip_CreateBitmapFromFile(this.mapImageList[levelNo].sFile)
+        if (!this.bitmapList[levelNo]) {
+            this.bitmapList[levelNo] := Gdip_CreateBitmapFromFile(this.mapImageList[levelNo].sFile)
+        }
 
-        rotatedWidth := Gdip_GetImageWidth(pBitmap)
-        rotatedHeight := Gdip_GetImageHeight(pBitmap)
+        rotatedWidth := Gdip_GetImageWidth(this.bitmapList[levelNo])
+        rotatedHeight := Gdip_GetImageHeight(this.bitmapList[levelNo])
         this.mapImageList[levelNo].rotatedWidth := rotatedWidth
         this.mapImageList[levelNo].rotatedHeight := rotatedHeight
 
@@ -118,7 +133,7 @@ class MapGUIs {
         obm := SelectObject(hdc, hbm)
         Gdip_SetSmoothingMode(G, 4) 
         G := Gdip_GraphicsFromHDC(hdc)
-        Gdip_DrawImage(G, pBitmap, 0, 0, mapScaledWidth, mapScaledHeight / 2, 0, 0, rotatedWidth, rotatedHeight, this.opacity)
+        Gdip_DrawImage(G, this.bitmapList[levelNo], 0, 0, mapScaledWidth, mapScaledHeight / 2, 0, 0, rotatedWidth, rotatedHeight, this.opacity)
         ; pPen := Gdip_CreatePen(0x44ff0000, 5)
         ; Gdip_DrawRectangle(G, pPen, 0, 0, mapScaledWidth, mapScaledHeight/2)
         ; Gdip_DeletePen(pPen)
@@ -142,7 +157,7 @@ class MapGUIs {
         DeleteDC(hdc)
         
         Gdip_DeleteGraphics(G)
-        Gdip_DisposeImage(pBitmap)
+        ; Gdip_DisposeImage(pBitmap)
 
     }
 

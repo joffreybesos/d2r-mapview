@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.1.0] - 2022-09-09 - Rust map server replacement
+
+- d2-mapserver has been replaced with a new application written in rust called 'd2-mapgenerator'
+- You can still use the old d2-mapserver at your configured baseUrl
+- The new rust based mapgenerator only works locally, you cannot host on another machine
+
 ## [3.0.0] - 2022-09-08 - Major rework
 
 - Maps no longer have to load when going from one walkable area to another!

@@ -216,12 +216,13 @@ GetPathEnd(levelNo, ByRef pathStart, ByRef pathEnd) {
         case "35": pathStart := 34, pathEnd := 36
         case "36": pathStart := 35, pathEnd := 37
         ;case "41": return "55"
-        ;case "42": return "56"
-        ;case "43": return "62"
-        ;case "44": return "65"
-        ; case "45": return "58"
+        case "42": pathStart := 41, pathEnd := 43
+        case "43": pathStart := 42, pathEnd := 62
+        case "44": pathStart := 43, pathEnd := 45
+        
         case "47": pathStart := 40, pathEnd := 48
         case "48": pathStart := 47, pathEnd := 49
+        case "49": pathStart := 48, pathEnd := 744
         ;case "50": pathStart := 40, pathEnd := 51
         case "51": pathStart := 50, pathEnd := 52
         case "52": pathStart := 51, pathEnd := 53

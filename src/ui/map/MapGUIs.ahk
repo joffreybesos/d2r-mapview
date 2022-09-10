@@ -77,6 +77,10 @@ class MapGUIs {
         {
             if (!this.mapImageList[thisLevelNo]) {
                 cmd := exePath " generate --d2lod " d2path " --seed " gameMemoryData["mapSeed"] " --difficulty " gameMemoryData["difficulty"] " --rotate --scale " settings["serverScale"] " --map " thislevelNo
+                GetPathEnd(thisLevelNo, pathStart, pathEnd)
+                if (pathStart) {
+                    cmd := cmd . " --pathstart " pathStart " --pathend " pathEnd
+                }
                 RunWait, %comspec% /c %cmd%,,hide
                 this.mapImageList[thisLevelNo] := new MapImage(settings, gameMemoryData["mapSeed"], gameMemoryData["difficulty"], thisLevelNo)
             }

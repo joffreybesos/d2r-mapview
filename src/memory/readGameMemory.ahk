@@ -8,9 +8,9 @@
 #Include %A_ScriptDir%\memory\scanForPlayer.ahk
 
 
-; global lastdwInitSeedHash1
-; global lastdwInitSeedHash2
-; global lastdwEndSeedHash1
+global lastdwInitSeedHash1
+global lastdwInitSeedHash2
+global lastdwEndSeedHash1
 global xorkey
 global playerLevel 
 global experience
@@ -38,16 +38,25 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     ; get playername
     , playerNameAddress := d2rprocess.read(playerUnit + 0x10, "Int64")
     , playerName := d2rprocess.readString(playerNameAddress, length := 0)
-    
 
     ; get the map seed
     , actAddress := d2rprocess.read(playerUnit + 0x20, "Int64")  
     , actMiscAddress := d2rprocess.read(actAddress + 0x78, "Int64")   ;0x0000023a64ed4780 ;2449824630656
-    , mapSeed := d2rprocess.read(actMiscAddress + 0x840, "UInt") 
+
+    dwInitSeedHash1 := d2rprocess.read(actMiscAddress + 0x840, "UInt") 
+    dwInitSeedHash2 := d2rprocess.read(actMiscAddress + 0x844, "UInt") 
+    dwEndSeedHash1 := d2rprocess.read(actMiscAddress + 0x868, "UInt") 
+
+    if (dwInitSeedHash1 != lastdwInitSeedHash1 or dwInitSeedHash2 != lastdwInitSeedHash2 or mapSeed == 0) {
+        mapSeed := calculateMapSeed(dwInitSeedHash1, dwInitSeedHash2, dwEndSeedHash1)
+        lastdwInitSeedHash1 := dwInitSeedHash1
+        lastdwInitSeedHash2 := dwInitSeedHash2
+    }
+    ;mapSeed := d2rprocess.read(actMiscAddress + 0x840, "UInt") 
 
 
     ; get the difficulty
-    , aActUnk2 := d2rprocess.read(actAddress + 0x78, "Int64")
+    aActUnk2 := d2rprocess.read(actAddress + 0x78, "Int64")
     , difficulty := d2rprocess.read(aActUnk2 + 0x830, "UShort")
     
     if (Mod(ticktock, 6)) {
@@ -170,4 +179,12 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
     ;ElapsedTime := A_TickCount - StartTime
     ;OutputDebug, % ElapsedTime "`n"
     ;ToolTip % "`n`n`n`n" ElapsedTime
+}
+
+
+calculateMapSeed(InitSeedHash1, InitSeedHash2, EndSeedHash1) {
+	WriteLog("Calculating new map seed from " InitSeedHash1 " " InitSeedHash2 " " EndSeedHash1)
+	mapSeed := DllCall("SeedGenerator.dll\GetSeed", "UInt", InitSeedHash1, "UInt", InitSeedHash2, "UInt", EndSeedHash1, "UInt", "0", "UInt")
+	WriteLog("Found mapSeed " mapSeed)
+	return mapSeed
 }

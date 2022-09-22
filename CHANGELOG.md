@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.1] - 2022-09-23 - Fix after latest patch
+
+- Seed decryption has been reimplemented
+- Made some fixes to item stats
+
 ## [3.0.0] - 2022-09-08 - Major rework
 
 - Maps no longer have to load when going from one walkable area to another!

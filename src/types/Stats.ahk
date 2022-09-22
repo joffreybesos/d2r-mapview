@@ -5,62 +5,66 @@ loadStats(ByRef statCount, ByRef statPtr, ByRef statExCount, ByRef statExPtr) {
     d2rprocess.readRaw(statPtr, statBuffer, statCount*10)
     statArray := []
     skillsfound := 0
-    Loop, %statCount%
-    {
-        offset := (A_Index -1) * 8
-        , statLayer := NumGet(&statBuffer, offset, Type := "Short")
-        , statEnum := NumGet(&statBuffer, offset + 0x2, Type := "UShort")
-        , statValue := NumGet(&statBuffer , offset + 0x4, Type := "Int")
-        switch (statEnum) {
-            case 6: statValue := statValue >> 8   ; life
-            case 7: statValue := statValue >> 8   ; maxlife
-            case 8: statValue := statValue >> 8   ; mana
-            case 9: statValue := statValue >> 8   ; maxmana
-            case 10: statValue := statValue >> 8   ; stamina
-            case 11: statValue := statValue >> 8   ; maxstamina
-            case 216: statValue := statValue >> 8   ; item_hp_perlevel
-            case 217: statValue := statValue >> 8   ; item_mana_perlevel
-            case 56: statValue := statValue / 25   ; cold length, divided by num frames
-            case 59: statValue := statValue / 25   ; poison length
+    if (statCount < 20) {
+        Loop, %statCount%
+        {
+            offset := (A_Index -1) * 8
+            , statLayer := NumGet(&statBuffer, offset, Type := "Short")
+            , statEnum := NumGet(&statBuffer, offset + 0x2, Type := "UShort")
+            , statValue := NumGet(&statBuffer , offset + 0x4, Type := "Int")
+            switch (statEnum) {
+                case 6: statValue := statValue >> 8   ; life
+                case 7: statValue := statValue >> 8   ; maxlife
+                case 8: statValue := statValue >> 8   ; mana
+                case 9: statValue := statValue >> 8   ; maxmana
+                case 10: statValue := statValue >> 8   ; stamina
+                case 11: statValue := statValue >> 8   ; maxstamina
+                case 216: statValue := statValue >> 8   ; item_hp_perlevel
+                case 217: statValue := statValue >> 8   ; item_mana_perlevel
+                case 56: statValue := statValue / 25   ; cold length, divided by num frames
+                case 59: statValue := statValue / 25   ; poison length
+            }
+            statName := getStatName(statEnum)
+            if (statEnum == 107) {
+                skillsfound++
+                statName := statName . skillsfound
+                
+            }
+            ;OutputDebug, % statName " " statEnum " " statLayer " " statValue "`n"
+            statArray[statName] := { "statLayer": statLayer, "statValue": statValue }
         }
-        statName := getStatName(statEnum)
-        if (statEnum == 107) {
-            skillsfound++
-            statName := statName . skillsfound
-            
-        }
-        ;OutputDebug, % statName " " statEnum " " statLayer " " statValue "`n"
-        statArray[statName] := { "statLayer": statLayer, "statValue": statValue }
     }
     statExCount := statExCount
-    d2rprocess.readRaw(statExPtr, statBuffer, statExCount*10)
-    Loop, %statExCount%
-    {
-        offset := (A_Index -1) * 8
-        , statLayer := NumGet(&statBuffer, offset, Type := "Short")
-        , statEnum := NumGet(&statBuffer, offset + 0x2, Type := "UShort")
-        , statValue := NumGet(&statBuffer , offset + 0x4, Type := "Int")
-        switch (statEnum) {
-            case 6: statValue := statValue >> 8   ; life
-            case 7: statValue := statValue >> 8   ; maxlife
-            case 8: statValue := statValue >> 8   ; mana
-            case 9: statValue := statValue >> 8   ; maxmana
-            case 10: statValue := statValue >> 8   ; stamina
-            case 11: statValue := statValue >> 8   ; maxstamina
-            case 216: statValue := statValue >> 8   ; item_hp_perlevel
-            case 217: statValue := statValue >> 8   ; item_mana_perlevel
-            case 56: statValue := Round(statValue / 25, 0)   ; cold length, divided by num frames
-            case 59: statValue := Round(statValue / 25, 0)   ; poison length
+    if (statExCount < 20) {
+        d2rprocess.readRaw(statExPtr, statBuffer, statExCount*10)
+        Loop, %statExCount%
+        {
+            offset := (A_Index -1) * 8
+            , statLayer := NumGet(&statBuffer, offset, Type := "Short")
+            , statEnum := NumGet(&statBuffer, offset + 0x2, Type := "UShort")
+            , statValue := NumGet(&statBuffer , offset + 0x4, Type := "Int")
+            switch (statEnum) {
+                case 6: statValue := statValue >> 8   ; life
+                case 7: statValue := statValue >> 8   ; maxlife
+                case 8: statValue := statValue >> 8   ; mana
+                case 9: statValue := statValue >> 8   ; maxmana
+                case 10: statValue := statValue >> 8   ; stamina
+                case 11: statValue := statValue >> 8   ; maxstamina
+                case 216: statValue := statValue >> 8   ; item_hp_perlevel
+                case 217: statValue := statValue >> 8   ; item_mana_perlevel
+                case 56: statValue := Round(statValue / 25, 0)   ; cold length, divided by num frames
+                case 59: statValue := Round(statValue / 25, 0)   ; poison length
+            }
+            statName := getStatName(statEnum)
+            if (statEnum == 107) {
+                skillsfound++
+                statName := statName . skillsfound
+                
+            }
+            ;OutputDebug, % statName " " statEnum " " statLayer " " statValue "`n"
+            statOrder := getStatSortPriority(statName) ;"_" statName
+            statArray[statName] := { "statLayer": statLayer, "statValue": statValue, "statOrder": statOrder }
         }
-        statName := getStatName(statEnum)
-        if (statEnum == 107) {
-            skillsfound++
-            statName := statName . skillsfound
-            
-        }
-        ;OutputDebug, % statName " " statEnum " " statLayer " " statValue "`n"
-        statOrder := getStatSortPriority(statName) ;"_" statName
-        statArray[statName] := { "statLayer": statLayer, "statValue": statValue, "statOrder": statOrder }
     }
 
     ; turn list of stats into readable format

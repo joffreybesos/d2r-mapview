@@ -34,12 +34,20 @@ ReadItems(ByRef d2rprocess, startingOffset, ByRef items) {
                         , itemx := NumGet(&pPath , 0x10, "UShort")
                         , itemy := NumGet(&pPath , 0x14, "UShort")
                         , pStatsListExPtr := NumGet(&itemStructData , 0x88, "Int64")
-                        d2rprocess.readRaw(pStatsListExPtr, pStatsListEx, 144)
+                        d2rprocess.readRaw(pStatsListExPtr, pStatsListEx, 180)
                         , statPtr := NumGet(&pStatsListEx , 0x30, "Int64")
-                        , statCount := NumGet(&pStatsListEx , 0x38, "Int64")
-                        , statExPtr := NumGet(&pStatsListEx , 0x80, "Int64")
-                        , statExCount := NumGet(&pStatsListEx , 0x88, "Int64")
-                        , item := new GameItem(txtFileNo, itemQuality, uniqueOrSetId)
+                        , statCount := NumGet(&pStatsListEx , 0x38, "UInt")
+                        , statExPtr := NumGet(&pStatsListEx , 0x88, "Int64")
+                        , statExCount := NumGet(&pStatsListEx , 0x90, "UInt")
+
+                        ; SetFormat, Integer, Hex
+                        ; OutputDebug, % "UD "
+                        ; Loop, 180
+                        ; {
+                        ;     OutputDebug, % NumGet(&pStatsListEx, A_Index-1, "UChar") " " 
+                        ; }
+
+                        item := new GameItem(txtFileNo, itemQuality, uniqueOrSetId)
                         , item.name := name
                         , item.itemLoc := itemLoc
                         , item.x := itemx

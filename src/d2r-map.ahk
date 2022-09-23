@@ -213,9 +213,9 @@ While 1 {
         Sleep, 80 ; sleep when no offset found, you're likely in menu
     } else {
         offsetAttempts := 0
-        timeStamp("readGameMemory")
+        ; timeStamp("readGameMemory")
         readGameMemory(d2rprocess, settings, gameMemoryData)
-        timeStamp("readGameMemory")
+        ; timeStamp("readGameMemory")
 
         if (gameMemoryData["experience"]) {
             lastPlayerLevel:= gameMemoryData["playerLevel"]

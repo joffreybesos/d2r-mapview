@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.2] - 2022-09-24 - Minor fixes
+
+- Fix for reading items from vendors
+- Replaced SeedDecrypt.dll with one written in Rust which works more reliably
+
 ## [3.0.1] - 2022-09-23 - Fix after latest patch
 
 - Seed decryption has been reimplemented

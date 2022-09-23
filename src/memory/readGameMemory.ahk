@@ -184,7 +184,10 @@ readGameMemory(ByRef d2rprocess, ByRef settings, ByRef gameMemoryData) {
 
 calculateMapSeed(InitSeedHash1, InitSeedHash2, EndSeedHash1) {
 	WriteLog("Calculating new map seed from " InitSeedHash1 " " InitSeedHash2 " " EndSeedHash1)
-	mapSeed := DllCall("SeedGenerator.dll\GetSeed", "UInt", InitSeedHash1, "UInt", InitSeedHash2, "UInt", EndSeedHash1, "UInt", "0", "UInt")
-	WriteLog("Found mapSeed " mapSeed)
+	mapSeed := DllCall("rustdecrypt.dll\get_seed", "UInt", InitSeedHash1, "UInt", InitSeedHash2, "UInt", EndSeedHash1, "UInt")
+	WriteLog("Found mapSeed '" mapSeed "'")
+    if (!mapSeed) {
+        WriteLog("ERRROR: YOU HAVE AN ERROR DEECRYPTING THE MAP SEED, YOUR MAPS WILL EITHER NOT APPEAR OR NOT LINE UP")
+    }
 	return mapSeed
 }

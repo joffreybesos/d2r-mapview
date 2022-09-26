@@ -11,8 +11,11 @@ initMemory(gameWindowId) {
      if !isObject(d2rprocess) 
     {
         WriteLog(gameWindowId " not found, please make sure game is running, try running MH as admin if still having issues")
-        errornogame := localizedStrings["errormsg10"]
-        Msgbox, 48, d2r-mapview %version%, %errormsg10%`n`n%errormsg11%`n%errormsg12%`n`n%errormsg3%
+        errormsg10 := localizedStrings["errormsg10"]
+        errormsg11 := localizedStrings["errormsg11"]
+        errormsg12 := localizedStrings["errormsg12"]
+        errormsg3 := localizedStrings["errormsg3"]
+        Msgbox, 48, d2r-mapview %version%, %englishforced%`n%errormsg10%`n`n%errormsg11%`n%errormsg12%`n`n%errormsg3%
         ExitApp
     }
     WriteLog("Initalised memory")

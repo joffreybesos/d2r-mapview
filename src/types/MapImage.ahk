@@ -139,6 +139,7 @@ class MapImage {
                 case "prerotated": prerotated := convertToBool(field[2]), foundFields++
                 case "originalwidth": originalwidth := Trim(field[2]), foundFields++
                 case "originalheight": originalheight := Trim(field[2]), foundFields++
+                case "version": mapServerVersion := Trim(field[2])
             }
         }
         if (foundFields < 9) {
@@ -155,6 +156,14 @@ class MapImage {
         }
         if (serverisv10) {
             prerotated := true
+        }
+        if (mapServerVersion < 14) {
+            if (!settings["alertedMapServerVersion"]) {
+                settings["alertedMapServerVersion"] := true
+                IniWrite, % 1, settings.ini, Settings, alertedMapServerVersion
+                errormsg27 := localizedStrings["errormsg27"]
+                Msgbox, 48, d2r-mapview %version%, %errormsg27%
+            }
         }
         this.leftTrimmed := leftTrimmed
         this.topTrimmed := topTrimmed

@@ -2,12 +2,13 @@
 ReadStates(ByRef d2rprocess, gameMemoryData, ByRef currentStates) {
     playerAddress := gameMemoryData["playerPointer"]
     pStatsListEx := d2rprocess.read(playerAddress + 0x88, "Int64")
-    stateByte1 := d2rprocess.read(pStatsListEx + 0xAC8, "UInt")
-    stateByte2 := d2rprocess.read(pStatsListEx + 0xAC8 + 4, "UInt")
-    stateByte3 := d2rprocess.read(pStatsListEx + 0xAC8 + 8, "UInt")
-    stateByte4 := d2rprocess.read(pStatsListEx + 0xAC8 + 12, "UInt")
-    stateByte5 := d2rprocess.read(pStatsListEx + 0xAC8 + 16, "UInt")
-    stateByte6 := d2rprocess.read(pStatsListEx + 0xAC8 + 20, "UInt")
+
+    stateByte1 := d2rprocess.read(pStatsListEx + 0xAD0, "UInt")
+    stateByte2 := d2rprocess.read(pStatsListEx + 0xAD0 + 4, "UInt")
+    stateByte3 := d2rprocess.read(pStatsListEx + 0xAD0 + 8, "UInt")
+    stateByte4 := d2rprocess.read(pStatsListEx + 0xAD0 + 12, "UInt")
+    stateByte5 := d2rprocess.read(pStatsListEx + 0xAD0 + 16, "UInt")
+    stateByte6 := d2rprocess.read(pStatsListEx + 0xAD0 + 20, "UInt")
 
     stats1 := calculateState(stateByte1, -1)
     stats2 := calculateState(stateByte2, 31)
@@ -328,5 +329,7 @@ getStateName(stateNum) {
         case 185: return "STATE_COOLDOWN"
         case 186: return "STATE_SHAREDSTASH"
         case 187: return "STATE_HIDEDEAD"
+        case 188: return "STATE_IMPALE"
+        case 189: return "STATE_DESECRATED"
     }
 }

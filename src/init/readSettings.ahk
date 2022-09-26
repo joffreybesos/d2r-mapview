@@ -17,6 +17,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["alwaysShowMap"] := 0
     settings["hideTown"] := 0
     settings["serverScale"] := 3
+    settings["alertedMapServerVersion"] := false
 
     settings["mapPosition"] := "CENTER"   ; can be "TOP_LEFT" or "TOP_RIGHT"
     settings["centerModeScale"] := 2.262

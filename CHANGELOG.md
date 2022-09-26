@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.3] - 2022-09-26 - Minor fixes
+
+- Fixed buff bar (thanks @reetah)
+- Added sunder charms to list of items
+- You will now get a warning if you are running an old version of the map server
+
 ## [3.0.2] - 2022-09-24 - Minor fixes
 
 - Fix for reading items from vendors

@@ -777,6 +777,12 @@ class GameItem {
             case 398: return localizedStrings["Rainbow Facet"]
             case 399: return localizedStrings["Rainbow Facet"]
             case 400: return localizedStrings["Hellfire Torch"]
+            case 401: return localizedStrings["Cold Rupture"]
+            case 402: return localizedStrings["Flame Rift"]
+            case 403: return localizedStrings["Crack of the Heavens"]
+            case 404: return localizedStrings["Rotting Fissure"]
+            case 405: return localizedStrings["Bone Break"]
+            case 406: return localizedStrings["Black Cleft"]
         }
     }
 

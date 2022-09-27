@@ -25,8 +25,17 @@ class BuffBarLayer {
         this.textBoxWidth := this.imageSize * 15  ; 15 icons wide max
         this.textBoxHeight := this.imageSize + this.yoffset
 
-        this.leftMargin := gameWindowX + (gameWindowWidth / 2) - (this.textBoxWidth / 2)
-        this.topMargin := gameWindowY + gameWindowHeight - (gameWindowHeight / 4.3) + settings["buffBarVerticalOffset"]
+        if (settings["buffBarX"] != 0) {
+            this.leftMargin := settings["buffBarX"]
+        } else {
+            this.leftMargin := gameWindowX + (gameWindowWidth / 2) - (this.textBoxWidth / 2)
+        }
+        
+        if (settings["buffBarX"] != 0) {
+            this.topMargin := settings["buffBarY"]
+        } else {
+            this.topMargin := gameWindowY + gameWindowHeight - (gameWindowHeight / 4.3) + settings["buffBarVerticalOffset"]
+        }        
 
         pToken := Gdip_Startup()
         DetectHiddenWindows, On
@@ -56,6 +65,10 @@ class BuffBarLayer {
     lock() {
         Gui, BuffBar: +E0x20
         this.locked := 1
+        settings["buffBarX"] := this.leftMargin
+        settings["buffBarY"] := this.topMargin
+        writeIniVar("buffBarX", settings, 0)
+        writeIniVar("buffBarY", settings, 0)
     }
 
     checkHover(mouseX, mouseY) {

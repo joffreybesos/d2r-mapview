@@ -52,6 +52,7 @@ ShowHelpText(settings) {
     s .= "`n"
     s .= "- CTRL+H to show/hide this help`n"
     s .= "- CTRL+O to open settings menu`n"
+    s .= "- CTRL+L to lock/unlock buff bar and item count`n"
     s .= "- " switchMapMode " to toggle centred map mode`n"
     s .= "- " alwaysShowKey " key to permanently show map`n"
     s .= "- " increaseMapSizeKey " key to increase map size`n"

@@ -37,7 +37,7 @@ class GameInfoLayer {
         this.gameWindowY := gameWindowY
         this.gameWindowWidth := gameWindowWidth
         this.gameWindowHeight := gameWindowHeight
-        this.textBoxWidth := 250
+        this.textBoxWidth := 300
         this.textBoxHeight := height
 
         this.topMargin := gameWindowY
@@ -136,6 +136,7 @@ class GameInfoLayer {
                 if (A_TickCount - this.startTime < 10000) {
                     textList := textList "Ctrl+O for options`n"
                     textList := textList "Ctrl+H for help`n"
+                    textList := textList "Ctrl+L for lock/unlock bars`n"
                 } else {
                     this.hideStartupText := true
                 }

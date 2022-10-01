@@ -68,6 +68,11 @@ readSettings(settingsFile, ByRef settings) {
     settings["lastActiveGUITab"] := "Info"
     settings["settingsUIX"] := 100
     settings["settingsUIY"] := 100
+    
+    settings["buffBarX"] := 0
+    settings["buffBarY"] := 0
+    settings["itemCounterX"] := 0
+    settings["itemCounterY"] := 0
 
     settings["enableItemFilter"] := 1
     settings["itemFontSize"] := 12

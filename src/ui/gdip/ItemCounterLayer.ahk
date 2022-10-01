@@ -15,17 +15,27 @@ class ItemCounterLayer {
         gameWindowWidth := gameClientArea["W"]
         gameWindowHeight := gameClientArea["H"]
 
-        Gui, ItemCounter: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
+        Gui, ItemCounter: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs         
         this.ItemCounterLayerHwnd := WinExist()
         this.imageSize := settings["itemCounterSize"]
         this.textBoxWidth := this.imageSize
         this.textBoxHeight := this.imageSize * 3 ; 3 images high
 
-        this.leftMargin := gameWindowX + gameWindowWidth - this.textBoxWidth - 5
-        this.topMargin := gameWindowY + (gameWindowHeight / 2) - (this.textBoxHeight / 2)
+        if (settings["itemCounterX"] != 0) {
+            this.leftMargin := settings["itemCounterX"]
+        } else {
+            this.leftMargin := gameWindowX + gameWindowWidth - this.textBoxWidth - 5
+        }        
+        if (settings["itemCounterY"] != 0) {
+            this.topMargin := settings["itemCounterY"]
+        } else {
+            this.topMargin := gameWindowY + (gameWindowHeight / 2) - (this.textBoxHeight / 2)
+        }
+        
         this.itemCounterFontSize := this.imageSize / 3 ; settings["ItemCounterFontSize"]
         this.xoffset := 0
         this.yoffset := 0
+        this.locked := 1
 
         pToken := Gdip_Startup()
         DetectHiddenWindows, On
@@ -36,6 +46,20 @@ class ItemCounterLayer {
         Gdip_SetSmoothingMode(this.G, 4)
         Gdip_SetInterpolationMode(this.G, 7)
         Gui, ItemCounter: Show, NA
+    }
+    
+    unlock() {
+        Gui, ItemCounter: -E0x20
+        this.locked := 0
+    }
+
+    lock() {
+        Gui, ItemCounter: +E0x20
+        this.locked := 1
+        settings["itemCounterX"] := this.leftMargin
+        settings["itemCounterY"] := this.topMargin
+        writeIniVar("itemCounterX", settings, 0)
+        writeIniVar("itemCounterY", settings, 0)
     }
 
     drawItemCounter(ByRef HUDItems) {

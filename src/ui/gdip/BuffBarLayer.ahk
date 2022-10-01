@@ -14,9 +14,10 @@ class BuffBarLayer {
         gameWindowY := gameClientArea["Y"]
         gameWindowWidth := gameClientArea["W"]
         gameWindowHeight := gameClientArea["H"]
-
-        Gui, BuffBar: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs 
-        this.buffBarLayerHwnd := WinExist()
+        
+        
+        Gui, BuffBar: -Caption +E0x20 +E0x80000 +E0x00080000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs         
+        this.buffBarLayerHwnd := WinExist()        
         this.imageSize := settings["buffBarIconSize"]
         this.buffBarFontSize := this.imageSize / 3 ; settings["buffBarFontSize"]
         this.xoffset := 0
@@ -24,8 +25,17 @@ class BuffBarLayer {
         this.textBoxWidth := this.imageSize * 15  ; 15 icons wide max
         this.textBoxHeight := this.imageSize + this.yoffset
 
-        this.leftMargin := gameWindowX + (gameWindowWidth / 2) - (this.textBoxWidth / 2)
-        this.topMargin := gameWindowY + gameWindowHeight - (gameWindowHeight / 4.3) + settings["buffBarVerticalOffset"]
+        if (settings["buffBarX"] != 0) {
+            this.leftMargin := settings["buffBarX"]
+        } else {
+            this.leftMargin := gameWindowX + (gameWindowWidth / 2) - (this.textBoxWidth / 2)
+        }
+        
+        if (settings["buffBarX"] != 0) {
+            this.topMargin := settings["buffBarY"]
+        } else {
+            this.topMargin := gameWindowY + gameWindowHeight - (gameWindowHeight / 4.3) + settings["buffBarVerticalOffset"]
+        }        
 
         pToken := Gdip_Startup()
         DetectHiddenWindows, On
@@ -41,9 +51,24 @@ class BuffBarLayer {
         this.pBrushExpiring := Gdip_BrushCreateSolid(0x33ff0000)
         this.pBrushBackground := Gdip_BrushCreateSolid(0x55000000)
         this.removedIcons := []
+        this.locked := 1
         Gdip_SetSmoothingMode(this.G, 4)
         Gdip_SetInterpolationMode(this.G, 7)
         Gui, BuffBar: Show, NA
+    }
+    
+    unlock() {
+        Gui, BuffBar: -E0x20
+        this.locked := 0
+    }
+
+    lock() {
+        Gui, BuffBar: +E0x20
+        this.locked := 1
+        settings["buffBarX"] := this.leftMargin
+        settings["buffBarY"] := this.topMargin
+        writeIniVar("buffBarX", settings, 0)
+        writeIniVar("buffBarY", settings, 0)
     }
 
     checkHover(mouseX, mouseY) {

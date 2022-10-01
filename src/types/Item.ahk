@@ -3086,7 +3086,7 @@ getItemBaseName(txtFileNo) {
         case 484: return "Fetish Trophy" 
         case 485: return "Sexton Trophy" 
         case 486: return "Cantor Trophy" 
-        case 487: return "Heirophant Trophy" 
+        case 487: return "Hierophant Trophy" 
         case 488: return "Blood Spirit" 
         case 489: return "Sun Spirit" 
         case 490: return "Earth Spirit" 

@@ -210,7 +210,6 @@ While 1 {
             offsetAttempts := 26
             WriteLogDebug("Offset attempts " offsetAttempts)
         }
-        Sleep, 80 ; sleep when no offset found, you're likely in menu
     } else {
         offsetAttempts := 0
         ; timeStamp("readGameMemory")

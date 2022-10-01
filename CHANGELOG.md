@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.4] - 2022-10-01 - Can move the buff bar/scroll counter
+
+- Thanks to @mengqin you can now move the scroll counter and buff bar.
+- Simply press Ctrl+L to 'unlock' then you can click and drag move the elements on the screen.
+- Press Ctrl+L to 'lock' them again so you don't accidentally move them.
+- Also a small fix thanks to @camy011
+
 ## [3.0.3] - 2022-09-26 - Minor fixes
 
 - Fixed buff bar (thanks @reetah)

@@ -37,8 +37,8 @@ class Brushes {
 
         ; missiles
         missileOpacity := settings["missileOpacity"]
-        , physicalMajorColor := missileOpacity . settings["missileColorPhysicalMajor"]
-        , physicalMinorColor := missileOpacity . settings["missileColorPhysicalMinor"]
+        , physicalMajorColor := missileOpacity . settings["missilePhysicalMajorColor"]
+        , physicalMinorColor := missileOpacity . settings["missilePhysicalMinorColor"]
         , fireMajorColor := missileOpacity . settings["missileFireMajorColor"]
         , fireMinorColor := missileOpacity . settings["missileFireMinorColor"]
         , iceMajorColor := missileOpacity . settings["missileIceMajorColor"]

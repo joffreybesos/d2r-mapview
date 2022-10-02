@@ -68,11 +68,6 @@ readSettings(settingsFile, ByRef settings) {
     settings["lastActiveGUITab"] := "Info"
     settings["settingsUIX"] := 100
     settings["settingsUIY"] := 100
-    
-    settings["buffBarX"] := 0
-    settings["buffBarY"] := 0
-    settings["itemCounterX"] := 0
-    settings["itemCounterY"] := 0
 
     settings["enableItemFilter"] := 1
     settings["itemFontSize"] := 12
@@ -130,7 +125,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["moveMapRight"] := "#Right"
     settings["moveMapUp"] := "#Up"
     settings["moveMapDown"] := "#Down"
-    settings["switchMapMode"] := "~\"
+    settings["switchMapMode"] := "\"
     settings["historyToggleKey"] := "^g"
     settings["performanceMode"] := "-1"
     settings["enableD2ML"] := 0
@@ -141,8 +136,8 @@ readSettings(settingsFile, ByRef settings) {
     settings["showPlayerMissiles"] := 1
     settings["showEnemyMissiles"] := 1
     settings["missileOpacity"] := "0x77"
-    settings["missileColorPhysicalMajor"] := "FFC2C2"
-    settings["missileColorPhysicalMinor"] := "C99D9D"
+    settings["missilePhysicalMajorColor"] := "FFC2C2"
+    settings["missilePhysicalMinorColor"] := "C99D9D"
     settings["missileFireMajorColor"] := "FF0000"
     settings["missileFireMinorColor"] := "C20000"
     settings["missileIceMajorColor"] := "00D0FF"

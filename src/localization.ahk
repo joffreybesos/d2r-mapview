@@ -20,7 +20,7 @@ LoadLocalization(ByRef settings) {
     if (settings["locale"] == "") {
         locale := GetLocale()
         settings["locale"] := locale
-        writeIniVar("locale", settings, defaultsettings)
+        writeIniVar("locale")
     } else {
         locale := settings["locale"]
     }

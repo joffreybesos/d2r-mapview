@@ -152,6 +152,11 @@ readSettings(settingsFile, ByRef settings) {
     settings["missileMajorDotSize"] := "4"
     settings["missileMinorDotSize"] := "2"
 
+    settings["CustomSettings"] := 0
+    settings["InvertedColors"] := 0
+    settings["WindowColor"] := SySC.GetColor(SySC.COLOR_WINDOW)
+    settings["FontColor"] := SySC.GetColor(SySC.COLOR_WINDOWTEXT)
+
     defaultSettings := settings.clone()
 
     ; read from the ini file and overwrite any of the above values

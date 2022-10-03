@@ -18,8 +18,8 @@ SendMode Input
 SetWorkingDir, %A_ScriptDir%
 SetTitleMatchMode, 2
 
-global version := "3.0.3"
-Splash()
+global version := "3.0._"
+Splash(version,0,"StartSettings")
 
 #Include %A_ScriptDir%\include\classMemory.ahk
 #Include %A_ScriptDir%\include\logging.ahk
@@ -125,7 +125,6 @@ global redrawMap := 1
 global offsets := []
 global hudBitmaps := loadBitmaps()
 global buffBitmaps := loadBuffIcons()
-
 CreateSettingsGUI()
 settingupGUI := false
 
@@ -152,16 +151,16 @@ fpsTimer := A_TickCount
 currentFPS := 0
 
 ; ui layers
-historyText := new SessionTableLayer(settings)
-gameInfoLayer := new GameInfoLayer(settings)
-partyInfoLayer := new PartyInfoLayer(settings)
-itemLogLayer := new ItemLogLayer(settings)
-itemCounterLayer := new ItemCounterLayer(settings)
-uiAssistLayer := new UIAssistLayer(settings)
-buffBarLayer := new BuffBarLayer(settings)
+global historyText := new SessionTableLayer(settings)
+global gameInfoLayer := new GameInfoLayer(settings)
+global partyInfoLayer := new PartyInfoLayer(settings)
+global itemLogLayer := new ItemLogLayer(settings)
+global itemCounterLayer := new ItemCounterLayer(settings)
+global uiAssistLayer := new UIAssistLayer(settings)
+global buffBarLayer := new BuffBarLayer(settings)
 mapGuis := new MapGUIs(settings)
 unitsGui := new UnitsGUI(settings)
-
+ShowSettings()
 ; main loop
 While 1 {
     frameStart:=A_TickCount
@@ -269,13 +268,13 @@ While 1 {
                 mapLoading := 1
                 mapGuis.hide()
                 unitsGui.hide()
-                
-                ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
+                Splash("loading",0)
+                ;ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
                 ; Show Map
                 mapGuis.downloadMapImages(mapList, gameMemoryData)
                 
                 mapLoading := 0
-                Gui, LoadingText: Destroy ; remove loading text
+                SplashClose() ; remove loading text
                 
                 redrawMap := 1
             }

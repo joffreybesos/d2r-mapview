@@ -1,10 +1,10 @@
-Splash(){
+Splash(text:="",time:=1000,onclickcmd:=""){
     global
     (pToken?:(pToken:=Gdip_Startup()))
     Gui, Splash:New, -Caption +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
     Gui, Splash:Default
     Gui, Show, NA
-    OnMessage(0x201, "StartSettings")
+    OnMessage(0x201, onclickcmd?onclickcmd:"SplashClose")
     Gui, hide
     local hwnd1:= WinExist()
     local pBitmap := Gdip_CreateBitmapFromFile(splashimg:="splashrc2.png")
@@ -30,12 +30,15 @@ Splash(){
     Black:=0xFF000000
     pBrush1 := Gdip_BrushCreateSolid(scarlet)
     pBrush := Gdip_BrushCreateSolid(0xFF000000)
-    VersionSize:=Gdip_SizeObj(Gdip_TextToGraphics(G,version, "x" (canvasCenterX/1.5) " y" (canvasHeight-38) " c00FFFFFF  s" 36, Font, Width, Height))
+    if (text = ""){
+        text:=version
+    }
+    textSize:=Gdip_SizeObj(Gdip_TextToGraphics(G,text, "x" (canvasCenterX/1.5) " y" (canvasHeight-38) " c00FFFFFF  s" 36, Font, Width, Height))
     
-    Gdip_FillRoundedRectangle(G,pBrush1,(canvasCenterX-VersionSize.centeroffset), canvasHeight-VersionSize.height-2,VersionSize.width-5, VersionSize.height,7)
-    Gdip_TextToGraphics(G,version, "x" (canvasCenterX-VersionSize.centeroffset)-2 " y" (canvasHeight-38)-3 " c" Strip0x(Black) " s" 36, Font, Width, Height)
-    Gdip_TextToGraphics(G,version, "x" (canvasCenterX-VersionSize.centeroffset) " y" (canvasHeight-38)-5 " c" Strip0x(White) " center s" 36, Font, Width, Height)
+    Gdip_FillRoundedRectangle(G,pBrush1,(canvasCenterX-textSize.centeroffset), canvasHeight-textSize.height-2,textSize.width-5, textSize.height,7)
     Gdip_DrawImage(G, pBitmap, 0, 0, canvasWidth, canvasHeight, 0, 0, Width, Height)
+    Gdip_TextToGraphics(G,text, "x" (canvasCenterX-textSize.centeroffset)-2 " y" (canvasHeight-38)-3 " c" Strip0x(Black) " s" 36, Font, Width, Height)
+    Gdip_TextToGraphics(G,text, "x" (canvasCenterX-textSize.centeroffset) " y" (canvasHeight-38)-5 " c" Strip0x(White) " center s" 36, Font, Width, Height)
     UpdateLayeredWindow(hwnd1, hdc, (A_ScreenWidth/2)-(canvasWidth/2), (A_ScreenHeight/2)-(canvasHeight/2), canvasWidth, canvasHeight)
         Gui, Show, NA
     
@@ -44,7 +47,12 @@ Splash(){
     DeleteDC(hdc)
     Gdip_DeleteGraphics(G)
     Gdip_DisposeImage(pBitmap)
-    SetTimer, SplashClose, -2000
+    if time !=0
+    {
+        OutputDebug, % time
+        SetTimer, SplashClose, % time
+
+    }
 }
 SplashClose(){
     Gui, Splash:Destroy

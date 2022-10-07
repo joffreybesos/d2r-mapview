@@ -74,6 +74,8 @@ class Brushes {
         ; monsters
         normalMobColor := 0xff . settings["normalMobColor"] 
         , uniqueMobColor := 0xff . settings["uniqueMobColor"] 
+        , championMobColor := 0xff . settings["championMobColor"] 
+        , minionMobColor := 0xff . settings["minionMobColor"] 
         , bossColor := 0xff . settings["bossColor"] 
         , deadColor := 0x44 . settings["deadColor"] 
         , mercColor := 0xcc . settings["mercColor"]
@@ -94,6 +96,8 @@ class Brushes {
 
         this.pPenNormal := Gdip_CreatePen(normalMobColor, this.normalDotSize * 0.7)
         , this.pPenUnique := Gdip_CreatePen(uniqueMobColor, this.uniqueDotSize * 0.7)
+        , this.pPenChampion := Gdip_CreatePen(championMobColor, this.uniqueDotSize * 0.7)
+        , this.pPenMinion := Gdip_CreatePen(minionMobColor, this.normalDotSize * 0.7)
         , this.pPenBoss := Gdip_CreatePen(bossColor, this.bossDotSize)
         , this.pPenDead := Gdip_CreatePen(deadColor, this.deadDotSize)
         , this.pPenMerc := Gdip_CreatePen(mercColor, this.normalDotSize * 0.7)

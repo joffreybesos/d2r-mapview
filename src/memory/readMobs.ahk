@@ -20,7 +20,9 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef mo
                 , mode := NumGet(&mobStructData , 0x0c, "UInt")
                 , pUnitData := NumGet(&mobStructData , 0x10, "Int64")
                 , pPath := NumGet(&mobStructData , 0x38, "Int64")
+                , dwOwnerId := d2rprocess.read(pUnitData + 0x0C, "UInt")
                 , isUnique := d2rprocess.read(pUnitData + 0x18, "UShort")
+                , monsterFlag := d2rprocess.read(pUnitData + 0x1A, "UChar")
                 , d2rprocess.readRaw(pPath, pathStructData, 16)
                 , monx := NumGet(&pathStructData , 0x02, "UShort")
                 , mony := NumGet(&pathStructData , 0x06, "UShort")
@@ -102,7 +104,7 @@ ReadMobs(ByRef d2rprocess, startingOffset, ByRef currentHoveringUnitId, ByRef mo
                         }
                     }
                 }
-                mob := {"txtFileNo": txtFileNo, "mode": mode, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "isPlayerMinion": isPlayerMinion, "textTitle": textTitle, "immunities": immunities, "hp": hp, "maxhp": maxhp, "isTownNPC": isTownNPC, "isHovered": isHovered }
+                mob := {"txtFileNo": txtFileNo, "mode": mode, "x": monx, "y": mony, "isUnique": isUnique, "isBoss": isBoss, "monsterFlag": monsterFlag, "isPlayerMinion": isPlayerMinion, "textTitle": textTitle, "immunities": immunities, "hp": hp, "maxhp": maxhp, "isTownNPC": isTownNPC, "isHovered": isHovered }
                 if (isHovered) {
                     hoveredMob := mob
                 }

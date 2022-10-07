@@ -70,7 +70,11 @@ drawNPCs(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef sca
                             Gdip_DrawPolygon(G, brushes.pPenTownNPCCross, points)
                         } else if (!mob["isTownNPC"] and !mob["isPlayerMinion"]) {
                             ;Gdip_DrawPolygon(G, brushes.pPenNormal, points)
-                            Gdip_DrawEllipse(G, brushes.pPenNormal, mobScreenPos.x-(brushes.normalDotSize/2), mobScreenPos.y-(brushes.normalDotSize/1.5), brushes.normalDotSize, brushes.normalDotSize/2)
+                            if (mob["monsterFlag"] == 16) { ; is a minion
+                                Gdip_DrawEllipse(G, brushes.pPenMinion, mobScreenPos.x-(brushes.normalDotSize/2), mobScreenPos.y-(brushes.normalDotSize/1.5), brushes.normalDotSize, brushes.normalDotSize/2)
+                            } else {
+                                Gdip_DrawEllipse(G, brushes.pPenNormal, mobScreenPos.x-(brushes.normalDotSize/2), mobScreenPos.y-(brushes.normalDotSize/1.5), brushes.normalDotSize, brushes.normalDotSize/2)
+                            }
                         }
                     } else {
                         if (mob["isPlayerMinion"] and settings["showMerc"]) {
@@ -167,7 +171,11 @@ drawNPCs(ByRef G, ByRef brushes, ByRef settings, ByRef gameMemoryData, ByRef sca
                             angleDegrees := angleDegrees + sliceSize
                         }
                     }
-                    Gdip_DrawEllipse(G, brushes.pPenUnique, mobScreenPos.x-(brushes.uniqueDotSize/2), mobScreenPos.y-(brushes.uniqueDotSize/1.5), brushes.uniqueDotSize, brushes.uniqueDotSize/2)
+                    if (mob["monsterFlag"] == 12) {
+                        Gdip_DrawEllipse(G, brushes.pPenChampion, mobScreenPos.x-(brushes.uniqueDotSize/2), mobScreenPos.y-(brushes.uniqueDotSize/1.5), brushes.uniqueDotSize, brushes.uniqueDotSize/2)
+                    } else {
+                        Gdip_DrawEllipse(G, brushes.pPenUnique, mobScreenPos.x-(brushes.uniqueDotSize/2), mobScreenPos.y-(brushes.uniqueDotSize/1.5), brushes.uniqueDotSize, brushes.uniqueDotSize/2)
+                    }
                 }
             }
         }

@@ -89,6 +89,8 @@ readSettings(settingsFile, ByRef settings) {
 
     settings["normalMobColor"] := "FFFFFF"
     settings["uniqueMobColor"] := "D4AF37"
+    settings["championMobColor"] := "605cd8"
+    settings["minionMobColor"] := "436f73"
     settings["bossColor"] := "FF0000"
     settings["mercColor"] := "436f73"
     settings["deadColor"] := "000000"

@@ -15,6 +15,7 @@ initMemory(gameWindowId) {
         errormsg11 := localizedStrings["errormsg11"]
         errormsg12 := localizedStrings["errormsg12"]
         errormsg3 := localizedStrings["errormsg3"]
+        englishforced := "Could not find D2R window " gameWindowId " try rerunning as admin"
         Msgbox, 48, d2r-mapview %version%, %englishforced%`n%errormsg10%`n`n%errormsg11%`n%errormsg12%`n`n%errormsg3%
         ExitApp
     }

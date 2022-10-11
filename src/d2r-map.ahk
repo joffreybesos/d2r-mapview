@@ -1,3 +1,4 @@
+#Include, <ADMIN>
 #SingleInstance, Force
 #Persistent
 #NoEnv
@@ -19,7 +20,7 @@ SetWorkingDir, %A_ScriptDir%
 SetTitleMatchMode, 2
 
 global version := "3.0._"
-Splash(version,0,"StartSettings")
+Splash(version,3000,"StartSettings")
 
 #Include %A_ScriptDir%\include\classMemory.ahk
 #Include %A_ScriptDir%\include\logging.ahk
@@ -160,7 +161,7 @@ global uiAssistLayer := new UIAssistLayer(settings)
 global buffBarLayer := new BuffBarLayer(settings)
 mapGuis := new MapGUIs(settings)
 unitsGui := new UnitsGUI(settings)
-ShowSettings()
+                                                                                                  ;ShowSettings()
 ; main loop
 While 1 {
     frameStart:=A_TickCount
@@ -268,7 +269,7 @@ While 1 {
                 mapLoading := 1
                 mapGuis.hide()
                 unitsGui.hide()
-                Splash("loading",0)
+                Splash("loading",0,,0.25)
                 ;ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
                 ; Show Map
                 mapGuis.downloadMapImages(mapList, gameMemoryData)

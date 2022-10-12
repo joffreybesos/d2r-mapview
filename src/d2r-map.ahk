@@ -126,6 +126,7 @@ global redrawMap := 1
 global offsets := []
 global hudBitmaps := loadBitmaps()
 global buffBitmaps := loadBuffIcons()
+global SettingsShow:=False
 
 
 CreateSettingsGUI()
@@ -283,7 +284,7 @@ While 1 {
                 mapGuis.downloadMapImages(mapList, gameMemoryData)
                 
                 mapLoading := 0
-                Gui, LoadingText: Destroy ; remove loading text
+                SplashClose()
                 
                 redrawMap := 1
             }

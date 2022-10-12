@@ -1,13 +1,23 @@
-Splash(text:="",time:=1000,onclickcmd:="",opacity=1){
+StartSplash(){
+    if settings.StartSplash
+        Splash(version,3000,"StartSettings")
+}
+LoadingSplash(){
+    Splash("loading",0,,0.25)
+}
+
+Splash(text="",time=1000,onclickcmd=False,opacity=1){
     global
+    if !FileExist(settings.SplashImg)
+        return
     (pToken?:(pToken:=Gdip_Startup()))
     Gui, Splash:New, -Caption +E0x80000 +LastFound +AlwaysOnTop +ToolWindow +OwnDialogs
     Gui, Splash:Default
     Gui, Show, NA
-    OnMessage(0x201, onclickcmd?onclickcmd:"SplashClose")
+        OnMessage(0x201, onclickcmd?onclickcmd:"SplashClose")
     Gui, hide
     local hwnd1:= WinExist()
-    local pBitmap := Gdip_CreateBitmapFromFile(splashimg:="splashrc2.png")
+    local pBitmap := Gdip_CreateBitmapFromFile(settings.SplashImg)
     if !pBitmap
         exit
     local Width := Gdip_GetImageWidth(pBitmap), Height := Gdip_GetImageHeight(pBitmap)
@@ -50,13 +60,10 @@ Splash(text:="",time:=1000,onclickcmd:="",opacity=1){
     DeleteDC(hdc)
     Gdip_DeleteGraphics(G)
     Gdip_DisposeImage(pBitmap)
-    if time !=0
-    {
-        OutputDebug, % time
+    if (time !=0)
         SetTimer, SplashClose, % time
-
-    }
 }
 SplashClose(){
     Gui, Splash:Destroy
+    OnMessage(0x201, "WM_LBUTTONDOWN")
 }

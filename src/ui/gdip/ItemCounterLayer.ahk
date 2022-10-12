@@ -58,8 +58,8 @@ class ItemCounterLayer {
         this.locked := 1
         settings["itemCounterX"] := this.leftMargin
         settings["itemCounterY"] := this.topMargin
-        writeIniVar("itemCounterX")
-        writeIniVar("itemCounterX")
+        writeIniVar("itemCounterX", settings, 0)
+        writeIniVar("itemCounterY", settings, 0)
     }
 
     drawItemCounter(ByRef HUDItems) {

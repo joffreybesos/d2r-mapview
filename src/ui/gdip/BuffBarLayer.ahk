@@ -67,8 +67,8 @@ class BuffBarLayer {
         this.locked := 1
         settings["buffBarX"] := this.leftMargin
         settings["buffBarY"] := this.topMargin
-        writeIniVar("buffBarX")
-        writeIniVar("buffBarX")
+        writeIniVar("buffBarX", settings, 0)
+        writeIniVar("buffBarY", settings, 0)
     }
 
     checkHover(mouseX, mouseY) {

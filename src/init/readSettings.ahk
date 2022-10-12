@@ -68,6 +68,11 @@ readSettings(settingsFile, ByRef settings) {
     settings["lastActiveGUITab"] := "Info"
     settings["settingsUIX"] := 100
     settings["settingsUIY"] := 100
+    
+    settings["buffBarX"] := 0
+    settings["buffBarY"] := 0
+    settings["itemCounterX"] := 0
+    settings["itemCounterY"] := 0
 
     settings["enableItemFilter"] := 1
     settings["itemFontSize"] := 12
@@ -127,7 +132,7 @@ readSettings(settingsFile, ByRef settings) {
     settings["moveMapRight"] := "#Right"
     settings["moveMapUp"] := "#Up"
     settings["moveMapDown"] := "#Down"
-    settings["switchMapMode"] := "\"
+    settings["switchMapMode"] := "~\"
     settings["historyToggleKey"] := "^g"
     settings["performanceMode"] := "-1"
     settings["enableD2ML"] := 0
@@ -158,6 +163,12 @@ readSettings(settingsFile, ByRef settings) {
     settings["InvertedColors"] := 0
     settings["WindowColor"] := SySC.GetColor(SySC.COLOR_WINDOW)
     settings["FontColor"] := SySC.GetColor(SySC.COLOR_WINDOWTEXT)
+
+
+
+    settings["StartSplash"] := 1
+    settings["LoadingSplash"] := 1
+    settings["SplashImg"] := A_ScriptDir "\ui\splash\splash.png"
 
     defaultSettings := settings.clone()
 

@@ -129,3 +129,101 @@ b64Decode(string)
         throw Exception("CryptStringToBinary failed", -1)
     return StrGet(&buf, size, "UTF-8")
 }
+
+
+
+ConvertD2H(var=255){
+    lastformat:=A_FormatInteger
+    SetFormat, IntegerFast, hex
+    var:=((Var += 0) += 0) ""
+    SetFormat, IntegerFast, % lastformat  
+    return var
+}
+
+Strip0x(covered){
+    return RegExReplace(covered, "0x(.*)","$1")
+}
+
+ARGB(R, G, B, A=00){
+    lastformat:=A_FormatInteger
+	SetFormat, Integer, Hex
+    ARGB:=(A << 24) | (R << 16) | (G << 8) | B
+    setformat, integer, % lastformat
+	Return ARGB
+}
+
+RGB300(Val_0_300){
+    ; aa 0-300 for full hue
+    Max := 255
+    a2 := 0
+    a3 := 0
+    n := Round(max/50,0)
+    if (aa:=Val_0_300) between 1 and 50
+    {
+        a1 := Color300(max)
+        ab := aa*n
+        a2 := Color300(ab)
+        a3 := Color300(0)
+    }
+    if aa between 51 and 100
+    {
+        a2 := Color300(max)
+        ab := (max-aa)*n
+        a1 := Color300(ab)
+        a3 := Color300(0)
+    }
+    if aa between 101 and 150
+    {
+        a2 := Color300(max)
+        ab := (aa-100)*n
+        a3 := Color300(ab)
+        a1 := Color300(0)
+    }
+    if aa between 151 and 200
+    {
+        a3 := Color300(max)
+        ab := (max-(aa-150))*n
+        a2 := Color300(ab)
+        a1 := Color300(0)
+    }
+    if aa between 201 and 250
+    {
+        a3 := Color300(max)
+        ab := (aa-200)*n
+        a1 := Color300(ab)
+        a2 := Color300(0)
+    }
+    if aa between 251 and 300
+    {
+        a1 := Color300(max)
+        ab := (max-(aa-250))*n
+        a3 := Color300(ab)
+        a2 := Color300(0)
+    }
+    return a1 a2 a3
+}
+
+Color300(N){ 					; Function borrowed from Wicked (http://www.autohotkey.com/forum/viewtopic.php?t=57368&postdays=0&postorder=asc&start=0)
+   SetFormat, Integer, Hex 
+   N += 0 
+   SetFormat, Integer, D 
+   StringTrimLeft, N, N, 2 
+   If (StrLen(N) < 2) 
+      N = 0%N%
+   Return N 
+}
+
+Gdip_SizeObj(array,offsetratio=4){
+    TextSA:=StrSplit(array, "|")
+    x:=TextSA.1
+    y:=TextSA.2
+    width:=TextSA.3
+    height:=TextSA.4
+    chars:=TextSA.5
+    lines:=TextSA.6
+    center:=TextSA.3/2
+    charwidth:=width/chars
+    centeroffset:=((co:=((charwidth/offsetratio) * chars))?co:0)
+    obj:= {"x":x,"y":y,"width":width,"height":height,"chars":chars,"lines":lines,"center":center,"charwidth":charwidth,"centeroffset":centeroffset}
+    return obj
+}

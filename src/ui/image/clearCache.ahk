@@ -1,3 +1,7 @@
+#SingleInstance, Force
+SendMode Input
+SetWorkingDir, %A_ScriptDir%
+
 ClearCache(folder) {
     files := 0
     Loop Files, %folder%\*.png

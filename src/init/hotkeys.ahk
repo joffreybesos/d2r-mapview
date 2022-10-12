@@ -1,5 +1,5 @@
 
-SetupHotKeys() {
+SetupHotKeys(ByRef gameWindowId, ByRef settings){
     switchMapModeKey := settings["switchMapMode"]
     if (switchMapModeKey) {
         Hotkey, IfWinActive, % gameWindowId
@@ -52,6 +52,34 @@ SetupHotKeys() {
     }
 }
 
+WM_LBUTTONDOWN(wParam, lParam, msg, hwnd) {	
+    if (buffBarLayer.buffBarLayerHwnd = hwnd) {
+        PostMessage, 0xA1, 2,,, A
+        keywait, lbutton
+        WinGetPos, X1,Y1,  uptime
+        buffBarLayer.leftMargin := X1
+        buffBarLayer.topMargin := Y1
+    }
+
+    if (itemCounterLayer.ItemCounterLayerHwnd = hwnd) {
+        PostMessage, 0xA1, 2,,, A
+        keywait, lbutton
+        WinGetPos, X1,Y1,  uptime
+        itemCounterLayer.leftMargin := X1
+        itemCounterLayer.topMargin := Y1
+    }
+}
+
+buffbarLocker(){
+    
+    if (buffBarLayer.locked and itemCounterLayer.locked) {
+        buffBarLayer.unlock()
+        itemCounterLayer.unlock()
+    } else {
+        buffBarLayer.lock()		
+        itemCounterLayer.lock()		
+    }
+}
 HistoryToggle(){
     global
     historyToggle := !historyToggle

@@ -1,4 +1,3 @@
-#Include, <ADMIN>
 #SingleInstance, Force
 #Persistent
 #NoEnv
@@ -19,14 +18,12 @@ SendMode Input
 SetWorkingDir, %A_ScriptDir%
 SetTitleMatchMode, 2
 
-global version := "3.0._"
-Splash(version,3000,"StartSettings")
-
 #Include %A_ScriptDir%\include\classMemory.ahk
 #Include %A_ScriptDir%\include\logging.ahk
 #Include %A_ScriptDir%\include\Yaml.ahk
 #Include %A_ScriptDir%\include\JSON.ahk
-#Include %A_ScriptDir%\include\Gdip_All.ahk
+;#Include %A_ScriptDir%\include\Gdip_All.ahk
+#Include <Gdip>
 #Include %A_ScriptDir%\itemfilter\AlertList.ahk
 #Include %A_ScriptDir%\itemfilter\ItemAlert.ahk
 #Include %A_ScriptDir%\types\Areas.ahk
@@ -68,6 +65,7 @@ Splash(version,3000,"StartSettings")
 #Include %A_ScriptDir%\ui\splash\splash.ahk
 #Include %A_ScriptDir%\mapFunctions.ahk
 
+
 ;Add right click menu in tray
 Menu, Tray, NoStandard ; to remove default menu
 Menu, Tray, Tip, d2r-mapview
@@ -77,7 +75,7 @@ Menu, Tray, Add, Reload, Reload
 Menu, Tray, Add
 Menu, Tray, Add, Exit, ExitMH
 
-
+global version := "3.0.4"
 WriteLog("*******************************************************************")
 WriteLog("* Map overlay started https://github.com/joffreybesos/d2r-mapview *")
 WriteLog("*******************************************************************")
@@ -85,17 +83,19 @@ WriteLog("Version: " version)
 WriteLog("Working folder: " A_ScriptDir)
 WriteLog("Please report issues in #support on discord: https://discord.gg/qEgqyVW3uj")
 ClearCache(A_Temp)
-global gameWindowId
 global settings
 global defaultSettings
 readSettings("settings.ini", settings)
 global localizedStrings := LoadLocalization(settings)
+
+StartSplash() ; moved to after settings init
+
 CheckForUpdates()
 checkServer(settings)
 lastMap := ""
 exitArray := []
 helpToggle:= true
-Global historyToggle := true
+historyToggle := true
 global lastlevel:=""
 lastSeed:=""
 session :=
@@ -108,7 +108,7 @@ performanceMode := settings["performanceMode"]
 if (performanceMode != 0) {
     SetBatchLines, %performanceMode%
 }
-global pToken
+
 global sp := A_ScriptFullPath
 global isMapShowing:=1
 global debug := settings["debug"]
@@ -126,8 +126,12 @@ global redrawMap := 1
 global offsets := []
 global hudBitmaps := loadBitmaps()
 global buffBitmaps := loadBuffIcons()
+
+
 CreateSettingsGUI()
 settingupGUI := false
+
+SetupHotKeys(gameWindowId, settings)
 
 ; check that game is running
 if (not WinExist(gameWindowId)) {
@@ -140,7 +144,9 @@ if (not WinExist(gameWindowId)) {
 ; initialise memory reading
 global d2rprocess := initMemory(gameWindowId)
 patternScan(d2rprocess, offsets)
-(pToken?:(pToken:=Gdip_Startup()))
+Gdip_Startup()
+
+
 
 ; performance counters
 global ticktock := 0
@@ -152,16 +158,18 @@ fpsTimer := A_TickCount
 currentFPS := 0
 
 ; ui layers
-global historyText := new SessionTableLayer(settings)
-global gameInfoLayer := new GameInfoLayer(settings)
-global partyInfoLayer := new PartyInfoLayer(settings)
-global itemLogLayer := new ItemLogLayer(settings)
-global itemCounterLayer := new ItemCounterLayer(settings)
-global uiAssistLayer := new UIAssistLayer(settings)
-global buffBarLayer := new BuffBarLayer(settings)
+historyText := new SessionTableLayer(settings)
+gameInfoLayer := new GameInfoLayer(settings)
+partyInfoLayer := new PartyInfoLayer(settings)
+itemLogLayer := new ItemLogLayer(settings)
+itemCounterLayer := new ItemCounterLayer(settings)
+uiAssistLayer := new UIAssistLayer(settings)
+buffBarLayer := new BuffBarLayer(settings)
 mapGuis := new MapGUIs(settings)
 unitsGui := new UnitsGUI(settings)
-                                                                                                  ;ShowSettings()
+                
+OnMessage(0x0201, "WM_LBUTTONDOWN")
+
 ; main loop
 While 1 {
     frameStart:=A_TickCount
@@ -269,13 +277,13 @@ While 1 {
                 mapLoading := 1
                 mapGuis.hide()
                 unitsGui.hide()
-                Splash("loading",0,,0.25)
-                ;ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
+                
+                LoadingSplash()
                 ; Show Map
                 mapGuis.downloadMapImages(mapList, gameMemoryData)
                 
                 mapLoading := 0
-                SplashClose() ; remove loading text
+                Gui, LoadingText: Destroy ; remove loading text
                 
                 redrawMap := 1
             }
@@ -357,6 +365,10 @@ While 1 {
         Sleep, ticksPerFrame - frameDuration
     }
 }
+
+
+
+^L::buffbarLocker()
 #IfWinActive ahk_exe D2R.exe
 ~^H::
 ~Esc::Help(A_ThisHotkey)

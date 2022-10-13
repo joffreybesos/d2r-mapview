@@ -161,8 +161,10 @@ readSettings(settingsFile, ByRef settings) {
 
     settings["CustomSettings"] := 0
     settings["InvertedColors"] := 0
-    settings["WindowColor"] := SySC.GetColor(SySC.COLOR_WINDOW)
-    settings["FontColor"] := SySC.GetColor(SySC.COLOR_WINDOWTEXT)
+    ;settings["WindowColor"] := SySC.GetColor(SySC.COLOR_WINDOW)
+    settings["WindowColor"] := "2e2f30"
+    ;settings["FontColor"] := SySC.GetColor(SySC.COLOR_WINDOWTEXT)
+    settings["FontColor"] := "d1c18c"
 
 
 

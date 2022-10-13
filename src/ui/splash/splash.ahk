@@ -2,8 +2,14 @@ StartSplash(){
     if settings.StartSplash
         Splash(version,3000,"StartSettings")
 }
+
 LoadingSplash(){
     Splash("loading",0,,0.25)
+}
+
+StartSettings(){
+    SetTimer, ShowSettings, -1000
+    OnMessage(0x201, "WM_LBUTTONDOWN")
 }
 
 Splash(text="",time=1000,onclickcmd=False,opacity=1){
@@ -63,6 +69,7 @@ Splash(text="",time=1000,onclickcmd=False,opacity=1){
     if (time !=0)
         SetTimer, SplashClose, % time
 }
+
 SplashClose(){
     Gui, Splash:Destroy
     OnMessage(0x201, "WM_LBUTTONDOWN")

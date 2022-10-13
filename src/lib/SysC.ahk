@@ -69,5 +69,4 @@
             Gui, Add, text, % "x" (((count/2) >= A_Index)?0:250) " y" (((count/2) >= A_Index)?0+((A_Index-1)*20):100+(((A_Index-count/2)-6)*20)) " c" (color:=this.GetColor(this[props[A_Index]]) ), % props[A_Index] "=" this[props[A_Index]] "=" color "`n"
         Gui, show, autosize
     }
-}   
-outputdebug, % SySC.demo()
+}  

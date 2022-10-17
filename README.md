@@ -2,11 +2,26 @@
 
 ## Bans
 
-Blizzard did a banwave targetting this tool for usage online.
+Blizzard did a banwave targetting this tool for usage online on October 14 2022.
 
-# DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
 
-## Join the discord server <https://discord.gg/qEgqyVW3uj>
+
+
+
+## Discord server
+
+Discord server <https://discord.gg/qEgqyVW3uj>
 
 ![Worldstone Keep level 2](https://user-images.githubusercontent.com/93067706/170401221-10e7a71e-7cad-488d-98e0-69f4d3617332.png)
 

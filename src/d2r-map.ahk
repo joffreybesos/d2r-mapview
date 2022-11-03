@@ -6,6 +6,22 @@
 #KeyHistory 0
 ; if not A_IsAdmin
 ; 	Run *RunAs "%A_ScriptFullPath%" 
+Gui, Add, Button, x20 y70 w250 gContinue, I acknowledge I'm a cunt and want to get banned
+Gui, Add, Button, x20 y100 w250 gExit, Exit because I'm not a fucking idiot
+Gui, Add, Text, x15 y15, THIS MAP HACK WILL GET YOU BANNED ONLINE`nSERIOUSLY, YOU WILL GET BANNED VERY QUICKLY`nDON'T USE IT YOU CUNTS
+Gui, Show, w300 h140, d2r-mapview 3.0.4
+Return
+
+Exit:
+  ExitApp
+Return
+
+GuiClose:
+  ExitApp
+Return
+
+Continue:
+
 ListLines Off
 Process, Priority, , A
 SetBatchLines, -1

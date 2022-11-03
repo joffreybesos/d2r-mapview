@@ -1,17 +1,27 @@
 # Diablo 2: Resurrected map viewer
 
-Noob friendly FREE map overlay tool for Diablo 2 Resurrected.  
-Use at your own risk, there is no warranty or responsibility taken for being penalised for using this.
-
-This tool is licenced under GPLv3, reselling this maphack violates the terms of the license.
-
 ## Bans
 
-Blizzard did a ban wave on June 14 where it seems they targeted MapAssist (another map hack).  
-This map hack is very similar in how it functions.  
-While most users of this map hack were spared, **it is recommended to consider this map hack detectable online**.
+Blizzard did a banwave targetting this tool for usage online on October 14 2022.
 
-## Join the discord server <https://discord.gg/qEgqyVW3uj>
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+**DO NOT USE THIS TOOL ONLINE AS IT WILL RESULT IN A BAN**  
+
+
+
+
+## Discord server
+
+Discord server <https://discord.gg/qEgqyVW3uj>
 
 ![Worldstone Keep level 2](https://user-images.githubusercontent.com/93067706/170401221-10e7a71e-7cad-488d-98e0-69f4d3617332.png)
 

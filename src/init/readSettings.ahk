@@ -143,8 +143,8 @@ readSettings(settingsFile, ByRef settings) {
     settings["showPlayerMissiles"] := 1
     settings["showEnemyMissiles"] := 1
     settings["missileOpacity"] := "0x77"
-    settings["missileColorPhysicalMajor"] := "FFC2C2"
-    settings["missileColorPhysicalMinor"] := "C99D9D"
+    settings["missilePhysicalMajorColor"] := "FFC2C2"
+    settings["missilePhysicalMinorColor"] := "C99D9D"
     settings["missileFireMajorColor"] := "FF0000"
     settings["missileFireMinorColor"] := "C20000"
     settings["missileIceMajorColor"] := "00D0FF"
@@ -158,6 +158,19 @@ readSettings(settingsFile, ByRef settings) {
 
     settings["missileMajorDotSize"] := "4"
     settings["missileMinorDotSize"] := "2"
+
+    settings["CustomSettings"] := 0
+    settings["InvertedColors"] := 0
+    ;settings["WindowColor"] := SySC.GetColor(SySC.COLOR_WINDOW)
+    settings["WindowColor"] := "2e2f30"
+    ;settings["FontColor"] := SySC.GetColor(SySC.COLOR_WINDOWTEXT)
+    settings["FontColor"] := "d1c18c"
+
+
+
+    settings["StartSplash"] := 1
+    settings["LoadingSplash"] := 1
+    settings["SplashImg"] := A_ScriptDir "\ui\splash\splash.png"
 
     defaultSettings := settings.clone()
 

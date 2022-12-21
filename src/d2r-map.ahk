@@ -33,11 +33,13 @@ SetControlDelay, -1
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 SetTitleMatchMode, 2
+
 #Include %A_ScriptDir%\include\classMemory.ahk
 #Include %A_ScriptDir%\include\logging.ahk
 #Include %A_ScriptDir%\include\Yaml.ahk
 #Include %A_ScriptDir%\include\JSON.ahk
-#Include %A_ScriptDir%\include\Gdip_All.ahk
+;#Include %A_ScriptDir%\include\Gdip_All.ahk
+#Include <Gdip>
 #Include %A_ScriptDir%\itemfilter\AlertList.ahk
 #Include %A_ScriptDir%\itemfilter\ItemAlert.ahk
 #Include %A_ScriptDir%\types\Areas.ahk
@@ -76,7 +78,9 @@ SetTitleMatchMode, 2
 #Include %A_ScriptDir%\ui\gdip\ItemLogLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\ItemCounterLayer.ahk
 #Include %A_ScriptDir%\ui\gdip\BuffBarLayer.ahk
+#Include %A_ScriptDir%\ui\splash\splash.ahk
 #Include %A_ScriptDir%\mapFunctions.ahk
+
 
 ;Add right click menu in tray
 Menu, Tray, NoStandard ; to remove default menu
@@ -88,7 +92,6 @@ Menu, Tray, Add
 Menu, Tray, Add, Exit, ExitMH
 
 global version := "3.0.4"
-
 WriteLog("*******************************************************************")
 WriteLog("* Map overlay started https://github.com/joffreybesos/d2r-mapview *")
 WriteLog("*******************************************************************")
@@ -100,6 +103,9 @@ global settings
 global defaultSettings
 readSettings("settings.ini", settings)
 global localizedStrings := LoadLocalization(settings)
+
+StartSplash() ; moved to after settings init
+
 CheckForUpdates()
 checkServer(settings)
 lastMap := ""
@@ -136,9 +142,10 @@ global redrawMap := 1
 global offsets := []
 global hudBitmaps := loadBitmaps()
 global buffBitmaps := loadBuffIcons()
+global SettingsShow:=False
 
 
-CreateSettingsGUI(settings, localizedStrings)
+CreateSettingsGUI()
 settingupGUI := false
 
 SetupHotKeys(gameWindowId, settings)
@@ -288,12 +295,12 @@ While 1 {
                 mapGuis.hide()
                 unitsGui.hide()
                 
-                ShowText(settings, "Loading map data...`nPlease wait`nPress Ctrl+H for help`nPress Ctrl+O for settings", "44") ; 44 is opacity
+                LoadingSplash()
                 ; Show Map
                 mapGuis.downloadMapImages(mapList, gameMemoryData)
                 
                 mapLoading := 0
-                Gui, LoadingText: Destroy ; remove loading text
+                SplashClose()
                 
                 redrawMap := 1
             }
@@ -377,250 +384,12 @@ While 1 {
 }
 
 
-+F10::Gosub, ExitMH
 
-MapAlwaysShow:
-{
-    MapAlwaysShow(settings, gameMemoryData, mapGuis, unitsGui)
-    return
-}
-
-MapSizeIncrease:
-{
-    MapSizeIncrease(settings, gameMemoryData)
-    mapGuis.setScale(settings)
-    unitsGui.setScale(settings)
-    mapGuis.setOffsetPosition(settings)
-    unitsGui.setOffsetPosition(settings)
-    return
-}
-
-MapSizeDecrease:
-{
-    MapSizeDecrease(settings, gameMemoryData)
-    mapGuis.setScale(settings)
-    unitsGui.setScale(settings)
-    mapGuis.setOffsetPosition(settings)
-    unitsGui.setOffsetPosition(settings)
-    return
-}
-
-SwitchMapMode:
-{
-    SwitchMapMode(settings, mapImageList, gameMemoryData, uiData)
-    mapGuis.setScale(settings)
-    unitsGui.setScale(settings)
-    mapGuis.setOffsetPosition(settings)
-    unitsGui.setOffsetPosition(settings)
-    return
-}
-
-MoveMapLeft:
-{
-    MoveMapLeft(settings)
-    mapGuis.setScale(settings)
-    unitsGui.setScale(settings)
-    mapGuis.setOffsetPosition(settings)
-    unitsGui.setOffsetPosition(settings)
-    return
-}
-MoveMapRight:
-{
-    MoveMapRight(settings)
-    mapGuis.setScale(settings)
-    unitsGui.setScale(settings)
-    mapGuis.setOffsetPosition(settings)
-    unitsGui.setOffsetPosition(settings)
-    return
-}
-MoveMapUp:
-{
-    MoveMapUp(settings)
-    mapGuis.setScale(settings)
-    unitsGui.setScale(settings)
-    mapGuis.setOffsetPosition(settings)
-    unitsGui.setOffsetPosition(settings)
-    return
-}
-MoveMapDown:
-{
-    MoveMapDown(settings)
-    mapGuis.setScale(settings)
-    unitsGui.setScale(settings)
-    mapGuis.setOffsetPosition(settings)
-    unitsGui.setOffsetPosition(settings)
-    return
-}
-HistoryToggle:
-{
-    historyToggle := !historyToggle
-    ; settings["showGameInfo"] := historyToggle
-    ; IniWrite, %historyToggle%, settings.ini, Settings, showGameInfo
-    return
-}
-
+^L::buffbarLocker()
 #IfWinActive ahk_exe D2R.exe
-^H::
-{
-    if (helpToggle) {
-        ShowHelpText(settings)
-        WriteLog("Show Help")
-    } else {
-        Gui, HelpText: Hide
-        WriteLog("Hide Help")
-    }
-    helpToggle := !helpToggle
-    return
-}
-
-~Esc::
-{
-    Gui, HelpText: Hide
-    helpToggle := 1
-    return
-}
-
-~+F11::
-{
-    WriteLog("Reloading script!")
-    Reload
-    return
-}
-
-
-~+F9::
-{
-    WriteLog("Debug mode set to " debug)
-    debug := !debug
-    return
-}
-
-^O::
-{
-    Gosub, ShowSettings
-    return
-}
-
-^L::
-{
-    if (buffBarLayer.locked) {
-        buffBarLayer.unlock()
-    } else {
-        buffBarLayer.lock()		
-    }
-
-    if (itemCounterLayer.locked) {
-        itemCounterLayer.unlock()
-    } else {
-        itemCounterLayer.lock()		
-    }
-    return	
-}
-
-ExitMH:
-{
-    WriteLog("Pressed Shift+F10, exiting...")
-    session.saveEntry()
-
-    ; performance stats
-    alreadyseenperf := []
-    for k, perf in perfdata
-    {
-        
-        thisName := perf["name"]
-        if (!HasVal(alreadyseenperf, thisName)) {
-            averageVal := 0
-            count := 0
-            for k, perf2 in perfdata
-            {
-                thisName2 := perf2["name"]
-                if (thisName2 == thisName) {
-                    averageVal := averageVal + perf2["duration"]
-                    ++count
-                }
-            }
-            OutputDebug, % thisName " " Round(averageVal / count / 1000.0, 2) "ms, last measurement " Round(perf2["duration"] / 1000.0, 2) "ms `n"
-            alreadyseenperf.Push(thisName)
-        }
-    }
-    ExitApp
-    return
-}
-
-; open the settings window and a given position
-ShowSettings:
-{
-    uix := settings["settingsUIX"]
-    uiy := settings["settingsUIY"]
-    if (!uix)
-        uix := 100
-    if (!uiy)
-        uiy := 100
-    Gui, Settings: Show, x%uix% y%uiy% h482 w362, d2r-mapview settings
-    return
-}
-
-; update settings (triggered when clicking save settings)`
-Update:
-{
-    WriteLog("Applying new settings...")
-    UpdateSettings(settings, defaultSettings)
-    historyText.delete()
-    historyText := new SessionTableLayer(settings)
-    gameInfoLayer.delete()
-    gameInfoLayer := new GameInfoLayer(settings)
-    partyInfoLayer.delete()
-    partyInfoLayer := new PartyInfoLayer(settings)
-    uiAssistLayer.delete()
-    uiAssistLayer := new UIAssistLayer(settings)
-    itemLogLayer.delete()
-    itemLogLayer := new ItemLogLayer(settings)
-    itemCounterLayer.delete()
-    itemCounterLayer := new ItemCounterLayer(settings)
-    buffBarLayer.delete()
-    buffBarLayer := new BuffBarLayer(settings)
-    SetupHotKeys(gameWindowId, settings)
-    lastlevel := "INVALIDATED"
-    mapGuis.setScale(settings)
-    unitsGui.setScale(settings)
-    mapGuis.setOffsetPosition(settings)
-    unitsGui.setOffsetPosition(settings)
-    mapShowing := 0
-    GuiControl, Hide, Unsaved
-    GuiControl, Disable, UpdateBtn
-    redrawMap := 1
-    return
-}
-
-UpdateFlag:
-{
-    if (!settingupGUI) {
-        GuiControl, Show, Unsaved6
-        GuiControl, Enable, UpdateBtn
-    }
-    return
-}
-
-Reload:
-{
-    Reload
-    return
-}
-
-WM_LBUTTONDOWN(wParam, lParam, msg, hwnd) {	
-    if (buffBarLayer.buffBarLayerHwnd = hwnd) {
-        PostMessage, 0xA1, 2,,, A
-        keywait, lbutton
-        WinGetPos, X1,Y1,  uptime
-        buffBarLayer.leftMargin := X1
-        buffBarLayer.topMargin := Y1
-    }
-
-    if (itemCounterLayer.ItemCounterLayerHwnd = hwnd) {
-        PostMessage, 0xA1, 2,,, A
-        keywait, lbutton
-        WinGetPos, X1,Y1,  uptime
-        itemCounterLayer.leftMargin := X1
-        itemCounterLayer.topMargin := Y1
-    }
-}
+~^H::
+~Esc::Help(A_ThisHotkey)
+~^O::ShowSettings()
+~+F9::debug()
+~+F10::ExitMH(A_ThisHotkey)
+~+F11::Reload()
